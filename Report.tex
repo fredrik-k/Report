@@ -6,7 +6,8 @@
 %\usepackage[swedish]{babel}  % aktivera om rapporten är på svenska
 \parskip 7pt plus 2pt minus 2pt
 \parindent 0pt
-\usepackage{graphicx}
+\usepackage[pdftex]{graphicx}
+\usepackage{epstopdf}
 \addbibresource{mybib.bib}  %  Comment if you don't want to use bibtex
 \begin{document}
 \begin{titlepages}
@@ -154,7 +155,7 @@ In figure \ref{log_norm_n_2} and \ref{log_norm_n_3_2}, measured values of the si
 %
 \begin{figure}[!hbt]
 \include{graphics}
-\includegraphics[width=1\textwidth ]{images/signal_model/log_norm_n_2}
+\includegraphics[width=1\textwidth]{images/signal_model/log_norm_n_2.eps}
 \caption{Measured signal strength (blue) versus signal strength modelled using the log-normal shadowing model with $n=2$ (red).}\label{log_norm_n_2}
 \end{figure}
 %
