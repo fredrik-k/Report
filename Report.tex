@@ -518,7 +518,7 @@ This allows the noise to be low when the distance is short and large when the di
 %
 \subsection{Number of Particles}
 %
-The number of particles $N$ is the most straight forward choice, a higher $N$ directly improves the filter but increases the computational burden. If the system model is poor or the process noise is large a larger number of particles is needed to provide a sufficient particle density over the possible states.  
+The number of particles $N$ is the most straight forward choice, a higher $N$ directly improves the filter but increases the computational burden. If the system model is poor or the process noise is large a larger number of particles is needed to provide a sufficient particle density over the possible states. As the system model only has two states, it suggests a fairly low number of particles. On the other hand, a random walk is used for the state update, which is a non-precise update spreading the particles over a quite large area. Considering both of these, $N=1000$ has been chosen to be a suitable number of particles.    
 %
 \chapter{Modelling the Kinematics} %Working title
 %
