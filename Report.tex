@@ -66,7 +66,7 @@ d_f=\frac{2D^2}{\lambda} & d_f\gg D & d_f\gg \lambda \label{equation:frau_dist}
 where $D$ is the largest physical dimension of the transmitting antenna.
 
 For a radio signal with frequency ranging from 2.4 to 5 GHz (WiFi) and a largest antenna dimension $D$ of 0.1 meter, $d_f$ is in the
-range of $\left[0.36,0.75\right]$  and a $d>1$ meter fulfils both the additional requirements from \ref{equation:frau_dist}.
+range of $\left[0.36,0.75\right]$  and a $d>1$ meter fulfills both the additional requirements from \ref{equation:frau_dist}.
 %
 \section{Path Loss}
 %
@@ -130,7 +130,7 @@ where n is the path loss exponent and  $X_\sigma$ is a zero-mean Gaussian distri
 %
 \begin{table}
 \begin{center}
-\begin{tabular}{|l|c|}
+\begin{tabular}{| l | c |}
 \hline
 \multicolumn{1}{|c|}{Signal environment} & Path loss exponent, $n$ \\
 \hline
@@ -156,13 +156,13 @@ In figure \ref{log_norm_n_2} and \ref{log_norm_n_3_2}, measured values of the si
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth]{images/signal_model/log_norm_n_2.eps}
-\caption{Measured signal strength (blue) versus signal strength modelled using the log-normal shadowing model with $n=2$ (red).}\label{log_norm_n_2}
+\caption{Measured signal strength (blue) versus signal strength modeled using the log-normal shadowing model with $n=2$ (red).}\label{log_norm_n_2}
 \end{figure}
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/signal_model/log_norm_n_3_2}
-\caption{Measured signal strength (blue) versus signal strength modelled using the log-normal shadowing model with $n=3.2$ (red).}\label{log_norm_n_3_2}
+\caption{Measured signal strength (blue) versus signal strength modeled using the log-normal shadowing model with $n=3.2$ (red).}\label{log_norm_n_3_2}
 \end{figure}
 %
 \begin{figure}[!hbt]
@@ -178,8 +178,8 @@ It is obvious this model has its flaws, a low value of $n$ fails to predict good
 A simple extension of the log-normal shadowing model is combining different values of $n$ for use in various intervals of the distance to the transmitter. The most simple of these models are the double slope model where two different path loss exponent $n_1$ and $n_2$ are used together with a single break distance $d_1$ where the model changes from one to the other. This model then becomes,
 \begin{subequations}
 \begin{align}
-\log_{10}({P_r(d)})&=&\log_{10}({P_r(d_0)})-10n_1\log_{10}\left[{\frac{d}{d_0}}\right] + X_{\sigma_1}, \hspace{5pt} d_0<d<d_1\\
-\log_{10}({P_r(d)})&=&\log_{10}({P_r(d_0)})-10n_2\log_{10}\left[{\frac{d}{d_0}}\right] + X_{\sigma_2}, \hspace{5pt} d>d_1
+\log_{10}({P_r(d)})&=\log_{10}({P_r(d_0)})-10n_1\log_{10}\left[{\frac{d}{d_0}}\right] + X_{\sigma_1}, & d_0<d<d_1\\
+\log_{10}({P_r(d)})&=\log_{10}({P_r(d_0)})-10n_2\log_{10}\left[{\frac{d}{d_0}}\right] + X_{\sigma_2}, & d>d_1
 \end{align}
 \end{subequations} 
 where $X_{\sigma_1}$ and $X_{\sigma_2}$ are random Gaussian distributed variables with zero mean and standard deviation $\sigma_1$ and $\sigma_2$ respectively.
@@ -196,7 +196,7 @@ This model combines the good traits from the two log-normal shadowing models, ho
 %
 \subsection{$\alpha$-Model} %Maybe something else
 %
-A third attempt at modelling the signal strength is to introduce a parameter $\alpha$ multiplied with the distance $d$ in the log-normal shadowing model to account for the extra decrease in signal strength.  The model becomes,
+A third attempt at modeling the signal strength is to introduce a parameter $\alpha$ multiplied with the distance $d$ in the log-normal shadowing model to account for the extra decrease in signal strength.  The model becomes,
 %
 \begin{equation}
 \log_{10}({P_r(d)})=\log_{10}({P_r(d_0)})-10n\log_{10}\left[{\frac{d}{d_0}}\right] - \alpha d+ X_\sigma.
@@ -333,9 +333,9 @@ After the re-sampling technique described above is applied to the particles of o
 % 
 \subsection{State Update}
 %
-In the state update step some model of the system behaviour, $f(x_k,u_k,v_k)$ in equation \ref{equation:nonlinear_model_first}, is used to update the states of each particle in each time step, $k$. If the system behaviour is well known, for one or all of the states, the use  of an elaborate model improves the convergence rate of the particles and thus the estimation accuracy. This usually allows for the use of fewer particles as the approximate behaviour of the system is known and as such there is need to move particles to improbable states. 
+In the state update step some model of the system behavior, $f(x_k,u_k,v_k)$ in equation \ref{equation:nonlinear_model_first}, is used to update the states of each particle in each time step, $k$. If the system behavior is well known, for one or all of the states, the use  of an elaborate model improves the convergence rate of the particles and thus the estimation accuracy. This usually allows for the use of fewer particles as the approximate behavior of the system is known and as such there is need to move particles to improbable states. 
 
-However, if there is little or no knowledge of the states behaviour some type of random walk update can be used, only trying to capture the variance of the state over a time step. If the variance is large, this calls for a large number of particles so to keep the particle density for all probable states high. 
+However, if there is little or no knowledge of the states behavior some type of random walk update can be used, only trying to capture the variance of the state over a time step. If the variance is large, this calls for a large number of particles so to keep the particle density for all probable states high. 
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -393,7 +393,7 @@ Most devices using the IEEE $802.11$ standard have an \emph{Media Access Control
 %
 \section{Wi-Fi and Positioning}
 %
-The Wi-Fi standard provides enticing possibilities for indoor positioning, especially in public or corporate areas. Some of the advantages over other positioning techniques is that the range of typical wireless products, like Wi-Fi access points (APs) have limited range ($\sim 30$ meter) and thus needs to be placed with relative short intervals. One of the disadvantages is that indoor signal environments often are rather complex, thus posing a harder modelling task.
+The Wi-Fi standard provides enticing possibilities for indoor positioning, especially in public or corporate areas. Some of the advantages over other positioning techniques is that the range of typical wireless products, like Wi-Fi access points (APs) have limited range ($\sim 30$ meter) and thus needs to be placed with relative short intervals. One of the disadvantages is that indoor signal environments often are rather complex, thus posing a harder modeling task.
 
 Below a few different techniques for indoor positioning is presented, 
 %
@@ -440,7 +440,7 @@ The evolution of Wi-Fi has prompted many AP to implement standards for both 2.4 
 %
 Of course, some of the signal behaviour is expected to be highly correlated. For one, the large scale distance dependent path loss is largely the same in both signals, and it is from this path loss the distance to the AP is determined. Independence is though a nice feature for the signal noise, including the \emph{small scale fading}. 
 
-To investigate the correlation between 2.4 and 5 GHz signals, measurements could be taken, with an increasing distance, to an AP transmitting on both frequencies. After the path loss dependent behaviour is removed from the signals, the correlation of the noise could be computed.  
+To investigate the correlation between 2.4 and 5 GHz signals, measurements could be taken, with an increasing distance, to an AP transmitting on both frequencies. After the path loss dependent behavior is removed from the signals, the correlation of the noise could be computed.  
 
 Such an investigation was performed, taking measurements at increasing distances, in the rang $[2,44.5]$, of the signal strength from an AP in line-of-sight. In figure \ref{noise_corr_los} the resulting noise is displayed, and computing the \emph{correlation coefficient $r_{xy}$} between the two using,
 \begin{equation}
@@ -496,7 +496,7 @@ placing the new particles somewhere on an circle of radius $2\Delta t$ from the 
 %
 \subsection{Measurement Noise}
 %
-On a first glance, the measurement noise would be a fairly simple choice, i e. take a couple of sets of measurements at different distances from a AP and investigate the noise behaviour. Then use this as the measurement noise. 
+On a first glance, the measurement noise would be a fairly simple choice, i e. take a couple of sets of measurements at different distances from a AP and investigate the noise behavior. Then use this as the measurement noise. 
 
 FIGURES HERE!!
 
@@ -520,7 +520,7 @@ This allows the noise to be low when the distance is short and large when the di
 %
 The number of particles $N$ is the most straight forward choice, a higher $N$ directly improves the filter but increases the computational burden. If the system model is poor or the process noise is large a larger number of particles is needed to provide a sufficient particle density over the possible states. As the system model only has two states, it suggests a fairly low number of particles. On the other hand, a random walk is used for the state update, which is a non-precise update spreading the particles over a quite large area. Considering both of these, $N=1000$ has been chosen to be a suitable number of particles.    
 %
-\chapter{Modelling the Kinematics} %Working title
+\chapter{Modeling the Kinematics} %Working title
 %
 Modelling the kinematics may greatly improve the performance of a positioning system, especially if the estimated position is noisy or biased. The kinematics may also be used to estimate the position in between the updates from the main positioning algorithm. The range of models stretches from simple random walk processes to estimating accelerations, velocities and position in three dimensional space using sensor fusion.
 
@@ -528,13 +528,13 @@ After a short description of different random walk processes, quaternions are in
 %
 \section{Random Walk}
 %
-The simplest way of modelling the kinematics, aside from the trivial case of choosing not to model it at all, is to use a \emph{random walk} model for each state. In a random walk the states, $x$, undergoes time updates according to
+The simplest way of modeling the kinematics, aside from the trivial case of choosing not to model it at all, is to use a \emph{random walk} model for each state. In a random walk the states, $x$, undergoes time updates according to
 %
 \begin{equation}
 x_{k+1} = x_k + v_k
 \end{equation}      
 %
-where $v_k$ is a random process. Usually $v_k$ is considered independent for each state, and depending on the distribution and standard deviation $\sigma$, different random walk processes are obtained. How $v_k$ should be distributed is determined by the intrinsic behaviour of the states, a common choice is a normal distribution with an appropriate $\sigma$. Such a random walk is called a \emph{Gaussian random walk}, and if $\sigma$ is very small it resembles a \emph{Brownian motion}. A Gaussian random walk for three states in two dimensions, each starting in $(0\hspace{5pt}0)$, is displayed in figure \ref{rand_walk}. 
+where $v_k$ is a random process. Usually $v_k$ is considered independent for each state, and depending on the distribution and standard deviation $\sigma$, different random walk processes are obtained. How $v_k$ should be distributed is determined by the intrinsic behavior of the states, a common choice is a normal distribution with an appropriate $\sigma$. Such a random walk is called a \emph{Gaussian random walk}, and if $\sigma$ is very small it resembles a \emph{Brownian motion}. A Gaussian random walk for three states in two dimensions, each starting in $(0\hspace{5pt}0)$, is displayed in figure \ref{rand_walk}. 
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -678,7 +678,7 @@ which is considerably more uniform between use cases.
 \caption{Average acceleration during 10 seconds of a typical walk.}\label{avr_acc}
 \end{figure}
 
-A 10 second sample of the average acceleration measured by a phone placed in the front pocket during a typical walk is displayed in figure \ref{avr_acc}. A flaw of this approach is easily noticed, owing to gravity, the average acceleration is centred around this value, ($9.81$ m/s$^2$). A way around this is to differentiate the signal according to 
+A 10 second sample of the average acceleration measured by a phone placed in the front pocket during a typical walk is displayed in figure \ref{avr_acc}. A flaw of this approach is easily noticed, owing to gravity, the average acceleration is centered around this value, ($9.81$ m/s$^2$). A way around this is to differentiate the signal according to 
 %
 \begin{equation}
 \Delta f(x) = \frac{f(x+\Delta t) - f(x) }{\Delta t},
@@ -707,7 +707,7 @@ The technique could be refined further, by e. g identifying the step frequency o
 %
 The step length of an individual, moving in a straight line with a constant speed, is more or less constant. Different individuals or the same individual moving at different speeds or performing turns have a quite large span of step lengths. In this thesis the step length have been determined by the authors walking a predetermined distance comprised of walking straight interspersed with turning both left and right, at a constant speed. The average step length is then simply computed as the distance divided by number of steps and a value of $0.77$ meters was obtained.  
 
-For real world usage however, the length of a users steps must be determined. This can be done in various ways, one is to have the user estimate their own step length but the same method as above. Another is to use adaptive tune the step length by using approximately known distances travelled and the number of steps taken whilst travelling. A way of doing this is to use some sort of positioning technique (GPS, WiFi etc.) to estimate the distance while the step counter determines the number of steps.      
+For real world usage however, the length of a users steps must be determined. This can be done in various ways, one is to have the user estimate their own step length but the same method as above. Another is to use adaptive tune the step length by using approximately known distances travelled and the number of steps taken whilst traveling. A way of doing this is to use some sort of positioning technique (GPS, WiFi etc.) to estimate the distance while the step counter determines the number of steps.      
 %
 \section{Direction of Movement}
 %
@@ -724,7 +724,7 @@ There are a few problems of using the gyroscope to determine the direction of mo
 %
 \subsection{Magnetometer}
 %
-A way around the problems of a known initial direction is the use of a magnetometer, which measures the \emph{magnetic field strength} in each of the phones three coordinate directions. Using the known electromagnetic field produced by the earth’s core, it is possible to find the phones heading. In theory this enables the magnetometer along with a known phone orientation to estimate the direction of movement. This is possible in environments where the electromagnetic fields, apart from the earth’s own, is weak, e. g outdoors. In most indoor environments however, fields from electronic devices and structural elements (metal beams, pipes etc.) produced their own magnetic fields. These fields is in many cases strong enough to interfere or even overpower the earth’s, causing the estimated heading to be off. 
+A way around the problems of a known initial direction is the use of a magnetometer, which measures the \emph{magnetic field strength} in each of the phones three coordinate directions. Using the known electromagnetic field produced by the earth's core, it is possible to find the phones heading. In theory this enables the magnetometer along with a known phone orientation to estimate the direction of movement. This is possible in environments where the electromagnetic fields, apart from the earth's own, is weak, e. g outdoors. In most indoor environments however, fields from electronic devices and structural elements (metal beams, pipes etc.) produced their own magnetic fields. These fields is in many cases strong enough to interfere or even overpower the earth's, causing the estimated heading to be off. 
 
 The \emph{fingerprinting} strategy for signal strengths described in \ref{sec:AfPA}, may also be utilized to characterize the magnetic field strengths in an indoor environment. These measurements can then be used to find the true heading, but this approach lacks generality as measurements at each location is needed.  
 %
