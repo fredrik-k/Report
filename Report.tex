@@ -12,7 +12,7 @@
 \begin{document}
 \begin{titlepages}
 \author{Fredrik Karlsson \& Martin Karlsson}
-\title{Advantages of Using Simultaneous Measurements of 2.4 any 5 GHz WiFi Signals for Indoor Positioning}%Temporary
+\title{Advantages of Using Simultaneous Measurements of 2.4 and 5 GHz WiFi Signals for Indoor Positioning}%Temporary
 \year{2014}
 \month{January}
 \TFRT{9999}  %%  You will get the number from the department.
@@ -38,19 +38,19 @@ These people helped me a lot with my work.
 %
 \label{chap:RSP}
 %
-The performance of any wireless communication system is fundamentally limited by the properties of the radio signal. In the simplest of worlds these properties and hence the signals power, would only depend on the distance between transmitter and receiver. However, instead they vary greatly depending on the environment, from a simple line-of-sight (LOS) case to a severely obstructed one, where walls, windows, furniture etc. distort the signal between transmitter and receiver. Furthermore, the signal is also affected by a large number of small-scale effects. Among them are, reflections from various surfaces, diffraction and Doppler shift due to a difference in speed between the receiver in reference to the transmitter \cite{rappaport96}. In this thesis the focus is put on obtaining good models for the indoor propagation of radio signals for the application of positioning. 
+The performance of any wireless communication system is fundamentally limited by the properties of the radio signal. In the simplest of worlds these properties and hence the signal intensities, would depend only on the distance between transmitter and receiver. However, instead they vary greatly depending on the environment, from a simple line-of-sight (LOS) case to a severely obstructed one, where walls, windows, furniture etc. distort the signal between transmitter and receiver. Furthermore, the signal is affected by a large number of small-scale effects. Among them are reflections from various surfaces, diffraction and Doppler shift due to a difference in speed between the receiver in reference to the transmitter \cite{rappaport96}. In this thesis the focus is put on obtaining good models for the indoor propagation of radio signals for the application of positioning. 
 
-The chapter consists of a recapitulation of free space signal propagation and path loss, together with different ways of modeling these. Different sources of disturbances and their influence are discussed. 
+The chapter consists of a recapitulation of free space signal propagation and path loss, together with different ways of modeling these. Different sources of disturbances and their influences are discussed. 
 %
 \section{Free Space Propagation Model}
 %
-How radio signals decays with increasing transmitter-receiver (T-R) separation is of interest in many applications especially if a position is to be obtained from the received signal strength. The free space propagation model is a relatively simple model of predicting the received signal power given a certain T-R separation and a line-of-sight path in between. This model focuses on the large-scale propagation features, thus predicting the average signal strength received without small scale effects taken into account. As in most propagation models a power law function of how the signal power decays by distance is assumed$\left(\sim{1/d^2}\right)$ \cite{rappaport96}. The power received at a distance $d$ from a radiating transmitter is given by the Friis free space equation,
+How radio signals decay with increasing transmitter-receiver (T-R) separation is of interest in many applications, especially if a position is to be obtained from the received signal strength. The free space propagation model is a relatively simple model of predicting the received signal power given a certain T-R separation and a LOS path in between. This model focuses on the large-scale propagation features, thus predicting the average signal strength received without small scale effects taken into account. As in most propagation models a power law function of how the signal power decays by distance is assumed$\left(\sim{1/d^2}\right)$ \cite{rappaport96}. The power received at a distance $d$ from a radiating transmitter is given by the Friis free space equation,
 %
 \begin{equation}
 P_r(d)=\frac{P_tG_tG_r\lambda^2}{(4\pi)^2d^2L}\label{equation:friis_equation}
 \end{equation}
 %
-where $P_r(d)$ is the received power at a T-R separation of $d$ meters, $P_t$ is the transmitted power, $G_t$ and $G_r$ is the gains of the transmitter and receiver antennas respectively, $L\geq1$ is the system loss factor which is not related to propagation i.e hardware losses and $\lambda$ is the wavelength of the transmitted signal in meters. Here the units of $P_t$ and $P_r$ are must be the same. The gains ($G_t$ and $G_r$) are dimensionless constants related to the antennas effectiveness of receiving or transmitting a signal which is related to the construction and physical properties of the antenna. The wavelength $\lambda$ is related o the frequency of the signal by,
+where $P_r(d)$ is the received power at a T-R separation of $d$ meters, $P_t$ is the transmitted power, $G_t$ and $G_r$ are the gains of the transmitter and receiver antennas respectively, $L\geq1$ is the system loss factor which is not related to propagation, i.e hardware losses, and $\lambda$ is the wavelength of the transmitted signal in meters. Here the units of $P_t$ and $P_r$ are the same. The gains ($G_t$ and $G_r$) are dimensionless constants related to the antennas' effectiveness of receiving and transmitting a signal which is related to the construction and physical properties of the antennas. The wavelength $\lambda$ is related to the frequency of the signal by,
 \begin{equation}
 \lambda=\frac{c}{f}=\frac{2\pi c}{\omega_c}
 \end{equation} 
@@ -70,7 +70,7 @@ range of $\left[0.36,0.75\right]$  and a $d>1$ meter fulfills both the additiona
 %
 \section{Path Loss}
 %
-The \emph{path loss}, is defined as the difference in dB between the transmitted and received power and represents the signal attenuation measured in a positive quantity of dB. If the antennas are assumed to have unity gain, an \emph{isotropic} radiator, the path loss (PL) can be obtained from \ref{equation:friis_equation} as \cite{rappaport96}, 
+The \emph{path loss} is defined as the difference in dB between the transmitted and received power and represents the signal attenuation, measured in a positive quantity of dB. If the antennas are assumed to have unity gain, i.e they are \emph{isotropic} radiators, the path loss (PL) can be obtained from \ref{equation:friis_equation} as \cite{rappaport96}, 
 %
 \begin{equation}
 PL\left(\text{dB}\right)=10\log_{10}{\frac{P_t}{P_r}}=-10\log_{10}{\left[\frac{\lambda^2}{\left(4\pi\right)^2d^2}\right]}\label{equation:pl}.
@@ -88,7 +88,7 @@ For practical reasons, as most formulas expresses powers in dB, $d_0$ is chosen 
 10\log_{10}{P_r(d)}=10\log_{10}{P_r(d_0)}-20\log_{10}{d} \hspace{30pt} d\geq d_0\geq d_f,
 \end{equation}   
 %
-where $P_r(d_0)$ can be determined by a simple measurement at 1 meter from the transmitter. The resulting model represents the indoor line-of-sight path loss case.
+where $P_r(d_0)$ can be determined by a simple measurement at 1 meter from the transmitter. The resulting model represents the indoor LOS path loss case.
 %
 \section{Basic Mechanisms for Signal Propagation}
 %
@@ -96,22 +96,22 @@ In this section the three basic mechanisms for signal propagation, reflection, d
 %
 \subsection{Reflection}
 %
-When a radio wave propagating through one medium encounters a medium with a different set of electrical properties, the wave is partially transmitted and partially reflected. The intensity of the transmitted and reflected wave may be related to each other through the \emph{Fresnel reflection coefficient} ($\Gamma$). This coefficient is dependent on the material properties, wave polarization, angle of incident and the frequency of the wave \cite{rappaport96}.
+When a radio wave propagating through one medium encounters a medium with a different set of electrical properties, the wave is partially transmitted and partially reflected. The intensities of the transmitted and reflected waves may be related to each other through the \emph{Fresnel reflection coefficient} ($\Gamma$). This coefficient is dependent on the material properties, wave polarization, angle of incident and the frequency of the wave \cite{rappaport96}.
 
-The requirement of a surface to be considered as a possible source of reflection is that its dimensions are much larger than the wavelength of the incident wave and typical indoor sources include walls, floor, ceiling etc. The reflections causes the signal strength to be larger in some areas of the room and less in other than the free space model predicts.
+The requirement of a surface to be considered as a possible source of reflection is that its dimensions are much larger than the wavelength of the incident wave and typical indoor sources include walls, floor, ceiling etc. The reflections cause the signal strength to be larger in some areas of the room and less in others than the free space model predicts.
 %
 \subsection{Diffraction}
 %
-Diffraction is the property that allows waves to propagate around different obstructions, e.g round corners, travel beyond the horizon or behind obstructions. Huygens principle, which states 
+Diffraction is the property that allows waves to propagate around different obstructions, e.g propagate  around corners, travel beyond the horizon or behind obstructions. Huygens principle states 
 \begin{quote}
  \emph{All points on a wavefront can be considered as point sources for the new wavelet.} \cite{rappaport96}
  \end{quote}
 %
-Where diffraction is caused by the propagation of a secondary wave into a shadowed region, and diffraction can be viewed as the wave ''bending'' around the edge of objects. Because only a fraction of the wave propagates into the shadowed region the signal strength decays rapidly when moving further into the shadowed region \cite{rappaport96}.
+Where diffraction is caused by the propagation of a secondary wave into a shadowed region, and diffraction can be viewed as the wave ''bending'' around the edge of objects. Because only a fraction of the wave propagates into the shadowed region, the signal strength decays rapidly when moving further into the shadowed region \cite{rappaport96}.
 %
 \subsection{Scattering}
 %
-Scattering occurs when an wave travels through an environment which consists of many objects with small dimensions compared to the wavelength per unit volume. The energy of a scattered wave is spread out in all directions from the scattering surface. Even surfaces considered flat usually posses some roughness and thus some scattering properties. 
+Scattering occurs when a wave travels through an environment which has a large density of objects with small dimensions compared to the wavelength. The energy of a scattered wave is spread out in all directions from the scattering surface. Even surfaces considered flat usually possess some roughness and thus some scattering properties.
 
 Scattering usually contributes to a higher signal strength than the one predicted by only diffraction and reflection \cite{rappaport96}.
 %
@@ -120,7 +120,7 @@ Scattering usually contributes to a higher signal strength than the one predicte
 The Friis free space equation together with the reflection, diffraction and scattering have spawned many different models for indoor signal propagation of a wide rage of complexity.
 %
 \subsection{Log-normal Shadowing} 
-One of the more simple simple models is the log-distance path loss model
+One of the more simple models is the log-distance path loss model
 %
 \begin{equation}
 \log_{10}({P_r(d)})=\log_{10}({P_r(d_0)})-10n\log_{10}\left[{\frac{d}{d_0}}\right] + X_\sigma
@@ -149,9 +149,9 @@ Indoor high number of obstructions & 4-6 \\
 \label{table:path_loss_n}
 \end{table}
 %
-This models allows for some tuning for a specific environment using different values of $n$.
+This model allows some tuning for a specific environment using different values of $n$.
 
-In figure \ref{log_norm_n_2} and \ref{log_norm_n_3_2}, measured values of the signal strength is compared to predicted ones using the log-normal shadowing model with $n=2$ and $n=3.2$ respectively, using a measured value of $\log_{10}({P_r(d_0)})= -30$. The measurements was taken while following the distance trajectory to the transmitting antenna shown in figure \ref{dist_trans}. The environment the measurement was taken i is an open office space with some obstructions.
+In figure \ref{log_norm_n_2} and \ref{log_norm_n_3_2}, measured values of the signal strength are compared to predicted ones using the log-normal shadowing model with $n=2$ and $n=3.2$ respectively, using a measured value of $\log_{10}({P_r(d_0)})= -30$. The measurements were taken while following the distance trajectory to the transmitting antenna shown in figure \ref{dist_trans}. The environment in which the measurements were taken is an open office space with some obstructions.
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -171,11 +171,11 @@ In figure \ref{log_norm_n_2} and \ref{log_norm_n_3_2}, measured values of the si
 \caption{The distance to the transmitting antenna in meters used in the measurements of the signal strength}\label{dist_trans}
 \end{figure}
 
-It is obvious this model has its flaws, a low value of $n$ fails to predict good signal strength when the distance to the transmitter is fairly large and the high value does not preform satisfactory close to the transmitter. The measurement taken is similar to a real world use-case where one moves through a office space, sometimes under a transmitter in line-of-sight and sometimes being far away in an obstructed area. The flaws promotes the search for a model with better performance.
+It is obvious that this model has its flaws. A low value of $n$ fails to predict good signal strengths when the distance to the transmitter is fairly large, and the high value does not perform satisfactory close to the transmitter. The measurement taken is similar to a real world use-case where one moves through an office space, sometimes under a transmitter in line-of-sight and sometimes being far away in an obstructed area. The flaws promote the search for a model with better performance.
 %
 \subsection{Double Slope Model}
 %
-A simple extension of the log-normal shadowing model is combining different values of $n$ for use in various intervals of the distance to the transmitter. The most simple of these models are the double slope model where two different path loss exponent $n_1$ and $n_2$ are used together with a single break distance $d_1$ where the model changes from one to the other. This model then becomes,
+A simple extension of the log-normal shadowing model is combining different values of $n$ for use in various intervals of the distance to the transmitter. The most simple of these models is the double slope model where two different path loss exponent $n_1$ and $n_2$ are used together with a single break distance $d_1$, where the model changes from one to the other. This model then becomes,
 \begin{subequations}
 \begin{align}
 \log_{10}({P_r(d)})&=\log_{10}({P_r(d_0)})-10n_1\log_{10}\left[{\frac{d}{d_0}}\right] + X_{\sigma_1}, & d_0<d<d_1\\
@@ -192,11 +192,11 @@ In figure \ref{double_slope} the double slope model for $n_1=2$, $n_2=3.2$ and $
 \caption{Signal strength measurements (blue) versus double slope model predictions (red) with $n_1=2$, $n_2=3.2$ and $d_1=10$ meter.}\label{double_slope}
 \end{figure}
 
-This model combines the good traits from the two log-normal shadowing models, however at $d=d_1$ the model presents an undesirable ''jump'' and the prediction around $d_1$ are rather poor. Furthermore, a single $d_1$ might be hard to find for a set of transmitters and the different values of $n$ may change between the transmitters.
+This model combines the good traits from the two log-normal shadowing models, however at $d=d_1$ the model presents an undesirable ''jump'', and the predictions around $d_1$ are rather poor. Furthermore, a single $d_1$ might be hard to find for a set of transmitters, and the different values of $n$ may change between the transmitters.
 %
 \subsection{$\alpha$-Model} %Maybe something else
 %
-A third attempt at modeling the signal strength is to introduce a parameter $\alpha$ multiplied with the distance $d$ in the log-normal shadowing model to account for the extra decrease in signal strength.  The model becomes,
+A third attempt to model the signal strength is to introduce a parameter $\alpha$ multiplied with the distance $d$ in the log-normal shadowing model to account for the extra decrease in signal strength.  The model then becomes
 %
 \begin{equation}
 \log_{10}({P_r(d)})=\log_{10}({P_r(d_0)})-10n\log_{10}\left[{\frac{d}{d_0}}\right] - \alpha d+ X_\sigma.
@@ -204,9 +204,9 @@ A third attempt at modeling the signal strength is to introduce a parameter $\al
 %
 where $X_\sigma$ is a zero-mean Gaussian distributed random variable with standard deviation $\sigma$.
 
-A typical choice of $n$ for indoor conditions is 2 or slightly less, to account for the line-of-sight case when $d$ is small, see table \ref{table:path_loss_n}. The rage of $\alpha$ is around $[0.3,1.5]$ depending on the building.
+A typical choice of $n$ for indoor conditions is 2 or slightly less, to account for the line-of-sight case when $d$ is small, see table \ref{table:path_loss_n}. The range of $\alpha$ is around $[0.3,1.5]$ depending on the building.
 
-This model possesses the desirable feature of only having one parameter, $\alpha$, to tune after the initial $n$ is chosen. However, it tends to underestimate the signal strength at large distances $d$, as $\alpha d$ grows linearly with $d$ while all other parts grows as the logarithm of $d$. Two simple ways to correct this easily comes to mind. Either the model can be changed to a log-normal shadowing when $d$ is large or a maximum of $\alpha d $ may be imposed. The first of these becomes     
+This model possesses the desirable feature of only having one parameter, $\alpha$, to tune after the initial $n$ is chosen. However, it tends to underestimate the signal strength at large distances $d$, as $\alpha d$ grows linearly with $d$ while all other parts grows as the logarithm of $d$. Two simple ways to correct this easily comes to mind. Either the model can be changed to a log-normal shadowing when $d$ is large or a maximum of $\alpha d $ may be imposed. The first of these becomes
 %
 \begin{subequations}
 \begin{align}
@@ -221,7 +221,7 @@ and the second
 \end{equation}
 %
 Using one of these approaches, one loses some of the simplicity of having only one tunable parameter. However, these choices are simpler than for the double slope model, as there is no need to determine when the change from line-of-sight occurs. 
-For \ref{equation:fixed_alpha} the predicted signals strength for $n=2$, $\alpha=0.9$ and $d_{\text{max}}=20$ is shown together with measurements in figure \ref{fixed_alpha}. 
+For \ref{equation:fixed_alpha} the predicted signal strength for $n=2$, $\alpha=0.9$ and $d_{\text{max}}=20$ is shown together with measurements in figure \ref{fixed_alpha}. 
  %
  \begin{figure}[!hbt]
 \include{graphics}
@@ -229,22 +229,22 @@ For \ref{equation:fixed_alpha} the predicted signals strength for $n=2$, $\alpha
 \caption{Signal strength measurements (blue) versus fixed $\alpha$ model predictions (red) with $n=2$, $\alpha=0.9$ and $d_{\text{max}}=20$ meter.}\label{fixed_alpha}
 \end{figure}
 
-This model predicts the signal strength satisfactory both for small and large values of $d$ while removing the ''jump'' present in the double slope model.
+This model predicts the signal strength satisfactory both for small and large values of $d$, while removing the ''jump'' present in the double slope model.
  %
  \section{Small Scale Fading}
  %
 In addition to the large scale propagation effects described above, a radio signal usually displays a phenomena called small scale fading. The small scale fading causes the signal strength to fluctuate rapidly over small distances or short time-spans \cite{rappaport96}. This effect is caused by different waves of the transmitted signal, called \emph{multipath waves}, arriving at the receiver with a slight time difference and thus causing interference. It can be a reflected or scattered wave arriving right after the direct wave, or reflected/scattered waves from different sources reaching the receiver at different times. 
 
-Another effect include in small scale fading is a random frequency modulation cause by different Doppler shift on different multipath signals. Sources of this is a relative movement between transmitter and receiver or movement by objects in the vicinity of the signals path. 
+Another effect included in small scale fading is a random frequency modulation caused by different Doppler shifts on different multipath signals. The source of this is a relative movement between transmitter and receiver or movement by objects in the vicinity of the signals path. 
 
-The description presented above is brief and for a more complete description of the small scale fading phenomena readers are referred to chapter 4 in \cite{rappaport96}.  
+The description presented above is brief, and for a more complete description of the small scale fading phenomena readers are referred to chapter 4 in \cite{rappaport96}.  
  %
  \section{Aspects for Positioning Applications}
  \label{sec:AfPA}
  %
- For a signal strength model to be practical for positioning, it needs to possess two properties. It needs to predict the mean signal strength at a specific distance with satisfactory precision and the variance around the mean should be sufficiently small. A few different approaches for reach this goal is available. One is to try to characterize the environment where the positioning is taking place using measurements of the signal environment i numerous points. This is feasible only when the environment are fairly uniform as the resulting model is an approximation for the entire environment. 
+ For a signal strength model to be practical for positioning, it needs to possess two properties. It needs to predict the mean signal strength at a specific distance with satisfactory precision and the variance around the mean should be sufficiently small. A few different approaches to reach this goal are available. One is to try to characterize the environment where the positioning is taking place using measurements of the signal environment in numerous points. This is feasible only when the environment are fairly uniform as the resulting model is an approximation for the entire environment. 
  
- Another approach is to, by a large set of measurements create a signal strength map of the entire environment. This is called \emph{fingerprinting} and overcomes the problem of having a changing environment, however it is impractical if used in a large area. 
+ Another approach is to, by a large set of measurements, create a signal strength map of the entire environment. This is called \emph{fingerprinting} and overcomes the problem of having a changing environment. However, it is impractical if used in a large area. 
  
  A third way of finding a model is to try to estimate the model parameters while the positioning is ongoing. This requires a knowledge that at some point during the positioning, the position error is known to be small, and using this knowledge finding suitable model parameters. Estimating the model has the advantaged of not being tied to a specific environment and whilst staying in the same environment the model will continue to improve. On the other hand it may not produce the best results, especially when moving between different environments or if small positioning errors are rare or hard to deem small.        
  %
