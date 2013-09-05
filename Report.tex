@@ -253,7 +253,7 @@ The description presented above is brief, and for a more complete description of
 %
 The \emph{particle filter} or \emph{sequential Monte Carlo methods} are a set of estimation algorithms for estimating the posterior density of the state-space in a non-linear filtering problem. The particle filter uses a set of particles distributed over the state-space using a system model and state measurements are used to determine each particles probability to represent the ''true'' state of the system.  
 
-In this chapter the non-linear filtering problem will be explained along with its solution using the particle filter. Some computational aspects will be investigated and the particle filters uses in positioning briefly discussed.
+In this chapter the non-linear filtering problem will be explained along with its solution using the particle filter. Some computational aspects will be investigated and the particle filters uses in positioning briefly discussed. The chapter ends with a section about other estimation techniques where most focus are placed on the \emph{least squares estimation}.
 %
 \section{Non-Linear Filtering Problem}
 The non-linear filtering problem consists of estimating the states in a non-linear non-Gaussian model on the general form
@@ -269,7 +269,7 @@ y_k&=h(x_k,u_k) + e_k
 %
 where $f$ and $h$ are arbitrary non-linear functions of the states $x_k$, inputs $u_k$ and process noise $v_k$, furthermore $y_k$ is the measurement at time $k$. The measurement noise $e_k$ and process noise $v_k$ are random processes with arbitrary probability density functions \cite{gson12}. 
 
-There are a large collection of filtering methods solving this estimation problem in different ways with different restrictions. One of the most common is the \emph{Kalman filter}. This method is intuitive, simple and computationally effective, however it suffers from requiring the functions $f$ and $h$ to be linear and the probability density functions of the process $v_k$ and measurement noise $e_k$ to be zero-mean Gaussian. The \emph{extended Kalman} filter solves the problem of $f$ and $h$ being non-linear but still assumes $v_k$ and $e_k$ to be zero-mean Gaussian noise.
+There are a large collection of filtering methods solving this estimation problem in different ways with different restrictions. One of the most common is the \emph{Kalman filter}. This method is intuitive, simple and computationally effective, however it suffers from requiring the functions $f$ and $h$ to be linear and the probability density functions of the process $v_k$ and measurement noise $e_k$ to be zero-mean Gaussian. The \emph{extended Kalman} filter solves the problem of $f$ and $h$ being non-linear but still assumes $v_k$ and $e_k$ to be zero-mean Gaussian noise. Further, both Kalman approaches requires the posterior distribution of the states to be zero mean Gaussian.
 
 Here we will instead focus on another filtering approach, the \emph{particle filter} also called the \emph{Sequential Monte Carlo method}. This is a simulation based approach for solving the estimation problem \ref{equation:nonlinear_model} only requiring the probability density function of $e_k$ and $v_k$ to be known \cite{gson12,fig_fra10}.  
 
@@ -375,6 +375,27 @@ The particle filter may be successfully used in positioning applications, especi
 
  A case where the particle filter is useful is the estimation of position or position and heading in a two-dimensional space, which is the case for most indoor positioning applications. Furthermore, using signal strength from multiple sources as a measurement of position renders both a non-linear model and non-Gaussian posterior distributions further promoting the use of a particle filter. However, introducing more dynamic states e.g acceleration, unmeasured velocities or trying to filter sensor biases or drifts introduces to many dimensions. Thus, such estimations require their own filter \cite{gson12}.        
 %
+\section{Other Estimation Techniques}
+%
+There are a few different techniques for state estimation given a set of measurements, the \emph{Kalman} methods mentioned earlier, a couple of \emph{maximum.-likelihood} base ones and the \emph{least squares estimation} methods. \cite{gson12}
+%
+ \subsection{Least Squares Estimation}
+%
+The method \emph{least squares} is a common estimation technique for overdetermined systems, and is base on minimizing the error between a observed value and a modeled one. 
+
+Given a series of $n$ measurements, $z_i$ and $n$ models $f_i(x_k)$ of the $m$ states $x_k$, the goal of the least squares estimation is the find the minimum of
+%
+\begin{equation}
+S = \sum_{i=1}^n(z_i-f_i(x_k))^2
+\label{ls_sum}
+\end{equation}
+%
+given $n>m$. In the case of $f_i(x_k)$ being linear for all $i$, the algorithm is called the \emph{linear least squares} and $S$, in this case, has only one global minima due to convexity. Also, a analytic solution is always present.
+
+Generalizing the linear least squares estimation to non-linear models is fairly simple. The sum in \ref{ls_sum} is still to be minimized, however in the non-linear case a closed-form analytical solution can not be found. Instead the minimum is found by numerical approximations. As $S$ in the non-linear case is not, in general, convex, there exists multiple local solutions to the minimization problem. This requires a guess of the approximate states to ''guide'' the algorithm to the correct solution, and if the guess is to far from the global minima, a local minima could be found instead.     
+
+The non-linear least squares can be used to estimate a position in two dimensions from the models from chapter \ref{chap:RSP} together with measurements of signal strengths from at least three access points. 
+%
 \chapter{Introduction to Wi-Fi} %Working title
 %Citation needed
 The \emph{Wi-Fi Alliance} defines WiFi as any ''wireless local area network (WLAN) products that are base on the \emph{Institute of Electrical and Electronics Engineers} (IEEE) $802.11$ standards''. However, since most WLAN products use the $802.11$ standards, in common tongue, Wi-Fi and WLAN are interchangeable.    
@@ -462,7 +483,7 @@ An extensive discussion about how path loss depends on the frequency is done in 
 %
 Using the signal propagation models described in chapter \ref{chap:RSP} in combination with the particle filter from chapter \ref{chap:PF} provides a framework for indoor positioning is obtained. This framework can then be used to perform position estimation using RSSI measurements from multiple Wi-Fi APs. 
 
-In this chapter, the considerations about, and parameter choices for, the particle filter in the context of indoor positioning is presented. The performance is then tested in a few different environments and these tests serves as a basis for an extensive error analysis. The resulting knowledge is then used to ascertain if and how adaptive or crowd-sourced signal strength models may be used. The chapter is closed by a test of such models and their potential  advantages compared to more traditional models. 
+In this chapter, the considerations about, and parameter choices for, the particle filter in the context of indoor positioning is presented. The performance is then tested in a few different environments and compared to position estimation using a \emph{least squares} algorithm.  These tests then serves as a basis for an extensive error analysis, discussing the error behavior depending on different conditions. The resulting knowledge is then used to ascertain if and how adaptive or crowd-sourced signal strength models may be used. The chapter is closed by a test of such models and their potential advantages compared to more traditional models. 
 %
 \section{On Parameter Choices}
 %
@@ -479,19 +500,29 @@ y_{k+1}&=y_k + v^y_{k+1}
 %
 where $v^x_k$ and $v^y_k$ is the process noise on each state. 
 %
-\subsection{Process Noise}
+\subsection{Process Noise}  
 %
-The process noise is, in this case, rather straight forward to choose, as it represents the spread of particles in between measurements. A normal distribution is a appropriate choice,
+The process noise is, in this case, rather straight forward to choose, as it represents the spread of particles in between measurements. A normal distribution around a circle with radius $r$ is a appropriate choice,
+%
+\begin{eqnarray}
+v^x_k &\sim r\sin{\alpha_k}+\mathcal{N}(0,\sigma^2)\\
+v^y_k &\sim r\cos{\alpha_k}+\mathcal{N}(0,\sigma^2)
+\end{eqnarray}
+%
+where
 %
 \begin{equation}
-v^x_k,v^y_k\sim \mathcal{N}(\mu,\sigma^2)
+\alpha_k \sim \mathsf U(0,2\pi)
 \end{equation}
 %
-where $\mu$ represents the mean and $\sigma$ the standard deviation. In this case $\mu$ is a approximation of how far the phone travels in between measurements and $\sigma$ measures the uncertainty of this distance. A fair estimation is that a human walking travels at between 1 and 3 meters per second and given a interval $\Delta t$ between measurements $\mu = 2*\Delta t$ and $\sigma = 1*\Delta t$. Thus,
+where $\mathsf{U}(0,2\pi)$ is a uniform distribution between $0$ and $2\pi$ and the constant over each time step $k$. $\sigma$ is the standard deviation of the normal distribution. In this case $r$ is a approximation of how far the phone travels in between measurements and $\sigma$ measures the uncertainty of this distance. 
+
+A fair estimation is that a human walking travels at between 1 and 3 meters per second and given a interval $\Delta t$ between measurements $r = 2*\Delta t$ and $\sigma = 1*\Delta t$. Thus,
 %
-\begin{equation}
-v^x_k,v^y_k\sim \mathcal{N}(2\Delta t, \Delta t^2)
-\end{equation}
+\begin{eqnarray}
+v^x_k&\sim 2\Delta t \sin{\alpha_k} + \mathcal{N} (0, \Delta t^2)\\
+v^y_k&\sim 2\Delta t \cos{\alpha_k} + \mathcal{N} (0, \Delta t^2)\\
+\end{eqnarray}
 placing the new particles somewhere on an circle of radius $2\Delta t$ from the old one and spreading them out by a standard deviation of $\Delta t$.    
 %
 \subsection{Measurement Noise}
@@ -520,9 +551,33 @@ This allows the noise to be low when the distance is short and large when the di
 %
 The number of particles $N$ is the most straight forward choice, a higher $N$ directly improves the filter but increases the computational burden. If the system model is poor or the process noise is large a larger number of particles is needed to provide a sufficient particle density over the possible states. As the system model only has two states, it suggests a fairly low number of particles. On the other hand, a random walk is used for the state update, which is a non-precise update spreading the particles over a quite large area. Considering both of these, $N=1000$ has been chosen to be a suitable number of particles.    
 %
+\section{Test setup}
+%
+During the following sections of this chapter two different test cases will be used,
+\begin{description}
+%
+\item[Case 1:] \hfill \\
+%
+Measurements of the RSSI is taken at equally spaced points with $0.5$ meter spacing over a predetermined path. Only measurements from predetermined APs with known positions is taken. The measurements are taken while the measuring phone is at rest at each point.  
+%
+\item[Case 2:] \hfill \\
+%
+Measurements of the RSSI is taken continuously while the user is walking a predetermined path at a relatively constant speed. The time between each measurement is approximately 4 seconds. Only measurements predefined APs with known positions are used.  
+%
+\end{description}
+%
+\emph{Case 1} allows the analysis of error between true position and estimated position as the measurements are taken at a fixed point. Further, the distance between measurements can be changed in increments of 0.5 meters by only using a subset of the available data. 
+
+\emph{Case 2} provides a more natural use-case, where the user is moving while trying to find his position. This case lacks the ability for error analysis, as the measurements are taken continuously over a interval and only the estimated trajectory can be compared to the true one.  
+
+For different test, different paths and a different setup of APs is used. Further, all test are performed in the same open office environment, but differences between the exact environments for each tests exists. 
+%
+
+
+%
 \chapter{Modeling the Kinematics} %Working title
 %
-Modelling the kinematics may greatly improve the performance of a positioning system, especially if the estimated position is noisy or biased. The kinematics may also be used to estimate the position in between the updates from the main positioning algorithm. The range of models stretches from simple random walk processes to estimating accelerations, velocities and position in three dimensional space using sensor fusion.
+Modeling the kinematics may greatly improve the performance of a positioning system, especially if the estimated position is noisy or biased. The kinematics may also be used to estimate the position in between the updates from the main positioning algorithm. The range of models stretches from simple random walk processes to estimating accelerations, velocities and position in three dimensional space using sensor fusion.
 
 After a short description of different random walk processes, quaternions are introduced and their use in three-dimensional pose  estimation, without risk of singularities, explained. A section about positioning using only sensors, named \emph{dead reckoning}, is present after which, the chapter closes by an discussion of kinematics models used in indoor positioning and their effect on the performance.   
 %
