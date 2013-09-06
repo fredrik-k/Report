@@ -192,7 +192,7 @@ In figure \ref{double_slope} the double slope model for $n_1=2$, $n_2=3.2$ and $
 \caption{Signal strength measurements (blue) versus double slope model predictions (red) with $n_1=2$, $n_2=3.2$ and $d_1=10$ meter.}\label{double_slope}
 \end{figure}
 
-This model combines the good traits from the two log-normal shadowing models, however at $d=d_1$ the model presents an undesirable ''jump'', and the predictions around $d_1$ are rather poor. Furthermore, a single $d_1$ might be hard to find for a set of transmitters, and the different values of $n$ may change between the transmitters.
+This model combines the good traits from the two log-normal shadowing models. However, at $d=d_1$ the model presents an undesirable ''jump'', and the predictions around $d_1$ are rather poor. Furthermore, a single $d_1$ might be hard to find for a set of transmitters, and the different values of $n$ may change between the transmitters.
 %
 \subsection{$\alpha$-Model} %Maybe something else
 %
@@ -204,9 +204,9 @@ A third attempt to model the signal strength is to introduce a parameter $\alpha
 %
 where $X_\sigma$ is a zero-mean Gaussian distributed random variable with standard deviation $\sigma$.
 
-A typical choice of $n$ for indoor conditions is 2 or slightly less, to account for the line-of-sight case when $d$ is small, see table \ref{table:path_loss_n}. The range of $\alpha$ is around $[0.3,1.5]$ depending on the building.
+A typical choice of $n$ for indoor conditions is 2 or slightly less, to account for the LOS case when $d$ is small, see table \ref{table:path_loss_n}. The range of $\alpha$ is around $[0.3,1.5]$, depending on the building.
 
-This model possesses the desirable feature of only having one parameter, $\alpha$, to tune after the initial $n$ is chosen. However, it tends to underestimate the signal strength at large distances $d$, as $\alpha d$ grows linearly with $d$ while all other parts grows as the logarithm of $d$. Two simple ways to correct this easily comes to mind. Either the model can be changed to a log-normal shadowing when $d$ is large or a maximum of $\alpha d $ may be imposed. The first of these becomes
+This model possesses the desirable feature of having only one parameter, $\alpha$, to tune after the initial $n$ is chosen. However, it tends to underestimate the signal strength at large distances $d$, as $\alpha d$ grows linearly with $d$ while all other parts grow as the logarithm of $d$. Two simple ways to correct this easily comes to mind. Either the model can be changed to a log-normal shadowing when $d$ is large, or a maximum of $\alpha d $ may be imposed. The first of these becomes
 %
 \begin{subequations}
 \begin{align}
@@ -220,8 +220,8 @@ and the second
 \label{equation:fixed_alpha}
 \end{equation}
 %
-Using one of these approaches, one loses some of the simplicity of having only one tunable parameter. However, these choices are simpler than for the double slope model, as there is no need to determine when the change from line-of-sight occurs. 
-For \ref{equation:fixed_alpha} the predicted signal strength for $n=2$, $\alpha=0.9$ and $d_{\text{max}}=20$ is shown together with measurements in figure \ref{fixed_alpha}. 
+Using one of these approaches, one loses some of the simplicity of having only one tunable parameter. However, these choices are simpler than for the double slope model, as there is no need to determine when the change from LOS occurs. 
+For \ref{equation:fixed_alpha} the predicted signal strengths for $n=2$, $\alpha=0.9$ and $d_{\text{max}}=20$ are shown together with measurements in figure \ref{fixed_alpha}. 
  %
  \begin{figure}[!hbt]
 \include{graphics}
@@ -242,18 +242,18 @@ The description presented above is brief, and for a more complete description of
  \section{Aspects for Positioning Applications}
  \label{sec:AfPA}
  %
- For a signal strength model to be practical for positioning, it needs to possess two properties. It needs to predict the mean signal strength at a specific distance with satisfactory precision and the variance around the mean should be sufficiently small. A few different approaches to reach this goal are available. One is to try to characterize the environment where the positioning is taking place using measurements of the signal environment in numerous points. This is feasible only when the environment are fairly uniform as the resulting model is an approximation for the entire environment. 
+ For a signal strength model to be practical for positioning, it needs to possess two properties. It needs to predict the mean signal strength at a specific distance with satisfactory precision, and the variance around the mean should be sufficiently small. A few different approaches to reach this goal are available. One is to try to characterize the environment where the positioning is taking place, using measurements of the signal environment in numerous points. This is feasible only when the environment is fairly uniform, as the resulting model is an approximation for the entire environment. 
  
- Another approach is to, by a large set of measurements, create a signal strength map of the entire environment. This is called \emph{fingerprinting} and overcomes the problem of having a changing environment. However, it is impractical if used in a large area. 
+ Another approach is to create a signal strength map of the entire environment, by a large set of measurements. This is called \emph{fingerprinting}, and overcomes the problem of having a changing environment. However, it is impractical if used in a large area. 
  
- A third way of finding a model is to try to estimate the model parameters while the positioning is ongoing. This requires a knowledge that at some point during the positioning, the position error is known to be small, and using this knowledge finding suitable model parameters. Estimating the model has the advantaged of not being tied to a specific environment and whilst staying in the same environment the model will continue to improve. On the other hand it may not produce the best results, especially when moving between different environments or if small positioning errors are rare or hard to deem small.        
+ A third way of finding a model is to try to estimate the model parameters while the positioning is ongoing. This requires that at some point during the positioning, the position error is known to be small. Using this knowledge suitable model parameters can be calculated. Estimating the model has the advantaged of not being tied to a specific environment and whilst staying in the same environment the model will continue to improve. On the other hand it may not produce the best results, especially when moving between different environments or if small positioning errors are rare or hard to deem small.        
  %
 \chapter{The Particle Filter}
 \label{chap:PF}
 %
-The \emph{particle filter} or \emph{sequential Monte Carlo methods} are a set of estimation algorithms for estimating the posterior density of the state-space in a non-linear filtering problem. The particle filter uses a set of particles distributed over the state-space using a system model and state measurements are used to determine each particles probability to represent the ''true'' state of the system.  
+The \emph{particle filter} or \emph{sequential Monte Carlo methods} are sets of estimation algorithms for estimating the posterior density of the state-space in a non-linear filtering problem. The particle filter uses a set of particles distributed over the state-space using a system model and state measurements are used to determine each particle's probability to represent the ''true'' state of the system.  
 
-In this chapter the non-linear filtering problem will be explained along with its solution using the particle filter. Some computational aspects will be investigated and the particle filters uses in positioning briefly discussed. The chapter ends with a section about other estimation techniques where most focus are placed on the \emph{least squares estimation}.
+In this chapter the non-linear filtering problem will be explained along with its solution using the particle filter. Some computational aspects will be investigated and the particle filter used in positioning briefly discussed. The chapter ends with a section about other estimation techniques, where most focus is placed on the \emph{least squares estimation}.
 %
 \section{Non-Linear Filtering Problem}
 The non-linear filtering problem consists of estimating the states in a non-linear non-Gaussian model on the general form
@@ -269,19 +269,19 @@ y_k&=h(x_k,u_k) + e_k
 %
 where $f$ and $h$ are arbitrary non-linear functions of the states $x_k$, inputs $u_k$ and process noise $v_k$, furthermore $y_k$ is the measurement at time $k$. The measurement noise $e_k$ and process noise $v_k$ are random processes with arbitrary probability density functions \cite{gson12}. 
 
-There are a large collection of filtering methods solving this estimation problem in different ways with different restrictions. One of the most common is the \emph{Kalman filter}. This method is intuitive, simple and computationally effective, however it suffers from requiring the functions $f$ and $h$ to be linear and the probability density functions of the process $v_k$ and measurement noise $e_k$ to be zero-mean Gaussian. The \emph{extended Kalman} filter solves the problem of $f$ and $h$ being non-linear but still assumes $v_k$ and $e_k$ to be zero-mean Gaussian noise. Further, both Kalman approaches requires the posterior distribution of the states to be zero mean Gaussian.
+There is a large collection of filtering methods solving this estimation problem in different ways with different restrictions. One of the most common is the \emph{Kalman filter}. This method is intuitive, simple and computationally effective. On the other hand, it suffers from requiring the functions $f$ and $h$ to be linear, and the probability density functions of the process $v_k$ and measurement noise $e_k$ to be zero-mean Gaussian. The \emph{extended Kalman} filter solves the problem of $f$ and $h$ being non-linear, but still assumes $v_k$ and $e_k$ to be zero-mean Gaussian noise. Further, both Kalman approaches require the posterior distribution of the states to be zero mean Gaussian.
 
-Here we will instead focus on another filtering approach, the \emph{particle filter} also called the \emph{Sequential Monte Carlo method}. This is a simulation based approach for solving the estimation problem \ref{equation:nonlinear_model} only requiring the probability density function of $e_k$ and $v_k$ to be known \cite{gson12,fig_fra10}.  
+Here we will instead focus on another filtering approach, the \emph{particle filter}, also called the \emph{Sequential Monte Carlo method}. This is a simulation based approach for solving the estimation problem \ref{equation:nonlinear_model}, only requiring the probability density function of $e_k$ and $v_k$ to be known \cite{gson12,fig_fra10}.  
 
-The particle filter consists of a set of $N$ particles $\left\{x^i\right\}_{i=1}^N$, which represents different samples of states. These particle are used to create an approximation of the distribution $p(x_k|y_{1:k})$  of the states $x_k$ given the set of measurements $y_{1:k}$. The strength of the particle filter is that the distribution $p(x_k|y_{1:k})$ can be an arbitrary one. One the other hand, to provide the same particle density the number of particle grows by the power of the number of states. I.e if you have 10 particle and one state, to provide the same density for two dimension you need 100 and for three, 1000. This makes the particle filter only suitable when the number of states is relatively small.
+The particle filter consists of a set of $N$ particles $\left\{x^i\right\}_{i=1}^N$, which represent different samples of states. These particles are used to create an approximation of the distribution $p(x_k|y_{1:k})$  of the states $x_k$ given the set of measurements $y_{1:k}$. The strength of the particle filter is that the distribution $p(x_k|y_{1:k})$ can be arbitrary. One the other hand, to provide the same particle density the number of particle grows by the power of the number of states. Hence, if you have 10 particles and one state, you need 100 particles to provide the same density for two dimensions. For three dimensions, you then need 1000 particles. This makes the particle filter suitable only when the number of states is relatively small.
 %
 \section{The Particle Filter Process}
 \label{sec:PF_process}
 %
 The process of the particle filter consists of three separate steps \cite{gson12}, 
 \begin{enumerate}
-\item \emph{Weighting of particle}: using the measurements each particle is assigned a weight corresponding to the likelihood of its states being the true ones.
-\item \emph{Re-sampling}: From the existing $N$ particles create $N$ new ones by a cleaver choice.
+\item \emph{Weighting of particles}: using the measurements each particle is assigned a weight, corresponding to the likelihood of its states being the true ones.
+\item \emph{Re-sampling}: From the existing $N$ particles, create $N$ new ones by a clever choice.
 \item \emph{State update}: Using some trajectory of the states, update the states of each particle.
 \end{enumerate}
 %
@@ -291,11 +291,11 @@ The process of the particle filter consists of three separate steps \cite{gson12
 \caption{Histogram over the initial particle distribution in range $[-10,10]$ using 100 bins}\label{hist_ini_dist}
 \end{figure}
 %
-In the following sections these steps will be explored more in-depth along with a simple one dimensional example using $N=1000$ particles. We start by distributing the particles using an uniform distribution in the range $[-10,10]$, using $0$ as our true state and Gaussian distributed zero-mean random variable with standard deviation 1 as the measurement noise, $e_k$ from equation \ref{equation:nonlinear_model_second}. The initial particle distribution is displayed in figure  \ref{hist_ini_dist}
+In the following sections these steps will be explored more in-depth along with a simple one dimensional example using $N=1000$ particles. We start by distributing the particles using a uniform distribution in the range $[-10,10]$, using $0$ as our true state and Gaussian distributed zero-mean random variable with standard deviation 1 as the measurement noise, $e_k$ from equation \ref{equation:nonlinear_model_second}. The initial particle distribution is displayed in Figure  \ref{hist_ini_dist}
 %
 \subsection{Computing the Weights}
 %
-Given that the measurement noise $e_k$ is assumed to be known, the weighting of the particles is a straight forward process. For each measurement $y^l_{1:k}$ compute the probability $p^l(x^i_k|y^l_{1:k})$ that the particle $x^i$ has the true set of states. Then the total probability for each particle is,
+Given that the measurement noise $e_k$ is known, the weighting of the particles is a straight forward process. For each measurement $y^l_{1:k}$ compute the probability $p^l(x^i_k|y^l_{1:k})$ that the particle $x^i$ has the true set of states. Then the total probability for each particle is,
 %
 \begin{equation}
 p(x^i_k|y_k)=\prod_{l=1}^{L}p^l(x^i_k|y^l_{1:k}), 
@@ -315,13 +315,13 @@ as to have the probabilities normalized.
 \caption{Particles versus their normalized weights.}\label{particle_weights}
 \end{figure}
 
-In figure \ref{particle_weights} the normalized weights assigned to each particle in our example is displayed. It comes as no surprise that the weights resembles the normally distributed measurement noise. 
+In Figure \ref{particle_weights} the normalized weights assigned to each particle in our example are displayed. It comes as no surprise that the weights resemble the normally distributed measurement noise. 
 %
 \subsection{Re-sampling}
 %
-The re-sampling step is introduced to eliminate the possibility for one or a few particles to be the only probable after a few iterations of the particle filter. If the re-sampling is omitted, the computing of weight and subsequent state update could dilute the particles is the state-space until only one particle is the probable one. This could be the case even if the most probable particle does not agree with the measurement. Thus purpose of the re-sampling is to use the weights to create $N$ new particles from the $N$ old ones. This can be done in many ways, one is to allow a number of the most probable particles to spawn new particles until $N$ particles is obtained. A statistically more stringent way is to compute a uniformly distributed random number $r$ between zero and one. Then, assuming the sum of all particles probabilities are one, start adding these until the sum is greater than $r$, allowing the particles causing the change to spawn a new. Using this method particles with high probabilities have a greater chance of spawning a new while particles with small weight still may create new ones.
+The re-sampling step is introduced to eliminate the possibility of one or a few particles to be the only probable after a few iterations of the particle filter. If the re-sampling is omitted, the computing of weight and subsequent state update could dilute the particles in the state-space until only one particle is the probable one. This could be the case even if the most probable particle does not agree with the measurement. Thus, the purpose of the re-sampling is to use the weights to create $N$ new particles from the $N$ old ones. This can be done in many ways. One is to allow a number of the most probable particles to spawn new particles until $N$ particles are obtained. A statistically more stringent way is to compute a uniformly distributed random number $r$ between zero and one. Then, assuming the sum of all particle probabilities are one, start adding these until the sum is greater than $r$ Then, let the particle that caused the change spawn a new one. Using this method particles with high probabilities have a greater chance of spawning a new one, while particles with small weight still may create new ones.
 
-After the re-sampling is done it is crucial to give all particles the same weight, i.e $1/N$, as to avoid the dilution of probability.
+After the re-sampling is done, it is crucial to give all particles the same weight, i.e $1/N$, as to avoid the dilution of probability.
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -329,11 +329,11 @@ After the re-sampling is done it is crucial to give all particles the same weigh
 \caption{Histogram over the particle distribution, after one iteration of the particle filter, in range $[-10,10]$ using 100 bins}\label{hist_dist_1_itr}
 \end{figure}
 
-After the re-sampling technique described above is applied to the particles of our example their distribution is displayed in figure \ref{hist_dist_1_itr}. After the re-sampling the states of the particles still existing tends more towards the true one, $X=0$ and the mean of the states may be used an estimation of the true one.    
+After the re-sampling technique described above is applied to the particles of our example, their distribution is displayed in figure \ref{hist_dist_1_itr}. After the re-sampling the states of the particles still existing tend more towards the true one, $X=0$. The mean of the states may now be used as an estimation of the true state.    
 % 
 \subsection{State Update}
 %
-In the state update step some model of the system behavior, $f(x_k,u_k,v_k)$ in equation \ref{equation:nonlinear_model_first}, is used to update the states of each particle in each time step, $k$. If the system behavior is well known, for one or all of the states, the use  of an elaborate model improves the convergence rate of the particles and thus the estimation accuracy. This usually allows for the use of fewer particles as the approximate behavior of the system is known and as such there is need to move particles to improbable states. 
+In the state update step some model of the system behavior, $f(x_k,u_k,v_k)$ in equation \ref{equation:nonlinear_model_first}, is used to update the states of each particle in each time step, $k$. If the system behavior is well known, for one or all of the states, the use  of an elaborate model improves the convergence rate of the particles and thus the estimation accuracy. This usually allows the use of fewer particles, since there is no need to move particles to improbable states.
 
 However, if there is little or no knowledge of the states behavior some type of random walk update can be used, only trying to capture the variance of the state over a time step. If the variance is large, this calls for a large number of particles so to keep the particle density for all probable states high. 
 %
@@ -343,15 +343,15 @@ However, if there is little or no knowledge of the states behavior some type of 
 \caption{Histogram over the particle distribution, after one iteration of the particle filter and a state update, in range $[-10,10]$ using 100 bins}\label{hist_dist_1_itr_dyn}
 \end{figure}
 
-In our example the ''true'' state is stationary, so the state update consists only of adding a Gaussian distributed random number with a small standard deviation ($0.1$) to each particle. This corresponds to letting each particle undergo \emph{Brownian motion}, and the resulting particle distribution may be viewed in figure \ref{hist_dist_1_itr_dyn}.
+In our example the ''true'' state is stationary, so the state update consists only of adding a Gaussian distributed random number with a small standard deviation ($0.1$) to each particle. This corresponds to letting each particle undergo \emph{Brownian motion}, and the resulting particle distribution may be viewed in Figure \ref{hist_dist_1_itr_dyn}.
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/PF/hist_dist_10_itr}
-\caption{Histogram over the particle distribution, after ten iteration of the particle filter, in range $[-10,10]$ using 100 bins}\label{hist_dist_10_itr}
+\caption{Histogram over the particle distribution, after ten iterations of the particle filter, in range $[-10,10]$ using 100 bins}\label{hist_dist_10_itr}
 \end{figure}
 
-Finally, in figure \ref{hist_dist_10_itr} the particle distribution after ten iterations of the particle filter is displayed and the mean of the particle states is
+Finally, in figure \ref{hist_dist_10_itr} the particle distribution after ten iterations is displayed, and the mean of the particle states is
 \begin{equation}
 \sum^{N}_{i=1}{\frac{x^i_{10}}{N}} = 0.04.
 \end{equation} 
@@ -359,21 +359,21 @@ Finally, in figure \ref{hist_dist_10_itr} the particle distribution after ten it
 \section{Computational Aspects}
 \label{sec:com_asp}
 %
-The particle filter, like most \emph{Monte Carlo} based filters, suffers from high computational complexity. Especially as the number of particles necessary to keep a fixed particle density in the state space grows as the power of the number of states. A solution to this is proposed in \cite{gson12}, where only states bearing non-linear distributions is passed throughout the particle filter and states bearing Gaussian distributions may be filtered by a different method. This is called the \emph{marginalized particle filter} and aim to keep the number of states passed to the particle filter low. 
+The particle filter, like most \emph{Monte Carlo} based filters, suffers from high computational complexity. Especially as the number of particles necessary to keep a fixed particle density in the state space grows as the power of the number of states. A solution to this is proposed in \cite{gson12}, where only states bearing non-linear distributions are passed throughout the particle filter and states bearing Gaussian distributions may be filtered by a different method. This is called the \emph{marginalized particle filter} and aim to keep the number of states passed to the particle filter low. 
 
-The three steps discussed in section \ref{sec:PF_process} pose somewhat different computational difficulties. The weights needs to be calculated for each particle and thus needs to be computed $N$ times, giving a \emph{Ordo $N$} ($O(N)$) complexity. However, the calculation for each weight depends of the number of measurements $M$ giving a total complexity of $O(M*N)$. In most cases though the number of measurements is small in comparison to the number of particles and may be neglected. Another pleasant feature of the weight computation is their independence of each other, thus making parallelization of computations simple.
+The three steps discussed in section \ref{sec:PF_process} pose somewhat different computational difficulties. The weights need to be calculated for each particle and thus need to be computed $N$ times, giving an \emph{Ordo $N$} ($O(N)$) complexity. However, the calculation for each weight depends of the number of measurements $M$ giving a total complexity of $O(M*N)$. In most cases though, the number of measurements is small in comparison to the number of particles and may be neglected. Another pleasant feature of the weight computation is their independence of each other, thus making parallelization of computations simple.
 
-The re-sampling step, assuming the number of samples before and after is constant, using the algorithm described in section \ref{sec:PF_process} comprises two distinct steps. First the \emph{cumulative sum} of the weights are computed, this is of complexity $O(N)$ but can depending on the implementation be computed alongside the weights. Next, for the $N$ new particles, it is needed to determine which of the $N$ old ones is to be its clone. This is done by, for each new particle, computing a uniformly distributed random number in the range [0,1]. This random number is then compared to the cumulative sum of weights to find the index where the cumulative sum for the first time is equal to or larger than the random number. This can be done using a \emph{binary search} as the cumulative sum is sorted by its nature, giving the step complexity $O(N*\log_2{N})$. Furthermore, the particles are not entirely independent in this step, making parallelization tricky.
+The re-sampling step, assuming the number of samples before and after is constant, the algorithm described in section \ref{sec:PF_process} comprises two distinct steps. First the \emph{cumulative sum} of the weights are computed. This is of complexity $O(N)$ but can depending on the implementation be computed alongside the weights. Next, for the $N$ new particles, it is needed to determine which of the $N$ old ones is to be its clone. This is done by, for each new particle, computing a uniformly distributed random number in the range [0,1]. This random number is then compared to the cumulative sum of weights to find the index where the cumulative sum for the first time is equal to or larger than the random number. This can be done using a \emph{binary search} as the cumulative sum is sorted by its nature, giving the step complexity $O(N*\log_2{N})$. Furthermore, the particles are not entirely independent in this step, making parallelization cumbersome.
 
-Updating the states is done for each particle and is dependent on the number of states $K$ along with the complexity of the state model, resulting in roughly $O(N*K)$ complexity. During this step, the particles are entirely independent, giving a possibility for parallelization.   
+Updating the states is done for each particle and it depends on the number of states $K$ along with the complexity of the state model, resulting in roughly $O(N*K)$ complexity. During this step, the particles are entirely independent, which makes parallelization possible.
 
 In all, the filter has approximately $O(N*\log_2{N})$, at least when the number of measurements $M$ and states $K$ are few compared to the number of particles.       
 %
 \section{Particle Filter for Positioning Application}
 %
-The particle filter may be successfully used in positioning applications, especially if the states and models used possesses certain features. More specific, the particle filter may be use with good results if the models are non-linear and the posterior distributions are non-Gaussian while the number of states are small \cite{gson12}. If the number of states grows the ''curse'' of dimensionality makes the use the particle filter infeasible.
+The particle filter may be successfully used in positioning applications, especially if the states and models used possess certain features. More specific, the particle filter may be used with good results if the models are non-linear and the posterior distributions are non-Gaussian while the number of states is small \cite{gson12}. If the number of states grows, the ''curse'' of dimensionality makes the use the particle filter infeasible.
 
- A case where the particle filter is useful is the estimation of position or position and heading in a two-dimensional space, which is the case for most indoor positioning applications. Furthermore, using signal strength from multiple sources as a measurement of position renders both a non-linear model and non-Gaussian posterior distributions further promoting the use of a particle filter. However, introducing more dynamic states e.g acceleration, unmeasured velocities or trying to filter sensor biases or drifts introduces to many dimensions. Thus, such estimations require their own filter \cite{gson12}.        
+A case where the particle filter is useful is the estimation of position or position and heading in a two-dimensional space, which is the case for most indoor positioning applications. Furthermore, using signal strengths from multiple sources as a measurement of position renders, both a non-linear model and non-Gaussian posterior distributions further promote the use of a particle filter. However, introducing more dynamic states ,e.g acceleration, unmeasured velocities or trying to filter sensor biases or drifts, introduces too many dimensions. Thus, such estimations require their own filter \cite{gson12}.        
 %
 \section{Other Estimation Techniques}
 %
@@ -381,93 +381,95 @@ There are a few different techniques for state estimation given a set of measure
 %
  \subsection{Least Squares Estimation}
 %
-The method \emph{least squares} is a common estimation technique for overdetermined systems, and is base on minimizing the error between a observed value and a modeled one. 
+The method \emph{least squares} is a common estimation technique for overdetermined systems, and is based on minimizing the error between an observed value and a modeled one. 
 
-Given a series of $n$ measurements, $z_i$ and $n$ models $f_i(x_k)$ of the $m$ states $x_k$, the goal of the least squares estimation is the find the minimum of
+Given a series of $n$ measurements, $z_i$ and $n$ models $f_i(x_k)$ of the $m$ states $x_k$. The goal of the least squares estimation is the find the minimum of
 %
 \begin{equation}
 S = \sum_{i=1}^n(z_i-f_i(x_k))^2
 \label{ls_sum}
 \end{equation}
 %
-given $n>m$. In the case of $f_i(x_k)$ being linear for all $i$, the algorithm is called the \emph{linear least squares} and $S$, in this case, has only one global minima due to convexity. Also, a analytic solution is always present.
+given $n>m$. In the case of $f_i(x_k)$ being linear for all $i$, the algorithm is called the \emph{linear least squares} and $S$, in this case, has only one global minimum due to convexity. Also, an analytic solution is always present.
 
-Generalizing the linear least squares estimation to non-linear models is fairly simple. The sum in \ref{ls_sum} is still to be minimized, however in the non-linear case a closed-form analytical solution can not be found. Instead the minimum is found by numerical approximations. As $S$ in the non-linear case is not, in general, convex, there exists multiple local solutions to the minimization problem. This requires a guess of the approximate states to ''guide'' the algorithm to the correct solution, and if the guess is to far from the global minima, a local minima could be found instead.     
+Generalizing the linear least squares estimation to non-linear models is fairly simple. The sum in \ref{ls_sum} is still to be minimized, but in the non-linear case a closed-form analytical solution can not be found. Instead the minimum is found by numerical approximations. As $S$ in the non-linear case is not, in general, convex, there exist multiple local solutions to the minimization problem. This requires a guess of the approximate states to ''guide'' the algorithm to the correct solution, and if the guess is too far from the global minimum, a local minimum could be found instead.     
 
-The non-linear least squares can be used to estimate a position in two dimensions from the models from chapter \ref{chap:RSP} together with measurements of signal strengths from at least three access points. 
+The non-linear least squares can be used to estimate a position in two dimensions from the models in Chapter \ref{chap:RSP}, together with measurements of signal
+% Fråga Fredrik:
+ strengths from at least three access points. 
 %
-\chapter{Introduction to Wi-Fi} %Working title
+\chapter{Introduction to WiFi} %Working title
 %Citation needed
-The \emph{Wi-Fi Alliance} defines WiFi as any ''wireless local area network (WLAN) products that are base on the \emph{Institute of Electrical and Electronics Engineers} (IEEE) $802.11$ standards''. However, since most WLAN products use the $802.11$ standards, in common tongue, Wi-Fi and WLAN are interchangeable.    
+The \emph{WiFi Alliance} defines WiFi as any ''wireless local area network (WLAN) products that are based on the \emph{Institute of Electrical and Electronics Engineers} (IEEE) $802.11$ standards''. However, since most WLAN products use the $802.11$ standards, in common tongue, WiFi and WLAN are interchangeable.    
 
-This chapter is intended to give an introduction to the Wi-Fi technologies and why these are of interest for indoor positioning.
+This chapter is intended to give an introduction to the WiFi technologies and why these are of interest for indoor positioning.
 %
 \section{The $802.11$ Standard}
 %
 The (IEEE) $802.11$ standard consists of a series of techniques for over-the-air radio modulation using the same basic protocol. The standard allows different products, computers, smart-phones etc. implementing the protocol to communicate wirelessly. Historically the communication has taken place over the frequency 2.4 GHz, however in later years devices implementing 5 GHz communication protocol have become increasingly common.
 
-The standard splits each frequency range into several channels over which the communication takes place. The frequency 2.4 GHz is split into 14 channels with 5 MHz spacing, for 5 GHz the situation is more complicated and not explained in detail. Local regulations affects which channels are allowed in a certain region.   
+The standard splits each frequency range into several channels over which the communication takes place. The frequency 2.4 GHz is split into 14 channels with 5 MHz spacing. For 5 GHz the situation is more complicated and will not be explained in detail. Local regulations affects which channels are allowed in a certain region.   
 %
 \subsection{The MAC-Address}
 %
-Most devices using the IEEE $802.11$ standard have an \emph{Media Access Control} (MAC) address assigned as its network address. The MAC address is usually assigned by the devices manufacturer and can be considered unique in a local area network. The address consists of twelve hexadecimal numbers and in its human readable form is presented as six groups of two hexadecimal numbers separated with either \verb|:| or \verb|-| e.g \verb|0a:1b:2c:3d:4e:5f|. They can be used to identify from which devices a signal originated.
+Most devices using the IEEE $802.11$ standard have a \emph{Media Access Control} (MAC) address assigned as its network address. The MAC address is usually assigned by the manufacturer and can be considered unique in a local area network. The address consists of twelve hexadecimal numbers. In its human readable form it is presented as six groups of two hexadecimal numbers, separated with either \verb|:| or \verb|-|, e.g \verb|0a:1b:2c:3d:4e:5f|. They can be used to identify from which devices a signal originates.
 %
-\section{Wi-Fi and Positioning}
+\section{WiFi and Positioning}
 %
-The Wi-Fi standard provides enticing possibilities for indoor positioning, especially in public or corporate areas. Some of the advantages over other positioning techniques is that the range of typical wireless products, like Wi-Fi access points (APs) have limited range ($\sim 30$ meter) and thus needs to be placed with relative short intervals. One of the disadvantages is that indoor signal environments often are rather complex, thus posing a harder modeling task.
+The WiFi standard provides enticing possibilities for indoor positioning, especially in public or corporate areas. Some of the advantages compared to other positioning techniques is that the range of typical wireless products, like WiFi access points (AP:s), have limited range ($\sim 30$ meters) and thus need to be placed with relatively short intervals. One of the disadvantages is that indoor signal environments are often complex, posing a harder modeling task.
 
-Below a few different techniques for indoor positioning is presented, 
+A few different techniques for indoor positioning are presented below.
 %
 \begin{itemize}
 \item \emph{MAC-Address}:  
 
-Receiving a signal, and thereby a MAC-address from an AP indicates, the receiving device being  within approximately $30$. This is a rather rough positioning, but may be used to pinpoint a device to a certain area. Furthermore, receiving a signal from multiple devices should improve the positioning. 
+Receiving a signal, and thereby a MAC-address from an AP, indicates that the receiving device is within approximately $30$. This is a rather rough positioning, but may be used to pinpoint a device to a certain area. Furthermore, receiving signals from multiple devices should improve the positioning. 
 %
 \item \emph{Received Signal Strength (RSS)}:
 
-Measuring the signal strength from a AP puts the devices not just in the vicinity, but gives a rough indication of the distance to the AP. Multiple APs may then be used to triangulated a position, but noisy measurements gives a rather large uncertainty. 
+Measuring the signal strength from an AP puts the devices not just in the vicinity, but gives a rough indication of the distance to the AP. Multiple APs may then be used to triangulate a position, but noisy measurements give a rather large uncertainty. 
 %
 \item \emph{Time of Arrival (ToA)}:
 
-If the APs and measuring device are synchronized in time, the time difference between when a message was sent and received may be used to compute the distance between device and AP. However, the the time differences involved usually are weary short ($\sim 3*10^{-9}$ seconds per meter), especially in indoor environments, requiring the time synchronization to be precise.  
+If the APs and measuring device are synchronized in time, the time difference between when a message was sent and received may be used to compute the distances between the device and the APs. However, the time differences involved are usually very short ($\sim 3*10^{-9}$ seconds per meter), especially in indoor environments, requiring the time synchronization to be precise.  
 %
 \item \emph{Round Trip Time (RTT)}: 
 
-A way to eliminate the requirement of synchronized APs, is to measure the time it takes for a message travel to the AP and back again, this time is called the \emph{round trip time}. As only one devices performs the time measurement the need for synchronization is eliminated, but instead the time from an AP receives a message still it sends the response needs to be known.
+A way to eliminate the requirement of synchronized APs, is to measure the time it takes for a message travel to the AP and back again. This time is called the \emph{round trip time}. As only one device performs the time measurement the need for synchronization is eliminated, but instead the time from when an AP receives a message until it sends the response has to be known.
 %
 \end{itemize}
 %
-The techniques presented here assumes the measuring device is also performing the positioning, similar approaches are available using the APs, to position devices in the environment. Furthermore, the technologies above could be combined or used together with different technologies such as blue-tooth, NFC, rfid etc. to increase the positioning accuracy. 
-In this thesis however,  the focus will be placed on the received signal strength.
+The techniques presented here assume that the measuring device is also performing the positioning. Similar approaches are available using the APs, to position devices in the environment. Furthermore, the technologies above could be combined or used together with different technologies such as blue-tooth, NFC, rfid etc. to increase the positioning accuracy. 
+In this thesis however, the focus will be placed on the received signal strength.
 %
 \subsection{Received Signal Strength Indication}
 %
-The \emph{Received Signal Strength Indication} (RSSI) is a value indicating the short-time-average of the received signal power \cite{fig_fra10}. The RSSI is given in arbitrary units, but usually dBm, and there is no standard of how RSSI should be related to the physical properties of the received signal. 
+The \emph{Received Signal Strength Indication} (RSSI) is a value indicating the short-time-average of the received signal power \cite{fig_fra10}. The RSSI is given in an arbitrary unit, but usually dBm, and there is no standard of how RSSI should be related to the physical properties of the received signal.
 
-For the RSSI to be a meaningful measurement of the received signal strength it must be related to the physical properties of the signal. Usually a measurement of the RSSI at a known distance is used together with an investigation of how the RSSI changes with the distance. The the models discussed in chapter \ref{chap:RSP} can then be applied. 
+For the RSSI to be a meaningful measurement of the received signal strength it must be related to the physical properties of the signal. Usually, a measurement of the RSSI at a known distance is used together with an investigation of how the RSSI changes with the distance. The models discussed in chapter \ref{chap:RSP} can then be applied. 
 %
 
 \subsection{RSSI Measurements in Android}
 
-A RSSI measurement on a device running the Android operating system is initiated by an application requesting a scan of the signal environment. The operating system preforms the scan when the necessary system resources are available. Each channel specified by the IEEE $802.11$ standard and available in the current region is scanned. When a transmitter is found, a short-time average of the received signal power is measured and converted to an appropriate RSSI. The process is repeated until all reachable transmitters has been measured, and the results are returned along with information on the transmitters MAC-address, transmission frequency and a time-stamp. 
+An RSSI measurement on a device running the Android operating system is initiated by an application requesting a scan of the signal environment. The operating system performs the scan when the necessary system resources are available. Each channel specified by the IEEE $802.11$ standard and available in the current region is scanned. When a transmitter is found, a short-time average of the received signal power is measured and converted to an appropriate RSSI. The process is repeated until all reachable transmitters have been measured, and the results are returned along with information about each transmitter's MAC-address, its transmission frequency and a time-stamp. 
 
-Performing a scan only when the necessary system resources are available, causes the time from a scan is request to the results are returned to be irregular. Further, an environment with many transmitters will take a longer time to scan than a environment with few.         
+Performing a scan only when the necessary system resources are available, causes the time from a scan is request to the results are returned to be irregular. Further, an environment with many transmitters will take a longer time to scan than an environment with few.         
 %
 \section{Performance of 2.4 GHz Versus 5 GHz}
 %
-The evolution of Wi-Fi has prompted many AP to implement standards for both 2.4 and 5 GHz communications. Alongside the performance boost to devices able to use both frequencies, this poses an enticing possibility for higher performing indoor positioning. Different frequencies may, in the best case, provide two independent measurements of the distance to an AP. To investigate if this is the case, the correlation between the two frequencies must be determined.  
+The evolution of WiFi has prompted many AP:s to implement standards for both 2.4 and 5 GHz communications. Alongside the performance boost to devices able to use both frequencies, this poses an enticing possibility for higher performing indoor positioning. Different frequencies may, in the best case, provide two independent measurements of the distance to an AP. To investigate if this is the case, the correlation between the two frequencies must be determined.  
 %
 \subsection{Signal Correlation}
 %
-Of course, some of the signal behaviour is expected to be highly correlated. For one, the large scale distance dependent path loss is largely the same in both signals, and it is from this path loss the distance to the AP is determined. Independence is though a nice feature for the signal noise, including the \emph{small scale fading}. 
+Of course, some of the signal behaviour is expected to be highly correlated. For one, the large scale distance dependent path loss is largely the same in both signals, and it is from this path loss the distance to the AP is determined. Independence is a nice feature for the signal noise though, including the \emph{small scale fading}. 
 
 To investigate the correlation between 2.4 and 5 GHz signals, measurements could be taken, with an increasing distance, to an AP transmitting on both frequencies. After the path loss dependent behavior is removed from the signals, the correlation of the noise could be computed.  
 
-Such an investigation was performed, taking measurements at increasing distances, in the rang $[2,44.5]$, of the signal strength from an AP in line-of-sight. In figure \ref{noise_corr_los} the resulting noise is displayed, and computing the \emph{correlation coefficient $r_{xy}$} between the two using,
+Such an investigation was performed, taking measurements at increasing distances, in the range $[2,44.5]$, of the signal strength from an AP in line-of-sight. In Figure \ref{noise_corr_los} the resulting noise is displayed. The \emph{correlation coefficient $r_{xy}$} between the two can be computed using,
 \begin{equation}
 r_{xy}=\frac{\sum\limits_{i=1}^{N}{(x_i-\bar{x})(y_i-\bar{y})}}{(n-1)\sigma_x\sigma_y},
 \end{equation}
-where $N$ is the number of measurements, $x_i$ and $y_i$ are the 2.4 and 5 GHz measurements compensated for the path loss, $\bar x$ and $\bar y$ their means and $\sigma_x$ and $\sigma_y$ their standard deviations. The computation yields $r_{xy}=-0.31$ CONTINUED DISCUSSION ABOUT THE CORRELATION HER ? AND ANOTHER MEASUREMENT FOR NLOS? 
+where $N$ is the number of measurements, $x_i$ and $y_i$ are the 2.4 and 5 GHz measurements compensated for the path loss, $\bar x$ and $\bar y$ their means and $\sigma_x$ and $\sigma_y$ their standard deviations. The computation yields $r_{xy}=-0.31$ CONTINUED DISCUSSION ABOUT THE CORRELATION HERE. AND ANOTHER MEASUREMENT FOR NLOS? 
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -475,34 +477,34 @@ where $N$ is the number of measurements, $x_i$ and $y_i$ are the 2.4 and 5 GHz m
 \caption{The noise of the 2.4 and 5 GHz measurement versus distance after compensation for the path loss.}\label{noise_corr_los}
 \end{figure}
 %
-\subsection{Difference in Modelling}
+\subsection{Difference in Modeling}
 %
-An extensive discussion about how path loss depends on the frequency is done in \cite{rappaport96}, the gist of which is that higher frequencies lose power faster than lower ones. The difference between 2.4 and 5 GHz is not large (a factor $\sim 2$), however some extra attention is needed to model the two. To extend the models in chapter \ref{chap:RSP} to the difference in frequency, usually different $n$ or $\alpha$, depending on choice of model, will be needed. Furthermore, an AP may transmit 5 GHz with a greater power than 2.4 GHz to mitigate some of the increased path loss, requiring measurements for both frequencies.  
+An extensive discussion about how path loss depends on the frequency is done in \cite{rappaport96}, the gist of which is that higher frequencies lose power faster with distance than lower ones. The difference between 2.4 and 5 GHz is not large (a factor $\sim 2$), however some extra attention is needed to model the two. To extend the models in chapter \ref{chap:RSP} to the difference in frequency, usually different $n$ or $\alpha$, depending on the choice of model, will be needed. Furthermore, an AP may transmit 5 GHz with a greater power than 2.4 GHz to mitigate some of the increased path loss, requiring measurements for both frequencies.  
 %
 \chapter{Indoor Positioning - Pure RSSI Approach} 
 %
-Using the signal propagation models described in chapter \ref{chap:RSP} in combination with the particle filter from chapter \ref{chap:PF} provides a framework for indoor positioning is obtained. This framework can then be used to perform position estimation using RSSI measurements from multiple Wi-Fi APs. 
+Using the signal propagation models described in Chapter \ref{chap:RSP} in combination with the particle filter from chapter \ref{chap:PF} provides a framework for indoor positioning. This framework can then be used to perform position estimation using RSSI measurements from multiple WiFi APs. 
 
 In this chapter, the considerations about, and parameter choices for, the particle filter in the context of indoor positioning is presented. The performance is then tested in a few different environments and compared to position estimation using a \emph{least squares} algorithm.  These tests then serves as a basis for an extensive error analysis, discussing the error behavior depending on different conditions. The resulting knowledge is then used to ascertain if and how adaptive or crowd-sourced signal strength models may be used. The chapter is closed by a test of such models and their potential advantages compared to more traditional models. 
 %
 \section{On Parameter Choices}
 %
-There are four parts of the particle filter that can be chosen by the user to some extent, the number of particle $N$, the system model, the process noise $v_k$ and the measurement noise $e_k$.
+There are four parts of the particle filter that can be chosen by the user to some extent. The number of particles $N$, the system model, the process noise $v_k$ and the measurement noise $e_k$.
 %
 \subsection{System Model}
 %
-The process model is the most extensive choice, where both the number of states and their respective dynamics needs to be determined. Some parts of this is dependent on available measurements and how complex a model is allowed. Using only measurements of the RSSI from multiple APs, a simple model using only two states $x$ and $y$ i. e position in the plan, is used. Further, a random walk process is used to model the dynamics, resulting in the state update
+The process model is the most extensive choice, where both the number of states and their respective dynamics need to be determined. Some parts of this is dependent on available measurements and how complex a model is allowed to be. Using only measurements of the RSSI from multiple APs, a simple model using only two states $x$ and $y$,describing the position in a plane, are used. Moreover, a random walk process is used to model the dynamics, resulting in the state update
 %
 \begin{eqnarray}
 x_{k+1}&=x_k + v^x_{k+1} \\
 y_{k+1}&=y_k + v^y_{k+1} 
 \end{eqnarray}
 %
-where $v^x_k$ and $v^y_k$ is the process noise on each state. 
+where $v^x_k$ and $v^y_k$ are the process noise on each state. 
 %
 \subsection{Process Noise}  
 %
-The process noise is, in this case, rather straight forward to choose, as it represents the spread of particles in between measurements. A normal distribution around a circle with radius $r$ is a appropriate choice,
+The process noise is, in this case, rather straight forward to choose, as it represents the spread of particles in between measurements. A normal distribution around a circle with radius $r$ is an appropriate choice,
 %
 \begin{eqnarray}
 v^x_k &\sim r\sin{\alpha_k}+\mathcal{N}(0,\sigma^2)\\
@@ -517,7 +519,7 @@ where
 %
 where $\mathsf{U}(0,2\pi)$ is a uniform distribution between $0$ and $2\pi$ and the constant over each time step $k$. $\sigma$ is the standard deviation of the normal distribution. In this case $r$ is a approximation of how far the phone travels in between measurements and $\sigma$ measures the uncertainty of this distance. 
 
-A fair estimation is that a human walking travels at between 1 and 3 meters per second and given a interval $\Delta t$ between measurements $r = 2*\Delta t$ and $\sigma = 1*\Delta t$. Thus,
+A fair estimation is that a walking person travels at between 1 and 3 meters per second, and given an interval $\Delta t$ between measurements it holds that $r = 2*\Delta t$ and $\sigma = 1*\Delta t$. Thus,
 %
 \begin{eqnarray}
 v^x_k&\sim 2\Delta t \sin{\alpha_k} + \mathcal{N} (0, \Delta t^2)\\
@@ -531,7 +533,7 @@ On a first glance, the measurement noise would be a fairly simple choice, i e. t
 
 FIGURES HERE!!
 
-However, doing this gives inconclusive results, the noise seams to be dependent, both on distance from the AP and whether the AP is in line-of-sight or not. Furthermore, sometimes reflections of the signal may reach the phone in obscure ways resulting in odd measurements.
+However, doing this gives inconclusive results. The noise seems to be dependent, both on distance from the AP and whether the AP is in line-of-sight or not. Furthermore, sometimes reflections of the signal may reach the phone in obscure ways resulting in odd measurements.
 
 A better way is to use a zero-mean Gaussian distribution with distance dependent standard deviation, 
 %
@@ -539,17 +541,17 @@ A better way is to use a zero-mean Gaussian distribution with distance dependent
 e^i_k\sim \mathcal{N}(0,\sigma(d)^2)
 \end{equation}
 %
-where $e^i_k$ denotes the measurement noise from the $i$:th AP and $\sigma(d)^2$ is a distance dependent function. As we only pas below AP and thus never comes closer than around two meters , the noise never is deterministic and equal to zero. The function $\sigma(d)$ is to be chosen to approximate the noise found in the measurements. The lowest  standard deviation of the noise is found when the signal strength is high and is around 3 dB, and the highest standard deviation is found for $d>17$ meters and is in the worst case 20 dB. The function $\sigma(d)$ is then,
+where $e^i_k$ denotes the measurement noise from the $i$:th AP and $\sigma(d)^2$ is a distance dependent function. As we only pass below AP and thus never come closer than around two meters, the noise never is deterministic and equal to zero. The function $\sigma(d)$ is to be chosen to approximate the noise found in the measurements. The lowest  standard deviation of the noise is found when the signal strength is high and is around 3 dB, and the highest standard deviation is found for $d>17$ meters and is in the worst case 20 dB. The function $\sigma(d)$ is then,
 %
 \begin{equation}
 \sigma(d) = \left \{ \begin{array}{cc}3 + d, & 0<d<17\\ 20,  & d\geq 17\end{array}\right.
 \end{equation}
 %
-This allows the noise to be low when the distance is short and large when the distance is large and the probability for obstructions are fairly large.
+This allows the noise to be low when the distance is short and large when the distance is large and the probability for obstructions is fairly large.
 %
 \subsection{Number of Particles}
 %
-The number of particles $N$ is the most straight forward choice, a higher $N$ directly improves the filter but increases the computational burden. If the system model is poor or the process noise is large a larger number of particles is needed to provide a sufficient particle density over the possible states. As the system model only has two states, it suggests a fairly low number of particles. On the other hand, a random walk is used for the state update, which is a non-precise update spreading the particles over a quite large area. Considering both of these, $N=1000$ has been chosen to be a suitable number of particles.    
+The number of particles $N$ is the most straight forward choice. A higher $N$ directly improves the filter but increases the computational burden. If the system model is poor or the process noise is large a larger number of particles is needed to provide a sufficient particle density over the possible states. As the system model only has two states, it suggests a fairly low number of particles. On the other hand, a random walk is used for the state update, which is a non-precise update spreading the particles over a quite large area. Considering both of these, $N=1000$ has been chosen to be a suitable number of particles.    
 %
 \section{Test setup}
 %
@@ -558,7 +560,7 @@ During the following sections of this chapter two different test cases will be u
 %
 \item[Case 1:] \hfill \\
 %
-Measurements of the RSSI is taken at equally spaced points with $0.5$ meter spacing over a predetermined path. Only measurements from predetermined APs with known positions is taken. The measurements are taken while the measuring phone is at rest at each point.  
+Measurements of the RSSI is taken at equally spaced points with $0.5$ meter spacing over a predetermined path. Only measurements from predetermined APs with known positions are taken. The measurements are taken while the measuring phone is at rest at each point.  
 %
 \item[Case 2:] \hfill \\
 %
@@ -566,11 +568,11 @@ Measurements of the RSSI is taken continuously while the user is walking a prede
 %
 \end{description}
 %
-\emph{Case 1} allows the analysis of error between true position and estimated position as the measurements are taken at a fixed point. Further, the distance between measurements can be changed in increments of 0.5 meters by only using a subset of the available data. 
+\emph{Case 1} allows the analysis of error between true position and estimated position as the measurements are taken at fixed points. Further, the distance between measurements can be changed in increments of 0.5 meters by only using a subset of the available data. 
 
-\emph{Case 2} provides a more natural use-case, where the user is moving while trying to find his position. This case lacks the ability for error analysis, as the measurements are taken continuously over a interval and only the estimated trajectory can be compared to the true one.  
+\emph{Case 2} provides a more natural use-case, where the user is moving while trying to find his position. This case lacks the ability for error analysis, as the measurements are taken continuously over an interval and only the estimated trajectory can be compared to the true one.  
 
-For different test, different paths and a different setup of APs is used. Further, all test are performed in the same open office environment, but differences between the exact environments for each tests exists. 
+For different tests, different paths and a different setup of APs is used. Further, all tests are performed in the same open office environment, but differences between the exact environments for each test exist. 
 %
 \section{Results}
 %
@@ -584,7 +586,7 @@ The results for the different tests performed is presented in the different sect
 \caption{The path (blue line) used in the \emph{environment one}, along with measurement points (blue \texttt{x}), start point (black \texttt{x}) and end point (red \texttt{o}) }\label{env_one}
 \end{figure}
 %
-The methodology from \emph{case 1} was used during this test and measurements from seven APs along a path of around one hundred meters. The locations of the APs together with the path taken may be found in figure \ref{env_one}.
+The methodology from \emph{case 1} was used during this test and measurements from seven APs along a path of aproximately one hundred meters. The locations of the APs together with the path taken may be found in Figure \ref{env_one}.
 %
 \subsection{Environment Two - WORKING TITLE}
 %
@@ -598,17 +600,17 @@ The methodology from \emph{case 1} was used during this test and measurements fr
 %
 Modeling the kinematics may greatly improve the performance of a positioning system, especially if the estimated position is noisy or biased. The kinematics may also be used to estimate the position in between the updates from the main positioning algorithm. The range of models stretches from simple random walk processes to estimating accelerations, velocities and position in three dimensional space using sensor fusion.
 
-After a short description of different random walk processes, quaternions are introduced and their use in three-dimensional pose  estimation, without risk of singularities, explained. A section about positioning using only sensors, named \emph{dead reckoning}, is present after which, the chapter closes by an discussion of kinematics models used in indoor positioning and their effect on the performance.   
+After a short description of different random walk processes, quaternions are introduced and their use in three-dimensional pose  estimation, without risk of singularities, explained. A section about positioning using only sensors, named \emph{dead reckoning}, is presented, after which the chapter closes by a discussion of kinematics models used in indoor positioning and their effects on the performance.   
 %
 \section{Random Walk}
 %
-The simplest way of modeling the kinematics, aside from the trivial case of choosing not to model it at all, is to use a \emph{random walk} model for each state. In a random walk the states, $x$, undergoes time updates according to
+The simplest way of modeling the kinematics, aside from the trivial case of choosing not to model it at all, is to use a \emph{random walk} model for each state. In a random walk the states, $x$, undergo time updates according to
 %
 \begin{equation}
 x_{k+1} = x_k + v_k
 \end{equation}      
 %
-where $v_k$ is a random process. Usually $v_k$ is considered independent for each state, and depending on the distribution and standard deviation $\sigma$, different random walk processes are obtained. How $v_k$ should be distributed is determined by the intrinsic behavior of the states, a common choice is a normal distribution with an appropriate $\sigma$. Such a random walk is called a \emph{Gaussian random walk}, and if $\sigma$ is very small it resembles a \emph{Brownian motion}. A Gaussian random walk for three states in two dimensions, each starting in $(0\hspace{5pt}0)$, is displayed in figure \ref{rand_walk}. 
+where $v_k$ is a random process. Usually $v_k$ is considered independent for each state, and depending on the distribution and standard deviation $\sigma$, different random walk processes are obtained. How $v_k$ should be distributed is determined by the intrinsic behavior of the states. A common choice is a normal distribution with an appropriate $\sigma$. Such a random walk is called a \emph{Gaussian random walk}, and if $\sigma$ is very small it resembles a \emph{Brownian motion}. A Gaussian random walk for three states in two dimensions, each starting in $(0\hspace{5pt}0)$, is displayed in figure \ref{rand_walk}. 
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -618,11 +620,11 @@ where $v_k$ is a random process. Usually $v_k$ is considered independent for eac
 %
 \section{Quaternions}
 %
-The \emph{quaternions} are a extension of the complex numbers first described in 1843 by the Irish mathematician William Rowan Hamilton. They where first used in three-dimensional mechanics and today there are, among other applications, used to estimate the pose (position and direction in relation to a fixed frame) in three dimensions \cite{mann13}.
+The \emph{quaternions} are an extension of the complex numbers, first described in 1843 by the Irish mathematician William Rowan Hamilton. They were first used in three-dimensional mechanics and today they are, among other applications, used to estimate the pose (position and direction in relation to a fixed frame) in three dimensions \cite{mann13}.
 %
 \subsection{Quaternion Theory}
 %
-As stated before quaternions are a set of numbers $q$, extending the complex number, defined as
+As stated before a quaternion, $q$, is a set of numbers, extending the complex number, defined as
 %
 \begin{equation}
 q = a+bi+cj+dk, \hspace{5pt}[a,b,c,d]\in \mathbb R
@@ -705,9 +707,9 @@ Another use full definition is the quaternion norm $|q|$,
 %
 \subsection{Quaternions Interpreted as Rotations}
 %
-Why a certain subset of quaternions, $|q|=1$ may be interpreted as rotations is beyond the scope of this thesis, instead here a recapitulation of how they can be use will be presented. If a reader is interested in the mechanisms involved are referred to \cite{kuip98} for an in-depth discussion of the background and theory of quaternions. 
+Why a certain subset of quaternions, $|q|=1$ may be interpreted as rotations is beyond the scope of this thesis. Instead, here follows a recapitulation of how they can be uses. Reader interested in the mechanisms involved are referred to \cite{kuip98} for an in-depth discussion of the background and theory of quaternions. 
 
-Rotations are defined by two elements, the amount (angle) of rotation and around what axis the rotation is performed. Suppose a rotation of $\theta$ is performed around the three-dimensional unit vector $\vec n$, the quaternion representation of this would be
+Rotations are defined by two elements, the amount (angle) of rotation and around what axis the rotation is performed. Suppose that a rotation of $\theta$ is performed around the three-dimensional unit vector $\vec n$. The quaternion representation of this would be
 \begin{equation}
 q = \left(\begin{array}{c}\cos{\frac{\theta}{2}}\vspace{5pt}\\ \vec{n}\sin{\frac{\theta}{2}}\end{array}\right).
 \end{equation}  
@@ -718,7 +720,7 @@ Finding the vector $\vec v$ rotated clockwise by $\theta$ around $\vec n$, noted
 \left(\begin{array}{c}0\\ \vec{v_r}\end{array}\right) = q\otimes \left(\begin{array}{c}0\\ \vec{v}\end{array}\right) \otimes q^{-1}.
 \end{equation}
 %
-from here on, the naming convention
+From here on, the naming convention
 %
 \begin{equation}
 \vec v\equiv \left(\begin{array}{c}0\\ \vec{v}\end{array}\right).
@@ -730,7 +732,7 @@ The rotation of a vector, $\vec v$, by a quaternion, $q$ and subsequently by $p$
 (p\otimes q)\otimes \vec v \otimes (p\otimes q)^{-1}=p\otimes(q\otimes\vec v\otimes q^{-1})\otimes p^{-1}. 
 \end{equation}
 %
-When using sensors, in particular a gyroscope, to compute the rotation, it is common to end up with integrated angular velocities on the form $\vec{r} = (r_x \; \; r_y \; \; r_z)^T$. Each element in $\vec r$ characterize the rotation around a axis in an orthogonal coordinate system, in a relatively short timespan. To describe this rotation using quaternions, the direction around which the rotation is performed can be viewed as the direction of $\vec r$ and the vector norm $|\vec r|$ may be considered the angle of rotation. The corresponding quaternion, $q$, is then
+When using sensors, in particular a gyroscope, to compute the rotation, it is common to end up with integrated angular velocities on the form $\vec{r} = (r_x \; \; r_y \; \; r_z)^T$. Each element in $\vec r$ characterize the rotation around an axis in an orthogonal coordinate system, in a relatively short timespan. To describe this rotation using quaternions, the direction around which the rotation is performed can be viewed as the direction of $\vec r$, and the vector norm $|\vec r|$ may be considered the angle of rotation. The corresponding quaternion, $q$, is then
 %
 \begin{equation}
 q = \left(\begin{array}{c}\cos{\frac{|\vec r|}{2}}\vspace{5pt} \\ \frac{\vec{r}}{|\vec r|}\cos{\frac{|\vec r|}{2}}\end{array}\right)
@@ -830,7 +832,7 @@ However, as stated before, the error in cumulative and the performance deteriora
 
 SOME ABOUT THE ROTATION VECTORS HERE
 
-It is apparent that both position and heading needs to be calibrated to obtain a good position estimate. How this is done is explained in the following chapters.
+It is apparent that both position and heading need to be calibrated to obtain a good position estimate. How this is done is explained in the following chapters.
 %
 \chapter{Sensor Evaluation}
 %
