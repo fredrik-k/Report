@@ -485,7 +485,7 @@ An extensive discussion about how path loss depends on the frequency is done in 
 %
 Using the signal propagation models described in Chapter \ref{chap:RSP} in combination with the particle filter from chapter \ref{chap:PF} provides a framework for indoor positioning. This framework can then be used to perform position estimation using RSSI measurements from multiple WiFi APs. 
 
-In this chapter, the considerations about, and parameter choices for, the particle filter in the context of indoor positioning is presented. The performance is then tested in a few different environments and compared to position estimation using a \emph{least squares} algorithm.  These tests then serves as a basis for an extensive error analysis, discussing the error behavior depending on different conditions. The resulting knowledge is then used to ascertain if and how adaptive or crowd-sourced signal strength models may be used. The chapter is closed by a test of such models and their potential advantages compared to more traditional models. 
+In this chapter, the considerations about, and parameter choices for, the particle filter in the context of indoor positioning are presented. The performance is then tested in a few different environments and compared to position estimation using a \emph{least squares} algorithm.  These tests then serves as a basis for an extensive error analysis, discussing the error behavior depending on different conditions. The resulting knowledge is then used to ascertain if and how adaptive or crowd-sourced signal strength models may be used. The chapter is closed by a test of such models and their potential advantages compared to more traditional models. 
 %
 \section{On Parameter Choices}
 %
@@ -493,7 +493,7 @@ There are four parts of the particle filter that can be chosen by the user to so
 %
 \subsection{System Model}
 %
-The process model is the most extensive choice, where both the number of states and their respective dynamics need to be determined. Some parts of this is dependent on available measurements and how complex a model is allowed to be. Using only measurements of the RSSI from multiple APs, a simple model using only two states $x$ and $y$,describing the position in a plane, are used. Moreover, a random walk process is used to model the dynamics, resulting in the state update
+The process model is the most extensive choice, where both the number of states and their respective dynamics need to be determined. Some parts of this are dependent on available measurements and how complex a model is allowed to be. Using only measurements of the RSSI from multiple APs, a simple model using only two states $x$ and $y$,describing the position in a plane, are used. Moreover, a random walk process is used to model the dynamics, resulting in the state update
 %
 \begin{eqnarray}
 x_{k+1}&=x_k + v^x_{k+1} \\
@@ -529,7 +529,7 @@ placing the new particles somewhere on an circle of radius $2\Delta t$ from the 
 %
 \subsection{Measurement Noise}
 %
-On a first glance, the measurement noise would be a fairly simple choice, i e. take a couple of sets of measurements at different distances from a AP and investigate the noise behavior. Then use this as the measurement noise. 
+At a first glance, the measurement noise would be a fairly simple choice, i e. take a couple of sets of measurements at different distances from a AP and investigate the noise behavior. Then use this as the measurement noise. 
 
 FIGURES HERE!!
 
@@ -541,26 +541,26 @@ A better way is to use a zero-mean Gaussian distribution with distance dependent
 e^i_k\sim \mathcal{N}(0,\sigma(d)^2)
 \end{equation}
 %
-where $e^i_k$ denotes the measurement noise from the $i$:th AP and $\sigma(d)^2$ is a distance dependent function. As we only pass below AP and thus never come closer than around two meters, the noise never is deterministic and equal to zero. The function $\sigma(d)$ is to be chosen to approximate the noise found in the measurements. The lowest  standard deviation of the noise is found when the signal strength is high and is around 3 dB, and the highest standard deviation is found for $d>17$ meters and is in the worst case 20 dB. The function $\sigma(d)$ is then,
+where $e^i_k$ denotes the measurement noise from the $i$:th AP and $\sigma(d)^2$ is a distance dependent function. As we only pass below AP and thus never come closer than around two meters, the noise is never deterministic and equal to zero. The function $\sigma(d)$ is to be chosen to approximate the noise found in the measurements. The lowest  standard deviation of the noise is found when the signal strength is high and around 3 dB, and the highest standard deviation is found for $d>17$ meters and is in the worst case 20 dB. The function $\sigma(d)$ is then,
 %
 \begin{equation}
 \sigma(d) = \left \{ \begin{array}{cc}3 + d, & 0<d<17\\ 20,  & d\geq 17\end{array}\right.
 \end{equation}
 %
-This allows the noise to be low when the distance is short and large when the distance is large and the probability for obstructions is fairly large.
+This allows the noise to be low when the distance is short and large when the distance is large and the probability of obstructions is fairly large.
 %
 \subsection{Number of Particles}
 %
 The number of particles $N$ is the most straight forward choice. A higher $N$ directly improves the filter but increases the computational burden. If the system model is poor or the process noise is large a larger number of particles is needed to provide a sufficient particle density over the possible states. As the system model only has two states, it suggests a fairly low number of particles. On the other hand, a random walk is used for the state update, which is a non-precise update spreading the particles over a quite large area. Considering both of these, $N=1000$ has been chosen to be a suitable number of particles.    
 %
-\section{Test setup}
+\section{Test Setup}
 %
 During the following sections of this chapter two different test cases will be used,
 \begin{description}
 %
 \item[Case 1:] \hfill \\
 %
-Measurements of the RSSI is taken at equally spaced points with $0.5$ meter spacing over a predetermined path. Only measurements from predetermined APs with known positions are taken. The measurements are taken while the measuring phone is at rest at each point.  
+Measurements of the RSSI is taken at equally spaced points with $0.5$ meters spacing over a predetermined path. Only measurements from predetermined APs with known positions are taken. The measurements are taken while the measuring phone is at rest at each point.  
 %
 \item[Case 2:] \hfill \\
 %
@@ -570,13 +570,13 @@ Measurements of the RSSI is taken continuously while the user is walking a prede
 %
 \emph{Case 1} allows the analysis of error between true position and estimated position as the measurements are taken at fixed points. Further, the distance between measurements can be changed in increments of 0.5 meters by only using a subset of the available data. 
 
-\emph{Case 2} provides a more natural use-case, where the user is moving while trying to find his position. This case lacks the ability for error analysis, as the measurements are taken continuously over an interval and only the estimated trajectory can be compared to the true one.  
+\emph{Case 2} provides a more natural use-case, where the user is moving while trying to find his position. This case lacks the ability of error analysis, as the measurements are taken continuously over an interval and only the estimated trajectory can be compared to the true one.  
 
-For different tests, different paths and a different setup of APs is used. Further, all tests are performed in the same open office environment, but differences between the exact environments for each test exist. 
+For different tests, different paths and a different setup of APs are used. Further, all tests are performed in the same type of open office environment, but differences between the exact environments for each test exist. 
 %
 \section{Results}
 %
-The results for the different tests performed is presented in the different sections below. 
+The results of the different tests performed are presented in the sections below. 
 %
 \subsection{Environment One - WORKING TITLE} 
 %
@@ -586,7 +586,7 @@ The results for the different tests performed is presented in the different sect
 \caption{The path (blue line) used in the \emph{environment one}, along with measurement points (blue \texttt{x}), start point (black \texttt{x}) and end point (red \texttt{o}) }\label{env_one}
 \end{figure}
 %
-The methodology from \emph{case 1} was used during this test and measurements from seven APs along a path of aproximately one hundred meters. The locations of the APs together with the path taken may be found in Figure \ref{env_one}.
+The methodology from \emph{case 1} was used during this test and measurements from seven APs along a path of approximately one hundred meters. The locations of the APs together with the path taken may be found in Figure \ref{env_one}.
 %
 \subsection{Environment Two - WORKING TITLE}
 %
@@ -598,7 +598,7 @@ The methodology from \emph{case 1} was used during this test and measurements fr
 %
 \chapter{Modeling the Kinematics} %Working title
 %
-Modeling the kinematics may greatly improve the performance of a positioning system, especially if the estimated position is noisy or biased. The kinematics may also be used to estimate the position in between the updates from the main positioning algorithm. The range of models stretches from simple random walk processes to estimating accelerations, velocities and position in three dimensional space using sensor fusion.
+Modeling the kinematics may greatly improve the performance of a positioning system, especially if the estimated position is noisy or biased. The kinematics may also be used to estimate the position in between the updates from the main positioning algorithm. The range of models stretches from simple random walk processes to estimating acceleration, velocity and position in a three dimensional space using sensor fusion.
 
 After a short description of different random walk processes, quaternions are introduced and their use in three-dimensional pose  estimation, without risk of singularities, explained. A section about positioning using only sensors, named \emph{dead reckoning}, is presented, after which the chapter closes by a discussion of kinematics models used in indoor positioning and their effects on the performance.   
 %
@@ -610,12 +610,12 @@ The simplest way of modeling the kinematics, aside from the trivial case of choo
 x_{k+1} = x_k + v_k
 \end{equation}      
 %
-where $v_k$ is a random process. Usually $v_k$ is considered independent for each state, and depending on the distribution and standard deviation $\sigma$, different random walk processes are obtained. How $v_k$ should be distributed is determined by the intrinsic behavior of the states. A common choice is a normal distribution with an appropriate $\sigma$. Such a random walk is called a \emph{Gaussian random walk}, and if $\sigma$ is very small it resembles a \emph{Brownian motion}. A Gaussian random walk for three states in two dimensions, each starting in $(0\hspace{5pt}0)$, is displayed in figure \ref{rand_walk}. 
+where $v_k$ is a random process. Usually $v_k$ is considered independent for each state, and depending on the distribution and standard deviation $\sigma$, different random walk processes are obtained. How $v_k$ should be distributed is determined by the intrinsic behavior of the states. A common choice is a normal distribution with an appropriate $\sigma$. Such a random walk is called a \emph{Gaussian random walk}, and if $\sigma$ is very small it resembles a \emph{Brownian motion}. Four series of Gaussian random walks in two dimensions, each starting in $(0\hspace{5pt}0)$, are displayed in Figure \ref{rand_walk}. 
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/rand_walk}
-\caption{Random walk of four states using $\sigma = 1$ and $10000$ steps.}\label{rand_walk}
+\caption{Four series of random walk using $\sigma = 1$ and $10000$ steps.}\label{rand_walk}
 \end{figure}
 %
 \section{Quaternions}
@@ -624,7 +624,7 @@ The \emph{quaternions} are an extension of the complex numbers, first described 
 %
 \subsection{Quaternion Theory}
 %
-As stated before a quaternion, $q$, is a set of numbers, extending the complex number, defined as
+As stated before a quaternion, $q$, is a set of numbers, extending the complex numbers, defined as
 %
 \begin{equation}
 q = a+bi+cj+dk, \hspace{5pt}[a,b,c,d]\in \mathbb R
@@ -639,7 +639,7 @@ Further, the basis elements obey
 i^2=j^2=k^2=ijk=-1
 \end{equation}
 %
-thus, from \ref{equation:basis} all possible of the basis multiplications can be formed according to table \ref{table:basis}.
+Thus, from \ref{equation:basis} all possible of the basis multiplications can be formed according to table \ref{table:basis}.
 %
 \begin{table}[!hbt]
 \begin{center}
@@ -674,32 +674,32 @@ q\otimes r = \left(\begin{array}{c}q_0\\ \vec{q}\end{array}\right) \otimes \left
 \left(\begin{array}{c}q_0r_0-\vec{q} \cdot \vec{r}\\ q_0\vec{r}+r_0\vec{q}+\vec{q}\times \vec{r}\end{array}\right)
 \end{equation}
 %
-for two quaternions $q$ and $r$, where $\cdot$ denote the scalar product and $\times$ denote the vector product. The quaternion multiplication is non-associative, meaning
+for two quaternions $q$ and $r$, where $\cdot$ denote the scalar product and $\times$ denote the vector product. The quaternion multiplication is non-commutative, meaning
 %
 \begin{equation}
-\vec{q}\otimes \vec{r} \neq \vec{r} \otimes \vec{q}
+{q}\otimes {r} \neq {r} \otimes {q}
 \end{equation}
 %
 in general. It is, however associative
 %
 \begin{equation}
-(\vec{q}\otimes\vec{r})\otimes\vec{s} = \vec{q}\otimes(\vec{r}\otimes\vec{s}).
+({q}\otimes{r})\otimes{s} = {q}\otimes({r}\otimes{s}).
 \label{equation:quat_asso}
 \end{equation} 
 %
-Further, the \emph{unit} quaternion is defined
+Further, the \emph{unit} quaternion is defined as
 %
 \begin{equation}
 {q_{\mathbf{I}}}=\left(\begin{array}{c}1\\ 0 \\ 0 \\ 0\end{array}\right)
 \end{equation}
 %
-and the quaternion inverse $q^{-1}$ are
+and the quaternion inverse $q^{-1}$ is
 %
 \begin{eqnarray}
-q^{-1}\otimes q = q\otimes q^{-1} = q_{\mathbf{I}} &\Leftrightarrow& q^{-1} = \left(\begin{array}{c}q_0\\ -\vec{q}\end{array}\right)
+q^{-1}\otimes q = q\otimes q^{-1} = q_{\mathbf{I}} &\Leftrightarrow& q^{-1} = \frac{1}{|q|^2}\left(\begin{array}{c}q_0\\ -\vec{q}\end{array}\right)
 \end{eqnarray}
 %
-Another use full definition is the quaternion norm $|q|$,
+where the quaternion norm $|q|$ is defined as
 %
 \begin{equation}
 |q| = \sqrt{q_0^2+q_1^2+q_2^2+q_3^2 }.
@@ -754,7 +754,7 @@ which is considerably more uniform between use cases.
 \caption{Average acceleration during 10 seconds of a typical walk.}\label{avr_acc}
 \end{figure}
 
-A 10 second sample of the average acceleration measured by a phone placed in the front pocket during a typical walk is displayed in figure \ref{avr_acc}. A flaw of this approach is easily noticed, owing to gravity, the average acceleration is centered around this value, ($9.81$ m/s$^2$). A way around this is to differentiate the signal according to 
+A 10 second sample of the average acceleration measured by a phone placed in the front pocket during a typical walk is displayed in figure \ref{avr_acc}. A flaw of this approach is easily noticed. Due to gravity, the average acceleration is centered around this value, ($9.81$ m/s$^2$). A way around this is to differentiate the signal according to 
 %
 \begin{equation}
 \Delta f(x) = \frac{f(x+\Delta t) - f(x) }{\Delta t},
@@ -767,7 +767,7 @@ A 10 second sample of the average acceleration measured by a phone placed in the
 \end{figure}
 \subsection{Step Length Considerations}
 %
-yielding a signal according to figure \ref{avr_acc_dif}. This signal i centred around zero, but possesses unnecessary high frequency behaviour. The sampling frequency for the accelerometer is $\sim 200$ Hz, giving a frequency content of the signal between 0 and 100 Hz. The normal step frequency for a person is no larger than 3 Hz, which promotes filtering the signal. Doing this with a fifth order \emph{Butterworth filter} with a cut-of frequency of 6 Hz yields the signal in figure \ref{avr_acc_dif_filt}.
+yielding a signal according to figure \ref{avr_acc_dif}. This signal is centred around zero, but possesses unnecessary high frequency behaviour. The sampling frequency of the accelerometer is $\sim 200$ Hz, giving a frequency content of the signal between 0 and 100 Hz. The normal step frequency for a person is no larger than 3 Hz, which promotes filtering the signal. Doing this with a fifth order \emph{Butterworth filter} with a cut-of frequency of 6 Hz yields the signal in figure \ref{avr_acc_dif_filt}.
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -775,19 +775,19 @@ yielding a signal according to figure \ref{avr_acc_dif}. This signal i centred a
 \caption{Filtered differentiation of average acceleration during 10 seconds of a typical walk.}\label{avr_acc_dif_filt}
 \end{figure}
 %
-Here the steps are clearly distinguishable, the large peek corresponding to a step with the same leg as the pocket the phone is placed in, the smaller one indicates a step taken by the other leg. A algorithm for identifying a step could be counting the number of times  the signal is decreasing and passing from above to below $-20$.
+Here, the steps are clearly distinguishable. The large peek corresponds to a step with the same leg as the pocket containing the phone, and the smaller one indicates a step taken by the other leg. An algorithm for identifying a step could be counting the number of times  the signal is decreasing and passing from above to below $-20$.
 
-The technique could be refined further, by e. g identifying the step frequency or by using more sensors. This text more of a short prof of concept for the technique. During the latter parts of this thesis a proprietary solution developed by \emph{Qualcomm} will be used. 
+The technique could be refined further, by e. g identifying the step frequency or by using more sensors. This text is more of a short proof of concept for the technique. During the latter parts of this thesis a proprietary solution developed by \emph{Qualcomm} will be used. 
 %
 \subsection{Step Length Considerations}
 %
-The step length of an individual, moving in a straight line with a constant speed, is more or less constant. Different individuals or the same individual moving at different speeds or performing turns have a quite large span of step lengths. In this thesis the step length have been determined by the authors walking a predetermined distance comprised of walking straight interspersed with turning both left and right, at a constant speed. The average step length is then simply computed as the distance divided by number of steps and a value of $0.77$ meters was obtained.  
+The step length of an individual, moving in a straight line with a constant speed, is more or less constant. Different individuals or the same individual moving at different speeds or performing turns have a quite large span of step lengths. In this thesis the step length has been determined by the authors walking a predetermined distance comprised of walking straight interspersed with turning both left and right, at a constant speed. The average step length is then simply computed as the distance divided by number of steps and a value of $0.77$ meters was obtained.  
 
-For real world usage however, the length of a users steps must be determined. This can be done in various ways, one is to have the user estimate their own step length but the same method as above. Another is to use adaptive tune the step length by using approximately known distances travelled and the number of steps taken whilst traveling. A way of doing this is to use some sort of positioning technique (GPS, WiFi etc.) to estimate the distance while the step counter determines the number of steps.      
+For real world usage however, the length of a user's steps must be determined. This can be done in various ways, one is to have the user estimate their own step length with the same method as above. Another is to adaptively tune the step length by using approximately known distances travelled and the number of steps taken whilst traveling. A way of doing this is to use some sort of positioning technique (GPS, WiFi etc.) to estimate the distance while the step counter determines the number of steps.      
 %
 \section{Direction of Movement}
 %
-To have a good estimation of the movement, not only the distance travelled needs to be known. More importantly is the direction in which the movement takes place. In addition, this task is more complicated than finding the distance by the number of steps taken. Many approaches are available using a wide span of technologies, here a some of the mostly used for hand-held devices are presented.  
+To have a good estimation of the movement, not only the distance travelled needs to be known. More importantly is the direction in which the movement takes place. In addition, this task is more complicated than finding the distance by the number of steps taken. Many approaches are available using a wide span of technologies. Some of the most common technologies for hand-held devices are presented below.
 %
 \subsection{Gyroscope}
 %
@@ -796,25 +796,25 @@ The gyroscope measures the \emph{angular velocities} at which the phone is turni
 \Delta t \frac{\vec \omega _t +\vec \omega _{t+\Delta t}}{2}.
 \end{equation} 
 %
-There are a few problems of using the gyroscope to determine the direction of movement. As it only measures how the angles change during time, the direction at the start of the navigation must be known and the orientation needs to be kept fixed in reference to the movement. Furthermore, the gyroscope suffers from drifts and biases, so if it is to be used for long stretches of time the heading needs to be calibrated. 
+There are a few problems of using the gyroscope to determine the direction of movement. As it only measures how the angles change during time, the direction at the start of the navigation must be known and the orientation needs to be kept fixed in reference to the movement. Furthermore, the gyroscope suffers from drifts and biases. Hence, if it is to be used for long stretches of time, the heading needs to be calibrated. 
 %
 \subsection{Magnetometer}
 %
-A way around the problems of a known initial direction is the use of a magnetometer, which measures the \emph{magnetic field strength} in each of the phones three coordinate directions. Using the known electromagnetic field produced by the earth's core, it is possible to find the phones heading. In theory this enables the magnetometer along with a known phone orientation to estimate the direction of movement. This is possible in environments where the electromagnetic fields, apart from the earth's own, is weak, e. g outdoors. In most indoor environments however, fields from electronic devices and structural elements (metal beams, pipes etc.) produced their own magnetic fields. These fields is in many cases strong enough to interfere or even overpower the earth's, causing the estimated heading to be off. 
+A way around the problems of a known initial direction is the use of a magnetometer, which measures the \emph{magnetic field strength} in each of the phone's three coordinate directions. Using the known electromagnetic field produced by the earth's core, it is possible to find the phone's heading. In theory this enables the magnetometer along with a known phone orientation to estimate the direction of movement. This is possible in environments where the electromagnetic fields, apart from the earth's own, are weak, e. g outdoors. In most indoor environments however, fields from electronic devices and structural elements (metal beams, pipes etc.) produce their own magnetic fields. These fields are in many cases strong enough to interfere or even overpower the earth's, causing the estimated heading to be wrong. 
 
-The \emph{fingerprinting} strategy for signal strengths described in \ref{sec:AfPA}, may also be utilized to characterize the magnetic field strengths in an indoor environment. These measurements can then be used to find the true heading, but this approach lacks generality as measurements at each location is needed.  
+The \emph{fingerprinting} strategy for signal strengths described in \ref{sec:AfPA}, may also be utilized to characterize the magnetic field strengths in an indoor environment. These measurements can then be used to find the true heading, but this approach lacks generality as measurements at each location are needed.  
 %
 \subsection{Sensor Fused Approaches}
 %
-Different approaches for combining magnetometer, gyroscope and possibly other sensors to produce a sensor fused estimation of the heading. Most Android phones implements such an algorithm, using gyroscope, magnetometer and accelerometer to produce an estimate of how the phone is oriented in the world coordinate system. The algorithm uses gyroscope and accelerometer to determine when the magnetometer output is corrupted, and uses their measurements to estimate the heading until the magnetometer can be trusted. ASK ABOUT HOW THIS WORKS IN PRACTICE!!!
+There are different approaches for combining magnetometer, gyroscope and possibly other sensors to produce a sensor fused estimation of the heading. Most Android phones implement such an algorithm, using gyroscope, magnetometer and accelerometer to produce an estimate of how the phone is oriented in the world coordinate system. The algorithm uses gyroscope and accelerometer to determine when the magnetometer output is corrupted, and uses their measurements to estimate the heading until the magnetometer can be trusted. ASK ABOUT HOW THIS WORKS IN PRACTICE!!!
 %
 \section{Dead Reckoning}
 %
-\emph{Dead reckoning} is the process of calculating the current position based on a previously determined position and advancing that position based on a known model. Dead reckoning has been used by e. g ships and airplanes for a long time or in more resent time in networked computer games. 
+\emph{Dead reckoning} is the process of calculating the current position based on a previously determined position and advancing that position based on a known model. Dead reckoning has been used by e. g ships and airplanes for a long time, and in more resent time in networked computer games. 
 
-Dead reckoning estimations are subject to cumulative errors i. e errors are added over time and depending on the accuracy of the dead reckoning system, the estimated position deviates from the true. This imply that the position estimate and heading needs to be calibrated at a certain time interval to provide an  accurate position.
+Dead reckoning estimations are subject to cumulative errors i.e. errors are added over time and depending on the accuracy of the dead reckoning system, the estimated position deviates from the true. This implies that the position and heading estimates need to be calibrated at a certain time interval to provide an accurate position.
 
-For phones a dead reckoning estimation would most likely include some form of step counting combined with one of the heading estimations previously mentioned. As an example, the true and estimated path using a pedometer and a gyroscope during a walk of approximately 110 meters, is presented in figure \ref{deadreckon_1}. The behaviour is fairly good but there is a heading error present soon after the start, and this grows as the walk continues. The distance estimated by the pedometer is also larger than the true distance travelled.  
+For phones, a dead reckoning estimation would most likely include some form of step counting combined with one of the heading estimations previously mentioned. As an example, the true and estimated paths using a pedometer and a gyroscope during a walk of approximately 110 meters, are presented in Figure \ref{deadreckon_1}. The behavior is fairly good but there is a heading error present soon after the start, and this grows as the walk continues. The distance estimated by the pedometer is also larger than the true distance traveled.  
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -822,7 +822,7 @@ For phones a dead reckoning estimation would most likely include some form of st
 \caption{True versus, by dead reckoning, estimated path using gyroscope and pedometer.}\label{deadreckon_1}
 \end{figure}
 
-However, as stated before, the error in cumulative and the performance deteriorates with time. This is shown in figure \ref{deadreckon_2}. The distance round the rectangle is approximately 105 meters and the especially the heading error is clearly visible. 
+However, as stated before, the error in cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and especially the heading error is clearly visible. 
 %
 \begin{figure}[!hbt]
 \include{graphics}
