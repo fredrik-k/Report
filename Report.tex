@@ -38,7 +38,7 @@ These people helped me a lot with my work.
 %
 \label{chap:RSP}
 %
-The performance of any wireless communication system is fundamentally limited by the properties of the radio signal. In the simplest of worlds these properties and hence the signal intensities, would depend only on the distance between transmitter and receiver. However, instead they vary greatly depending on the environment, from a simple line-of-sight (LOS) case to a severely obstructed one, where walls, windows, furniture etc. distort the signal between transmitter and receiver. Furthermore, the signal is affected by a large number of small-scale effects. Among them are reflections from various surfaces, diffraction and Doppler shift due to a difference in speed between the receiver in reference to the transmitter \cite{rappaport96}. In this thesis the focus is put on obtaining good models for the indoor propagation of radio signals for the application of positioning. 
+The performance of any wireless communication system is fundamentally limited by the properties of the radio signals. In the simplest of worlds these properties and hence the signal intensities, would depend only on the distance between transmitter and receiver. However, in fact they vary greatly depending on the environment, from a simple line-of-sight (LOS) case to a severely obstructed one, where walls, windows, furniture etc. distort the signal between transmitter and receiver. Furthermore, the signal is affected by a large number of small-scale effects. Among them are reflections from various surfaces, diffraction and Doppler shift due to a difference in speed between the receiver in reference to the transmitter \cite{rappaport96}. In this thesis the focus is put on obtaining good models for the indoor propagation of radio signals for the application of positioning. 
 
 The chapter consists of a recapitulation of free space signal propagation and path loss, together with different ways of modeling these. Different sources of disturbances and their influences are discussed. 
 %
@@ -92,7 +92,7 @@ where $P_r(d_0)$ can be determined by a simple measurement at 1 meter from the t
 %
 \section{Basic Mechanisms for Signal Propagation}
 %
-In this section the three basic mechanisms for signal propagation, reflection, diffraction and scattering, are presented together with their respective impact on the propagation model. The presentation is rather brief recap of sections 3.5 through 3.8 in  \cite{rappaport96} and interested readers are referred there for a more in-depth description.  
+In this section the three basic mechanisms for signal propagation, reflection, diffraction and scattering, are presented together with their respective impact on the propagation model. The presentation is rather brief recap of sections 3.5 through 3.8 in  \cite{rappaport96}, and interested readers are referred there for a more in-depth description.  
 %
 \subsection{Reflection}
 %
@@ -107,17 +107,17 @@ Diffraction is the property that allows waves to propagate around different obst
  \emph{All points on a wavefront can be considered as point sources for the new wavelet.} \cite{rappaport96}
  \end{quote}
 %
-Where diffraction is caused by the propagation of a secondary wave into a shadowed region, and diffraction can be viewed as the wave ''bending'' around the edge of objects. Because only a fraction of the wave propagates into the shadowed region, the signal strength decays rapidly when moving further into the shadowed region \cite{rappaport96}.
+Diffraction is caused by the propagation of a secondary wave into a shadowed region, and diffraction can be viewed as the wave ''bending'' around the edge of objects. Because only a fraction of the wave propagates into the shadowed region, the signal strength decays rapidly when moving further into the shadowed region \cite{rappaport96}.
 %
 \subsection{Scattering}
 %
 Scattering occurs when a wave travels through an environment which has a large density of objects with small dimensions compared to the wavelength. The energy of a scattered wave is spread out in all directions from the scattering surface. Even surfaces considered flat usually possess some roughness and thus some scattering properties.
 
-Scattering usually contributes to a higher signal strength than the one predicted by only diffraction and reflection \cite{rappaport96}.
+Scattering usually contributes to a higher signal strength than the one predicted only by diffraction and reflection \cite{rappaport96}.
 %
 \section{Indoor Propagation Models}
 %
-The Friis free space equation together with the reflection, diffraction and scattering have spawned many different models for indoor signal propagation of a wide rage of complexity.
+The Friis free space equation together with the reflection, diffraction and scattering have spawned many different models for indoor signal propagation of a wide range of complexity.
 %
 \subsection{Log-normal Shadowing} 
 One of the more simple models is the log-distance path loss model
@@ -126,7 +126,7 @@ One of the more simple models is the log-distance path loss model
 \log_{10}({P_r(d)})=\log_{10}({P_r(d_0)})-10n\log_{10}\left[{\frac{d}{d_0}}\right] + X_\sigma
 \end{equation} 
 %
-where n is the path loss exponent and  $X_\sigma$ is a zero-mean Gaussian distributed random variable with standard deviation $\sigma$ (both in dB). For some typical values of $n$ for different types of environments, see table \ref{table:path_loss_n}.
+where $n$ is the path loss exponent and  $X_\sigma$ is a zero-mean Gaussian distributed random variable with standard deviation $\sigma$ (both in dB). For some typical values of $n$ for different types of environments, see Table \ref{table:path_loss_n}.
 %
 \begin{table}
 \begin{center}
