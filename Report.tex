@@ -443,16 +443,16 @@ In this thesis however, the focus will be placed on the received signal strength
 %
 \subsection{Received Signal Strength Indication}
 %
-The \emph{Received Signal Strength Indication} (RSSI) is a value indicating the short-time-average of the received signal power \cite{fig_fra10}. The RSSI is given in an arbitrary unit, but usually dBm, and there is no standard of how RSSI should be related to the physical properties of the received signal.
+The \emph{Received Signal Strength Indication} (RSSI) is a value indicating the short-time-average of the received signal power \cite{fig_fra10}. The RSSI is given in an arbitrary unit, but usually dBm, and there is no standard of how RSSI should be related to the physical properties of the received signal. This means different manufacturers of devices abel to communicate over Wi-Fi may choose the range in which the RSSI is presented. 
 
-For the RSSI to be a meaningful measurement of the received signal strength it must be related to the physical properties of the signal. Usually, a measurement of the RSSI at a known distance is used together with an investigation of how the RSSI changes with the distance. The models discussed in chapter \ref{chap:RSP} can then be applied. 
+For the RSSI to be a meaningful measurement of the received signal strength it must somehow be related to the physical properties of the signal. Usually, a measurement of the RSSI at a known distance is used together with an investigation of how the RSSI changes with the distance. The models discussed in chapter \ref{chap:RSP} can then be applied. Different devices may posses different parameters, thus requiring modeling for a specific device or an adaptive estimation scheme. 
 %
 
 \subsection{RSSI Measurements in Android}
 
 An RSSI measurement on a device running the Android operating system is initiated by an application requesting a scan of the signal environment. The operating system performs the scan when the necessary system resources are available. Each channel specified by the IEEE $802.11$ standard and available in the current region is scanned. When a transmitter is found, a short-time average of the received signal power is measured and converted to an appropriate RSSI. The process is repeated until all reachable transmitters have been measured, and the results are returned along with information about each transmitter's MAC-address, its transmission frequency and a time-stamp. 
 
-Performing a scan only when the necessary system resources are available, causes the time from a scan is request to the results are returned to be irregular. Further, an environment with many transmitters will take a longer time to scan than an environment with few.         
+To conserve battery life for the measuring device, a technique called \emph{passive scanning} is used. Simply explained, each AP sends a message approximately every 100 ms telling devices in the vicinity it is active, its MAC-address and some additional information. The measuring device scan each channel for a little more than 100 ms to catch all AP on that channel, resulting in a quite long scan time ($\sim 3$-$5$ s). Which channels to scan could be specified to reduce the scan time, but some AP data might then be lost. Another way of performing the scans is to have the measuring devices actively probing (''asking'') for APs in its surroundings, but this would require almost constant sending of messages, thus draining the battery.               
 %
 \section{Performance of 2.4 GHz Versus 5 GHz}
 %
@@ -464,7 +464,7 @@ Of course, some of the signal behaviour is expected to be highly correlated. For
 
 To investigate the correlation between 2.4 and 5 GHz signals, measurements could be taken, with an increasing distance, to an AP transmitting on both frequencies. After the path loss dependent behavior is removed from the signals, the correlation of the noise could be computed.  
 
-Such an investigation was performed, taking measurements at increasing distances, in the range $[2,44.5]$, of the signal strength from an AP in line-of-sight. In Figure \ref{noise_corr_los} the resulting noise is displayed. The \emph{correlation coefficient $r_{xy}$} between the two can be computed using,
+Such an investigation was performed, taking measurements at increasing distances, in the range $[2,44$-$5]$, of the signal strength from an AP in line-of-sight. In Figure \ref{noise_corr_los} the resulting noise is displayed. The \emph{correlation coefficient $r_{xy}$} between the two can be computed using,
 \begin{equation}
 r_{xy}=\frac{\sum\limits_{i=1}^{N}{(x_i-\bar{x})(y_i-\bar{y})}}{(n-1)\sigma_x\sigma_y},
 \end{equation}
@@ -478,7 +478,7 @@ where $N$ is the number of measurements, $x_i$ and $y_i$ are the 2.4 and 5 GHz m
 %
 \subsection{Difference in Modeling}
 %
-An extensive discussion about how path loss depends on the frequency is done in \cite{rappaport96}, the gist of which is that higher frequencies lose power faster with distance than lower ones. The difference between 2.4 and 5 GHz is not large (a factor $\sim 2$), however some extra attention is needed to model the two. To extend the models in chapter \ref{chap:RSP} to the difference in frequency, usually different $n$ or $\alpha$, depending on the choice of model, will be needed. Furthermore, an AP may transmit 5 GHz with a greater power than 2.4 GHz to mitigate some of the increased path loss, requiring measurements for both frequencies.  
+An extensive discussion about how path loss depends on the frequency is done in \cite{rappaport96}, the gist of which is that higher frequencies lose power faster with distance. The difference between 2.4 and 5 GHz is not large (a factor $\sim 2$), however some extra attention is needed to model the two. To extend the models in chapter \ref{chap:RSP} to the difference in frequency, usually different $n$ or $\alpha$, depending on the choice of model, will be needed. Furthermore, an AP may transmit 5 GHz with a greater power than 2.4 GHz to mitigate some of the increased path loss, requiring measurements of the transmitted power for both frequencies.  
 %
 \chapter{Indoor Positioning - Pure RSSI Approach} 
 %
@@ -524,52 +524,46 @@ A fair estimation is that a walking person travels at between 1 and 3 meters per
 v^x_k&\sim 2\Delta t \sin{\alpha_k} + \mathcal{N} (0, \Delta t^2)\\
 v^y_k&\sim 2\Delta t \cos{\alpha_k} + \mathcal{N} (0, \Delta t^2)\\
 \end{eqnarray}
-placing the new particles somewhere on an circle of radius $2\Delta t$ from the old one and spreading them out by a standard deviation of $\Delta t$.    
+placing the new particles somewhere on an circle of radius $2\Delta t$ from the old one and spreading them out by a standard deviation of $\Delta t$.
+
+This estimation could be further improved by the use of a technique for counting steps, and this approach will be investigated in later chapters.    
 %
 \subsection{Measurement Noise}
 %
-At a first glance, the measurement noise would be a fairly simple choice, i e. take a couple of sets of measurements at different distances from a AP and investigate the noise behavior. Then use this as the measurement noise. 
+The measurement noise is a quite simple simple choice, take a couple of sets of measurements at different distances from a AP and investigate the noise behavior. This has been done for a quite large number of access point and in environments ranging from line-of-sight to a highly obstructed signal path and some of these results are displayed in figure \ref{noise_behaviour}. 
+%
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/pure_rssi/noise_behaviour}
+\caption{The difference between measurements and model for a few different APs for different environments and distances. Notice that the \emph{y}-axis of the figures are different.}\label{noise_behaviour}
+\end{figure}
 
-FIGURES HERE!!
+The resulting variance in the measurements ranged from $9$ to $60$, with a mean around $25$. The reason for the large span is that some of the APs was in line-of-sight for most of the measurement even though the distance to them was fairly large. Other APs was, on the other hand, highly obstructed while at a quite short distance, and yet others followed the models quite well. 
 
-However, doing this gives inconclusive results. The noise seems to be dependent, both on distance from the AP and whether the AP is in line-of-sight or not. Furthermore, sometimes reflections of the signal may reach the phone in obscure ways resulting in odd measurements.
+During the position estimations in the rest of this section the mean of the variance, 25, will be used. Further the measurement noise will be assumed to be gaussian with zero mean.  
 
-A better way is to use a zero-mean Gaussian distribution with distance dependent standard deviation, 
-%
-\begin{equation}
-e^i_k\sim \mathcal{N}(0,\sigma(d)^2)
-\end{equation}
-%
-where $e^i_k$ denotes the measurement noise from the $i$:th AP and $\sigma(d)^2$ is a distance dependent function. As we only pass below AP and thus never come closer than around two meters, the noise is never deterministic and equal to zero. The function $\sigma(d)$ is to be chosen to approximate the noise found in the measurements. The lowest  standard deviation of the noise is found when the signal strength is high and around 3 dB, and the highest standard deviation is found for $d>17$ meters and is in the worst case 20 dB. The function $\sigma(d)$ is then,
-%
-\begin{equation}
-\sigma(d) = \left \{ \begin{array}{cc}3 + d, & 0<d<17\\ 20,  & d\geq 17\end{array}\right.
-\end{equation}
-%
-This allows the noise to be low when the distance is short and large when the distance is large and the probability of obstructions is fairly large.
-%
 \subsection{Number of Particles}
 %
 The number of particles $N$ is the most straight forward choice. A higher $N$ directly improves the filter but increases the computational burden. If the system model is poor or the process noise is large a larger number of particles is needed to provide a sufficient particle density over the possible states. As the system model only has two states, it suggests a fairly low number of particles. On the other hand, a random walk is used for the state update, which is a non-precise update spreading the particles over a quite large area. Considering both of these, $N=1000$ has been chosen to be a suitable number of particles.    
 %
 \section{Test Setup}
 %
-During the following sections of this chapter two different test cases will be used,
+During the sections of this chapter two different test cases will be used,
 \begin{description}
 %
 \item[Case 1:] \hfill \\
 %
-Measurements of the RSSI are taken at equally spaced points with $0.5$ meters spacing over a predetermined path. Only measurements from predetermined APs with known positions are taken. The measurements are taken while the measuring phone is at rest at each point.  
+Measurements of the RSSI are taken at equally spaced points with $0.5$ meters spacing over a predetermined path. Only measurements from APs with known positions are used. The measurements are taken while the measuring phone is at rest at each point.  
 %
 \item[Case 2:] \hfill \\
 %
-Measurements of the RSSI is taken continuously while the user is walking a predetermined path at a relatively constant speed. The time between each measurement is approximately 4 seconds. Only measurements and predefined APs with known positions are used.  
+Measurements of the RSSI is taken continuously while the user is walking a predetermined path at a relatively constant speed. The time between each measurement is approximately 4 seconds. Only measurements form APs with known positions are used.  
 %
 \end{description}
 %
 \emph{Case 1} allows the analysis of error between true position and estimated position as the measurements are taken at fixed points. Further, the distance between measurements can be changed in increments of 0.5 meters by only using a subset of the available data. 
 
-\emph{Case 2} provides a more natural use-case, where the user is moving while trying to find his position. This case lacks the ability of error analysis, as the measurements are taken continuously over an interval and only the estimated trajectory can be compared to the true one.  
+\emph{Case 2} provides a more natural use-case, where the user is moving while trying to find his position. This case lacks the ability of error analysis, as the measurements are taken continuously over an interval and the time between two consecutive measurements is not fixed. However, the estimated trajectory can be compared to the true one.  
 
 For different tests, different paths and a different setup of APs are used. Further, all tests are performed in the same type of open office environment, but differences between the exact environments for each test exist. 
 %
