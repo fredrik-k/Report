@@ -12,7 +12,7 @@
 \begin{document}
 \begin{titlepages}
 \author{Fredrik Karlsson \& Martin Karlsson}
-\title{Advantages of Using Simultaneous Measurements of 2.4 and 5 GHz Wi-Fi Signals for Indoor Positioning}%Temporary
+\title{Indoor Positioning Using Simultaneous Measurements of 2.4 and 5 GHz WiFi Signals}%Temporary
 \year{2014}
 \month{January}
 \TFRT{9999}  %%  You will get the number from the department.
@@ -32,7 +32,6 @@ These people helped me a lot with my work.
 \subsection{Phone Coordinate System}
 \subsection{World Coordinate System}
 \subsubsection{Thesis Specific Considerations}
-\chapter{Background}
 
 \chapter{Radio Signal Propagation}
 %
@@ -90,7 +89,7 @@ For practical reasons, as most formulas expresses powers in dB, $d_0$ is chosen 
 %
 where $P_r(d_0)$ can be determined by a simple measurement at 1 meter from the transmitter. The resulting model represents the indoor LOS path loss case.
 %
-\section{Basic Mechanisms for Signal Propagation}
+\section{Basic Mechanisms of Signal Propagation}
 %
 In this section the three basic mechanisms for signal propagation, reflection, diffraction and scattering, are presented together with their respective impact on the propagation model. The presentation is rather brief recap of sections 3.5 through 3.8 in  \cite{rappaport96}, and interested readers are referred there for a more in-depth description.  
 %
@@ -369,7 +368,7 @@ Updating the states is done for each particle and it depends on the number of st
 
 In all, the filter has approximately $O(N*\log_2{N})$, at least when the number of measurements $M$ and states $K$ are few compared to the number of particles.       
 %
-\section{Particle Filter for Positioning Application}
+\section{Particle Filter for Positioning Applications}
 %
 The particle filter may be successfully used in positioning applications, especially if the states and models used possess certain features. More specific, the particle filter may be used with good results if the models are non-linear and the posterior distributions are non-Gaussian while the number of states is small \cite{gson12}. If the number of states grows, the ''curse'' of dimensionality makes the use the particle filter infeasible.
 
@@ -483,7 +482,7 @@ An extensive discussion about how path loss depends on the frequency is done in 
 %
 \chapter{Indoor Positioning - Pure RSSI Approach} 
 %
-Using the signal propagation models described in Chapter \ref{chap:RSP} in combination with the particle filter from chapter \ref{chap:PF} provides a framework for indoor positioning. This framework can then be used to perform position estimation using RSSI measurements from multiple WiFi APs. 
+The signal propagation models described in Chapter \ref{chap:RSP} in combination with the particle filter from Chapter \ref{chap:PF} provides a framework for indoor positioning. This framework can be used to perform position estimation using RSSI measurements from multiple WiFi APs. 
 
 In this chapter, the considerations about, and parameter choices for, the particle filter in the context of indoor positioning are presented. The performance is then tested in a few different environments and compared to position estimation using a \emph{least squares} algorithm.  These tests then serves as a basis for an extensive error analysis, discussing the error behavior depending on different conditions. The resulting knowledge is then used to ascertain if and how adaptive or crowd-sourced signal strength models may be used. The chapter is closed by a test of such models and their potential advantages compared to more traditional models. 
 %
@@ -560,11 +559,11 @@ During the following sections of this chapter two different test cases will be u
 %
 \item[Case 1:] \hfill \\
 %
-Measurements of the RSSI is taken at equally spaced points with $0.5$ meters spacing over a predetermined path. Only measurements from predetermined APs with known positions are taken. The measurements are taken while the measuring phone is at rest at each point.  
+Measurements of the RSSI are taken at equally spaced points with $0.5$ meters spacing over a predetermined path. Only measurements from predetermined APs with known positions are taken. The measurements are taken while the measuring phone is at rest at each point.  
 %
 \item[Case 2:] \hfill \\
 %
-Measurements of the RSSI is taken continuously while the user is walking a predetermined path at a relatively constant speed. The time between each measurement is approximately 4 seconds. Only measurements predefined APs with known positions are used.  
+Measurements of the RSSI is taken continuously while the user is walking a predetermined path at a relatively constant speed. The time between each measurement is approximately 4 seconds. Only measurements and predefined APs with known positions are used.  
 %
 \end{description}
 %
@@ -594,7 +593,20 @@ The methodology from \emph{case 1} was used during this test and measurements fr
 %
 \subsection{Environment Three - WORKING TITLE}
 %
+\chapter{Calibrating the Model Parameters} %Working title
+%
 
+In the previous chapter, the parameters $/alpha$ and $\log_{10}({P_r(d_0)})$ in the path-loss model 
+%
+\begin{equation}
+\log_{10}({P_r(d)})=\log_{10}({P_r(d_0)})-10n\log_{10}\left[{\frac{d}{d_0}}\right] - \alpha*\min({d, d_{\text{max}})}+ X_\sigma.
+\label{equation:fixed_alpha}
+\end{equation}
+%
+were assumed to be known. However, these constraints are not necessary if the parameters can be estimated during the positioning process.ÄNDRA det sista sen..
+
+%
+\chapter{Compensating for signal block} %Working title
 %
 \chapter{Modeling the Kinematics} %Working title
 %
