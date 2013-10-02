@@ -480,7 +480,8 @@ where $N$ is the number of measurements, $x_i$ and $y_i$ are the 2.4 and 5 GHz m
 %
 An extensive discussion about how path loss depends on the frequency is done in \cite{rappaport96}, the gist of which is that higher frequencies lose power faster with distance. The difference between 2.4 and 5 GHz is not large (a factor $\sim 2$), however some extra attention is needed to model the two. To extend the models in chapter \ref{chap:RSP} to the difference in frequency, usually different $n$ or $\alpha$, depending on the choice of model, will be needed. Furthermore, an AP may transmit 5 GHz with a greater power than 2.4 GHz to mitigate some of the increased path loss, requiring measurements of the transmitted power for both frequencies.  
 %
-\chapter{Indoor Positioning - Pure RSSI Approach} 
+\chapter{Indoor Positioning - Pure RSSI Approach}
+\label{chap:pure_rssi}
 %
 The signal propagation models described in Chapter \ref{chap:RSP} in combination with the particle filter from Chapter \ref{chap:PF} provides a framework for indoor positioning. This framework can be used to perform position estimation using RSSI measurements from multiple WiFi APs. 
 
@@ -579,7 +580,7 @@ Measurements of the RSSI is taken continuously while the user is walking a prede
 %
 \end{description}
 %
-\emph{Case 1} allows the analysis of error between true position and estimated position as the measurements are taken at fixed points. Further, the distance between measurements can be changed in increments of 0.5 meters by only using a subset of the available data. 
+\emph{Case 1} allows the analysis of error between true position and estimated position as the measurements are taken at fixed points. Further, the distance between measurements can be changed in increments of 0.5 meters by using only a subset of the available data. 
 
 \emph{Case 2} provides a more natural use-case, where the user is moving while trying to find his position. This case lacks the ability of error analysis, as the measurements are taken continuously over an interval and the time between two consecutive measurements is not fixed. However, the estimated trajectory can be compared to the true one.   
 
@@ -590,6 +591,8 @@ For different tests, different paths and a different setup of APs are used. Furt
 The results of the different tests performed are presented in the sections below. 
 %
 \subsection{Environment One - WORKING TITLE} 
+%
+
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -631,7 +634,7 @@ Median & $1.5$ \\
 \caption{Attributes of the absolute positioning error for \emph{environment one}.}\label{table:error_env-1}
 \end{table}
 
-In this environment the placement of the access point in relation to the path walked is beneficial. During the walk, measurements from at least four APs is available and almost always on both $2.4$ and $5$ GHz.  Further, the geometry of the APs is such that we always stay inside or at the border of a polygon where the APs compose the corners. These properties contributes to the fairly small positioning errors in table \ref{table:error_env-1}  
+In this environment the placement of the access point in relation to the path walked is beneficial. During the walk, measurements from at least four APs are available and almost always on both $2.4$ and $5$ GHz.  Further, the geometry of the APs is such that we always stay inside or at the border of a polygon where the APs compose the corners. These properties contributes to the fairly small positioning errors in table \ref{table:error_env-1}  
 %
 \subsection{Environment Two - WORKING TITLE}
 %
@@ -690,15 +693,65 @@ On the other hand, most newly constructed or renovated building already have ple
 \chapter{Calibrating the Model Parameters} %Working title
 %
 
-In the previous chapter, the parameters $/alpha$ and $\log_{10}({P_r(d_0)})$ in the path-loss model 
+In the previous chapter, the parameters $\alpha$ and $C$ in the path-loss model 
 %
 \begin{equation}
-\log_{10}({P_r(d)})=\log_{10}({P_r(d_0)})-10n\log_{10}\left[{\frac{d}{d_0}}\right] - \alpha*\min({d, d_{\text{max}})}+ X_\sigma.
-\label{equation:fixed_alpha}
+\log_{10}({P_r(d)})=C-10n\log_{10}(d) - \alpha\cdot\min({d, d_{\text{max}})}+ X_\sigma.
+\label{equation:model_to_adapt}
 \end{equation}
 %
-were assumed to be known. However, these constraints are not necessary if the parameters can be estimated during the positioning process.ÄNDRA det sista sen..
+were assumed to be known. However, these constraints are not necessary if the parameters can be estimated during the localization. This is useful since $/alpha$ depends on the current environment, and $C$ depends on the radiated power from each AP. This chapter describes an algorithm for determining when the estimation of the location is accurate, and using this to estimate the model parameters.
 
+
+%
+\section{Estimation of Position Error} %Working title
+%
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/adapt_parameters/prediction_interval}
+\caption{Figure text}\label{true_vs_est_env_2_05}
+\end{figure}
+%
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/adapt_parameters/error_vs_maxP_all}
+\caption{Figure text}\label{true_vs_est_env_2_05}
+\end{figure}
+%
+The method described in Chapter \ref{chap:pure_rssi} has proven to perform better at a closer distance to the nearest AP. At a certain time step, a large maximum RSSI-value indicates that the nearest AP is close. This, in turn, indicates that the position error is relatively small. Figure XXXXX shows this relation. The data is from the test setup $Case 1$ for $Environment Two$, defined in XX.
+
+Whenever one RSSI is above a certain value, the error can be considered small. This value depends on the model of the phone, and on $C$ for the closest AP. In this example, -36 dB is a suitable lower limit. If one RSSI is larger than that at a certain time, the average error is 1.05 meters, and it is unlikely to get an error that is larger than 4 meters. For other phone models and different values of $C$, the limit has to be modified by adding a constant value, in order to get similar results.
+
+%
+\section{Updating the Parameters} %Working title
+%
+In order to successfully determine $\alpha$ and $C$, an accurate estimation of the position is required. The previous section described how a maximum RSSI larger than a certain limit indicated a low position error. Therefore, the algorithm performs a calibration when this limit is exceeded. Expressions for each parameter can be determined by \ref{equation:model_to_adapt}, which yields
+
+%
+\begin{equation}
+\alpha=\frac{C-10n\log_{10}(d)-\log_{10}(P_r)}{\min({d, d_{\text{max}})}}
+\label{equation:update_alpha}
+\end{equation}
+%
+
+%
+\begin{equation}
+C = \log_{10}(P_r)+10n\log_{10}(d)+\alpha\cdot\min({d, d_{\text{max}})}
+\label{equation:update_c}
+\end{equation}
+%
+The noise $X_\sigma$ is unknown and omitted in the parameter update. 
+%
+Since $\alpha$ and $C$ depend on each other, they should not be updated at the same time. Instead, $C$ is updated for the nearest AP only, whereas $\alpha$ is updated using the RSSI from the others. When $C$ is determined, the phone is assumed to be straight below the nearest AP, so that the distance $d$ consists only of the vertical distance $d_{\text{ver}}$. In this case, $d_{\text{ver}}$ = 2 meters. Moreover, this AP is assumed to be within LOS, i.e. $\alpha$=0. Hence, \ref{equation:update_c} can be rewritten as
+%
+\begin{equation}
+C = \log_{10}(P_r)+10n\log_{10}(d_{\text{ver}})
+\label{equation:update_c_simple}
+\end{equation}
+%
+Furthermore, initial estimations of the constants are required. These have to be accurate enough for the algorithm to perform a first successful parameter update. Hence, the position estimation has to be accurate enough when an update is performed. 
+%
+The value of $C$ is specific for each frequency on each AP. Hence, the algorithm should store one value of $C$ for each frequency on each AP. The parameter $\alpha$ can be treated in different ways. One is to let alpha be the same for the whole building. This is suitable if the environment in the building is rather homogeneous, i.e. the density of obstacles such as walls furniture is relatively constant. Another alternative is to let $\alpha$ depend on the environment between the phone and each AP. 
 %
 \section{Compensating for signal block} %Working title
 %
@@ -945,6 +998,7 @@ It is apparent that both position and heading need to be calibrated to obtain a 
 \chapter{Indoor positioning - Sensor Fused Approach} 
 
 \printbibliography  %% Comment if you don't want to use bibtex
+
 \end{document}
 
 
