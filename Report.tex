@@ -486,11 +486,6 @@ The signal propagation models described in Chapter \ref{chap:RSP} in combination
 
 In this chapter, the considerations about, and parameter choices for, the particle filter in the context of indoor positioning are presented. The performance is then tested in a few different environments and compared to position estimation using a \emph{least squares} algorithm.  These tests then serves as a basis for an extensive error analysis, discussing the error behavior depending on different conditions. The resulting knowledge is then used to ascertain if and how adaptive or crowd-sourced signal strength models may be used. The chapter is closed by a test of such models and their potential advantages compared to more traditional models. 
 %
-\subsection{Importance of Geometry}
-%
-
-
-%
 \section{On Parameter Choices}
 %
 There are four parts of the particle filter that can be chosen by the user to some extent. The number of particles $N$, the system model, the process noise $v_k$ and the measurement noise $e_k$.
@@ -545,7 +540,7 @@ The measurement noise is a quite simple simple choice, take a couple of sets of 
 
 The resulting variance in the measurements ranged from $9$ to $60$, with a mean around $25$. The reason for the large span is that some of the APs was in line-of-sight for most of the measurement even though the distance to them was fairly large. Other APs was, on the other hand, highly obstructed while at a quite short distance, and yet others followed the models quite well. 
 
-During the position estimations in the rest of this section the mean of the variance, 25, will be used. Further, the measurement noise will be assumed to be gaussian with zero mean.  
+During the position estimations in the rest of this section the mean of the variance, 25, will be used. Further the measurement noise will be assumed to be gaussian with zero mean.  
 
 \subsection{Number of Particles}
 %
@@ -568,9 +563,9 @@ Measurements of the RSSI is taken continuously while the user is walking a prede
 %
 \emph{Case 1} allows the analysis of error between true position and estimated position as the measurements are taken at fixed points. Further, the distance between measurements can be changed in increments of 0.5 meters by only using a subset of the available data. 
 
-\emph{Case 2} provides a more natural use-case, where the user is moving while trying to find his position. This case lacks the ability of error analysis, as the measurements are taken continuously over an interval and the time between two consecutive measurements is not fixed. However, the estimated trajectory can be compared to the true one.   
+\emph{Case 2} provides a more natural use-case, where the user is moving while trying to find his position. This case lacks the ability of error analysis, as the measurements are taken continuously over an interval and the time between two consecutive measurements is not fixed. However, the estimated trajectory can be compared to the true one.  
 
-For different tests, different paths and a different setup of APs are used. Further, all tests are performed in the same type of open office environment, but the differences between the exact environments for each test are fairly large. 
+For different tests, different paths and a different setup of APs are used. Further, all tests are performed in the same type of open office environment, but differences between the exact environments for each test exist. 
 %
 \section{Results}
 %
@@ -578,81 +573,17 @@ The results of the different tests performed are presented in the sections below
 %
 \subsection{Environment One - WORKING TITLE} 
 %
-
-%
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/env_one}
-\caption{The path (\emph{blue} line) used in the \emph{environment one}, along with measurement points (\emph{blue} \texttt{x}), start point (\emph{black} \texttt{x}) and end point (\emph{red} \texttt{o}) }\label{env_one}
+\caption{The path (blue line) used in the \emph{environment one}, along with measurement points (blue \texttt{x}), start point (black \texttt{x}) and end point (red \texttt{o}) }\label{env_one}
 \end{figure}
 %
-\begin{figure}[!hbt]
-\include{graphics}
-\includegraphics[width=1\textwidth ]{images/pure_rssi/true_vs_est_env_1_05}
-\caption{Comparison between the true (\emph{blue}) and estimated (\emph{black}) path for \emph{environment one}.}\label{true_vs_est_env_1_05}
-\end{figure}
-%
-\begin{figure}[!hbt]
-\include{graphics}
-\includegraphics[width=1\textwidth ]{images/pure_rssi/error_env_1_05}
-\caption{The absolute errors in estimated position for \emph{environment one}.}\label{error_env_1_05}
-\end{figure}
-%
-The methodology from \emph{case 1} was used during this test and measurements from seven APs along a path of approximately one hundred meters. The locations of the APs together with the path taken may be found in figure \ref{env_one}.
-
-The estimated walked path using RSSI measurements is presented in figure \ref{true_vs_est_env_1_05} and the absolute position errors in figure \ref{error_env_1_05}. Some additional data concerning the error is presented in table \ref{table:error_env-1}.
-%
-\begin{table}
-\begin{center}
-\begin{tabular}{|l|c|}
-\hline
-\multicolumn{1}{|c|}{Attribute} & Meter \\
-\hline
-\hline
-Mean & $1.7$ \\
-\hline
-Maximum & $4.7$\\
-\hline
-Median & $1.5$ \\
-\hline 
-\end{tabular}
-\end{center}
-\caption{Attributes of the absolute positioning error for \emph{environment one}.}\label{table:error_env-1}
-\end{table}
-
-In this environment the placement of the access point in relation to the path walked is beneficial. During the walk, measurements from at least four APs is available and almost always on both $2.4$ and $5$ GHz.  Further, the geometry of the APs is such that we always stay inside or at the border of a polygon where the APs compose the corners. These properties contributes to the fairly small positioning errors in table \ref{table:error_env-1}  
+The methodology from \emph{case 1} was used during this test and measurements from seven APs along a path of approximately one hundred meters. The locations of the APs together with the path taken may be found in Figure \ref{env_one}.
 %
 \subsection{Environment Two - WORKING TITLE}
 %
-The test in \emph{environment two} uses the methodology of \emph{case 2} and the measurements are taken over a distance of $176.5$ meters, for a reference of the actual path see figure \ref{true_vs_est_env_2_05}.    
-%
-\begin{figure}[!hbt]
-\include{graphics}
-\includegraphics[width=1\textwidth ]{images/pure_rssi/true_vs_est_env_2_05}
-\caption{The true path (\emph{blue}), along with estimated path (\emph{black}), start point (\emph{red} \texttt{o}), initial heading (\emph{black} arrow) and access point (\emph{cyan} \texttt{o}).}\label{true_vs_est_env_2_05}
-\end{figure}
-%
-\begin{table}[!hbt]
-\begin{center}
-\begin{tabular}{|l|c|}
-\hline
-\multicolumn{1}{|c|}{Attribute} & Meter \\
-\hline
-\hline
-Mean & $4.0$ \\
-\hline
-Maximum & $11.5$\\
-\hline
-Median & $3.2$ \\
-\hline 
-\end{tabular}
-\end{center}
-\caption{Attributes for the absolute positioning errors for \emph{environment two}.}\label{table:error_env_2}
-\end{table}
 
-A plot of the estimated path along with the true one is shown in figure \ref{true_vs_est_env_2_05} and some attributes of the absolute positioning error can be found in table \ref{table:error_env_2}.
-
-The maximum positioning error here is considerably worse than the maximum from \emph{environment one}. This is largely due a unfavorable geometry of the APs during the last part of the path where only measurements from the three rightmost APs where available. Theses APs compose a quite obtuse triangle further impairing the positioning.  
 %
 \subsection{Environment Three - WORKING TITLE}
 %
