@@ -566,6 +566,7 @@ During the position estimations in the rest of this section the mean of the vari
 The number of particles $N$ is the most straight forward choice. A higher $N$ directly improves the filter but increases the computational burden. If the system model is poor or the process noise is large a larger number of particles is needed to provide a sufficient particle density over the possible states. As the system model only has two states, it suggests a fairly low number of particles. On the other hand, a random walk is used for the state update, which is a non-precise update spreading the particles over a quite large area. Considering both of these, $N=1000$ has been chosen to be a suitable number of particles.    
 %
 \section{Test Setup}
+\label{sec:test_setup}
 %
 During the sections of this chapter two different test cases will be used,
 \begin{description}
@@ -587,6 +588,7 @@ Measurements of the RSSI is taken continuously while the user is walking a prede
 For different tests, different paths and a different setup of APs are used. Further, all tests are performed in the same type of open office environment, but the differences between the exact environments for each test are fairly large. 
 %
 \section{Results}
+\label{environment_results}
 %
 The results of the different tests performed are presented in the sections below. 
 %
@@ -708,19 +710,19 @@ were assumed to be known. However, these constraints are not necessary if the pa
 %
 \begin{figure}[!hbt]
 \include{graphics}
-\includegraphics[width=1\textwidth ]{images/adapt_parameters/prediction_interval}
-\caption{Figure text}\label{true_vs_est_env_2_05}
+\includegraphics[width=1\textwidth ]{images/adapt_parameters/error_vs_maxP_all}
+\caption{Figure text}\label{error_vs_maxp_all}
 \end{figure}
 %
 \begin{figure}[!hbt]
 \include{graphics}
-\includegraphics[width=1\textwidth ]{images/adapt_parameters/error_vs_maxP_all}
-\caption{Figure text}\label{true_vs_est_env_2_05}
+\includegraphics[width=1\textwidth ]{images/adapt_parameters/prediction_interval}
+\caption{Figure text}\label{prediction_interval}
 \end{figure}
-%
-The method described in Chapter \ref{chap:pure_rssi} has proven to perform better at a closer distance to the nearest AP. At a certain time step, a large maximum RSSI-value indicates that the nearest AP is close. This, in turn, indicates that the position error is relatively small. Figure XXXXX shows this relation. The data is from the test setup $Case 1$ for $Environment Two$, defined in XX.
 
-Whenever one RSSI is above a certain value, the error can be considered small. This value depends on the model of the phone, and on $C$ for the closest AP. In this example, -36 dB is a suitable lower limit. If one RSSI is larger than that at a certain time, the average error is 1.05 meters, and it is unlikely to get an error that is larger than 4 meters. For other phone models and different values of $C$, the limit has to be modified by adding a constant value, in order to get similar results.
+The method described in Chapter \ref{chap:pure_rssi} has proven to perform better at a closer distance to the nearest AP. At a certain time step, a large maximum RSSI-value indicates that the nearest AP is close. This, in turn, indicates that the position error is relatively small. Figure \ref{error_vs_maxp_all} shows this relation. The data is from the test setup \emph{Case 1} for \emph{Environment Two}, defined in Section \ref{sec:test_setup} and \ref{environment_results}, respectively.
+
+Whenever one RSSI is above a certain value, the error can be considered small. This value depends on the model of the phone, and on $C$ for the closest AP. In this example, -36 dB is a suitable lower limit. If one RSSI is larger than that at a certain time, the average error is 1.05 meters, and it is unlikely to get an error that is larger than 4 meters. Figure \ref{prediction_interval} shows the error together with a one-sided, upper bounded, 99\% prediction interval. For other phone models and different values of $C$, the limit has to be modified by adding a constant value, in order to get similar results.
 
 %
 \section{Updating the Parameters} %Working title
