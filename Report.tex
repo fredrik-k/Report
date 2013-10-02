@@ -489,8 +489,21 @@ In this chapter, the considerations about, and parameter choices for, the partic
 %
 \subsection{Importance of Geometry}
 %
+How the access point are positioned in reference to the one of interest to estimate highly impacts the quality of the estimation. In figure \ref{geometries} three different AP geometries are shown along with the distribution of probable positions. It represents a idealized case where the noise in the measurements of the distance to each AP is zero-mean Gaussian. However, it provides a illustrating example of how the geometry impacts the distribution of the estimated position.
 
+The leftmost case in figure \ref{geometries} the APs are placed on a straight line, and in this case trilateration of the \emph{true} position, $[0,20]$, is impossible if no prior information is known. As the figure show, APs positioned in on a straight line gives two equally probable position estimates (more \emph{red} implies higher probability), i.e it is not possible to distinguish between a position and its mirror image in the line formed by the APs. 
 
+The second case displays a scenario where the APs are placed in the corners of a obtuse triangle (largest angle greater than $90^\circ$). In this rather ideal case it is possible to discern the \emph{true} position as the most probable one. However, higher noise levels and/or biased noise in the measurements will make this increasingly hard.  
+
+The third case represents a best-case scenario where the position to be estimated is centered in an equilateral triangle. Here, it is easy to distinguish the most probable position, and likewise the \emph{true} position.
+
+The positioning will further benefit from a larger number of APs as both the number of measurements and probability of having a advantageous geometry increases. Still, a few conclusion could be drawn from this discussion, the main one being that the best position estimates will be obtained when the measurements are taken inside a polygon with corners consisting of the APs. %
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/pure_rssi/geometries}
+\caption{Probable positions for different access point configuration (\emph{white} \texttt{+}), \emph{red} implies high probability and \emph{blue} low probability. The \emph{true} position is $[0, 20]$.}\label{geometries}
+\end{figure}
+%
 %
 \section{On Parameter Choices}
 %
@@ -657,7 +670,25 @@ The maximum positioning error here is considerably worse than the maximum from \
 %
 \subsection{Environment Three - WORKING TITLE}
 %
-\chapter{Adapting the Model Parameters} %Working title
+For environment three which was a substantially longer path of around 300 meters (273 m), the \emph{case 2} methodology was used. Measurements was receive around once every 3th second, resulting in them measurements being taken over a distance of around $4.5$ meters and a total of 61 different measurements points were collected. 
+
+In figure \ref{true_vs_est_env_3}, the true path along with estimated positions and path, may be viewed. For this test case, it is hard to give a absolute measurement of the error. Instead, one has to consider the difference between true and estimated path. Further, the measurements was taken while moving at constant speed and the time between each measurements is more or less constant. Thus, the estimated positions should be approximately equally spaced over the path. The estimated path differs from the true one at times, but the difference is, in absolute terms, not large. Also, most of the estimated positions are equally spaced. However, a few of them stands out and the minimum distance between two is $0.49$ m and maximum $8.2$ m. Another interesting observation is that the mean distance between two consecutive estimated positions is $4.1$ m giving a total distance of $250$ m, which is $23$ m less than the true path. This is also visible in figure \ref{true_vs_est_env_3} in that the estimated path have a tendency to cut corners.         
+%
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/pure_rssi/true_vs_est_env_3}
+\caption{The true path (\emph{blue}), along with estimated path (\emph{red}), estimated positions (\emph{black} \texttt{x}), start point (\emph{red} \texttt{o}), initial heading (\emph{black} arrow) and access point (\emph{cyan} \texttt{o}).}\label{true_vs_est_env_3}
+\end{figure}
+%
+\section{Concluding remarks}
+%
+Using measurements of RSSI to position devices in a indoor environment can be a satisfactory technique if the need for precision is not to great. In a fairly homogenous building, i.e approximately the same path loss model within, with a reasonable number of access point placed in a acceptable geometry, the positioning may be quite good. 
+
+A few objections must however be mentioned, first and foremost, more or less all buildings needs a specific path loss model and the power with each AP transmits, and their location, needs to be known. Also, to have a chance to obtain a reasonable position estimate measurements from at least three different APs must be available at all times. If fewer are available larger positioning errors are to be expected, if only two AP are visible at least two positions will be equally probable and if only measurements from one is available all point at a certain distance may be the true position. Further, antennas have different abilities to receive signals, thus the behavior of the specific device must be known. Lastly, how different users hold or carry their devices substantially affect the received signal power.  
+
+On the other hand, most newly constructed or renovated building already have plenty of APs and there this technique may provide a simple and cost effective way of providing indoor positioning. If methods for finding APs and estimating the path loss model in a simple way can be attained the setup may even be quite simple. If some of the user induced signal blockages can be registered and compensated for as well, the technique might be useful for tracking people raven when they do not carry their device in hand. This only leaves the problem of characterizing the behavior of the antenna for each device, but as this only needs to be done one time for each type of device, it is no overwhelming task.        
+%
+\chapter{Calibrating the Model Parameters} %Working title
 %
 
 In the previous chapter, the parameters $\alpha$ and $C$ in the path-loss model 
