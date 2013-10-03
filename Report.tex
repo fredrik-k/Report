@@ -423,7 +423,7 @@ A few different techniques for indoor positioning are presented below.
 \begin{itemize}
 \item \emph{MAC-Address}:  
 
-Receiving a signal, and thereby a MAC-address from an AP, indicates that the receiving device is within approximately $30$. This is a rather rough positioning, but may be used to pinpoint a device to a certain area. Furthermore, receiving signals from multiple devices should improve the positioning. 
+Receiving a signal, and thereby a MAC-address from an AP, indicates that the receiving device is within approximately $30$ meters, depending on building, transmitted power and effectivity of the receiving antenna. This is a rather crude positioning, but may be used to pinpoint a device to a certain area. Furthermore, receiving signals from multiple devices will improve the positioning, if the transmitter locations are different i.e reducing the possible position to a subsection of the area. 
 %
 \item \emph{Received Signal Strength (RSS)}:
 
@@ -453,7 +453,7 @@ For the RSSI to be a meaningful measurement of the received signal strength it m
 
 An RSSI measurement on a device running the Android operating system is initiated by an application requesting a scan of the signal environment. The operating system performs the scan when the necessary system resources are available. Each channel specified by the IEEE $802.11$ standard and available in the current region is scanned. When a transmitter is found, a short-time average of the received signal power is measured and converted to an appropriate RSSI. The process is repeated until all reachable transmitters have been measured, and the results are returned along with information about each transmitter's MAC-address, its transmission frequency and a time-stamp. 
 
-To conserve battery life for the measuring device, a technique called \emph{passive scanning} is used. Simply explained, each AP sends a message approximately every 100 ms telling devices in the vicinity it is active, its MAC-address and some additional information. The measuring device scan each channel for a little more than 100 ms to catch all AP on that channel, resulting in a quite long scan time ($\sim 3$-$5$ s). Which channels to scan could be specified to reduce the scan time, but some AP data might then be lost. Another way of performing the scans is to have the measuring devices actively probing (''asking'') for APs in its surroundings, but this would require almost constant sending of messages, thus draining the battery.               
+To conserve battery life for the measuring device, a technique called \emph{passive scanning} is used. Simply explained, each AP sends a message approximately every 100 ms telling devices in the vicinity it is active, its MAC-address and some additional information. The measuring device scan each channel for a little more than 100 ms to catch all AP on that channel, resulting in a quite long scan time ($\sim 3$-$5$ s), depending on the number of channels to be scanned. Which channels to scan could be specified to reduce the scan time, but some AP data might then be lost. Another way of performing the scans is to have the measuring devices actively probing (''asking'') for APs in its surroundings, but this would require almost constant sending of messages, thus draining the battery.               
 %
 \section{Performance of 2.4 GHz Versus 5 GHz}
 %
@@ -479,7 +479,7 @@ where $N$ is the number of measurements, $x_i$ and $y_i$ are the 2.4 and 5 GHz m
 %
 \subsection{Difference in Modeling}
 %
-An extensive discussion about how path loss depends on the frequency is done in \cite{rappaport96}, the gist of which is that higher frequencies lose power faster with distance. The difference between 2.4 and 5 GHz is not large (a factor $\sim 2$), however some extra attention is needed to model the two. To extend the models in chapter \ref{chap:RSP} to the difference in frequency, usually different $n$ or $\alpha$, depending on the choice of model, will be needed. Furthermore, an AP may transmit 5 GHz with a greater power than 2.4 GHz to mitigate some of the increased path loss, requiring measurements of the transmitted power for both frequencies.  
+An extensive discussion about how path loss depends on the frequency is done in \cite{rappaport96}, the gist of which is that higher frequencies lose power faster with distance. The difference between the behavior  2.4 and 5 GHz is not large (a factor $\sim 2$), however some extra attention is needed to model the two. To extend the models in chapter \ref{chap:RSP} to the difference in frequency, usually different $n$ or $\alpha$, depending on the choice of model, will be needed. Furthermore, an AP may transmit 5 GHz with a greater power than 2.4 GHz to mitigate some of the increased path loss, requiring measurements of the transmitted power for both frequencies.  
 %
 \chapter{Indoor Positioning - Pure RSSI Approach}
 \label{chap:pure_rssi}
@@ -704,20 +704,22 @@ The comparison will be made for environment \emph{one} and \emph{two} from the p
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/ls_error_medium}
-\caption{Absolute position error for the LS (\emph{red}) and PF (\emph{blue}) estimators for environment \emph{one}.}\label{ls_error_medium}
+\caption{Absolute position error for the LS (\emph{red}) and PF (\emph{blue}) estimators for environment \emph{two}.}\label{ls_error_medium}
 \end{figure}
 
 The estimated path from both the PF and LS estimators is displayed in figure \ref{ls_short} along with the true path for environment \emph{one}. It is clearly visible that the PF performs considerably better compared to the LS estimator. The positioning errors from figure \ref{ls_error_short} makes this even more clear and the PF has a smaller positioning error for every sample compared to the LS estimator. The mean position error is, for the PF  $1.7$ m and for the LS estimation, $5.7$ m. 
 
-For environment \emph{two} the LS estimation perform better compared to the PF, see the errors in figure \ref{ls_error_medium}. 
+For environment \emph{two} the LS estimation perform better in comparison to the PF, as shown by the errors in figure \ref{ls_error_medium}. The PF, however, does still provide the best position estimates and the error is lower for the PF in most of the samples and the LS estimator produces the larges position error. The difference in maximum error though is not large, then again, the mean error for the PF is $3.4$ m and for the LS estimation, $5.1$ m. The PF seams to produce considerably better results compared to the LS method when the environment is favorable i.e when a large number of access point are available and/or their geometry are good. When the conditions are disadvantageous both methods performs equally, giving positions around 10 meters off.
 
-Medium path PF mean 3.4 LS mean 5.1
+The conclusion to be drawn from these investigations is a particle filter is the better choice for estimating positions from noisy RSSI measurements, especially if the only sought after attribute is the smallest mean and maximum errors. The lest squares estimation may be desirable to use if simple implementation is important or if limited computing power is available.     
 %
 \section{Concluding remarks}
 %
 Using measurements of RSSI to position devices in a indoor environment can be a satisfactory technique if the need for precision is not to great. In a fairly homogenous building, i.e approximately the same path loss model within, with a reasonable number of access point placed in a acceptable geometry, the positioning may be quite good. 
 
-A few objections must however be mentioned, first and foremost, more or less all buildings needs a specific path loss model and the power with each AP transmits, and their location, needs to be known. Also, to have a chance to obtain a reasonable position estimate measurements from at least three different APs must be available at all times. If fewer are available larger positioning errors are to be expected, if only two AP are visible at least two positions will be equally probable and if only measurements from one is available all point at a certain distance may be the true position. Further, antennas have different abilities to receive signals, thus the behavior of the specific device must be known. Lastly, how different users hold or carry their devices substantially affect the received signal power.  
+The position estimation may, with satisfactory result, be computed using a particle filter. The PF outperforms a least squares estimation in most cases and newer produces inferior results for a sustained timespan. The worse case error between the two estimators is on par when the environment is unfavorable but the PF produces better estimates in a beneficial environment and smaller mean errors in the long run. 
+
+A few objections with the technique must however be mentioned, first and foremost, more or less all buildings needs a specific path loss model and the power with each AP transmits, and their location, needs to be known. Also, to have a chance to obtain a reasonable position estimate measurements from at least three different APs must be available at all times. If fewer are available larger positioning errors are to be expected, if only two AP are visible at least two positions will be equally probable and if only measurements from one is available all point at a certain distance may be the true position. Further, antennas have different abilities to receive signals, thus the behavior of the specific device must be known. Lastly, how different users hold or carry their devices substantially affect the received signal power.  
 
 On the other hand, most newly constructed or renovated building already have plenty of APs and there this technique may provide a simple and cost effective way of providing indoor positioning. If methods for finding APs and estimating the path loss model in a simple way can be attained the setup may even be quite simple. If some of the user induced signal blockages can be registered and compensated for as well, the technique might be useful for tracking people raven when they do not carry their device in hand. This only leaves the problem of characterizing the behavior of the antenna for each device, but as this only needs to be done one time for each type of device, it is no overwhelming task.        
 %
