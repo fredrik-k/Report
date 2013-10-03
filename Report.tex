@@ -375,6 +375,7 @@ The particle filter may be successfully used in positioning applications, especi
 A case where the particle filter is useful is the estimation of position or position and heading in a two-dimensional space, which is the case for most indoor positioning applications. Furthermore, using signal strengths from multiple sources as a measurement of position renders, both a non-linear model and non-Gaussian posterior distributions further promote the use of a particle filter. However, introducing more dynamic states ,e.g acceleration, unmeasured velocities or trying to filter sensor biases or drifts, introduces too many dimensions. Thus, such estimations require their own filter \cite{gson12}.        
 %
 \section{Other Estimation Techniques}
+\label{sec:oet}
 %
 There are a few different techniques for state estimation given a set of measurements, the \emph{Kalman} methods mentioned earlier, a couple of \emph{maximum.-likelihood} base ones and the \emph{least squares estimation} methods. \cite{gson12}
 %
@@ -681,6 +682,34 @@ In figure \ref{true_vs_est_env_3}, the true path along with estimated positions 
 \end{figure}
 %
 \subsection{Least Squares - a Comparison}
+%
+A common way of estimating a position from a RSSI measurements is to use a least squares (LS) estimation, for additional information see \ref{sec:oet}. Here the difference between the estimations from a particle filter (PF) and from a LS algorithm will be investigated. 
+
+The comparison will be made for environment \emph{one} and \emph{two} from the previous sections, but with new datasets. Further, the methodology from \emph{case }1 will be used, but with 3 m instead of $0.5$ m sample spacing.This methodology is used to be able to measure the absolute position error from the different estimators. Further, both estimators will use the same path loss models.   
+%
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/pure_rssi/ls_short_path}
+\caption{Least squares estimation versus particle filter estimation for environment \emph{one}. True path (\emph{blue}), LS estimated path and position (\emph{black})and PF estimated path and position (\emph{red})}\label{ls_short}
+\end{figure}
+%
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/pure_rssi/ls_error_short}
+\caption{Absolute position error for the LS (\emph{red}) and PF (\emph{blue}) estimators for environment \emph{one}.}\label{ls_error_short}
+\end{figure}
+%
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/pure_rssi/ls_error_medium}
+\caption{Absolute position error for the LS (\emph{red}) and PF (\emph{blue}) estimators for environment \emph{one}.}\label{ls_error_medium}
+\end{figure}
+
+The estimated path from both the PF and LS estimators is displayed in figure \ref{ls_short} along with the true path for environment \emph{one}. It is clearly visible that the PF performs considerably better compared to the LS estimator. The positioning errors from figure \ref{ls_error_short} makes this even more clear and the PF has a smaller positioning error for every sample compared to the LS estimator. The mean position error is, for the PF  $1.7$ m and for the LS estimation, $5.7$ m. 
+
+For environment \emph{two} the LS estimation perform better compared to the PF, see the errors in figure \ref{ls_error_medium}. 
+
+Medium path PF mean 3.4 LS mean 5.1
 %
 \section{Concluding remarks}
 %
