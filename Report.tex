@@ -786,8 +786,33 @@ C = \log_{10}(P_r)+10n\log_{10}(d_{\text{ver}})
 %
 Furthermore, initial estimations of the constants are required. These have to be accurate enough for the algorithm to perform a first successful parameter update. Hence, the position estimation has to be accurate enough when an update is performed. 
 %
-The value of $C$ is specific for each frequency on each AP. Hence, the algorithm should store one value of $C$ for each frequency on each AP. The parameter $\alpha$ can be treated in different ways. One is to let alpha be the same for the whole building. This is suitable if the environment in the building is rather homogeneous, i.e. the density of obstacles such as walls furniture is relatively constant. Another alternative is to let $\alpha$ depend on the environment between the phone and each AP. 
+The value of $C$ is specific for each frequency on each AP. Hence, the algorithm should store one value of $C$ for each frequency on each AP.
+The parameter $\alpha$ can be treated in different ways. Here follows two alternatives for this.
+
+\subsection{Alternative 1}
+Alpha is the same for the whole building. After each determination of $\alpha_i$, $\alpha_a_v_e$ is defined as the average of all determinations, including the initial estimation.
 %
+\subsection{Alternative 2}
+In this algorithm, each value of $\alpha_i_j$ is stored in a matrix $\vec{\alpha}$. Here, $\alpha_i_j$ is the parameter to be used in section $i$, for AP $j$. Each floor is divided into sections as follows:
+
+Each AP corresponds to one circular section, centered at the AP and with radius $r_s$. These sections may overlap, and there might be areas that do not belong to any sector (see Figure XX). Hence, the following three cases may occur for each particle:
+
+\subsubsection{1. Exactly one section}
+If a certain particle is in section $k$ only, 
+the parameter set from row $k$ in alpha will be used for this particle. 
+
+\subsubsection{2. Several sections}
+If it is in several sections at the same time, an average of the parameter sets for these sections will be used.
+
+\subsubsection{3. No section}
+Finally, if it is outside all sections, a default value of $\alpha$ will be used.
+
+Please note that each particle gets its own set of parameters, and that the estimated position of the phone is not involved in choosing this set.
+
+Both alternatives have been tested offline using $Malab$. For the environments defined in \ref{environment_results}, the results are similar. Since alternative 1 is less complicated and does not perform worse than alternative 2, it was chosen for the implementation in Sonymap in order to avoid unnecessary computations.
+
+The reason why there is no gain in dividing the Glasgow building into areas is that it is homogeneous enough for alternative 1 to work. In an environment where the obstacle density changes more, alternative 2 would be more suitable.
+
 \section{Compensating for signal block} %Working title
 %
 \chapter{Modeling the Kinematics} %Working title
