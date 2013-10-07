@@ -725,7 +725,7 @@ A few objections with the technique must however be mentioned, first and foremos
 
 On the other hand, most newly constructed or renovated building already have plenty of APs and there this technique may provide a simple and cost effective way of providing indoor positioning. If methods for finding APs and estimating the path loss model in a simple way can be attained the setup may even be quite simple. If some of the user induced signal blockages can be registered and compensated for as well, the technique might be useful for tracking people raven when they do not carry their device in hand. This only leaves the problem of characterizing the behavior of the antenna for each device, but as this only needs to be done one time for each type of device, it is no overwhelming task.        
 %
-\chapter{Calibrating the Model Parameters} %Working title
+\chapter{Adapting the Model Parameters} %Working title
 %
 
 In the previous chapter, the parameters $\alpha$ and $C$ in the path-loss model 
@@ -813,8 +813,33 @@ Both alternatives have been tested offline using $Malab$. For the environments d
 
 The reason why there is no gain in dividing the Glasgow building into areas is that it is homogeneous enough for alternative 1 to work. In an environment where the obstacle density changes more, alternative 2 would be more suitable.
 
-\section{Compensating for signal block} %Working title
+\section{Compensating for Signal Block} %Working title
 %
+The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
+
+\subsection{Testing different use cases}
+In the tests this far, the phone has been held so that the signal is blocked as little as possible. In this section, three different use cases are tested, all in \emph{Environment three}.
+
+\subsubsection{Phone in pocket}
+In this test, the phone was first carried one round in the hand. After that, it was moved to the jeans side pocket, and then another round was walked.
+
+\subsubsection{Blocking with hands, once}
+Again, the phone was carried one round in the hand. Then, the user tried to block as much of the signals with the hands as possible during the second round the hands.
+
+\subsubsection{Blocking with hands, repeatedly}
+Like the previous test, but during the second round, the signals were blocked and unblocked repeatedly. 
+
+\subsection{Results}
+The results are shown in Figure XX-YY.
+
+
+\subsection{Compensation}
+Carrying the phone in the pocket did not affect the RSSI significantly, and hence the positioning was unaffected. However, blocking the signals with the hands lowered the RSSI considerably, causing the positioning to be inaccurate. Hence, this use case has to be detected and compensated for.
+
+\subsubsection{Detection}
+The main strategy for detecting the block is to note when the RSSI drops. However, moving away from the AP:s, or 
+
+
 \chapter{Modeling the Kinematics} %Working title
 %
 Modeling the kinematics may greatly improve the performance of a positioning system, especially if the estimated position is noisy or biased. The kinematics may also be used to estimate the position in between the updates from the main positioning algorithm. The range of models stretches from simple random walk processes to estimating acceleration, velocity and position in a three dimensional space using sensor fusion.
