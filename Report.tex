@@ -817,7 +817,7 @@ The reason why there is no gain in dividing the Glasgow building into areas is t
 %
 The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
 
-\subsection{Testing different use cases}
+\subsection{Evaluation of different use cases}
 In the tests this far, the phone has been held so that the signal is blocked as little as possible. In this section, three different use cases are tested, all in \emph{Environment three}.
 
 \subsubsection{Phone in pocket}
@@ -836,8 +836,9 @@ The results are shown in Figure XX-YY.
 \subsection{Compensation}
 Carrying the phone in the pocket did not affect the RSSI significantly, and hence the positioning was unaffected. However, blocking the signals with the hands lowered the RSSI considerably, causing the positioning to be inaccurate. Hence, this use case has to be detected and compensated for.
 
-\subsubsection{Detection}
-The main strategy for detecting the block is to note when the RSSI drops. However, moving away from the AP:s, or 
+The main strategy for detecting the block is to note when the RSSI drops. However, moving away from the AP:s, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal block only, the algorithm focuses on the six largest RSSI-values. If the average of these drops more than XX dB, this indicates a block.
+
+When a block is detected, a constant term $H$ is added to the model, which corresponds to how much the signals dropped. When the phone is unblocked, this is detected in an analogous way, and the $H$ is set to 0.
 
 
 \chapter{Modeling the Kinematics} %Working title
