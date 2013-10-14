@@ -195,7 +195,7 @@ This model combines the good traits from the two log-normal shadowing models. Ho
 %
 \subsection{$\alpha$-Model} %Maybe something else
 %
-A third attempt to model the signal strength is to introduce a parameter $\alpha$ multiplied with the distance $d$ in the log-normal shadowing model to account for the extra decrease in signal strength.  The model then becomes
+A third attempt to model the signal strength is to introduce a parameter $\alpha$ multiplied with the distance $d$ in the log-normal shadowing model to account for the extra decrease in signal strength. \cite{karlsson92} The model then becomes
 %
 \begin{equation}
 \log_{10}({P_r(d)})=\log_{10}({P_r(d_0)})-10n\log_{10}\left[{\frac{d}{d_0}}\right] - \alpha d+ X_\sigma.
@@ -790,10 +790,10 @@ The value of $C$ is specific for each frequency on each AP. Hence, the algorithm
 The parameter $\alpha$ can be treated in different ways. Here follows two alternatives for this.
 
 \subsection{Alternative 1}
-Alpha is the same for the whole building. After each determination of $\alpha_i$, $\alpha_a_v_e$ is defined as the average of all determinations, including the initial estimation.
+Alpha is the same for the whole building. After each determination of $\alpha_i$, $\alpha_{ave}$ is defined as the average of all determinations, including the initial estimation.
 %
 \subsection{Alternative 2}
-In this algorithm, each value of $\alpha_i_j$ is stored in a matrix $\vec{\alpha}$. Here, $\alpha_i_j$ is the parameter to be used in section $i$, for AP $j$. Each floor is divided into sections as follows:
+In this algorithm, each value of $\alpha_{ij}$ is stored in a matrix $\vec{\alpha}$. Here, $\alpha_{ij}$ is the parameter to be used in section $i$, for AP $j$. Each floor is divided into sections as follows:
 
 Each AP corresponds to one circular section, centered at the AP and with radius $r_s$. These sections may overlap, and there might be areas that do not belong to any sector (see Figure XX). Hence, the following three cases may occur for each particle:
 
@@ -820,26 +820,56 @@ The RSSI is affected by how the phone is carried by the user. If, for example, t
 \subsection{Evaluation of different use cases}
 In the tests this far, the phone has been held so that the signal is blocked as little as possible. In this section, three different use cases are tested, all in \emph{Environment three}.
 
-\subsubsection{Phone in pocket}
+\subsubsection{1. Phone in pocket}
 In this test, the phone was first carried one round in the hand. After that, it was moved to the jeans side pocket, and then another round was walked.
 
-\subsubsection{Blocking with hands, once}
+\subsubsection{2. Blocking with hands, once}
 Again, the phone was carried one round in the hand. Then, the user tried to block as much of the signals with the hands as possible during the second round the hands.
 
-\subsubsection{Blocking with hands, repeatedly}
+\subsubsection{3. Blocking with hands, repeatedly}
 Like the previous test, but during the second round, the signals were blocked and unblocked repeatedly. 
 
 \subsection{Results}
-The results are shown in Figure XX-YY.
+The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
 
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/adapt_parameters/pocket_positioning}
+\caption{Phone in pocket. Wearing the phone in the pocket did not affect the positioning significantly}\label{positioning_pocket}
+\end{figure}
+
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block}
+\caption{Blocking with hands, once. Attenuation by the hands had a severe impact on the positioning.}\label{hand_block}
+\end{figure}
+
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly}
+\caption{Blocking with hands, repeatedly. Attenuation by the hands had a severe impact on the positioning.}\label{hand_block_repeatedly}
+\end{figure}
 
 \subsection{Compensation}
 Carrying the phone in the pocket did not affect the RSSI significantly, and hence the positioning was unaffected. However, blocking the signals with the hands lowered the RSSI considerably, causing the positioning to be inaccurate. Hence, this use case has to be detected and compensated for.
 
 The main strategy for detecting the block is to note when the RSSI drops. However, moving away from the AP:s, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal block only, the algorithm focuses on the six largest RSSI-values. If the average of these drops more than XX dB, this indicates a block.
 
-When a block is detected, a constant term $H$ is added to the model, which corresponds to how much the signals dropped. When the phone is unblocked, this is detected in an analogous way, and the $H$ is set to 0.
+When a block is detected, a constant term $H$ is added to the model, which corresponds to how much the signals have been reduced. When the phone is unblocked, this is detected in an analogous way, and then $H$ is set to 0.
 
+Test 1) and 2) were performed again, but this time with the compensating algorithm. The results are shown in Figure \ref{hand_block_comp} and \ref{hand_block_repeatedly_comp}.
+
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_comp}
+\caption{Blocking with hands, once. The algorithm compensates for the attenuation.}\label{hand_block_comp}
+\end{figure}
+
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly_comp}
+\caption{Blocking with hands, repeatedly. The algorithm compensates for the attenuation.}\label{hand_block_repeatedly_comp}
+\end{figure}
 
 \chapter{Modeling the Kinematics} %Working title
 %
@@ -1084,7 +1114,7 @@ It is apparent that both position and heading need to be calibrated to obtain a 
 \chapter{Indoor positioning - Sensor Fused Approach} 
 
 \printbibliography  %% Comment if you don't want to use bibtex
-
+%
 \end{document}
 
 
