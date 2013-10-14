@@ -794,7 +794,7 @@ In the previous chapter, the parameters $\alpha$ and $C$ in the path-loss model
 \label{equation:model_to_adapt}
 \end{equation}
 %
-were assumed to be known. However, these constraints are not necessary if the parameters can be estimated during the localization. This is useful since $/alpha$ depends on the current environment, and $C$ depends on the radiated power from each AP. This chapter describes an algorithm for determining when the estimation of the location is accurate, and using this to estimate the model parameters.
+were assumed to be known. However, these constraints are not necessary if the parameters can be estimated during the localization. This is useful since $\alpha$ depends on the current environment, and $C$ depends on the radiated power from each AP. This chapter describes an algorithm for determining when the estimation of the location is accurate, and using this to estimate the model parameters.
 
 
 %
@@ -850,11 +850,20 @@ The parameter $\alpha$ can be treated in different ways. Here follows two altern
 
 \subsection{Alternative 1}
 Alpha is the same for the whole building. After each determination of $\alpha_i$, $\alpha_{ave}$ is defined as the average of all determinations, including the initial estimation.
+
+
 %
 \subsection{Alternative 2}
 In this algorithm, each value of $\alpha_{ij}$ is stored in a matrix $\vec{\alpha}$. Here, $\alpha_{ij}$ is the parameter to be used in section $i$, for AP $j$. Each floor is divided into sections as follows:
 
-Each AP corresponds to one circular section, centered at the AP and with radius $r_s$. These sections may overlap, and there might be areas that do not belong to any sector (see Figure XX). Hence, the following three cases may occur for each particle:
+Each AP corresponds to one circular section, centered at the AP and with radius $r_s$. These sections may overlap, and there might be areas that do not belong to any sector (see Figure \ref{alpha_sections}). Hence, the following three cases may occur for each particle:
+
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/adapt_parameters/alpha_sections}
+\caption{\emph{Environment three} divided into sections. Each circle corresponds to a section around a certain access point.}\label{alpha_sections}
+\end{figure}
+
 
 \subsubsection{1. Exactly one section}
 If a certain particle is in section $k$ only, 
@@ -912,7 +921,7 @@ The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and 
 \subsection{Compensation}
 Carrying the phone in the pocket did not affect the RSSI significantly, and hence the positioning was unaffected. However, blocking the signals with the hands lowered the RSSI considerably, causing the positioning to be inaccurate. Hence, this use case has to be detected and compensated for.
 
-The main strategy for detecting the block is to note when the RSSI drops. However, moving away from the AP:s, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal block only, the algorithm focuses on the six largest RSSI-values. If the average of these drops more than XX dB, this indicates a block.
+The main strategy for detecting the attenuation is to note when the RSSI drops. However, moving away from the AP:s, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal attenuation by the user only, the algorithm focuses on the six largest RSSI-values. If the average of these drops more than 6 dB, this indicates a block.
 
 When a block is detected, a constant term $H$ is added to the model, which corresponds to how much the signals have been reduced. When the phone is unblocked, this is detected in an analogous way, and then $H$ is set to 0.
 
