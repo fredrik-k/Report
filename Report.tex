@@ -589,16 +589,20 @@ R_x(d) = C - 2*10\log_{10}{d}-\alpha d
 %
 is determined appropriate to model the RSSI measurements. In this model, $R_x(d)$ is the RSSI measurement at a distance $d$ from the transmitter, $C$ is related to the power of the transmitter and $\alpha$ models path loss related to signal path obstruction. 
 
-The models are discussed in chapter \ref{chap:RSP} but appropriate values of the constants $C$ and $\alpha$ are yet to be determined. This may be done in a couple of fashions, two of which will be used here. The resulting values are highly dependent on the environment, thus making them, in this situation, suitable for a open office environment. The values of $C$ is also entirely related to the power with which the Wi-Fi access points transmits, so a different model will most likely have a different value.      
+The models are discussed in chapter \ref{chap:RSP} but appropriate values of the constants $C$ and $\alpha$ are yet to be determined. This may be done in a couple of fashions, two of which will be presented here. The resulting values, especially the value of $\alpha$, are highly dependent on the environment, thus making them, in this situation, suitable for a open office environment. The values of $C$ is also related to the power with which the Wi-Fi access points transmits, so a different AP will most likely have a different value.      
 
 \subsection{Model driven approach}
 %
-The first method is to measure the signal power at known locations, preferably with both obstructed and line of sight paths to the access points. From these values a appropriate value of $\alpha$ can be calculated from \ref{eq:RSSI_model} as
+Given measurements at known locations, preferably with both obstructed and line of sight paths to the access points, it is possible to compute the model parameters.
+
+The value of $\alpha$ from \ref{eq:RSSI_model} can be calculated as
 %
 \begin{equation}
 \alpha = \frac{C-2*10\log_{10}(d)-R_x(d)}{d}.
 \end{equation}
 %
+The estimation of $\alpha$ will improve if the paths between transmitters and receiver is representative for the desired environment.  
+
 To find the value of $C$, measurements of the RSSI should be performed in line of sight of the AP, at different locations and with different distances to the AP. The value can then be calculated from
 %
 \begin{equation}
@@ -627,7 +631,15 @@ This has been done at 20 different locations with 20 measurements of the RSSI fr
 \subsection{Estimation error approach}
 The other method is a bit more heuristic, but might produce equal or better performance. Instead of finding the values of $\alpha$ and $C$ by measurements it is possible to find the parameters resulting in the smallest average positioning error. This is done by taking a set of RSSI measurements at a few different known locations and use them in the position estimation algorithm with different $\alpha$ and $C$, to find the parameters producing the smallest mean estimation error.   
 
- 
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/pure_rssi/err_vs_param}
+\caption{Average estimation error as a function of $\alpha$ and $C$ for 2.4 and 5 GHz RSSI measurements. Values i deep blue (bottom left corner) are set to zero since these values resulted in very large positioning errors.}\label{env_one}
+\end{figure}
+%
+To illustrate this, the estimation error for $\alpha \in [0;1]$ and $C \in [-55;25]$ is shown in figure \ref{err_vs_param} for 2.4 and 5 GHz.
+
+   
 %
 \section{Test Setup}
 \label{sec:test_setup}
@@ -1179,6 +1191,26 @@ However, as stated before, the error in cumulative and the performance deteriora
 SOME ABOUT THE ROTATION VECTORS HERE
 
 It is apparent that both position and heading need to be calibrated to obtain a good position estimate. How this is done is explained in the following chapters.
+%
+\chapter{Algorithm Implementation in Android}
+%
+In previous chapters offline computations are used to obtain the position estimate. Here an online java implementation of the developed algorithms will be presented briefly. The particle filter is quite computationally demanding, and therefor it is important to discern if handheld devices are capable of performing these computations sufficiently fast. 
+
+The implementation will be done in a positioning application developed by Sony Mobile, called SonyMap. This application is intended for android smartphones and used to navigate and position the smartphone in Sony Mobiles buildings around the globe. 
+
+The chapter is closed by discussing some further optimizations possible, if it is necessary to decrease the computational time further.  
+%
+\subsection{Introducing SonyMap}
+%
+\section{Choice of Coordinate System}
+%
+\section{Java Implementations}
+%
+\subsection{Finding Building \& Floor}
+%
+\subsection{The Particle Filter}
+%
+\section{Further Optimizations - Parallel Computations}
 %
 \chapter{Sensor Evaluation}
 %
