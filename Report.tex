@@ -884,7 +884,7 @@ Both alternatives have been tested offline using $Malab$. For the environments d
 
 The reason why there is no gain in dividing the Glasgow building into areas is that it is homogeneous enough for alternative 1 to work. In an environment where the obstacle density changes more, alternative 2 would be more suitable.
 
-\section{Compensating for Signal Block} %Working title
+\section{Compensating for User Attenuation} %Working title
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -917,7 +917,7 @@ In this test, the phone was first carried one round in the hand. After that, it 
 Again, the phone was carried one round in the hand. Then, the user tried to block as much of the signals with the hands as possible during the second round the hands.
 
 \subsubsection{3. Blocking with hands, repeatedly}
-Like the previous test, but during the second round, the signals were blocked and unblocked repeatedly. 
+The signals were blocked and unblocked repeatedly (5 times) during two rounds. 
 
 
 The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
@@ -938,7 +938,7 @@ When an attenuation is detected, a constant term $H$ is added to the model, whic
 \label{equation:hand_comp}
 \end{equation}
 
-Test 1) and 2) were performed again, but this time with the compensating algorithm. The results are shown in Figure \ref{hand_block_comp} and \ref{hand_block_repeatedly_comp}.
+Test 1) and 2) were performed again, but this time with the compensating algorithm. The results are shown in Figure \ref{hand_block_comp} and \ref{hand_block_repeatedly_comp}. 
 
 \begin{figure}[!hbt]
 \include{graphics}
@@ -951,6 +951,9 @@ Test 1) and 2) were performed again, but this time with the compensating algorit
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly_comp}
 \caption{Blocking with hands, repeatedly. The algorithm compensates for the attenuation.}\label{hand_block_repeatedly_comp}
 \end{figure}
+
+Compensating for the hand attenuation clearly improved the positioning. However, $H$ can not be determined exactly, due to noise and obstacles in the environment. In addition, the hand attenuation is only detected if the phone is covered fast enough. If it goes from uncovered to covered successively, during several time steps, this can not be distinguished from other causes of lowered RSSI. Naturally, going from covered to uncovered works analogously.
+
 
 \chapter{Modeling the Kinematics} %Working title
 %
