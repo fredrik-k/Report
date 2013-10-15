@@ -808,8 +808,9 @@ In the previous chapter, the parameters $\alpha$ and $C$ in the path-loss model
 \label{equation:model_to_adapt}
 \end{equation}
 %
-were assumed to be known. However, these constraints are not necessary if the parameters can be estimated during the localization. This is useful since $\alpha$ depends on the current environment, and $C$ depends on the radiated power from each AP. This chapter describes an algorithm for determining when the estimation of the location is accurate, and using this to estimate the model parameters.
+were assumed to be known. However, these constraints are not necessary if the parameters can be estimated during the localization. This is useful since $\alpha$ depends on the current environment, and $C$ depends on the radiated power from each AP. The first part of this chapter describes an algorithm for determining when the estimation of the location is accurate, and using this to estimate the model parameters. 
 
+Another issue is that the signals reaching the phone might be attenuated considerably by the user. The weaker signals would indicate that the phone is further away from each AP than it actually is. In the second part of this chapter, an algorithm to compensate for this is proposed and evaluated.
 
 %
 \section{Estimation of Position Error} %Working title
@@ -930,15 +931,24 @@ Again, the phone was carried one round in the hand. Then, the user tried to bloc
 \subsubsection{3. Blocking with hands, repeatedly}
 Like the previous test, but during the second round, the signals were blocked and unblocked repeatedly. 
 
-\subsection{Results}
+
 The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
 
-\subsection{Compensation}
+
+
 Carrying the phone in the pocket did not affect the RSSI significantly, and hence the positioning was unaffected. However, blocking the signals with the hands lowered the RSSI considerably, causing the positioning to be inaccurate. Hence, this use case has to be detected and compensated for.
 
-The main strategy for detecting the attenuation is to note when the RSSI drops. However, moving away from the AP:s, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal attenuation by the user only, the algorithm focuses on the six largest RSSI-values. If the average of these drops more than 6 dB, this indicates a block.
+\subsection{Compensation}
 
-When a block is detected, a constant term $H$ is added to the model, which corresponds to how much the signals have been reduced. When the phone is unblocked, this is detected in an analogous way, and then $H$ is set to 0.
+The main strategy for detecting the attenuation is to note when the RSSI decreases fast. However, moving away from the AP:s, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal attenuation by the user only, the algorithm focuses on the six largest RSSI-values. If the average of these decrease more than 6 dB in one time step, this indicates hand attenuation. Moving away from the AP:s would not make the RSSI decrease that fast, and if LOS is lost to some AP:s there is a chance that LOS is established to another. If not, the compensation would work the same way for the obstacle as for the hand, which would support the positioning regardless.
+
+
+When an attenuation is detected, a constant term $H$ is added to the model, which corresponds to how much the signals have been reduced. Hence, the new model is given by \ref{equation:hand_comp}  When the phone is unblocked, this is detected in an analogous way, and then $H$ is set to 0. 
+
+\begin{equation}
+\log_{10}({P_r(d)})=C-10n\log_{10}(d) - \alpha\cdot\min({d, d_{\text{max}})}+H+ X_\sigma.
+\label{equation:hand_comp}
+\end{equation}
 
 Test 1) and 2) were performed again, but this time with the compensating algorithm. The results are shown in Figure \ref{hand_block_comp} and \ref{hand_block_repeatedly_comp}.
 
