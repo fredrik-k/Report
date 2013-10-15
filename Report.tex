@@ -578,6 +578,57 @@ In figure \ref{err_vs_N}, the mean positioning error for the same data set is sh
 
 For some of the test cases used later in this chapter, the distance between measurements and its variance will be lower, and for others, considerably higher, compared to the case presented in the last paragraph. To accommodate for this a larger $N$, of 300, is chosen and used for all tests in the following sections.    
 %
+\section{On model choice}
+%
+From chapter \ref{chap:RSP}, a model on the form
+%
+\begin{equation}
+R_x(d) = C - 2*10\log_{10}{d}-\alpha d
+\label{eq:RSSI_model}
+\end{equation}
+%
+is determined appropriate to model the RSSI measurements. In this model, $R_x(d)$ is the RSSI measurement at a distance $d$ from the transmitter, $C$ is related to the power of the transmitter and $\alpha$ models path loss related to signal path obstruction. 
+
+The models are discussed in chapter \ref{chap:RSP} but appropriate values of the constants $C$ and $\alpha$ are yet to be determined. This may be done in a couple of fashions, two of which will be used here. The resulting values are highly dependent on the environment, thus making them, in this situation, suitable for a open office environment. The values of $C$ is also entirely related to the power with which the Wi-Fi access points transmits, so a different model will most likely have a different value.      
+
+\subsection{Model driven approach}
+%
+The first method is to measure the signal power at known locations, preferably with both obstructed and line of sight paths to the access points. From these values a appropriate value of $\alpha$ can be calculated from \ref{eq:RSSI_model} as
+%
+\begin{equation}
+\alpha = \frac{C-2*10\log_{10}(d)-R_x(d)}{d}.
+\end{equation}
+%
+To find the value of $C$, measurements of the RSSI should be performed in line of sight of the AP, at different locations and with different distances to the AP. The value can then be calculated from
+%
+\begin{equation}
+C=R_x(d) - 2*10\log_{10}(d)
+\end{equation}
+% 
+i.e from \ref{eq:RSSI_model} with $\alpha = 0$ (line-of-sight).
+
+This has been done at 20 different locations with 20 measurements of the RSSI from available APs taken at each. The estimated values of $\alpha$ and $C$ is presented in table \ref{table:est_par}.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{Frequency, GHz} & $\alpha$ & $\sigma(\alpha)$ & $C$ & $\sigma(C)$ \\
+\hline
+\hline
+2.4 & 0.332 & 0.319 & -40.7 & 2.97 \\
+5.0 & 0.551 & 0.375 & -32.3 & 4.72  \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Estimated model parameters and the standard deviation of the estimation, indicated by $\sigma$.}\label{table:est_par}
+\end{table}
+%
+\subsection{Estimation error approach}
+The other method is a bit more heuristic, but might produce equal or better performance. Instead of finding the values of $\alpha$ and $C$ by measurements it is possible to find the parameters resulting in the smallest average positioning error. This is done by taking a set of RSSI measurements at a few different known locations and use them in the position estimation algorithm with different $\alpha$ and $C$, to find the parameters producing the smallest mean estimation error.   
+
+ 
+%
 \section{Test Setup}
 \label{sec:test_setup}
 %
@@ -835,25 +886,9 @@ The reason why there is no gain in dividing the Glasgow building into areas is t
 
 \section{Compensating for Signal Block} %Working title
 %
-The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
-
-\subsection{Evaluation of different use cases}
-In the tests this far, the phone has been held so that the signal is blocked as little as possible. In this section, three different use cases are tested, all in \emph{Environment three}.
-
-\subsubsection{1. Phone in pocket}
-In this test, the phone was first carried one round in the hand. After that, it was moved to the jeans side pocket, and then another round was walked.
-
-\subsubsection{2. Blocking with hands, once}
-Again, the phone was carried one round in the hand. Then, the user tried to block as much of the signals with the hands as possible during the second round the hands.
-
-\subsubsection{3. Blocking with hands, repeatedly}
-Like the previous test, but during the second round, the signals were blocked and unblocked repeatedly. 
-
-The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
-
 \begin{figure}[!hbt]
 \include{graphics}
-\includegraphics[width=1\textwidth ]{images/adapt_parameters/pocket_positioning}
+\includegraphics[width=1\textwidth ]{images/adapt_parameters/positioning_pocket}
 \caption{Phone in pocket. Wearing the phone in the pocket did not affect the positioning significantly}\label{positioning_pocket}
 \end{figure}
 
@@ -868,6 +903,26 @@ The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and 
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly}
 \caption{Blocking with hands, repeatedly. Attenuation by the hands had a severe impact on the positioning.}\label{hand_block_repeatedly}
 \end{figure}
+
+%
+The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
+
+\subsection{Evaluation of different use cases}
+In the tests this far, the phone has been held so that the signal is blocked as little as possible. In this section, three different use cases are tested, all in \emph{Environment three}.
+
+\subsubsection{1. Phone in pocket}
+In this test, the phone was first carried one round in the hand. After that, it was moved to the jeans side pocket, and then another round was walked.
+
+\subsubsection{2. Blocking with hands, once}
+Again, the phone was carried one round in the hand. Then, the user tried to block as much of the signals with the hands as possible during the second round the hands.
+
+\subsubsection{3. Blocking with hands, repeatedly}
+Like the previous test, but during the second round, the signals were blocked and unblocked repeatedly. 
+
+
+The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
+
+
 
 Carrying the phone in the pocket did not affect the RSSI significantly, and hence the positioning was unaffected. However, blocking the signals with the hands lowered the RSSI considerably, causing the positioning to be inaccurate. Hence, this use case has to be detected and compensated for.
 
