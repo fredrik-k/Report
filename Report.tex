@@ -467,11 +467,63 @@ Of course, some of the signal behaviour is expected to be highly correlated. For
 
 To investigate the correlation between 2.4 and 5 GHz signals, measurements could be taken, with an increasing distance, to an AP transmitting on both frequencies. After the path loss dependent behavior is removed from the signals, the correlation of the noise could be computed.  
 
-Such an investigation was performed, taking measurements at increasing distances, in the range $[2,44$-$5]$, of the signal strength from an AP in line-of-sight. In Figure \ref{noise_corr_los} the resulting noise is displayed. The \emph{correlation coefficient $r_{xy}$} between the two can be computed using,
+Such an investigation was performed, taking measurements at increasing distances, in the range $[2,44$-$5]$, of the signal strength from an AP in line-of-sight. In Figure \ref{noise_corr_los} the resulting noise is displayed. The \emph{correlation coefficient $\hat  r_{xy}$} between the two can be estimated using,
 \begin{equation}
-r_{xy}=\frac{\sum\limits_{i=1}^{N}{(x_i-\bar{x})(y_i-\bar{y})}}{(n-1)\sigma_x\sigma_y},
+\hat r_{xy}=\frac{\sum\limits_{i=1}^{N}{(x_i-\bar{x})(y_i-\bar{y})}}{(N-1)\sigma_x\sigma_y},
 \end{equation}
-where $N$ is the number of measurements, $x_i$ and $y_i$ are the 2.4 and 5 GHz measurements compensated for the path loss, $\bar x$ and $\bar y$ their means and $\sigma_x$ and $\sigma_y$ their standard deviations. The computation yields $r_{xy}=-0.31$ CONTINUED DISCUSSION ABOUT THE CORRELATION HERE. AND ANOTHER MEASUREMENT FOR NLOS? 
+where $N$ is the number of measurements, $x_i$ and $y_i$ are the 2.4 and 5 GHz measurements compensated for the path loss, $\bar x$ and $\bar y$ their means and $\sigma_x$ and $\sigma_y$ their standard deviations. 
+
+To construct a confidence interval for the covariance some statistic processing of the data is required. The presentation here will be brief and interested readers are referred to \cite{fisher15, fisher21}  for a more in-depth description. 
+
+Since the distribution of $\hat r_xy$ is not Gaussian, \emph{Fisher's z-tranform}
+%
+\begin{equation}
+z'=\frac{1}{2}\ln{\left(\frac{1+\hat r_{xy}}{1-\hat r_{xy}}\right)}
+\end{equation}
+%
+is used. Under certain conditions not explained here $ z'$ is normally distributed with standard deviation
+%
+\begin{equation}
+\sigma_{z'}=\frac{1}{\sqrt{N-3}}.
+\end{equation} 
+%
+The two-sided confidence interval at level $\alpha$ is then
+%
+\begin{equation}
+I_{\hat z'} = \hat z' \pm Z_{\alpha/2}\cdot\frac{1}{\sqrt{N-3}}, 
+\end{equation}
+%
+and may be transformed back to $\hat  r_{xy}$ using the \emph{inverse Fisher's z-transform},
+%
+\begin{equation}
+\hat r_{xy}=\frac{e^{2z'}-1}{e^{2z'}+1}.
+\end{equation}
+
+In table \ref{corr_conf} six estimations of the correlation between the noise of the 2.4 and 5 GHz RSSI measurements are presented. Four of these are estimated from data where the distance from varies by 15 meters to the AP. Two of these are taken in LOS and two in NLOS, and for each case one measurement is taken near the AP and one far from the AP. The other two sets of data are taken at stationary positions in LOS and NLOS respectively. 
+%
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Signal path & Estimated covariance, $r_{xy}$ & 95 \% confidence interval \\
+\hline
+\hline
+LOS near AP& -0.1039 & $[-0.2898;0.0896]$ \\
+\hline
+NLOS near AP& 0.2558 & $[0.0477;0.4426]$  \\
+\hline
+LOS far from AP& 0.2604 & $[-0.0853;0.5501]$\\
+\hline
+NLOS far from AP& & \\
+\hline
+LOS stationary  &-0.0644 & $[-0.1341;0.0060]$ \\
+\hline
+NLOS stationary  & & \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Estimated covariances and 95 \% confidence interval for 2.4 and 5 GHz in different environments.}\label{corr_conf}
+\end{table}
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -589,16 +641,20 @@ R_x(d) = C - 2*10\log_{10}{d}-\alpha d
 %
 is determined appropriate to model the RSSI measurements. In this model, $R_x(d)$ is the RSSI measurement at a distance $d$ from the transmitter, $C$ is related to the power of the transmitter and $\alpha$ models path loss related to signal path obstruction. 
 
-The models are discussed in chapter \ref{chap:RSP} but appropriate values of the constants $C$ and $\alpha$ are yet to be determined. This may be done in a couple of fashions, two of which will be used here. The resulting values are highly dependent on the environment, thus making them, in this situation, suitable for a open office environment. The values of $C$ is also entirely related to the power with which the Wi-Fi access points transmits, so a different model will most likely have a different value.      
+The models are discussed in chapter \ref{chap:RSP} but appropriate values of the constants $C$ and $\alpha$ are yet to be determined. This may be done in a couple of fashions, two of which will be presented here. The resulting values, especially the value of $\alpha$, are highly dependent on the environment, thus making them, in this situation, suitable for a open office environment. The values of $C$ is also related to the power with which the Wi-Fi access points transmits, so a different AP will most likely have a different value.      
 
-\subsection{Model driven approach}
+\subsection{Model Driven Approach}
 %
-The first method is to measure the signal power at known locations, preferably with both obstructed and line of sight paths to the access points. From these values a appropriate value of $\alpha$ can be calculated from \ref{eq:RSSI_model} as
+Given measurements at known locations, preferably with both obstructed and line of sight paths to the access points, it is possible to compute the model parameters.
+
+The value of $\alpha$ from \ref{eq:RSSI_model} can be calculated as
 %
 \begin{equation}
 \alpha = \frac{C-2*10\log_{10}(d)-R_x(d)}{d}.
 \end{equation}
 %
+The estimation of $\alpha$ will improve if the paths between transmitters and receiver is representative for the desired environment.  
+
 To find the value of $C$, measurements of the RSSI should be performed in line of sight of the AP, at different locations and with different distances to the AP. The value can then be calculated from
 %
 \begin{equation}
@@ -624,10 +680,22 @@ This has been done at 20 different locations with 20 measurements of the RSSI fr
 \caption{Estimated model parameters and the standard deviation of the estimation, indicated by $\sigma$.}\label{table:est_par}
 \end{table}
 %
-\subsection{Estimation error approach}
+\subsection{Estimation Error Approach}
 The other method is a bit more heuristic, but might produce equal or better performance. Instead of finding the values of $\alpha$ and $C$ by measurements it is possible to find the parameters resulting in the smallest average positioning error. This is done by taking a set of RSSI measurements at a few different known locations and use them in the position estimation algorithm with different $\alpha$ and $C$, to find the parameters producing the smallest mean estimation error.   
 
- 
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/pure_rssi/err_vs_param}
+\caption{Average estimation error as a function of $\alpha$ and $C$ for 2.4 and 5 GHz RSSI measurements. Values i deep blue (bottom left corner) are set to zero since these values resulted in very large positioning errors.}\label{err_vs_param}
+\end{figure}
+%
+To illustrate this, the estimation error for $\alpha \in [0;1]$ and $C \in [-55;25]$ is shown in figure \ref{err_vs_param} for 2.4 and 5 GHz. The parameters yielding the smallest average positioning errors is $C=-38$ and $\alpha = 0.3$ for 2.4 GHz and $C=-39$ and $\alpha = 0.2$ for 5 GHz. 
+%
+\subsection{Final Parameter Choice}
+%
+A few interesting observations can be made from the two methods above. The first of these being that the range of possible values are large, indicated by the standard deviations obtained from the model driven method. This is somewhat to be expected as the obstruction between transmitter and receiver is vastly different from location to location. Thus, the obtained parameters will be a average of the different environments giving rise to their high standard deviation. 
+
+Further, it is noteworthy that the parameters obtained from the two approaches is different, especially for 5 GHz. This might be due to different environments for the different estimations. However, the errors in position using the parameters found from  
 %
 \section{Test Setup}
 \label{sec:test_setup}
@@ -886,7 +954,7 @@ The reason why there is no gain in dividing the Glasgow building into areas is t
 
 \section{Compensating for Signal Block} %Working title
 %
-<<<<<<< HEAD
+
 The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
 
 \subsection{Evaluation of different use cases}
@@ -903,8 +971,8 @@ Like the previous test, but during the second round, the signals were blocked an
 
 The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
 
-=======
->>>>>>> 13350de9b31e3554926ab015ab1a5aa6b517a431
+
+
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/positioning_pocket}
@@ -923,8 +991,7 @@ The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and 
 \caption{Blocking with hands, repeatedly. Attenuation by the hands had a severe impact on the positioning.}\label{hand_block_repeatedly}
 \end{figure}
 
-<<<<<<< HEAD
-=======
+
 %
 The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
 
@@ -940,11 +1007,11 @@ Again, the phone was carried one round in the hand. Then, the user tried to bloc
 \subsubsection{3. Blocking with hands, repeatedly}
 Like the previous test, but during the second round, the signals were blocked and unblocked repeatedly. 
 
-\subsection{Results}
+
 The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
 
 \subsection{Compensation}
->>>>>>> 13350de9b31e3554926ab015ab1a5aa6b517a431
+
 Carrying the phone in the pocket did not affect the RSSI significantly, and hence the positioning was unaffected. However, blocking the signals with the hands lowered the RSSI considerably, causing the positioning to be inaccurate. Hence, this use case has to be detected and compensated for.
 
 \subsection{Compensation}
@@ -1210,6 +1277,26 @@ However, as stated before, the error in cumulative and the performance deteriora
 SOME ABOUT THE ROTATION VECTORS HERE
 
 It is apparent that both position and heading need to be calibrated to obtain a good position estimate. How this is done is explained in the following chapters.
+%
+\chapter{Algorithm Implementation in Android}
+%
+In previous chapters offline computations are used to obtain the position estimate. Here an online java implementation of the developed algorithms will be presented briefly. The particle filter is quite computationally demanding, and therefor it is important to discern if handheld devices are capable of performing these computations sufficiently fast. 
+
+The implementation will be done in a positioning application developed by Sony Mobile, called SonyMap. This application is intended for android smartphones and used to navigate and position the smartphone in Sony Mobiles buildings around the globe. 
+
+The chapter is closed by discussing some further optimizations possible, if it is necessary to decrease the computational time further.  
+%
+\subsection{Introducing SonyMap}
+%
+\section{Choice of Coordinate System}
+%
+\section{Java Implementations}
+%
+\subsection{Finding Building \& Floor}
+%
+\subsection{The Particle Filter}
+%
+\section{Further Optimizations - Parallel Computations}
 %
 \chapter{Sensor Evaluation}
 %
