@@ -463,11 +463,17 @@ The evolution of WiFi has prompted many AP:s to implement standards for both 2.4
 %
 \subsection{Signal Correlation}
 %
-Of course, some of the signal behaviour is expected to be highly correlated. For one, the large scale distance dependent path loss is largely the same in both signals, and it is from this path loss the distance to the AP is determined. Independence is a nice feature for the signal noise though, including the \emph{small scale fading}. 
+Of course, some of the signal behavior is expected to be highly correlated. For one, the large scale distance dependent path loss is largely the same in both signals, and it is from this path loss the distance to the AP is determined. Independence is a nice feature for the signal noise though, including the \emph{small scale fading}. 
 
-To investigate the correlation between 2.4 and 5 GHz signals, measurements could be taken, with an increasing distance, to an AP transmitting on both frequencies. After the path loss dependent behavior is removed from the signals, the correlation of the noise could be computed.  
+To investigate the correlation between 2.4 and 5 GHz signals, measurements could be taken, with an increasing distance, to an AP transmitting on both frequencies. After the path loss dependent behavior is removed from the signals, the correlation of the noise could be computed. This process is illustrated for one series of data in figure \ref{noise_corr_los} 
+%
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/wifi/noise_corr_los}
+\caption{Signal power, signal power together with linear trend and signal power minus linear trend for the 2.4 and 5 GHz channel. Measurements taken while traversing a distance of 15 meters, moving away from the AP.}\label{noise_corr_los}
+\end{figure}
 
-Such an investigation was performed, taking measurements at increasing distances, in the range $[2,44$-$5]$, of the signal strength from an AP in line-of-sight. In Figure \ref{noise_corr_los} the resulting noise is displayed. The \emph{correlation coefficient $\hat  r_{xy}$} between the two can be estimated using,
+The \emph{correlation coefficient $\hat  r_{xy}$} between the two can be estimated using,
 \begin{equation}
 \hat r_{xy}=\frac{\sum\limits_{i=1}^{N}{(x_i-\bar{x})(y_i-\bar{y})}}{(N-1)\sigma_x\sigma_y},
 \end{equation}
@@ -514,22 +520,16 @@ NLOS near AP& 0.2558 & $[0.0477;0.4426]$  \\
 \hline
 LOS far from AP& 0.2604 & $[-0.0853;0.5501]$\\
 \hline
-NLOS far from AP& & \\
+NLOS far from AP& 0.2364& $[0.0399; 0.4154]$ \\
 \hline
 LOS stationary  &-0.0644 & $[-0.1341;0.0060]$ \\
 \hline
-NLOS stationary  & & \\
+NLOS stationary  & -0.1191 &$[-0.1754;-0.0620]$ \\
 \hline
 \end{tabular}
 \end{center}
 \caption{Estimated covariances and 95 \% confidence interval for 2.4 and 5 GHz in different environments.}\label{corr_conf}
 \end{table}
-%
-\begin{figure}[!hbt]
-\include{graphics}
-\includegraphics[width=1\textwidth ]{images/wifi/noise_corr_los}
-\caption{The noise of the 2.4 and 5 GHz measurement versus distance after compensation for the path loss.}\label{noise_corr_los}
-\end{figure}
 %
 \subsection{Difference in Modeling}
 %
