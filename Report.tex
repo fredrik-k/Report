@@ -589,20 +589,16 @@ R_x(d) = C - 2*10\log_{10}{d}-\alpha d
 %
 is determined appropriate to model the RSSI measurements. In this model, $R_x(d)$ is the RSSI measurement at a distance $d$ from the transmitter, $C$ is related to the power of the transmitter and $\alpha$ models path loss related to signal path obstruction. 
 
-The models are discussed in chapter \ref{chap:RSP} but appropriate values of the constants $C$ and $\alpha$ are yet to be determined. This may be done in a couple of fashions, two of which will be presented here. The resulting values, especially the value of $\alpha$, are highly dependent on the environment, thus making them, in this situation, suitable for a open office environment. The values of $C$ is also related to the power with which the Wi-Fi access points transmits, so a different AP will most likely have a different value.      
+The models are discussed in chapter \ref{chap:RSP} but appropriate values of the constants $C$ and $\alpha$ are yet to be determined. This may be done in a couple of fashions, two of which will be used here. The resulting values are highly dependent on the environment, thus making them, in this situation, suitable for a open office environment. The values of $C$ is also entirely related to the power with which the Wi-Fi access points transmits, so a different model will most likely have a different value.      
 
 \subsection{Model driven approach}
 %
-Given measurements at known locations, preferably with both obstructed and line of sight paths to the access points, it is possible to compute the model parameters.
-
-The value of $\alpha$ from \ref{eq:RSSI_model} can be calculated as
+The first method is to measure the signal power at known locations, preferably with both obstructed and line of sight paths to the access points. From these values a appropriate value of $\alpha$ can be calculated from \ref{eq:RSSI_model} as
 %
 \begin{equation}
 \alpha = \frac{C-2*10\log_{10}(d)-R_x(d)}{d}.
 \end{equation}
 %
-The estimation of $\alpha$ will improve if the paths between transmitters and receiver is representative for the desired environment.  
-
 To find the value of $C$, measurements of the RSSI should be performed in line of sight of the AP, at different locations and with different distances to the AP. The value can then be calculated from
 %
 \begin{equation}
@@ -631,15 +627,7 @@ This has been done at 20 different locations with 20 measurements of the RSSI fr
 \subsection{Estimation error approach}
 The other method is a bit more heuristic, but might produce equal or better performance. Instead of finding the values of $\alpha$ and $C$ by measurements it is possible to find the parameters resulting in the smallest average positioning error. This is done by taking a set of RSSI measurements at a few different known locations and use them in the position estimation algorithm with different $\alpha$ and $C$, to find the parameters producing the smallest mean estimation error.   
 
-\begin{figure}[!hbt]
-\include{graphics}
-\includegraphics[width=1\textwidth ]{images/pure_rssi/err_vs_param}
-\caption{Average estimation error as a function of $\alpha$ and $C$ for 2.4 and 5 GHz RSSI measurements. Values i deep blue (bottom left corner) are set to zero since these values resulted in very large positioning errors.}\label{env_one}
-\end{figure}
-%
-To illustrate this, the estimation error for $\alpha \in [0;1]$ and $C \in [-55;25]$ is shown in figure \ref{err_vs_param} for 2.4 and 5 GHz.
-
-   
+ 
 %
 \section{Test Setup}
 \label{sec:test_setup}
@@ -896,8 +884,27 @@ Both alternatives have been tested offline using $Malab$. For the environments d
 
 The reason why there is no gain in dividing the Glasgow building into areas is that it is homogeneous enough for alternative 1 to work. In an environment where the obstacle density changes more, alternative 2 would be more suitable.
 
-\section{Compensating for User Attenuation} %Working title
+\section{Compensating for Signal Block} %Working title
 %
+<<<<<<< HEAD
+The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
+
+\subsection{Evaluation of different use cases}
+In the tests this far, the phone has been held so that the signal is blocked as little as possible. In this section, three different use cases are tested, all in \emph{Environment three}.
+
+\subsubsection{1. Phone in pocket}
+In this test, the phone was first carried one round in the hand. After that, it was moved to the jeans side pocket, and then another round was walked.
+
+\subsubsection{2. Blocking with hands, once}
+Again, the phone was carried one round in the hand. Then, the user tried to block as much of the signals with the hands as possible during the second round the hands.
+
+\subsubsection{3. Blocking with hands, repeatedly}
+Like the previous test, but during the second round, the signals were blocked and unblocked repeatedly. 
+
+The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
+
+=======
+>>>>>>> 13350de9b31e3554926ab015ab1a5aa6b517a431
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/positioning_pocket}
@@ -916,6 +923,8 @@ The reason why there is no gain in dividing the Glasgow building into areas is t
 \caption{Blocking with hands, repeatedly. Attenuation by the hands had a severe impact on the positioning.}\label{hand_block_repeatedly}
 \end{figure}
 
+<<<<<<< HEAD
+=======
 %
 The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
 
@@ -929,13 +938,13 @@ In this test, the phone was first carried one round in the hand. After that, it 
 Again, the phone was carried one round in the hand. Then, the user tried to block as much of the signals with the hands as possible during the second round the hands.
 
 \subsubsection{3. Blocking with hands, repeatedly}
-The signals were blocked and unblocked repeatedly (5 times) during two rounds. 
+Like the previous test, but during the second round, the signals were blocked and unblocked repeatedly. 
 
-
+\subsection{Results}
 The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
 
-
-
+\subsection{Compensation}
+>>>>>>> 13350de9b31e3554926ab015ab1a5aa6b517a431
 Carrying the phone in the pocket did not affect the RSSI significantly, and hence the positioning was unaffected. However, blocking the signals with the hands lowered the RSSI considerably, causing the positioning to be inaccurate. Hence, this use case has to be detected and compensated for.
 
 \subsection{Compensation}
@@ -950,7 +959,7 @@ When an attenuation is detected, a constant term $H$ is added to the model, whic
 \label{equation:hand_comp}
 \end{equation}
 
-Test 1) and 2) were performed again, but this time with the compensating algorithm. The results are shown in Figure \ref{hand_block_comp} and \ref{hand_block_repeatedly_comp}. 
+Test 1) and 2) were performed again, but this time with the compensating algorithm. The results are shown in Figure \ref{hand_block_comp} and \ref{hand_block_repeatedly_comp}.
 
 \begin{figure}[!hbt]
 \include{graphics}
@@ -963,9 +972,6 @@ Test 1) and 2) were performed again, but this time with the compensating algorit
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly_comp}
 \caption{Blocking with hands, repeatedly. The algorithm compensates for the attenuation.}\label{hand_block_repeatedly_comp}
 \end{figure}
-
-Compensating for the hand attenuation clearly improved the positioning. However, $H$ can not be determined exactly, due to noise and obstacles in the environment. In addition, the hand attenuation is only detected if the phone is covered fast enough. If it goes from uncovered to covered successively, during several time steps, this can not be distinguished from other causes of lowered RSSI. Naturally, going from covered to uncovered works analogously.
-
 
 \chapter{Modeling the Kinematics} %Working title
 %
@@ -1204,26 +1210,6 @@ However, as stated before, the error in cumulative and the performance deteriora
 SOME ABOUT THE ROTATION VECTORS HERE
 
 It is apparent that both position and heading need to be calibrated to obtain a good position estimate. How this is done is explained in the following chapters.
-%
-\chapter{Algorithm Implementation in Android}
-%
-In previous chapters offline computations are used to obtain the position estimate. Here an online java implementation of the developed algorithms will be presented briefly. The particle filter is quite computationally demanding, and therefor it is important to discern if handheld devices are capable of performing these computations sufficiently fast. 
-
-The implementation will be done in a positioning application developed by Sony Mobile, called SonyMap. This application is intended for android smartphones and used to navigate and position the smartphone in Sony Mobiles buildings around the globe. 
-
-The chapter is closed by discussing some further optimizations possible, if it is necessary to decrease the computational time further.  
-%
-\subsection{Introducing SonyMap}
-%
-\section{Choice of Coordinate System}
-%
-\section{Java Implementations}
-%
-\subsection{Finding Building \& Floor}
-%
-\subsection{The Particle Filter}
-%
-\section{Further Optimizations - Parallel Computations}
 %
 \chapter{Sensor Evaluation}
 %
