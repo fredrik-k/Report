@@ -954,6 +954,25 @@ The reason why there is no gain in dividing the Glasgow building into areas is t
 
 \section{Compensating for Signal Block} %Working title
 %
+
+The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
+
+\subsection{Evaluation of different use cases}
+In the tests this far, the phone has been held so that the signal is blocked as little as possible. In this section, three different use cases are tested, all in \emph{Environment three}.
+
+\subsubsection{1. Phone in pocket}
+In this test, the phone was first carried one round in the hand. After that, it was moved to the jeans side pocket, and then another round was walked.
+
+\subsubsection{2. Blocking with hands, once}
+Again, the phone was carried one round in the hand. Then, the user tried to block as much of the signals with the hands as possible during the second round the hands.
+
+\subsubsection{3. Blocking with hands, repeatedly}
+Like the previous test, but during the second round, the signals were blocked and unblocked repeatedly. 
+
+The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
+
+
+
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/positioning_pocket}
@@ -971,6 +990,7 @@ The reason why there is no gain in dividing the Glasgow building into areas is t
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly}
 \caption{Blocking with hands, repeatedly. Attenuation by the hands had a severe impact on the positioning.}\label{hand_block_repeatedly}
 \end{figure}
+
 
 %
 The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
@@ -990,7 +1010,7 @@ Like the previous test, but during the second round, the signals were blocked an
 
 The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
 
-
+\subsection{Compensation}
 
 Carrying the phone in the pocket did not affect the RSSI significantly, and hence the positioning was unaffected. However, blocking the signals with the hands lowered the RSSI considerably, causing the positioning to be inaccurate. Hence, this use case has to be detected and compensated for.
 
