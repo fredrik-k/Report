@@ -505,7 +505,11 @@ and may be transformed back to $\hat  r_{xy}$ using the \emph{inverse Fisher's z
 \hat r_{xy}=\frac{e^{2z'}-1}{e^{2z'}+1}.
 \end{equation}
 
-In table \ref{corr_conf} six estimations of the correlation between the noise of the 2.4 and 5 GHz RSSI measurements are presented. Four of these are estimated from data where the distance from varies by 15 meters to the AP. Two of these are taken in LOS and two in NLOS, and for each case one measurement is taken near the AP and one far from the AP. The other two sets of data are taken at stationary positions in LOS and NLOS respectively. 
+In table \ref{corr_conf} six estimations of the correlation between the noise of the 2.4 and 5 GHz RSSI measurements are presented. Four of these are estimated from data where the distance from varies by 15 meters to the AP. Two of these are taken in LOS and two in NLOS, and for each case one measurement is taken near the AP and one far from the AP. The other two sets of data are taken at stationary positions in LOS and NLOS respectively.
+
+The table shows that the correlations are small with high probabilities. This means that additional information is added by using both frequencies, compared to using only one of them. It also means that the impact of the noise from one frequency can be reduced by using the other frequency as well.
+
+However, the model errors, i.e. the difference between models and measurements, are still highly correlated between the frequencies . For example, if the user moves from LOS with an AP to the other side of a wall, both signal frequencies will be reduced in a similar way. Events like these are not modeled accurately, since one can not know when they occur. The result is a large correlation between the model errors for each frequency.
 %
 \begin{table}
 \begin{center}
