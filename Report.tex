@@ -699,7 +699,27 @@ To illustrate this, the estimation error for $\alpha \in [0;1]$ and $C \in [-55;
 %
 A few interesting observations can be made from the two methods above. The first of these being that the range of possible values are large, indicated by the standard deviations obtained from the model driven method. This is somewhat to be expected as the obstruction between transmitter and receiver is vastly different from location to location. Thus, the obtained parameters will be a average of the different environments giving rise to their high standard deviation. 
 
-Further, it is noteworthy that the parameters obtained from the two approaches is different, especially for 5 GHz. This might be due to different environments for the different estimations. However, the errors in position using the parameters found from  
+Further, it is noteworthy that the parameters obtained from the two approaches differ, especially for 5 GHz. One explanation for this is that the particle filter is able to find an accurate position given, for example, a positive model error for 2.4 GHz and a negative error for 5 GHz from the same AP. However, the parameters found trying to minimize the model error still produced small positioning errors when used together with the particle filter. 
+
+Looking at figure \ref{err_vs_param} the particle filter exhibits a interesting behavior. The positioning error is relatively small for a large range of parameters but a change to substantial errors happens suddenly for certain parameters. Parameter choices along the approximate line from $C=-25$ and $\alpha=0.7$ to $C=-39$ and $\alpha=0$ needs to be changed only by a small amount to produce either good or truly poor results. A deeper investigation shows that this line roughly translates to the models switching from estimating a too low signal power to estimating a too high one, for a certain location. The smallest positioning errors is obtained when the modeled and received power are about the same, placing them slightly above the line described earlier. However, these parameters are sensitive if the environment changes, resulting in estimating to high signal powers for the given location. A more robust choice is to over estimate the signal attenuation resulting in a higher $\alpha$. This choice might produce slightly larger positioning errors but is less sensitive to changing environments.
+
+For the continuation of this chapter the parameters found in \ref{table:model_par} will be used to model the received RSSI value at a distance, $d$ from the AP.   
+%
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|l|l|}
+\hline
+Frequency, GHz & $C$ & $\alpha$ \\
+\hline
+2.4 & -38 & 0.4 \\
+\hline
+5 & -36 & 0.5 \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Model parameters for equation \ref{eq:RSSI_model}, to be used to model the RSSI for the following sections.}\label{table:model_par}
+\end{table}
+  
 %
 \section{Test Setup}
 \label{sec:test_setup}
@@ -1307,7 +1327,7 @@ The chapter is closed by discussing some further optimizations possible, if it i
 \chapter{Indoor positioning - Sensor Fused Approach} 
 
 \printbibliography  %% Comment if you don't want to use bibtex
-%
+
 \end{document}
 
 
