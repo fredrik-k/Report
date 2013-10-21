@@ -1064,6 +1064,8 @@ Test 1) and 2) were performed again, but this time with the compensating algorit
 \caption{Blocking with hands, repeatedly. The algorithm compensates for the attenuation.}\label{hand_block_repeatedly_comp}
 \end{figure}
 
+Compensating for the hand attenuation clearly improved the positioning. However, $H$ can not be determined exactly, due to noise and obstacles in the environment. In addition, the hand attenuation is only detected if the phone is covered fast enough. If it goes from uncovered to covered successively, during several time steps, this can not be distinguished from other causes of lowered RSSI. Naturally, going from covered to uncovered works analogously.
+
 \chapter{Modeling the Kinematics} %Working title
 %
 Modeling the kinematics may greatly improve the performance of a positioning system, especially if the estimated position is noisy or biased. The kinematics may also be used to estimate the position in between the updates from the main positioning algorithm. The range of models stretches from simple random walk processes to estimating acceleration, velocity and position in a three dimensional space using sensor fusion.
