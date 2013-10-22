@@ -976,6 +976,39 @@ Both alternatives have been tested offline using $Malab$. For the environments d
 
 The reason why there is no gain in dividing the Glasgow building into areas is that it is homogeneous enough for alternative 1 to work. In an environment where the obstacle density changes more, alternative 2 would be more suitable.
 
+In order to evaluate the parameter updates, the algorithm was given erroneous initial parameter values. Then, the phone was carried one round in environment three, and after that the updated parameters were noted. The results are shown in Table \ref{table:parameter_adaptation}.
+
+
+\begin{table}[!hbt]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{2}{|c|}{Initial values}
+&\multicolumn{4}{|c|}{Values after adaptation} \\
+\hline
+\hline
+\multicolumn{2}{|c|}{2.4 and 5 GHz}
+&\multicolumn{2}{|c|}{2.4 GHz}
+&\multicolumn{2}{|c|}{5 GHz} \\
+
+\hline
+$C$ & $\alpha$ & $C$ & $\alpha$& $C$& $\alpha$\\
+\hline
+-50 & 1.0 & -37.7 & 0.28 & -35.8 & 0.35\\
+\hline
+-45 & 0.9 & -37.7 & 0.25 & -35.8 & 0.34\\
+\hline
+-35 & 0.5 & -35.6 & 0.35 & -33.7 & 0.42\\
+\hline
+-25 & 0.3 & -31.5 & 0.47 & -29.6 & 0.54\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Parameter values before and after adaptation.}\label{table:parameter_adaptation}
+\end{table}
+
+Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable after the adaptation. Moreover, the algorithm moves the parameter values towards the region with relatively low position error in Figure \ref{err_vs_param}. 
+
 \section{Compensating for Signal Block} %Working title
 %
 
@@ -1034,7 +1067,6 @@ Like the previous test, but during the second round, the signals were blocked an
 
 The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
 
-\subsection{Compensation}
 
 Carrying the phone in the pocket did not affect the RSSI significantly, and hence the positioning was unaffected. However, blocking the signals with the hands lowered the RSSI considerably, causing the positioning to be inaccurate. Hence, this use case has to be detected and compensated for.
 
@@ -1063,6 +1095,11 @@ Test 1) and 2) were performed again, but this time with the compensating algorit
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly_comp}
 \caption{Blocking with hands, repeatedly. The algorithm compensates for the attenuation.}\label{hand_block_repeatedly_comp}
 \end{figure}
+
+
+\section{Conclusion}
+In this chapter, an algorithm that updates the model parallel to the positioning has been suggested. The purpose is to increase the generality of the application, and making it improve while in a new environment.
+
 
 Compensating for the hand attenuation clearly improved the positioning. However, $H$ can not be determined exactly, due to noise and obstacles in the environment. In addition, the hand attenuation is only detected if the phone is covered fast enough. If it goes from uncovered to covered successively, during several time steps, this can not be distinguished from other causes of lowered RSSI. Naturally, going from covered to uncovered works analogously.
 
