@@ -1007,7 +1007,15 @@ $C$ & $\alpha$ & $C$ & $\alpha$& $C$& $\alpha$\\
 \caption{Parameter values before and after adaptation.}\label{table:parameter_adaptation}
 \end{table}
 
-Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable after the adaptation. Moreover, the algorithm moves the parameter values towards the region with relatively low position error in Figure \ref{err_vs_param}. 
+Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable after the adaptation. Moreover, the algorithm moves the parameter values towards the region with relatively low position error in Figure \ref{err_vs_param}. The bottom row in \ref{table:parameter_adaptation} was investigated in more detail, as an example of how the adaptation affects the positioning. Figure \ref{adaptation_vs_none} shows the positioning with and without the parameter adaptation, respectively, with $C = -25$ and $\alpha = 0.3$ as initial values.
+
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/adapt_parameters/adaptation_vs_none}
+\caption{}
+\label{adaptation_vs_none}
+\end{figure}
+
 
 \section{Compensating for Signal Block} %Working title
 %
@@ -1015,7 +1023,7 @@ Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable a
 The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
 
 \subsection{Evaluation of different use cases}
-In the tests this far, the phone has been held so that the signal is blocked as little as possible. In this section, three different use cases are tested, all in \emph{Environment three}.
+In the tests this far, the phone has been held so that the signal is blocked as little as possible. In this section, three different use cases are tested, all in \emph{Environment three}. 
 
 \subsubsection{1. Phone in pocket}
 In this test, the phone was first carried one round in the hand. After that, it was moved to the jeans side pocket, and then another round was walked.
