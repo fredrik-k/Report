@@ -1082,7 +1082,6 @@ Carrying the phone in the pocket did not affect the RSSI significantly, and henc
 
 The main strategy for detecting the attenuation is to note when the RSSI decreases fast. However, moving away from the AP:s, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal attenuation by the user only, the algorithm focuses on the six largest RSSI-values. If the average of these decrease more than 6 dB in one time step, this indicates hand attenuation. Moving away from the AP:s would not make the RSSI decrease that fast, and if LOS is lost to some AP:s there is a chance that LOS is established to another. If not, the compensation would work the same way for the obstacle as for the hand, which would support the positioning regardless.
 
-
 When an attenuation is detected, a constant term $H$ is added to the model, which corresponds to how much the signals have been reduced. Hence, the new model is given by \ref{equation:hand_comp}  When the phone is unblocked, this is detected in an analogous way, and then $H$ is set to 0. 
 
 \begin{equation}
@@ -1092,13 +1091,13 @@ When an attenuation is detected, a constant term $H$ is added to the model, whic
 
 Test 1) and 2) were performed again, but this time with the compensating algorithm. The results are shown in Figure \ref{hand_block_comp} and \ref{hand_block_repeatedly_comp}.
 
-\begin{figure}[!hbt]
+\begin{figure}[!htb]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_comp}
 \caption{Blocking with hands, once. The algorithm compensates for the attenuation.}\label{hand_block_comp}
 \end{figure}
 
-\begin{figure}[!hbt]
+\begin{figure}[!htb]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly_comp}
 \caption{Blocking with hands, repeatedly. The algorithm compensates for the attenuation.}\label{hand_block_repeatedly_comp}
