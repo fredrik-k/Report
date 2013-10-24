@@ -556,12 +556,13 @@ The second case displays a scenario where the APs are placed in the corners of a
 
 The third case represents a best-case scenario where the position to be estimated is centered in an equilateral triangle. Here, it is easy to distinguish the most probable position, and likewise the \emph{true} position.
 
-The positioning will further benefit from a larger number of APs as both the number of measurements and probability of having a advantageous geometry increases. Still, a few conclusion could be drawn from this discussion, the main one being that the best position estimates will be obtained when the measurements are taken inside a polygon with corners consisting of the APs. %
-\begin{Figure}[!hbt]
+The positioning will further benefit from a larger number of APs as both the number of measurements and probability of having a advantageous geometry increases. Still, a few conclusion could be drawn from this discussion, the main one being that the best position estimates will be obtained when the measurements are taken inside a polygon with corners consisting of the APs. 
+%
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/geometries}
 \caption{Probable positions for different access point configuration (\emph{white} \texttt{+}), \emph{red} implies high probability and \emph{blue} low probability. The \emph{true} position is $[0, 20]$.}\label{geometries}
-\end{Figure}
+\end{figure}
 %
 %
 \section{On Parameter Choices}
@@ -610,11 +611,11 @@ This estimation could be further improved by the use of a technique for counting
 %
 The measurement noise is a quite simple simple choice, take a couple of sets of measurements at different distances from a AP and investigate the noise behavior. This has been done for a quite large number of access point and in environments ranging from line-of-sight to a highly obstructed signal path and some of these results are displayed in Figure \ref{noise_behaviour}. 
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/noise_behaviour}
 \caption{The difference between measurements and model for a few different APs for different environments and distances. Notice that the \emph{y}-axis of the Figures are different.}\label{noise_behaviour}
-\end{Figure}
+\end{figure}
 
 The resulting variance in the measurements ranged from $9$ to $60$, with a mean around $25$. The reason for the large span is that some of the APs was in line-of-sight for most of the measurement even though the distance to them was fairly large. Other APs was, on the other hand, highly obstructed while at a quite short distance, and yet others followed the models quite well. 
 
@@ -622,11 +623,11 @@ During the position estimations in the rest of this section the mean of the vari
 
 \subsection{Number of Particles}
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/err_vs_N}
 \caption{Mean error in estimated position versus number of particles, $N$, for a two dimensional positioning.}\label{err_vs_N}
-\end{Figure}
+\end{figure}
 
 The number of particles required to maintain a high enough distribution over the part relevant part of the state space, is dependent on the size of the state space and the distance traveled in between filter updates. In this case, the size of the state space is two, position in x- and y-direction respective, as the positioning is done in two dimensions. The distance in between filter updates i.e distance between consecutive RSSI measurements changes for different test cases. The range starts at 0.5 meters with a close to zero variance, when measurements are taken every 0.5 meters around a predefined path. The other limit of the range is around 4 meters with considerably larger variance when measurements are taken around every third second while walking a predetermined path. 
 
@@ -687,11 +688,11 @@ This has been done at 20 different locations with 20 measurements of the RSSI fr
 \subsection{Estimation Error Approach}
 The other method is a bit more heuristic, but might produce equal or better performance. Instead of finding the values of $\alpha$ and $C$ by measurements it is possible to find the parameters resulting in the smallest average positioning error. This is done by taking a set of RSSI measurements at a few different known locations and use them in the position estimation algorithm with different $\alpha$ and $C$, to find the parameters producing the smallest mean estimation error.   
 
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/err_vs_param}
 \caption{Average estimation error as a function of $\alpha$ and $C$ for 2.4 and 5 GHz RSSI measurements. Values i deep blue (bottom left corner) are set to zero since these values resulted in very large positioning errors.}\label{err_vs_param}
-\end{Figure}
+\end{figure}
 %
 To illustrate this, the estimation error for $\alpha \in [0;1]$ and $C \in [-55;25]$ is shown in Figure \ref{err_vs_param} for 2.4 and 5 GHz. The parameters yielding the smallest average positioning errors is $C=-38$ and $\alpha = 0.3$ for 2.4 GHz and $C=-39$ and $\alpha = 0.2$ for 5 GHz. 
 %
@@ -752,23 +753,23 @@ The results of the different tests performed are presented in the sections below
 %
 
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/env_one}
 \caption{The path (\emph{blue} line) used in the \emph{environment one}, along with measurement points (\emph{blue} \texttt{x}), start point (\emph{black} \texttt{x}) and end point (\emph{red} \texttt{o}) }\label{env_one}
-\end{Figure}
+\end{figure}
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/true_vs_est_env_1_05}
 \caption{Comparison between the true (\emph{blue}) and estimated (\emph{black}) path for \emph{environment one}.}\label{true_vs_est_env_1_05}
-\end{Figure}
+\end{figure}
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/error_env_1_05}
 \caption{The absolute errors in estimated position for \emph{environment one}.}\label{error_env_1_05}
-\end{Figure}
+\end{figure}
 %
 The methodology from \emph{case 1} was used during this test and measurements from seven APs along a path of approximately one hundred meters. The locations of the APs together with the path taken may be found in Figure \ref{env_one}.
 
@@ -798,11 +799,11 @@ In this environment the placement of the access point in relation to the path wa
 %
 The test in \emph{environment two} uses the methodology of \emph{case 2} and the measurements are taken over a distance of $176.5$ meters, for a reference of the actual path see Figure \ref{true_vs_est_env_2_05}.    
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/true_vs_est_env_2_05}
 \caption{The true path (\emph{blue}), along with estimated path (\emph{black}), start point (\emph{red} \texttt{o}), initial heading (\emph{black} arrow) and access point (\emph{cyan} \texttt{o}).}\label{true_vs_est_env_2_05}
-\end{Figure}
+\end{figure}
 %
 \begin{table}[!hbt]
 \begin{center}
@@ -832,11 +833,11 @@ For environment three which was a substantially longer path of around 300 meters
 
 In Figure \ref{true_vs_est_env_3}, the true path along with estimated positions and path, may be viewed. For this test case, it is hard to give a absolute measurement of the error. Instead, one has to consider the difference between true and estimated path. Further, the measurements was taken while moving at constant speed and the time between each measurements is more or less constant. Thus, the estimated positions should be approximately equally spaced over the path. The estimated path differs from the true one at times, but the difference is, in absolute terms, not large. Also, most of the estimated positions are equally spaced. However, a few of them stands out and the minimum distance between two is $0.49$ m and maximum $8.2$ m. Another interesting observation is that the mean distance between two consecutive estimated positions is $4.1$ m giving a total distance of $250$ m, which is $23$ m less than the true path. This is also visible in Figure \ref{true_vs_est_env_3} in that the estimated path have a tendency to cut corners.         
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/true_vs_est_env_3}
 \caption{The true path (\emph{blue}), along with estimated path (\emph{red}), estimated positions (\emph{black} \texttt{x}), start point (\emph{red} \texttt{o}), initial heading (\emph{black} arrow) and access point (\emph{cyan} \texttt{o}).}\label{true_vs_est_env_3}
-\end{Figure}
+\end{figure}
 %
 \subsection{Least Squares - a Comparison}
 %
@@ -844,23 +845,23 @@ A common way of estimating a position from a RSSI measurements is to use a least
 
 The comparison will be made for environment \emph{one} and \emph{two} from the previous sections, but with new datasets. Further, the methodology from \emph{case }1 will be used, but with 3 m instead of $0.5$ m sample spacing.This methodology is used to be able to measure the absolute position error from the different estimators. Further, both estimators will use the same path loss models.   
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/ls_short_path}
 \caption{Least squares estimation versus particle filter estimation for environment \emph{one}. True path (\emph{blue}), LS estimated path and position (\emph{black})and PF estimated path and position (\emph{red})}\label{ls_short}
-\end{Figure}
+\end{figure}
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/ls_error_short}
 \caption{Absolute position error for the LS (\emph{red}) and PF (\emph{blue}) estimators for environment \emph{one}.}\label{ls_error_short}
-\end{Figure}
+\end{figure}
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/ls_error_medium}
 \caption{Absolute position error for the LS (\emph{red}) and PF (\emph{blue}) estimators for environment \emph{two}.}\label{ls_error_medium}
-\end{Figure}
+\end{figure}
 
 The estimated path from both the PF and LS estimators is displayed in Figure \ref{ls_short} along with the true path for environment \emph{one}. It is clearly visible that the PF performs considerably better compared to the LS estimator. The positioning errors from Figure \ref{ls_error_short} makes this even more clear and the PF has a smaller positioning error for every sample compared to the LS estimator. The mean position error is, for the PF  $1.7$ m and for the LS estimation, $5.7$ m. 
 
@@ -895,17 +896,17 @@ Another issue is that the signals reaching the phone might be attenuated conside
 %
 \section{Estimation of Position Error} %Working title
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/error_vs_maxP_all}
 \caption{Figure text}\label{error_vs_maxp_all}
-\end{Figure}
+\end{figure}
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/prediction_interval}
 \caption{Figure text}\label{prediction_interval}
-\end{Figure}
+\end{figure}
 
 The method described in Chapter \ref{chap:pure_rssi} has proven to perform better at a closer distance to the nearest AP. At a certain time step, a large maximum RSSI-value indicates that the nearest AP is close. This, in turn, indicates that the position error is relatively small. Figure \ref{error_vs_maxp_all} shows this relation. The data is from the test setup \emph{Case 1} for \emph{Environment Two}, defined in Section \ref{sec:test_setup} and \ref{environment_results}, respectively.
 
@@ -953,11 +954,11 @@ In this algorithm, each value of $\alpha_{ij}$ is stored in a matrix $\vec{\alph
 
 Each AP corresponds to one circular section, centered at the AP and with radius $r_s$. These sections may overlap, and there might be areas that do not belong to any sector (see Figure \ref{alpha_sections}). Hence, the following three cases may occur for each particle:
 
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/alpha_sections}
 \caption{\emph{Environment three} divided into sections. Each circle corresponds to a section around a certain access point.}\label{alpha_sections}
-\end{Figure}
+\end{figure}
 
 
 \subsubsection{1. Exactly one section}
@@ -1009,12 +1010,12 @@ $C$ & $\alpha$ & $C$ & $\alpha$& $C$& $\alpha$\\
 
 Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable after the adaptation. Moreover, the algorithm moves the parameter values towards the region with relatively low position error in Figure \ref{err_vs_param}. The bottom row in \ref{table:parameter_adaptation} was investigated in more detail, as an example of how the adaptation affects the positioning. Figure \ref{adaptation_vs_none} shows the positioning with and without the parameter adaptation, respectively, with $C = -25$ and $\alpha = 0.3$ as initial values.
 
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/adaptation_vs_none}
 \caption{}
 \label{adaptation_vs_none}
-\end{Figure}
+\end{figure}
 
 
 \section{Compensating for Signal Block} %Working title
@@ -1038,23 +1039,23 @@ The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and 
 
 
 
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/positioning_pocket}
 \caption{Phone in pocket. Wearing the phone in the pocket did not affect the positioning significantly}\label{positioning_pocket}
-\end{Figure}
+\end{figure}
 
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block}
 \caption{Blocking with hands, once. Attenuation by the hands had a severe impact on the positioning.}\label{hand_block}
-\end{Figure}
+\end{figure}
 
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly}
 \caption{Blocking with hands, repeatedly. Attenuation by the hands had a severe impact on the positioning.}\label{hand_block_repeatedly}
-\end{Figure}
+\end{figure}
 
 
 %
@@ -1091,17 +1092,17 @@ When an attenuation is detected, a constant term $H$ is added to the model, whic
 
 Test 1) and 2) were performed again, but this time with the compensating algorithm. The results are shown in Figure \ref{hand_block_comp} and \ref{hand_block_repeatedly_comp}.
 
-\begin{Figure}[!htb]
+\begin{figure}[!htb]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_comp}
 \caption{Blocking with hands, once. The algorithm compensates for the attenuation.}\label{hand_block_comp}
-\end{Figure}
+\end{figure}
 
-\begin{Figure}[!htb]
+\begin{figure}[!htb]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly_comp}
 \caption{Blocking with hands, repeatedly. The algorithm compensates for the attenuation.}\label{hand_block_repeatedly_comp}
-\end{Figure}
+\end{figure}
 
 
 \section{Conclusion}
@@ -1126,11 +1127,11 @@ x_{k+1} = x_k + v_k
 %
 where $v_k$ is a random process. Usually $v_k$ is considered independent for each state, and depending on the distribution and standard deviation $\sigma$, different random walk processes are obtained. How $v_k$ should be distributed is determined by the intrinsic behavior of the states. A common choice is a normal distribution with an appropriate $\sigma$. Such a random walk is called a \emph{Gaussian random walk}, and if $\sigma$ is very small it resembles a \emph{Brownian motion}. Four series of Gaussian random walks in two dimensions, each starting in $(0\hspace{5pt}0)$, are displayed in Figure \ref{rand_walk}. 
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/rand_walk}
 \caption{Four series of random walk using $\sigma = 1$ and $10000$ steps.}\label{rand_walk}
-\end{Figure}
+\end{figure}
 %
 \section{Quaternions}
 %
@@ -1262,11 +1263,11 @@ Characterizing a step allows a kinematics algorithm to keep track of the approxi
 %
 which is considerably more uniform between use cases.
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/avr_acc}
 \caption{Average acceleration during 10 seconds of a typical walk.}\label{avr_acc}
-\end{Figure}
+\end{figure}
 
 A 10 second sample of the average acceleration measured by a phone placed in the front pocket during a typical walk is displayed in Figure \ref{avr_acc}. A flaw of this approach is easily noticed. Due to gravity, the average acceleration is centered around this value, ($9.81$ m/s$^2$). A way around this is to differentiate the signal according to 
 %
@@ -1274,20 +1275,20 @@ A 10 second sample of the average acceleration measured by a phone placed in the
 \Delta f(x) = \frac{f(x+\Delta t) - f(x) }{\Delta t},
 \end{equation} 
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/avr_acc_dif}
 \caption{Differentiation of average acceleration during 10 seconds of a typical walk.}\label{avr_acc_dif}
-\end{Figure}
+\end{figure}
 \subsection{Step Length Considerations}
 %
 yielding a signal according to Figure \ref{avr_acc_dif}. This signal is centred around zero, but possesses unnecessary high frequency behaviour. The sampling frequency of the accelerometer is $\sim 200$ Hz, giving a frequency content of the signal between 0 and 100 Hz. The normal step frequency for a person is no larger than 3 Hz, which promotes filtering the signal. Doing this with a fifth order \emph{Butterworth filter} with a cut-of frequency of 6 Hz yields the signal in Figure \ref{avr_acc_dif_filt}.
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/avr_acc_dif_filt}
 \caption{Filtered differentiation of average acceleration during 10 seconds of a typical walk.}\label{avr_acc_dif_filt}
-\end{Figure}
+\end{figure}
 %
 Here, the steps are clearly distinguishable. The large peek corresponds to a step with the same leg as the pocket containing the phone, and the smaller one indicates a step taken by the other leg. An algorithm for identifying a step could be counting the number of times  the signal is decreasing and passing from above to below $-20$.
 
@@ -1330,19 +1331,19 @@ Dead reckoning estimations are subject to cumulative errors i.e. errors are adde
 
 For phones, a dead reckoning estimation would most likely include some form of step counting combined with one of the heading estimations previously mentioned. As an example, the true and estimated paths using a pedometer and a gyroscope during a walk of approximately 110 meters, are presented in Figure \ref{deadreckon_1}. The behavior is fairly good but there is a heading error present soon after the start, and this grows as the walk continues. The distance estimated by the pedometer is also larger than the true distance traveled.  
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_1}
 \caption{True versus, by dead reckoning, estimated path using gyroscope and pedometer.}\label{deadreckon_1}
-\end{Figure}
+\end{figure}
 
 However, as stated before, the error in cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and especially the heading error is clearly visible. 
 %
-\begin{Figure}[!hbt]
+\begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_2}
 \caption{True versus, by dead reckoning, estimated path using gyroscope and pedometer.}\label{deadreckon_2}
-\end{Figure}
+\end{figure}
 
 SOME ABOUT THE ROTATION VECTORS HERE
 
