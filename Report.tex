@@ -550,18 +550,18 @@ In this chapter, the considerations about, and parameter choices for, the partic
 %
 How the access points are positioned in relation to the user (i.e. the position of interest to estimate), highly impacts the quality of the estimation. In Figure \ref{geometries}, three different AP geometries are shown along with the distribution of probable positions. It represents an idealized case where the noise in the measurements of the distance to each AP is zero-mean Gaussian. However, it provides an illustrating example of how the geometry impacts the distribution of the estimated position.
 
-The leftmost case in Figure \ref{geometries} the APs are placed on a straight line, and in this case trilateration of the \emph{true} position, $[0,20]$, is impossible if no prior information is known. As the Figure show, APs positioned in on a straight line gives two equally probable position estimates (more \emph{red} implies higher probability), i.e it is not possible to distinguish between a position and its mirror image in the line formed by the APs. 
+In the leftmost case in Figure \ref{geometries} the APs are placed on a straight line, and in this case trilateration of the \emph{true} position, $[0,20]$, is impossible if no prior information is known. As the figure shows, APs positioned on a straight line gives two equally probable position estimates (more \emph{red} implies higher probability), i.e. it is not possible to distinguish between a position and its mirror image in the line formed by the APs. 
 
-The second case displays a scenario where the APs are placed in the corners of a obtuse triangle (largest angle greater than $90^\circ$). In this rather ideal case it is possible to discern the \emph{true} position as the most probable one. However, higher noise levels and/or biased noise in the measurements will make this increasingly hard.  
+The second case displays a scenario where the APs are placed in the corners of a obtuse triangle (largest angle greater than $90^\circ$). In this rather ideal case it is possible to discern the \emph{true} position as the most probable one. However, higher noise levels and/or biased noise in the measurements will make this increasingly hard, as there are two different positions with relatively high probabilities.
 
 The third case represents a best-case scenario where the position to be estimated is centered in an equilateral triangle. Here, it is easy to distinguish the most probable position, and likewise the \emph{true} position.
 
-The positioning will further benefit from a larger number of APs as both the number of measurements and probability of having a advantageous geometry increases. Still, a few conclusion could be drawn from this discussion, the main one being that the best position estimates will be obtained when the measurements are taken inside a polygon with corners consisting of the APs. 
+The positioning will further benefit from a larger number of APs as both the number of measurements and probability of having an advantageous geometry increases. Still, a few conclusions could be drawn from this discussion, the main one being that the best position estimates will be obtained when the measurements are taken inside a polygon with corners consisting of the APs. 
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/geometries}
-\caption{Probable positions for different access point configuration (\emph{white} \texttt{+}), \emph{red} implies high probability and \emph{blue} low probability. The \emph{true} position is $[0, 20]$.}\label{geometries}
+\caption{Probable positions for different access point configuration (\emph{white} \texttt{+}). \emph{Red} implies high probability and \emph{blue} low probability. The \emph{true} position is $[0, 20]$.}\label{geometries}
 \end{figure}
 %
 %
@@ -571,7 +571,7 @@ There are four parts of the particle filter that can be chosen by the user to so
 %
 \subsection{System Model}
 %
-The process model is the most extensive choice, where both the number of states and their respective dynamics need to be determined. Some parts of this are dependent on available measurements and how complex a model is allowed to be. Using only measurements of the RSSI from multiple APs, a simple model using only two states $x$ and $y$,describing the position in a plane, are used. Moreover, a random walk process is used to model the dynamics, resulting in the state update
+The process model is the most extensive choice, where both the number of states and their respective dynamics need to be determined. Some parts of this are dependent on available measurements and how complex the model is allowed to be. Using only measurements of the RSSI from multiple APs, a simple model using two states $x$ and $y$, describing the position in a plane, are used. Moreover, a random walk process is used to model the dynamics, resulting in the state update
 %
 \begin{eqnarray}
 x_{k+1}&=x_k + v^x_{k+1} \\
@@ -585,41 +585,43 @@ where $v^x_k$ and $v^y_k$ are the process noise on each state.
 The process noise is, in this case, rather straight forward to choose, as it represents the spread of particles in between measurements. A normal distribution around a circle with radius $r$ is an appropriate choice,
 %
 \begin{eqnarray}
-v^x_k &\sim r\sin{\alpha_k}+\mathcal{N}(0,\sigma^2)\\
-v^y_k &\sim r\cos{\alpha_k}+\mathcal{N}(0,\sigma^2)
+v^x_k &\sim r\sin{\alpha_k}+N(0,\sigma^2)\\
+v^y_k &\sim r\cos{\alpha_k}+N(0,\sigma^2)
 \end{eqnarray}
 %
 where
 %
 \begin{equation}
-\alpha_k \sim \mathsf U(0,2\pi)
+\alpha_k \sim \mathsf U(0,2\pi).
 \end{equation}
 %
-where $\mathsf{U}(0,2\pi)$ is a uniform distribution between $0$ and $2\pi$ and the constant over each time step $k$. $\sigma$ is the standard deviation of the normal distribution. In this case $r$ is a approximation of how far the phone travels in between measurements and $\sigma$ measures the uncertainty of this distance. 
+$\mathsf{U}(0,2\pi)$ is a uniform distribution between $0$ and $2\pi$. $\sigma$ is the standard deviation of the normal distribution. In this case $r$ is a approximation of how far the phone travels between two measurements and $\sigma$ measures the uncertainty of this distance. 
 
-A fair estimation is that a walking person travels at between 1 and 3 meters per second, and given an interval $\Delta t$ between measurements it holds that $r = 2*\Delta t$ and $\sigma = 1*\Delta t$. Thus,
+A fair estimation is that a walking person travels at between 1 and 2 meters per second, and given an interval $\Delta t$ between measurements it holds that $r \approx 1.5*\Delta t$ and $\sigma \approx 0.5*\Delta t$. Thus,
 %
 \begin{eqnarray}
-v^x_k&\sim 2\Delta t \sin{\alpha_k} + \mathcal{N} (0, \Delta t^2)\\
-v^y_k&\sim 2\Delta t \cos{\alpha_k} + \mathcal{N} (0, \Delta t^2)\\
+v^x_k&\sim 1.5\Delta t \sin{\alpha_k} + N \left(0, \left(\frac{\Delta t}{2}\right)^2\right)\\
+v^y_k&\sim 1.5\Delta t \cos{\alpha_k} + N \left(0, \left(\frac{\Delta t}{2}\right)^2\right)\\
 \end{eqnarray}
-placing the new particles somewhere on an circle of radius $2\Delta t$ from the old one and spreading them out by a standard deviation of $\Delta t$.
+places the new particles somewhere on a circle of radius $1.5\Delta t$ from the old one and spreads them by a standard deviation of $0.5\Delta t$.
 
 This estimation could be further improved by the use of a technique for counting steps, and this approach will be investigated in later chapters.    
 %
 \subsection{Measurement Noise}
 %
-The measurement noise is a quite simple simple choice, take a couple of sets of measurements at different distances from a AP and investigate the noise behavior. This has been done for a quite large number of access point and in environments ranging from line-of-sight to a highly obstructed signal path and some of these results are displayed in Figure \ref{noise_behaviour}. 
+The measurement noise can be estimated in the following way. Take a set of RSSI measurements from a certain AP, and vary the distance. Then model a received RSSI at each distance and compute the noise as the difference between model and measurement. The standard deviation of measurement noise can then be estimated as the average of the absolute value of the noise. To estimate the noise accurately a large set of data in different environments is required.
+
+This has been done for a quite large number of AP:s, and in environments ranging from LOS to a highly obstructed signal path. Some of these results are displayed in Figure \ref{noise_behaviour}. 
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/noise_behaviour}
-\caption{The difference between measurements and model for a few different APs for different environments and distances. Notice that the \emph{y}-axis of the Figures are different.}\label{noise_behaviour}
+\caption{The difference between measurements and model for a few different APs for different environments and distances. Notice that the \emph{y}-axis of the figures are different.}\label{noise_behaviour}
 \end{figure}
 
-The resulting variance in the measurements ranged from $9$ to $60$, with a mean around $25$. The reason for the large span is that some of the APs was in line-of-sight for most of the measurement even though the distance to them was fairly large. Other APs was, on the other hand, highly obstructed while at a quite short distance, and yet others followed the models quite well. 
+The resulting variance in the measurements ranged from $9$ to $60$, with a mean of $25$. The reason for the large span is that some of the APs were in LOS for most of the measurements even though the distance to them was fairly large. Other AP:s were, on the other hand, highly obstructed while at a quite short distance, and yet others followed the models well. 
 
-During the position estimations in the rest of this section the mean of the variance, 25, will be used. Further, the measurement noise will be assumed to be gaussian with zero mean.  
+During the position estimations in the rest of this chapter the mean of the variance, $25$, will be used. Further, the measurement noise will be assumed to be Gaussian with zero mean. This assumption is valid for data sets covering large distances. However, over a short traveled distance the noise is expected to be biased in some cases as it is highly dependent on the environment. This is somewhat mitigated by having measurements from numerous AP:s, allowing positive and negative biases to cancel.
 
 \subsection{Number of Particles}
 %
@@ -1012,6 +1014,7 @@ Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable a
 
 \begin{figure}[!hbt]
 \include{graphics}
+
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/adaptation_vs_none}
 \caption{}
 \label{adaptation_vs_none}
