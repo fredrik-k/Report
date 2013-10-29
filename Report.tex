@@ -1127,6 +1127,39 @@ Modeling the kinematics may greatly improve the performance of a positioning sys
 
 After a short description of different random walk processes, quaternions are introduced and their use in three-dimensional pose  estimation, without risk of singularities, explained. A section about positioning using only sensors, named \emph{dead reckoning}, is presented, after which the chapter closes by a discussion of kinematics models used in indoor positioning and their effects on the performance.   
 %
+\subsection{The Accelerometer}
+%
+A accelerometer is a sensor measuring acceleration (m/s$^2$) allong a certain axis. This is done by the accelerometer measuring the acceleration accosiated with the phenomenon of weight associated with a test mass at rest in the accelerometers frame of refrerence. To examplify, an accelerometer at rest on the earths surface measures a acceleration, g = $9.81$m/s$^2$. Further, an accelerometer in free fall in space will measure no acceleration. Today most accelerometers measures acceleration allong three orthogonal axis, thus giving information about the three dimentional acceleration. 
+
+The fact that every object at rest at earth experience the acceleration associated with gravity poses a problem when using the accelerometer since the gravity allways will be present in the measurments. This needs to be managed in some fashion. The simples is to keep the accelerometer fixed in reference to the earths coordinate system introducing gravity as a constant bias allong a certain direction, which is easy to subtract. A more challaging case is when the accelerometer changes its orientation compared to the earths coordinate system. Here an algorithm to keep track of the accelerometers orientation is needed if the effect of gravity is going to be deductible. 
+
+Another interesting aspect of gravity in relation to the accelerometer is the ability of finding out the accelerometers orientation in reference to the earths coordinate system. This is possible if the accelerometer does not experience any significant accleration except for gravity. Then the accelerometers orientation may be determined by the component of gravity present on each of its axis. 
+
+In principle the accelerometer could be used to estimate a position by integrating its output two times in respect to time. In practice, however, this is hard as the gravity needs to be accuratley subtracted from the measurments if not to introduce a large positioning error. If even 1 \% of gravity is left in the measurments it will introduce a error of 10 meters over 100 seconds. Further, the accelerometers present in todays smartphones suffers from biases and drifts which needs to be accuratly evaluated if not to further degrade the position estaimate. 
+%
+\subsection{The Gyroscope}
+%
+A gyroscope measures the \emph{angular velocities} with which it is turning around each its axis. Most gyroscopes uses three orthogonal axis giving measurments of the angular velocities on the form $\vec\omega = (\omega_x \hspace{5pt} \omega_y \hspace{5pt} \omega_z)$.  Mechanically, a gyroscope consits of a spinning wheel or disc mounted in a gimbal, a pivoted support that allows the disc to rotate freely about all three axis. This construction allows the disc to keep a almost fixed position in reference to the mounting platforms motion. However, this is a fairly large device not well suited for modern electronic devices. These instead rely on \emph{MEMS gyroscopes} which can be fashioned into a more suitable size. MEMS or \emph{vibrating structure} gyroscopes relies on the physical principle of vibrating objects tending to continue vibrating in the same plan as its supports rotate.  
+
+As the MEMS gyroscope measures angular velocities and, in this thesis, the angular change is of interest, a method of computing them are needed. This is fairly simple, given two sets of angular velocities measured with a time difference of $\Delta t$, the angular change,$\theta$, may be computed using  numerically integration according to the \emph{trapezoidal rule}, 
+\begin{equation}
+\theta=\Delta t \frac{\vec \omega _t +\vec \omega _{t+\Delta t}}{2}.
+\end{equation} 
+%
+This can, of course, be applied to each of the gyroscopes axis, resulting in an estimation of how the gyroscope is turning and in extention, its orientation, in three dimentions. 
+
+There are a few problems of using the gyroscope to determine the direction of movement. As it only measures how the angles change over time, the direction at the start of the navigation must be known and the orientation needs to be kept fixed in reference to the movement. For example, it is impossible do discern between a 90 degree turn and a mear turn of the gyroscope.  Furthermore, the gyroscope suffers from drifts and biases resulting in a growing heading error. Hence, if it is to be used for long stretches of time, the heading needs to be calibrated or only the difference between two fairly close (in time) angular estimation used. 
+%
+\subsection{The magnetometer}
+%
+A way around the problems of a known initial direction is the use of a magnetometer, which measures the \emph{magnetic field strength} in each of the phone's three coordinate directions. Using the known electromagnetic field produced by the earth's core, it is possible to find the phone's heading.
+
+There are a multitude of ways to measure the magnetic field strength, in most modern smartphones a measurment of the solid state \emph{Hall effect} sensor is used. These sensors produce a voltage proportional to the applied magnetic field.  
+
+In theory the magnetometer along with a known phone orientation in reference to the earths coordinate system to could be used to give an accurate estimation of the direction of movement. This is possible in environments where the electromagnetic fields, apart from the earth's own, are weak, e. g outdoors. In most indoor environments however, fields from electronic devices and structural elements (metal beams, pipes etc.) produce their own magnetic fields. These fields are in many cases strong enough to interfere or even overpower the earth's, causing the estimated heading to be wrong. 
+
+The \emph{fingerprinting} strategy for signal strengths described in \ref{sec:AfPA}, may also be utilized to characterize the magnetic field strengths in an indoor environment. These measurements can then be used to find the true heading, but this approach lacks generality as measurements at each location are needed.  
+%
 \section{Random Walk}
 %
 The simplest way of modeling the kinematics, aside from the trivial case of choosing not to model it at all, is to use a \emph{random walk} model for each state. In a random walk the states, $x$, undergo time updates according to
@@ -1290,7 +1323,6 @@ A 10 second sample of the average acceleration measured by a phone placed in the
 \includegraphics[width=1\textwidth ]{images/kinematic/avr_acc_dif}
 \caption{Differentiation of average acceleration during 10 seconds of a typical walk.}\label{avr_acc_dif}
 \end{figure}
-\subsection{Step Length Considerations}
 %
 yielding a signal according to Figure \ref{avr_acc_dif}. This signal is centred around zero, but possesses unnecessary high frequency behaviour. The sampling frequency of the accelerometer is $\sim 200$ Hz, giving a frequency content of the signal between 0 and 100 Hz. The normal step frequency for a person is no larger than 3 Hz, which promotes filtering the signal. Doing this with a fifth order \emph{Butterworth filter} with a cut-of frequency of 6 Hz yields the signal in Figure \ref{avr_acc_dif_filt}.
 %
@@ -1315,20 +1347,9 @@ For real world usage however, the length of a user's steps must be determined. T
 To have a good estimation of the movement, not only the distance travelled needs to be known. More importantly is the direction in which the movement takes place. In addition, this task is more complicated than finding the distance by the number of steps taken. Many approaches are available using a wide span of technologies. Some of the most common technologies for hand-held devices are presented below.
 %
 \subsection{Gyroscope}
-%
-The gyroscope measures the \emph{angular velocities} at which the phone is turning around each of its axis and outputs the values on the format $\vec\omega = (\omega_x \hspace{5pt} \omega_y \hspace{5pt} \omega_z)$. To compute the change of angle, two sets of angular velocities measured with a time difference of $\Delta t$, may be numerically integrated according to the \emph{trapezoidal rule}, 
-\begin{equation}
-\Delta t \frac{\vec \omega _t +\vec \omega _{t+\Delta t}}{2}.
-\end{equation} 
-%
-There are a few problems of using the gyroscope to determine the direction of movement. As it only measures how the angles change during time, the direction at the start of the navigation must be known and the orientation needs to be kept fixed in reference to the movement. Furthermore, the gyroscope suffers from drifts and biases. Hence, if it is to be used for long stretches of time, the heading needs to be calibrated. 
-%
-\subsection{Magnetometer}
-%
-A way around the problems of a known initial direction is the use of a magnetometer, which measures the \emph{magnetic field strength} in each of the phone's three coordinate directions. Using the known electromagnetic field produced by the earth's core, it is possible to find the phone's heading. In theory this enables the magnetometer along with a known phone orientation to estimate the direction of movement. This is possible in environments where the electromagnetic fields, apart from the earth's own, are weak, e. g outdoors. In most indoor environments however, fields from electronic devices and structural elements (metal beams, pipes etc.) produce their own magnetic fields. These fields are in many cases strong enough to interfere or even overpower the earth's, causing the estimated heading to be wrong. 
 
-The \emph{fingerprinting} strategy for signal strengths described in \ref{sec:AfPA}, may also be utilized to characterize the magnetic field strengths in an indoor environment. These measurements can then be used to find the true heading, but this approach lacks generality as measurements at each location are needed.  
-%
+\subsection{Magnetometer}
+
 \subsection{Sensor Fused Approaches}
 %
 There are different approaches for combining magnetometer, gyroscope and possibly other sensors to produce a sensor fused estimation of the heading. Most Android phones implement such an algorithm, using gyroscope, magnetometer and accelerometer to produce an estimate of how the phone is oriented in the world coordinate system. The algorithm uses gyroscope and accelerometer to determine when the magnetometer output is corrupted, and uses their measurements to estimate the heading until the magnetometer can be trusted. ASK ABOUT HOW THIS WORKS IN PRACTICE!!!
