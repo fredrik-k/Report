@@ -1407,6 +1407,10 @@ The chapter is closed by discussing some further optimizations possible, if it i
 %
 \chapter{Indoor positioning - Sensor Fused Approach} 
 
+The sensors described in the (previous chapter) provide additional information for the positioning. The gyroscope indicates  if the user has changed direction, and how much, while the step counter provides an estimation of how far the user has moved since the last time step.
+
+One way to use the information from the gyroscope is to introduce the direction of movement as a new state of each particle. Initially, each particle is given a uniformly random direction in the interval $[0,2 \pi)$. 
+
 \printbibliography  %% Comment if you don't want to use bibtex
 
 \end{document}
