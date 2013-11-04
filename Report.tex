@@ -871,7 +871,10 @@ The estimated path from both the PF and LS estimators is displayed in Figure \re
 
 For environment \emph{two} the LS estimation perform better in comparison to the PF, as shown by the errors in Figure \ref{ls_error_medium}. The PF, however, does still provide the best position estimates and the error is lower for the PF in most of the samples and the LS estimator produces the larges position error. The difference in maximum error though is not large, then again, the mean error for the PF is $3.4$ m and for the LS estimation, $5.1$ m. The PF seams to produce considerably better results compared to the LS method when the environment is favorable i.e when a large number of access point are available and/or their geometry are good. When the conditions are disadvantageous both methods performs equally, giving positions around 10 meters off.
 
-The conclusion to be drawn from these investigations is a particle filter is the better choice for estimating positions from noisy RSSI measurements, especially if the only sought after attribute is the smallest mean and maximum errors. The lest squares estimation may be desirable to use if simple implementation is important or if limited computing power is available.     
+The conclusion to be drawn from these investigations is a particle filter is the better choice for estimating positions from noisy RSSI measurements, especially if the only sought after attribute is the smallest mean and maximum errors. The lest squares estimation may be desirable to use if simple implementation is important or if limited computing power is available.
+
+An interesting aspect is the performance when no previous measurements are available. Then, the PF loses its advantage of using these, whereas nothing changes for the LS. A new test was performed in \emph{Environment two}, and at each measure point, the previous position was treated as completely unknown. This means that the particles had to be spread out over the whole floor before each estimation. Then, one iteration was performed in the PF. The errors are shown in Figure XXXXXX. The mean error is 5.09 m for the PF and 5.14 m for the LS. It is difficult to decide which method that works best in this case. 
+
 %
 \section{Concluding remarks}
 %
