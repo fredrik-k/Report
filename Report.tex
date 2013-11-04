@@ -111,8 +111,6 @@ Diffraction is caused by the propagation of a secondary wave into a shadowed reg
 \subsection{Scattering}
 %
 Scattering occurs when a wave travels through an environment which has a large density of objects with small dimensions compared to the wavelength. The energy of a scattered wave is spread out in all directions from the scattering surface. Even surfaces considered flat usually possess some roughness and thus some scattering properties.
-
-Scattering usually contributes to a higher signal strength than the one predicted only by diffraction and reflection \cite{rappaport96}. CHECK RAPPAPORT!
 %
 \section{Indoor Propagation Models}
 %
@@ -978,13 +976,17 @@ If it is in several sections at the same time, an average of the parameter sets 
 Finally, if it is outside all sections, a default value of $\alpha$ will be used.
 
 Please note that each particle gets its own set of parameters, and that the estimated position of the phone is not involved in choosing this set.
+%
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/adapt_parameters/adaptation_vs_none}
+\caption{}
+\label{adaptation_vs_none}
+\end{figure}
+%
+Both alternatives have been tested offline using $Malab$. For the environments defined in \ref{environment_results}, the results are similar. The reason why there is no gain in dividing the building into areas is that it is homogeneous enough for alternative 1 to work. In an environment where the obstacle density changes more, alternative 2 would be more suitable.
 
-Both alternatives have been tested offline using $Malab$. For the environments defined in \ref{environment_results}, the results are similar. Since alternative 1 is less complicated and does not perform worse than alternative 2, it was chosen for the implementation in Sonymap in order to avoid unnecessary computations.
-
-The reason why there is no gain in dividing the Glasgow building into areas is that it is homogeneous enough for alternative 1 to work. In an environment where the obstacle density changes more, alternative 2 would be more suitable.
-
-In order to evaluate the parameter updates, the algorithm was given erroneous initial parameter values. Then, the phone was carried one round in environment three, and after that the updated parameters were noted. The results are shown in Table \ref{table:parameter_adaptation}.
-
+In order to evaluate the parameter updates, the algorithm was given erroneous initial parameter values. Then, the phone was carried one round in \emph{Environment three}, and after that the updated parameters were noted. During the round 61 RSSI measurements were taken by the phone, giving a approximate spatial separation of 4.5 meters. The resulting parameters are shown in Table \ref{table:parameter_adaptation}
 
 \begin{table}[!hbt]
 \begin{center}
@@ -1015,15 +1017,6 @@ $C$ & $\alpha$ & $C$ & $\alpha$& $C$& $\alpha$\\
 \end{table}
 
 Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable after the adaptation. Moreover, the algorithm moves the parameter values towards the region with relatively low position error in Figure \ref{err_vs_param}. The bottom row in \ref{table:parameter_adaptation} was investigated in more detail, as an example of how the adaptation affects the positioning. Figure \ref{adaptation_vs_none} shows the positioning with and without the parameter adaptation, respectively, with $C = -25$ and $\alpha = 0.3$ as initial values.
-
-\begin{figure}[!hbt]
-\include{graphics}
-
-\includegraphics[width=1\textwidth ]{images/adapt_parameters/adaptation_vs_none}
-\caption{}
-\label{adaptation_vs_none}
-\end{figure}
-
 
 \section{Compensating for Signal Block} %Working title
 %
@@ -1063,39 +1056,12 @@ The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and 
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly}
 \caption{Blocking with hands, repeatedly. Attenuation by the hands had a severe impact on the positioning.}\label{hand_block_repeatedly}
 \end{figure}
-
-
 %
-The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
-
-\subsection{Evaluation of different use cases}
-In the tests this far, the phone has been held so that the signal is blocked as little as possible. In this section, three different use cases are tested, all in \emph{Environment three}.
-
-\subsubsection{1. Phone in pocket}
-In this test, the phone was first carried one round in the hand. After that, it was moved to the jeans side pocket, and then another round was walked.
-
-\subsubsection{2. Blocking with hands, once}
-Again, the phone was carried one round in the hand. Then, the user tried to block as much of the signals with the hands as possible during the second round the hands.
-
-\subsubsection{3. Blocking with hands, repeatedly}
-%
-\begin{figure}[!htb]
-\include{graphics}
-\includegraphics[width=1\textwidth ]{images/adapt_parameters/adaptation_vs_none}
-\caption{}\label{adaption_vs_none}
-\end{figure}
-%
-Like the previous test, but during the second round, the signals were blocked and unblocked repeatedly. 
-
-
-The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
-
-
 Carrying the phone in the pocket did not affect the RSSI significantly, and hence the positioning was unaffected. However, blocking the signals with the hands lowered the RSSI considerably, causing the positioning to be inaccurate. Hence, this use case has to be detected and compensated for.
 
 \subsection{Compensation}
 
-The main strategy for detecting the attenuation is to note when the RSSI decreases fast. However, moving away from the AP:s, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal attenuation by the user only, the algorithm focuses on the six largest RSSI-values. If the average of these decrease more than 6 dB in one time step, this indicates hand attenuation. Moving away from the AP:s would not make the RSSI decrease that fast, and if LOS is lost to some AP:s there is a chance that LOS is established to another. If not, the compensation would work the same way for the obstacle as for the hand, which would support the positioning regardless.
+The main strategy for detecting the attenuation is to note when the RSSI decreases fast. However, moving away from the AP:s, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal attenuation by the user only, the algorithm focuses on the six largest RSSI-values. If the average of these decrease more than 6 dB in one time step, this indicates hand attenuation. Moving away from the AP:s would not make the RSSI decrease that fast, and if LOS is lost to some AP:s there is a chance that LOS is established to another. If on the other hand LOS is lost to several AP without gaining LOS to other AP, e.g. entering a room without an AP, the compensation may be triggered. However, this is more likely to improve than to degrade the positioning as the standard RSSI models do not incorporate quick drops in signal level caused by walls and similar objects. If a user enters a room without an AP, the RSSI measurements would drop significantly to all AP:s, but the compensation would ideally remove this effect, allowing the walls to be taken into account by the positioning algorithm. 
 
 When an attenuation is detected, a constant term $H$ is added to the model, which corresponds to how much the signals have been reduced. Hence, the new model is given by \ref{equation:hand_comp}  When the phone is unblocked, this is detected in an analogous way, and then $H$ is set to 0. 
 
@@ -1305,7 +1271,7 @@ q = \left(\begin{array}{c}\cos{\frac{|\vec r|}{2}}\vspace{5pt} \\ \frac{\vec{r}}
 %
 \section{Characterization of Steps}
 %
-Characterizing a step allows a kinematics algorithm to keep track of the approximate distance travelled, as the length of a particular individuals steps is relatively regular. A way to identify whether a step has been taken, an accelerometer could be used. As stated earlier the accelerometer gives output on the form $\vec a = (a_x \hspace{5pt} a_y \hspace{5pt} a_z)^T$, each element representing the acceleration along each of the phones  coordinate axis. However, the orientation of the phone during a walk affects how each element in the acceleration vector behaves, a phone place in a pocket or a bag give vastly different output. A more robust way is to consider the average acceleration ,$|\vec a|$, defined in unison with the vector norm as 
+Characterizing a step allows a kinematics algorithm to keep track of the approximate distance travelled, as the length of a particular individuals steps is relatively regular. A way to identify whether a step has been taken, an accelerometer could be used. As stated earlier the accelerometer gives output on the form $\vec a = (a_x \hspace{5pt} a_y \hspace{5pt} a_z)^T$, each element representing the acceleration along each of the phones  coordinate axis. However, the orientation of the phone during a walk affects how each element in the acceleration vector behaves, a phone placed in a pocket or a bag give vastly different output. A more robust way is to consider the average acceleration ,$|\vec a|$, defined in unison with the vector norm as 
 %
 \begin{equation}
 |\vec a| = \sqrt{a_x^2+a_y^2+a_z^2},
@@ -1383,7 +1349,7 @@ For phones, a dead reckoning estimation would most likely include some form of s
 \caption{True versus, by dead reckoning, estimated path using gyroscope and pedometer.}\label{deadreckon_1}
 \end{figure}
 
-However, as stated before, the error in cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and especially the heading error is clearly visible. 
+However, as stated before, the error is cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and especially the heading error is clearly visible. 
 %
 \begin{figure}[!hbt]
 \include{graphics}
