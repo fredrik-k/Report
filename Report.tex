@@ -1273,6 +1273,7 @@ q = \left(\begin{array}{c}\cos{\frac{|\vec r|}{2}}\vspace{5pt} \\ \frac{\vec{r}}
 \end{equation}
 %
 \section{Characterization of Steps}
+\label{sec:step}
 %
 Characterizing a step allows a kinematics algorithm to keep track of the approximate distance travelled, as the length of a particular individuals steps is relatively regular. A way to identify whether a step has been taken, could be constructed using an accelerometer \cite{step_count}. As stated earlier the accelerometer gives output on the form $\vec a = (a_x \hspace{5pt} a_y \hspace{5pt} a_z)^T$, each element representing the acceleration along each of the phones  coordinate axis. However, the orientation of the phone during a walk affects how each element in the acceleration vector behaves, a phone placed in a pocket or a bag give vastly different output. A more robust way is to consider the average acceleration ,$|\vec a|$, defined in unison with the vector norm as 
 %
@@ -1315,6 +1316,7 @@ A algorithm corresponding to the rule above has been implemented in android usin
 The technique could be refined further, by e. g identifying the step frequency or by using more sensors. However, the performance in this for is sufficient for the application it is intended for.  
 %
 \subsection{Step Length Considerations}
+\label{subsec:step_len}
 %
 The step length of an individual, moving in a straight line with a constant speed, is more or less constant. Different individuals or the same individual moving at different speeds or performing turns have a quite large span of step lengths. In this thesis the step length has been determined by the authors walking a predetermined distance comprised of walking straight interspersed with turning both left and right, at a constant speed. The average step length is then simply computed as the distance divided by number of steps and a value of $0.77$ meters was obtained.  
 
@@ -1369,12 +1371,51 @@ MORE HERE
 Another method for estimating the direction of movement is to extend the particle filter with a state representing the heading of each particle. A kinematics model could be
 %
 \begin{eqnarray}
-x_{k+1} &  = & x_k + r*\cos{\theta_k} \nonumber\\
-y_{k+1} & = &y_k + r*\sin{\theta_k}\\
+x_{k+1} &  = & x_k + r\cdot\cos{\theta_k} \nonumber\\
+y_{k+1} & = &y_k + r\cdot\sin{\theta_k}\label{eq:heading_kin_mod}\\
 \theta_{k+1} & = & \theta_k + v_{k+1} \nonumber
 \end{eqnarray}
 %
-where $x$ and $y$ represents the particles two dimensional position, $r$ the approximate distance traversed between time step $k$ and $k+1$, $\theta$ the particle heading in the range of $\left[0,2\pi\right]$ radians and $v_{k+1}$ the process noise at time step $k+1$. During the state update particles will be spread according to their heading and the distance traveled since last update, particles with the correct heading will reach the correct position and be assigned large weights. A problem arrises when after a long stretch of walking straight, the user makes a turn, as most particles at that point has a heading corresponding to the user before the turn was made.  
+where $x$ and $y$ represents the particles two dimensional position, $r$ the approximate distance traversed between time step $k$ and $k+1$, $\theta$ the particle heading in the range of $\left[0,2\pi\right]$ radians and $v_{k+1}$ the process noise at time step $k+1$. During the state update particles will be spread according to their heading and the distance traveled since last update, particles with the correct heading will reach the correct position and be assigned large weights. A problem arrises when after a long stretch of walking straight, the user makes a turn, as most particles at that point has a heading corresponding to the user before the turn was made. Thus, to be able accommodate for turns, the process noise, $v_k$, must have a sufficiently large standard deviation. 
+
+Gyroscope measurements may be added to the kinematics model by adding them to the $\theta$ state update rule as,
+%
+\begin{equation}
+\theta_{k+1} = \theta_k + \Delta\theta_k + v_{k+1}.\label{eq:heading_gyro}
+\end{equation} 
+%
+Where,
+%
+\begin{equation}
+\Delta\theta_k = \sum^N_{n=1}\frac{\vec{\omega_{t_n}}+\vec{\omega_{t_{n+1}}}}{2}\cdot\left(t_{n+1}-t_n\right)
+\end{equation}
+%
+with $N$ as the number of gyroscope measurements between $t_k$ and $t_{k+1}$, $\vec{\omega}$ as the sensor measurements and $t_n$ as the time of the $n$th measurement. $\Delta\theta$ is a measurement of the change in direction between $k$ and $k+1$, allowing the kinematics model to more accurately capture turn. Used in this sense the gyroscope is only used to compute the angular change in between two times. Thus, if the time between state updates is short enough, biases and drifts of the gyroscope may be neglected. Further, this model allows for a process noise, $v_k$, with a much smaller standard deviation as most of the dynamics of a turn is captured by the gyroscope. 
+
+The problem of ''false'' turns, which arrises when the devices turns when the user do not, is still present. However, the effect can be reduced quite substantially when the gyroscope is used collaboratively with the particle filter. Each particle is a independent entity and if a turn is detected, a portion, $p\in[0,1]$, of the particles may be selected to ignore the turn. Later when the particles are given their weights, these particles will, depending on weather a actual turn was made, either be given a large or small weight. Thus, if a turn was made, the portion, $p$, of particles that did not turn will not be re-sampled or vice versa. 
+
+\subsubsection{Adding the Step Counter}
+%
+The kinematics model formulated in \ref{eq:heading_kin_mod} and \ref{eq:heading_gyro} may, of course, be integrated with a step counter, like the one described previously. The revised kinematics model then becomes,
+%
+\begin{eqnarray}
+x_{k+1} &  = & x_k + N\cdot (d + r_{k+1})\cdot\cos{\theta_k} \nonumber\\
+y_{k+1} & = &y_k + N\cdot (d + r_{k+1})\cdot\sin{\theta_k}\label{eq:heading_step_kin_mod}\\
+\theta_{k+1} & = & \theta_k +\Delta\theta_k+ v_{k+1} \nonumber
+\end{eqnarray}  
+%
+where $N$ is the number of steps taken between time step $k$ and $k+1$, $d$ is a predetermined step length and $ r_k$ is a small correction factor to account for fluctuations in step length. Further, $r_k$ and $v_k$ are Guassian random variables with zero mean and $\sigma_r$ and  $\sigma_v$ as standard deviations.
+
+Given a well determined step length of the user and an accurate gyroscope, the standard deviations of both $r_k$ and $v_k$ can be kept small. The resulting kinematics model will give a particle spread more related to the users actual movement. However, inferior behavior is to be expected if the users step length is far from the one used by the model. A solution to this is, as stated in Section \ref{subsec:step_len}, to include step length as an additional particle state. The extended model becomes,
+%
+\begin{eqnarray}
+x_{k+1} &  = & x_k + N\cdot d_k\cdot\cos{\theta_k} \nonumber\\
+y_{k+1} & = &y_k + N\cdot d_k\cdot\sin{\theta_k}\label{eq:heading_step_kin_mod}\\
+\theta_{k+1} & = & \theta_k +\Delta\theta_k+ v_{k+1} \nonumber \\
+d_{k+1} & = & d_k + r_{k+1}
+\end{eqnarray}  
+%
+with the same notation as previous with the exception of $d_k$ being the particles step length at time step $k$. Particles with an appropriate step length will agree more with measurements of the position and tend to ''survive'' the re-sampling. This has the advantage of being independent of the users step length as the algorithm adapts for each user. On the other hand, we now have introduce two additional filter states compared to the simple case of only two states corresponding to $x$- and $y$-position. Adding states forces an increase in the number of particles which in turn leads to a more computational power demanding algorithm. Increasing the number of states by a factor two requires the number of particles to increase to the power of two to keep the density of particles in over the state space the same. This would result in the need to use between 100 000 and 1 000 000 particles, which would be to computationally intensive for todays smartphones, at least without extensive optimization. But, adding the additional states increases the knowledge of how the user has moved in between measurements, giving a much more narrow area where a true position is probable. Further, the possible variance, especially of the step length state is fairly small. The step length for most persons is in the region of 0.5 to 1 meter, and when an initial estimate has been determined, there are only a few cases where this length changes by more than a few centimeter or a decimeter at most. Concerning the heading, particles would initially need to be spread in all directions, however, when a approximate heading is obtained, the spread only needs to be enough to correct for biases and drifts of the gyro and small heading changes caused by the user inadvertently turns the device a small amount. Larger ''false'' changes in heading will be caught by the partial spread discussed earlier. In conjunction, this decreases the number of particles needed from almost a million to between 3 000 and 10 000 depending on the time between position measurements.       
 %
 \section{Dead Reckoning}
 %
@@ -1383,8 +1424,7 @@ where $x$ and $y$ represents the particles two dimensional position, $r$ the app
 \includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_1}
 \caption{True versus, by dead reckoning, estimated path using gyroscope and pedometer.}\label{deadreckon_1}
 \end{figure}
-
-However, as stated before, the error is cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and especially the heading error is clearly visible. 
+\emph{Dead reckoning} is the process of calculating the current position based on a previously determined position and advancing that position based on a known model \cite{ped_dead}. Dead reckoning has been used by e. g ships and airplanes for a long time, and in more resent time in networked computer games \cite{network_game}. However, as stated before, the error is cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and especially the heading error is clearly visible. 
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -1392,7 +1432,6 @@ However, as stated before, the error is cumulative and the performance deteriora
 \caption{True versus, by dead reckoning, estimated path using gyroscope and pedometer.}\label{deadreckon_2}
 \end{figure}
 %
-\emph{Dead reckoning} is the process of calculating the current position based on a previously determined position and advancing that position based on a known model. Dead reckoning has been used by e. g ships and airplanes for a long time, and in more resent time in networked computer games. 
 
 Dead reckoning estimations are subject to cumulative errors i.e. errors are added over time and depending on the accuracy of the dead reckoning system, the estimated position deviates from the true. This implies that the position and heading estimates need to be calibrated at a certain time interval to provide an accurate position.
 
