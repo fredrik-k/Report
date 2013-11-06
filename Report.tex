@@ -29,8 +29,39 @@ These people helped me a lot with my work.
 \section{Limitations}
 \section{Platform}
 \section{Coordinate Systems}
-\subsection{Phone Coordinate System}
-\subsection{World Coordinate System}
+It should be apparent to the reader that a well defined coordinate system is of great importance for positioning applications. Further, to be able to receive a meaningful position, the coordinate system needs to be fixed in reference to the phone. In the sections below two different such coordinate systems are presented along with the coordinate system of the phone. 
+\subsection{World Frame}
+%
+The \emph{world frame} or the global coordinate system is commonly used for navigation, at least in a global perspective. The definition is as follows:
+%
+\begin{description}
+\item[$x_w$:] Tangential to the ground at the current location, defined as $y_w\times z_w$. Points approximately east. 
+\item[$y_w$:] Tangential to the ground at the current location, pointing towards magnetic North Pole.
+\item[$z_w$:] Perpendicular to the ground, pointing skywards.
+\end{description}
+%
+Noteworthy is that this system is not fixed in space and different positions on the earths surface will result in a differently oriented coordinate system. Further, as the world rotates around its own axes so does the coordinate system (15$^\circ$ per hour). In the sense of indoor positioning however, both of these effects can be considered small. The change in position is small and in a global perspective can be considered as a point, also, the timescale considered is often considerably shorter than one hour. 
+%
+\subsection{Local Frame}
+%
+Using the world frame might is some cases be impractical or cumbersome for a certain location. As an example, take a  building with most corridors oriented with an angular offset of $\phi$ in reference to the global frame. For this location it would be considerably more practical to orient the coordinate system so that most movement are done in the $x-$ and $y-$ directions.   
+
+Such a coordinate system is defined as
+%
+\begin{description}
+\item[$x_l$:] Located in the plane defined by $x_w$ and $y_w$. Pointing as $x_w$ with an offset of $\phi$.
+\item[$y_l$:] Located in the plane defined by $x_w$ and $y_w$. Pointing as $y_w$ with an offset of $\phi$.
+\item[$z_l$:] Equivalent to $z_w$, pointing skywards.
+\end{description}
+%
+\subsection{Phone Frame}
+%
+\begin{description}
+\item[$x_p$:]
+\item[$y_p$:]
+\item[$z_p$:]
+\end{description}
+%
 \subsubsection{Thesis Specific Considerations}
 
 \chapter{Radio Signal Propagation}
@@ -1127,6 +1158,7 @@ This can, of course, be applied to each of the gyroscopes axis, resulting in an 
 There are a few problems of using the gyroscope to determine the direction of movement. As it only measures how the angles change over time, the direction at the start of the navigation must be known and the orientation needs to be kept fixed in reference to the movement. For example, it is impossible do discern between a 90 degree turn and a mere turn of the gyroscope.  Furthermore, the gyroscope suffers from drifts and biases resulting in a growing heading error. Hence, if it is to be used for long stretches of time, the heading needs to be calibrated or only the difference between two fairly close (in time) angular estimation used. 
 %
 \subsection{The Magnetometer}
+\label{subsec:mag}
 %
 A way around the problems of a known initial direction is the use of a magnetometer, which measures the \emph{magnetic field strength} in each of the phone's three coordinate directions. Using the known electromagnetic field produced by the earth's core, it is possible to find the phone's heading.
 
@@ -1358,18 +1390,19 @@ To have a good estimation of the movement, not only the distance travelled needs
 %
 A enticing opportunity to determine the direction of movement using the gyroscope is, given a known initial heading, to integrate the gyroscope output using e.g. \emph{the trapezoidal rule}. This would give three angles describing the gyroscopes current orientation in reference to the initial one. This approach, however, has two major flaws. The MEMS gyroscopes posses biases and drifts making the estimated orientation to drift over time. This makes the gyroscope only suitable for estimations over short intervals of time. Further, the gyroscope only measures its own angular velocity and in extent orientation, making it had do discern between a true turn and a turn of the gyroscope, without strapping the gyroscope to the user with a fixed orientation. 
 
-A way to get around some parts of the last flaw is to use the accelerometer to approximately determine how the device is oriented in reference to gravity. The gyroscope may then be used to compute only the approximate angel with which the user has turned around the direction of gravity. This is beneficial simply because all ''normal'' turns performed by a human is done around the direction of gravity. This makes the orientation of the device in reference to the user somewhat obsolete, but false turns may still be induced by turning the device around the direction of gravity. t 
+A way to get around some parts of the last flaw is to use the accelerometer to approximately determine how the device is oriented in reference to gravity. The gyroscope may then be used to compute only the approximate angel with which the user has turned around the direction of gravity. This is beneficial simply because all ''normal'' turns performed by a human is done around the direction of gravity. This makes the orientation of the device in reference to the user somewhat obsolete, but false turns may still be induced by turning the device around the direction of gravity.
 % 
 \subsection{Sensor Fused Approaches}
 %
-There are different approaches for combining magnetometer, gyroscope and possibly other sensors to produce a sensor fused estimation of the heading. Most Android phones implement such an algorithm, using gyroscope, magnetometer and accelerometer to produce an estimate of how the phone is oriented in the world coordinate system. The algorithm uses gyroscope and accelerometer to determine when the magnetometer output is corrupted, and uses their measurements to estimate the heading until the magnetometer can be trusted. 
-
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/rot_test}
 \caption{True heading versus heading output from Android rotation vector sensor. The true heading was due east.}\label{rot_test}
 \end{figure}
+%
+There are different approaches for combining magnetometer, gyroscope and possibly other sensors to produce a sensor fused estimation of the heading. Most Android phones implement such an algorithm, using gyroscope, magnetometer and accelerometer to produce an estimate of how the phone is oriented in the world coordinate system. The algorithm uses gyroscope and accelerometer to determine when the magnetometer output is corrupted, and uses their measurements to estimate the heading until the magnetometer can be trusted. 
 
+In Figure \ref{rot_test} the estimated heading for such an algorithm is shown along with the true heading. The measurement was taken while walking due east for 91.5 meters in a corridor indoors. The difference between the mean estimated heading, 89.7$^\circ$, and true heading (90$^\circ$) is minuscule, but the estimation varies around $\pm$15$^\circ$ from the true heading. This method of estimating the heading does not posses longterm drifts, but, as the estimation relies on the magnetometer for longterm calibration, it may be corrupted by different environmental factors, see Section \ref{subsec:mag}. 
 %
 \subsection{Heading as a Particle Filter State}
 %
