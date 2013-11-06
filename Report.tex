@@ -1364,7 +1364,12 @@ A way to get around some parts of the last flaw is to use the accelerometer to a
 %
 There are different approaches for combining magnetometer, gyroscope and possibly other sensors to produce a sensor fused estimation of the heading. Most Android phones implement such an algorithm, using gyroscope, magnetometer and accelerometer to produce an estimate of how the phone is oriented in the world coordinate system. The algorithm uses gyroscope and accelerometer to determine when the magnetometer output is corrupted, and uses their measurements to estimate the heading until the magnetometer can be trusted. 
 
-MORE HERE
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/kinematic/rot_test}
+\caption{True heading versus heading output from Android rotation vector sensor. The true heading was due east.}\label{rot_test}
+\end{figure}
+
 %
 \subsection{Heading as a Particle Filter State}
 %
@@ -1424,6 +1429,7 @@ with the same notation as previous with the exception of $d_k$ being the particl
 \includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_1}
 \caption{True versus, by dead reckoning, estimated path using gyroscope and pedometer.}\label{deadreckon_1}
 \end{figure}
+%
 \emph{Dead reckoning} is the process of calculating the current position based on a previously determined position and advancing that position based on a known model \cite{ped_dead}. Dead reckoning has been used by e. g ships and airplanes for a long time, and in more resent time in networked computer games \cite{network_game}. However, as stated before, the error is cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and especially the heading error is clearly visible. 
 %
 \begin{figure}[!hbt]
