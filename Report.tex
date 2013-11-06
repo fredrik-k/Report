@@ -1446,6 +1446,37 @@ It is apparent that both position and heading need to be calibrated to obtain a 
 %
 \chapter{Indoor positioning - Sensor Fused Approach} 
 %
+In this chapter, a method of how to include the information from the sensors in the positioning algorithm will be presented. The dead reckoning presented in the previous chapter works well for short distances (see e.g. Figure \ref{deadreckon_1}), whereas information from WiFi signals do not have the disadvantage of drifts. The main strategy is now to combine these, in order to get the best properties from both  parts.
+
+\section{Extension of Particle State Space}
+
+In the previous chapters, the particles consisted of two states; the coordinates of the position. Now, we introduce the direction of movement, and the step length of the user, as two new states. 
+
+Initially, the position of each particle is uniformly random distributed in $[0,2\pi]$, and the step length is normally random distributed around 0.75 m. When the user takes a step, each particle moves its own step length in its own direction. Then, particles with good estimations of the step length and direction will reach accurate estimations of the position, and be more likely to multiply in the next step.
+
+The new states offer two advantages. Firstly, this kinematics model is more accurate than a random walk, which means that the particles are moved to more probable positions at each step. Secondly, the direction and step length can be used for dead-reckoning between the RSSI-measurements, providing a more frequent position estimation output.
+
+In order to keep the particle density in the state space high enough, the number of particles used has to be larger for this algorithm. In order to model the noise, all states are spread randomly with normal distributions around their current values, during each state update. 
+
+\section{Test Setup}
+In order to test this algorithm, one of the authors walked one round in \emph{Environment three}, in normal walking pace, holding the smart phone with constant orientation in relation to the body. The initial position and direction were treated as unknown. The parameter values used in this test are listed in Table ::::::::::    : 
+
+
+
+
+
+\section{Results}
+
+
+
+
+
+
+
+
+
+
+
 \chapter{Algorithm Implementation in Android}
 %
 In previous chapters offline computations are used to obtain the position estimate. Here an online java implementation of the developed algorithms will be presented briefly. The particle filter is quite computationally demanding, and therefor it is important to discern if handheld devices are capable of performing these computations sufficiently fast. 
