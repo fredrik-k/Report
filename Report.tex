@@ -28,6 +28,11 @@ These people helped me a lot with my work.
 \section{Goal}
 \section{Limitations}
 \section{Platform}
+%
+In this thesis smartphones running the \emph{Android operating system} will be used. Android is a open source software on which around 80 \% of current smartphones operate. 
+%
+\chapter{Background on Navigation}
+%
 \section{Coordinate Systems}
 It should be apparent to the reader that a well defined coordinate system is of great importance for positioning applications. Further, to be able to receive a meaningful position, the coordinate system needs to be fixed in reference to the phone. In the sections below two different such coordinate systems are presented along with the coordinate system of the phone. 
 \subsection{World Frame}
@@ -46,21 +51,27 @@ Noteworthy is that this system is not fixed in space and different positions on 
 %
 Using the world frame might is some cases be impractical or cumbersome for a certain location. As an example, take a  building with most corridors oriented with an angular offset of $\phi$ in reference to the global frame. For this location it would be considerably more practical to orient the coordinate system so that most movement are done in the $x-$ and $y-$ directions.   
 
-Such a coordinate system is defined as
+Such a coordinate system is defined as:
 %
 \begin{description}
-\item[$x_l$:] Located in the plane defined by $x_w$ and $y_w$. Pointing as $x_w$ with an offset of $\phi$.
-\item[$y_l$:] Located in the plane defined by $x_w$ and $y_w$. Pointing as $y_w$ with an offset of $\phi$.
+\item[$x_l$:] Located in the plane defined by $x_w$ and $y_w$. Pointing as $x_w$ with an angular offset of $\phi$.
+\item[$y_l$:] Located in the plane defined by $x_w$ and $y_w$. Pointing as $y_w$ with an angular offset of $\phi$.
 \item[$z_l$:] Equivalent to $z_w$, pointing skywards.
 \end{description}
 %
 \subsection{Phone Frame}
 %
+A unambiguous definition of a coordinate system with a fixed orientation in reference to the phone is crucial. This is due to most sensors reporting their measurements in coordinates fixed in reference to the phone. 
+
+In Android, the phone coordinate system is defined as: 
+%
 \begin{description}
-\item[$x_p$:]
-\item[$y_p$:]
-\item[$z_p$:]
+\item[$x_p$:] Pointing out of the side of the phone, defined as $y_p \times z_p$.
+\item[$y_p$:] Pointing upward from the top of the screen.
+\item[$z_p$:] Orthogonal against the phones screen, pointing up if the phone is placed back down on a table.
 \end{description}
+%
+Further, the phones orientation may be expressed as three angles $(\phi_x \hspace{5pt} \phi_y \hspace{5pt} \phi_z)$ representing the difference in orientation between the each of the phones axis and the world frame.
 %
 \subsubsection{Thesis Specific Considerations}
 
@@ -74,7 +85,7 @@ The chapter consists of a recapitulation of free space signal propagation and pa
 %
 \section{Free Space Propagation Model}
 %
-How radio signals decay with increasing transmitter-receiver (T-R) separation is of interest in many applications, especially if a position is to be obtained from the received signal strength. The free space propagation model is a relatively simple model of predicting the received signal power given a certain T-R separation and a LOS path in between. This model focuses on the large-scale propagation features, thus predicting the average signal strength received without small scale effects taken into account. As in most propagation models a power law function of how the signal power decays by distance is assumed$\left(\sim{1/d^2}\right)$ \cite{rappaport96}. The power received at a distance $d$ from a radiating transmitter is given by the Friis free space equation,
+How the magnitude of radio signals decay with increasing transmitter-receiver (T-R) separation is of interest in many applications, especially if a position is to be obtained from the received signal strength. The free space propagation model is a relatively simple model of predicting the received signal power given a certain T-R separation and a LOS path in between. This model focuses on the large-scale propagation features, thus predicting the average signal strength received without small scale effects taken into account. As in most propagation models a power law function of how the signal power decays by distance is assumed$\left(\sim{1/d^2}\right)$ \cite{rappaport96}. The power received at a distance $d$ from a radiating transmitter is given by the Friis free space equation,
 %
 \begin{equation}
 P_r(d)=\frac{P_tG_tG_r\lambda^2}{(4\pi)^2d^2L}\label{equation:friis_equation}
@@ -1345,7 +1356,7 @@ Here, the steps are clearly distinguishable and each peaks corresponds to a step
 
 A algorithm corresponding to the rule above has been implemented in android using java. To test the performance of the algorithm two walks of 100 steps respectively was made, one with the phone in hand and one with the phone in the front right jeans pocket. When the phone was carried in hand 101 steps was registered and when carried in pocket 
 100 steps was registered. This shows the simple algorithm producing satisfactory results in these common use cases.
-The technique could be refined further, by e. g identifying the step frequency or by using more sensors. However, the performance in this for is sufficient for the application it is intended for.  
+The technique could be refined further, by e. g identifying the step frequency or by using more sensors. However, the performance is sufficient for the application it is intended for.  
 %
 \subsection{Step Length Considerations}
 \label{subsec:step_len}
@@ -1366,8 +1377,8 @@ An alternative method is to add step length as a state in the particle filter co
 %
 The Android platform employes a sampling strategy called \emph{event based sampling}. An application may request sensor data with a specified time separation e.g. 50 ms for a sampling frequency of 20 Hz. However, the system will forward data to the application when a new value is available in conjunction with the specified rate. The result is sensor data sampled at slightly different time intervals. Further, if the system busy when the requested data is to be obtained, it may choose to skip that sample, resulting in a de facto doubling in sample time for the next sample. Disregarding sensor samples is more common when the system is under heavy load resulting in more and more samples being skipped.
 
-In Figure \ref{sample_diff} a histogram over the time between consecutive samples for a set of 12375 accelerometer data points with a specified time between samples of 50 ms. The first figure shows most time differences are around 50 ms, which is to be expected. If the data is studied more closely a small number of points are visible around a separation of 100 ms. These are generated by the system disregarding a sample resulting in around the double time difference. The two following figures consists of the data spilt into two intervals, one with time differences ranging from 
-40.3 ms to 0.0617 ms and the other with a range from 97.9 ms to 101 ms. The first of these intervals consists of 12311 data points, and the other of 64 points. 
+In Figure \ref{sample_diff} a histogram over the time between consecutive samples for a set of 12 375 accelerometer data points with a specified time between samples of 50 ms. The first figure shows most time differences are around 50 ms, which is to be expected. If the data is studied more closely a small number of points are visible around a separation of 100 ms. These are generated by the system disregarding a sample resulting in around the double time difference. The two following figures consists of the data spilt into two intervals, one with time differences ranging from 
+40.3 ms to 61.7 ms and the other with a range from 97.9 ms to 101 ms. The first of these intervals consists of 12 311 data points, and the second of 64 points. 
 
 Only a small fraction of the samples are skipped by the system, however, these might introduced behavior when the data is filtered. The \emph{Butterworth} low pass filter used in the step detection algorithm is designed by a cutoff frequency being chosen as a fraction of the \emph{Nyquist frequency}, half the sampling frequency. A small difference from the desired sample time only affects the cut-off frequency and filter behavior slightly. A missed sample, on the other hand, causes the cut-off frequency and the behavior of the filter to change drastically. 
 
@@ -1392,7 +1403,7 @@ A enticing opportunity to determine the direction of movement using the gyroscop
 
 A way to get around some parts of the last flaw is to use the accelerometer to approximately determine how the device is oriented in reference to gravity. The gyroscope may then be used to compute only the approximate angel with which the user has turned around the direction of gravity. This is beneficial simply because all ''normal'' turns performed by a human is done around the direction of gravity. This makes the orientation of the device in reference to the user somewhat obsolete, but false turns may still be induced by turning the device around the direction of gravity.
 % 
-\subsection{Sensor Fused Approaches}
+\subsection{Sensor Fused Heading Estimation}
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -1450,7 +1461,7 @@ Given a well determined step length of the user and an accurate gyroscope, the s
 x_{k+1} &  = & x_k + N\cdot d_k\cdot\cos{\theta_k} \nonumber\\
 y_{k+1} & = &y_k + N\cdot d_k\cdot\sin{\theta_k}\label{eq:heading_step_kin_mod}\\
 \theta_{k+1} & = & \theta_k +\Delta\theta_k+ v_{k+1} \nonumber \\
-d_{k+1} & = & d_k + r_{k+1}
+d_{k+1} & = & d_k + r_{k+1}\nonumber
 \end{eqnarray}  
 %
 with the same notation as previous with the exception of $d_k$ being the particles step length at time step $k$. Particles with an appropriate step length will agree more with measurements of the position and tend to ''survive'' the re-sampling. This has the advantage of being independent of the users step length as the algorithm adapts for each user. On the other hand, we now have introduce two additional filter states compared to the simple case of only two states corresponding to $x$- and $y$-position. Adding states forces an increase in the number of particles which in turn leads to a more computational power demanding algorithm. Increasing the number of states by a factor two requires the number of particles to increase to the power of two to keep the density of particles in over the state space the same. This would result in the need to use between 100 000 and 1 000 000 particles, which would be to computationally intensive for todays smartphones, at least without extensive optimization. But, adding the additional states increases the knowledge of how the user has moved in between measurements, giving a much more narrow area where a true position is probable. Further, the possible variance, especially of the step length state is fairly small. The step length for most persons is in the region of 0.5 to 1 meter, and when an initial estimate has been determined, there are only a few cases where this length changes by more than a few centimeter or a decimeter at most. Concerning the heading, particles would initially need to be spread in all directions, however, when a approximate heading is obtained, the spread only needs to be enough to correct for biases and drifts of the gyro and small heading changes caused by the user inadvertently turns the device a small amount. Larger ''false'' changes in heading will be caught by the partial spread discussed earlier. In conjunction, this decreases the number of particles needed from almost a million to between 3 000 and 10 000 depending on the time between position measurements.       
