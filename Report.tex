@@ -1454,23 +1454,90 @@ In the previous chapters, the particles consisted of two states; the coordinates
 
 Initially, the position of each particle is uniformly random distributed in $[0,2\pi]$, and the step length is normally random distributed around 0.75 m. When the user takes a step, each particle moves its own step length in its own direction. Then, particles with good estimations of the step length and direction will reach accurate estimations of the position, and be more likely to multiply in the next step.
 
-The new states offer two advantages. Firstly, this kinematics model is more accurate than a random walk, which means that the particles are moved to more probable positions at each step. Secondly, the direction and step length can be used for dead-reckoning between the RSSI-measurements, providing a more frequent position estimation output.
+The new states offer two advantages. Firstly, this kinematics model is more accurate than a random walk, which means that the particles are moved to more probable positions at each step. Secondly, the average direction and step length can be used for dead-reckoning between the RSSI-measurements, providing a more frequent position estimation output.
 
-In order to keep the particle density in the state space high enough, the number of particles used has to be larger for this algorithm. In order to model the noise, all states are spread randomly with normal distributions around their current values, during each state update. 
+In order to keep the particle density in the state space high enough, the number of particles used has to be larger for this algorithm. In order to model the noise, the directions and step lengths are spread randomly with normal distributions around their current values, during each state update (see Table \ref{table:parameter_distributions}). Standard deviations of 0.01 m for the step length, and 0.01 radians for the direction, seemed to be reasonable for the models. The states are updated each time a step is taken by the user. 
 
 \section{Test Setup}
-In order to test this algorithm, one of the authors walked one round in \emph{Environment three}, in normal walking pace, holding the smart phone with constant orientation in relation to the body. The initial position and direction were treated as unknown. The parameter values used in this test are listed in Table ::::::::::    : 
+
+In order to test this algorithm, one of the authors walked one round in \emph{Environment three}, at normal walking pace, holding the smart phone with constant orientation in relation to the body. The initial position and direction were treated as unknown. The parameter values used in this test are listed in Table \ref{table:parameters_careful_user_test}, and the probability distributions of the models are listed in Table \ref{table:parameter_distributions}.
+
+\begin{table}[!hbt]
+\begin{center}
+\begin{tabular}{|l|c|}
+\hline
+\multicolumn{1}{|c|}{Parameter} & Magnitude \\
+\hline
+\hline
+$C$ for 2.4 GHz & -38 dB \\
+\hline
+$C$ for 5 GHz & 	-36 dB\\
+\hline
+$\alpha$ for 2.4 GHz & 0.4 dB / m \\
+\hline
+$\alpha$ for 5 GHz & 0.5 dB / m \\
+\hline 
+Number of particles $N$ & $10^4$ \\
+\hline 
 
 
+\end{tabular}
+\end{center}
+\caption{Parameter magnitudes used in the algorithm.}\label{table:parameters_careful_user_test}
+\end{table}
 
 
+\begin{table}[!hbt]
+\begin{center}
+\begin{tabular}{|l|c|}
+\hline
+\multicolumn{1}{|c|}{Parameter} & Distribution \\
+\hline
+\hline
+Initial direction $\theta$ & $U(0,2\pi)$ \\
+\hline
+Process noise $v ^\theta$ & $N(0,10^{-4})$ \\
+\hline
+Initial step length $r$ & $N(0.75, 4 \cdot 10^{-2})$ \\
+\hline
+Process noise $v^r$ & $N(0,10^{-4})$ \\
+\hline
+Measurement noise $e^{RSSI}$ & $N(0,25)$ \\
+\hline
+
+
+\end{tabular}
+\end{center}
+\caption{Probability distributions used in the algorithm.}\label{table:parameter_distributions}
+\end{table}
+
+The test was then repeated, but this time, the initial average step length was set to 0.4 m. The purpose of this was to investigate how the states adapt to the actual step length, which was 0.83 m.
 
 \section{Results}
 
 
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/sensor_fused/path_multi}
+\caption{Figure text}\label{path_multi}
+\end{figure}
+%
 
+%
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/sensor_fused/error_multi}
+\caption{Figure text}\label{error_multi}
+\end{figure}
+%
 
-
+%
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/sensor_fused/step_length}
+\caption{Figure text}\label{step_length}
+\end{figure}
+%
 
 
 
