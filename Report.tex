@@ -1508,9 +1508,9 @@ In order to test this algorithm, one of the authors walked one round in \emph{En
 
 \begin{table}[!hbt]
 \begin{center}
-\begin{tabular}{|l|c|}
+\begin{tabular}{|l|l|}
 \hline
-\multicolumn{1}{|c|}{Parameter} & Magnitude \\
+\multicolumn{1}{|c|}{Parameter} & \multicolumn{1}{c|}{Magnitude} \\
 \hline
 \hline
 $C$ for 2.4 GHz & -38 dB \\
@@ -1533,9 +1533,9 @@ Number of particles $N$ & $10^4$ \\
 
 \begin{table}[!hbt]
 \begin{center}
-\begin{tabular}{|l|c|}
+\begin{tabular}{|l|l|}
 \hline
-\multicolumn{1}{|c|}{Parameter} & Distribution \\
+\multicolumn{1}{|c|}{Parameter} & \multicolumn{1}{c|}{Distribution} \\
 \hline
 \hline
 Initial direction $\theta$ & $U(0,2\pi)$ \\
@@ -1563,7 +1563,7 @@ The test was then repeated, but this time, the initial average step length was s
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/sensor_fused/path_multi}
-\caption{Figure text}\label{path_multi}
+\caption{Position estimations of different algorithms in \emph{Environment three}.}\label{path_multi}
 \end{figure}
 %
 
@@ -1571,7 +1571,7 @@ The test was then repeated, but this time, the initial average step length was s
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/sensor_fused/error_multi}
-\caption{Figure text}\label{error_multi}
+\caption{Position errors of different algorithms. Note that the scales on the y-axis are different.}\label{error_multi}
 \end{figure}
 %
 
@@ -1579,7 +1579,7 @@ The test was then repeated, but this time, the initial average step length was s
 \begin{center}
 \begin{tabular}{|l|l|l|l|}
 \hline
-Positioning algorithm & Maximum error & Average error & Median error \\
+\multicolumn{1}{|c|}{Positioning algorithm} & Maximum error & Average error & Median error \\
 \hline
 \hline
 Particle filter - WiFi & 11.6 & 3.5 & 3.1  \\
@@ -1597,7 +1597,7 @@ Particle filter - WiFi \& sensors & 5.8 & 1.8 & 1.8 \\
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/sensor_fused/step_length}
-\caption{Figure text}\label{step_length}
+\caption{Average step length of the particles, with initial value 0.4 m. It gets considerably closer to the true step length, which is 0.83 m in this test.}\label{step_length}
 \end{figure}
 %
 
@@ -1605,7 +1605,7 @@ Particle filter - WiFi \& sensors & 5.8 & 1.8 & 1.8 \\
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/sensor_fused/path_no_step_est}
-\caption{Figure text}\label{path_no_step_est}
+\caption{Position estimation using both WiFi and the sensors. Here, the step length was considered as known and set to 0.83 m.}\label{path_no_step_est}
 \end{figure}
 %
 
@@ -1613,7 +1613,7 @@ Particle filter - WiFi \& sensors & 5.8 & 1.8 & 1.8 \\
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/sensor_fused/error_no_step_est}
-\caption{Figure text}\label{error_no_step_est}
+\caption{Error of the position estimation unsing both WiFi and the sensors. The step length was set to 0.83 m.}\label{error_no_step_est}
 \end{figure}
 %
 
