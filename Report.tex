@@ -1627,13 +1627,13 @@ The time until a approximate initial error is clearly visible in the plot of the
 \caption{Position errors of different algorithms. Note that the scales on the y-axis are different.}\label{error_multi}
 \end{figure}
 %
-Figure \ref{path_multi} shows the estimated path of four different positioning algorithms, least squares, pedestrian dead reckoning and particle filter with and without sensor data. The positioning error is, for each algorithm, displayed in Figure \ref{error_multi} and to high light some of the features of the error, the mean, max and median values for each is available in Table \ref{table:error_different_algorithms}.
+Figure \ref{path_multi} shows the estimated path of four different positioning algorithms, least squares, pedestrian dead reckoning and particle filter with and without sensor data. The positioning error is, for each algorithm, displayed in Figure \ref{error_multi} and to high light some of the features of the error, the mean, max and median values for each is available in Table \ref{table:error_different_algorithms}. In this test, WiFi measurements combined with information from the sensors performed best. Furthermore, Figure \ref{error_multi} shows that the error from the dead reckoning seems to grow with time, which is a typical property of this estimation method. 
 %
 \begin{table}[!hbt]
 \begin{center}
 \begin{tabular}{|l|l|l|l|}
 \hline
-\multicolumn{1}{|c|}{Positioning algorithm} & Maximum error & Average error & Median error \\
+\multicolumn{1}{|c|}{Positioning algorithm} & Maximum error  & Average error  & Median error \\
 \hline
 \hline
 Least Squares - Wi-Fi Only & 11.2 & 4.8 & 4.1 \\
@@ -1646,13 +1646,15 @@ Particle Filter - Wi-Fi \& Sensors & 5.8 & 1.8 & 1.8 \\
 \hline
 \end{tabular}
 \end{center}
-\caption{Position estimations using four different algorithms utilizing sensors and/or \newline Wi-Fi in \emph{Environment three}.}\label{table:error_different_algorithms}
+\caption{Position estimations using four different algorithms utilizing sensors and/or \newline Wi-Fi in \emph{Environment three}. All magnitudes are in meters.}\label{table:error_different_algorithms}
 \end{table}
 
 The error of the particle filter with sensor data is larger when the step length also is estimated. This behavior is to be expected the estimation relies on relatively noise RSSI measurements to estimate the step length. However, this walk was conducted at a approximatively constant speed by a single user, and a different user may have a quite different stride length. In such a case, the positioning will improve if the  step length is estimated. Additionally, a user may change stride length over the course of a walk, which will be caught by the estimation.  
 %
 
 \subsection{Evaluation of the Step Length Estimation}
+
+Figure \ref{step_length} shows how the average step length of the particles changes with time. The initial estimation was intentionally set too low, in order to investigate how the algorithm would perform. During the very first steps, the estimated value is smaller than the true value. However, after six steps the value has passed 0.75 m, and from this point, the situation resembles one with an initial estimation of 0.75 m. 
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -1664,6 +1666,15 @@ The error of the particle filter with sensor data is larger when the step length
 %
 \section{Concluding Remarks}
 %
+Using information from the accelerometer and the gyroscope improved the positioning significantly. At the same time, this requires that the orientation of the phone in relation to the user does not chance too frequently. While these events may be detected and taken into account, there are situations where it takes some time for the algorithm to exclude a "false" turn, and if this happened too often, the position estimation would always be inaccurate.
+
+Even though the sensors contributes with important information about the movement of the user, it would not be an option to use these for pedestrian dead reckoning only, i.e without combining them with the WiFi measurements. The main reasons are that the initial states would have to be known, that the expected error grows with time, and that the orientation of the phone would always have to be fix in relation to the user. The conclusion is that WiFi measurements could be used without pedestrian dead reckoning, but not the other way around.
+
+
+
+
+
+
 \chapter{Algorithm Implementation in Android}
 %
 In previous chapters offline computations are used to obtain the position estimate. Here an online java implementation of the developed algorithms will be presented briefly. The particle filter is quite computationally demanding, and therefor it is important to discern if handheld devices are capable of performing these computations sufficiently fast. 
