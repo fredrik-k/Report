@@ -33,6 +33,18 @@ In this thesis smartphones running the \emph{Android operating system} will be u
 %
 \chapter{Background on Navigation}
 %
+This chapter gives a brief introduction to the background and history of navigation. First a overview of some of the different stages navigational technology have conquered over the course of history. Further, an introduction to the different coordinate systems used in this thesis will be presented and special emphasis will be put on the system used when evaluation the positioning algorithm. In connection with this a brief presentation of the \emph{longitude and latitude} coordinate system will be given. 
+%
+\section{Overview}
+%
+Mankind has always had a need to navigate in its surroundings. At an early stage these surroundings was fairly small and visual references to known landmarks was good enough to find ones way. As the distances traveled grew, so did the need for a more well defined frame of reference, so mankind turned to celestial bodies. Using the sun and the stars, with their relatively fixed position in reference to the earth, gave the ability to keep a desired heading over a long distance. This ability was then refined over the centuries and triangulation was discovered as a mean to find one's position. The invention of the compass further improved the navigation. With a known orientation only the relative angle to two landmarks or celestial bodies, is needed to find the position. 
+
+In the 20th century the improvements in measuring accelerations and angular velocities promoted a technology called \emph{dead reckoning}. From a known position and heading, it is possible, using an accelerometer and a gyroscope, to estimate current speed and heading to find the current position. With occasional fixes of the position and heading the current position is known at all times. However, the size of the devices involved makes the technology inly suitable for larger vehicles, like ships or airplanes.
+
+Another technological leap was taken with the introduction of the \emph{Global Positioning System} (GPS). A system using the time difference between signals received from satellites with known location made it possible for almost anyone to find their position with an accuracy of around 15 meters. Today GPS receivers are readily available both as standalone devices or integrated in cars or smartphones.
+
+A problem however exists with the GPS system. To obtain a good position, signals from at least  four satellites must be available. This could of course be improved by placing more satellites in orbit but this only solves part of the problem. In some location, like suburban areas or indoors, there is no           
+%
 \section{Coordinate Systems}
 It should be apparent to the reader that a well defined coordinate system is of great importance for positioning applications. Further, to be able to receive a meaningful position, the coordinate system needs to be fixed in reference to the phone. In the sections below two different such coordinate systems are presented along with the coordinate system of the phone. 
 \subsection{World Frame}
@@ -73,8 +85,18 @@ In Android, the phone coordinate system is defined as:
 %
 Further, the phones orientation may be expressed as three angles $(\phi_x \hspace{5pt} \phi_y \hspace{5pt} \phi_z)$ representing the difference in orientation between the each of the phones axis and the world frame.
 %
-\subsubsection{Thesis Specific Considerations}
-
+\subsection{Coordinate System Used for Measurements}
+%
+As the measurements performed in this thesis are performed over a limited area, a local frame is a convenient choice. The chosen coordinate system is aligned with the building the measurements are being taken in, allowing for most movement to occur either parallel to the $x$- $y$-axis. Out of convenience, a local frame with an angular offset of roughly $180^\circ$, giving the system:
+%
+\begin{description}
+\item[$x_t$:] Pointing roughly west. 
+\item[$y_t$:] Pointing roughly towards magnetic south.
+\item[$z_t$:] Equivalent to $z_w$, pointing skywards.
+\end{description}
+%
+In Figure REF HERE, the chosen coordinate system used is shown along with a floor plan of the building and the different paths used to evaluate the positioning algorithms.
+%
 \chapter{Radio Signal Propagation}
 %
 \label{chap:RSP}
@@ -1344,12 +1366,12 @@ A 10 second sample of the average acceleration measured by a phone placed in the
 \caption{Differentiation of average acceleration during 10 seconds of a typical walk.}\label{avr_acc_dif}
 \end{figure}
 %
-yielding a signal according to Figure \ref{avr_acc_dif}. This signal is centred around zero, but possesses unnecessary high frequency behaviour. The sampling frequency of the accelerometer is $\sim 20$ Hz, giving a frequency content of the signal between 0 and 10 Hz. The normal step frequency for a person is no larger than 3 Hz, which promotes filtering the signal. Doing this with a fourth order \emph{Butterworth filter} with a cut-of frequency of 3 Hz yields the signal in Figure \ref{avr_acc_dif_filt} \cite{pro07}.
+yielding the signal depicted in Figure \ref{avr_acc_dif}. This signal is centered around zero, but possesses unnecessary high frequency behavior. The sampling frequency of the accelerometer is $\sim 20$ Hz, giving a frequency content of the signal between 0 and 10 Hz. The normal step frequency for a person is no larger than 3 Hz, which promotes filtering the signal. Doing this with a fourth order \emph{Butterworth filter} with a cut-of frequency of 3 Hz results in the signal shown in Figure \ref{avr_acc_dif_filt} \cite{pro07}.
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/avr_acc_dif_filt}
-\caption{Filtered differentiation of average acceleration during 10 seconds of a typical walk with phone carried in hand (Red) and threshold to determine in step has been taken (blue). }\label{avr_acc_dif_filt}
+\caption{Filtered differentiation of average acceleration during 10 seconds of a typical walk with phone carried in hand (Red) and threshold to determine when step has been taken (blue). }\label{avr_acc_dif_filt}
 \end{figure}
 %
 Here, the steps are clearly distinguishable and each peaks corresponds to a step taken. In Figure \ref{avr_acc_dif_filt} a threshold for determining weather a step has been taken or not is also present. A simple rule to count the number of steps taken could be to count the number of times the signal passes from below to above the threshold. Using this rule 17 steps was taken during the 10 second interval displayed in Figure \ref{avr_acc_dif_filt}.
@@ -1372,7 +1394,7 @@ An alternative method is to add step length as a state in the particle filter co
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/sample_diff}
-\caption{histogram over time difference between consecutive samples given a specified time of 50 ms. Each interval is divided into 100 bins and the width of each bin is $7\cdot10^{-4}$, $2.5\cdot10^{-4}$ and $4\cdot10^{-5}$ seconds respectively.}\label{sample_diff}
+\caption{Histogram over time difference between consecutive samples given a specified time of 50 ms. Each interval is divided into 100 bins and the width of each bin is $7\cdot10^{-4}$, $2.5\cdot10^{-4}$ and $4\cdot10^{-5}$ seconds respectively.}\label{sample_diff}
 \end{figure}
 %
 The Android platform employes a sampling strategy called \emph{event based sampling}. An application may request sensor data with a specified time separation e.g. 50 ms for a sampling frequency of 20 Hz. However, the system will forward data to the application when a new value is available in conjunction with the specified rate. The result is sensor data sampled at slightly different time intervals. Further, if the system busy when the requested data is to be obtained, it may choose to skip that sample, resulting in a de facto doubling in sample time for the next sample. Disregarding sensor samples is more common when the system is under heavy load resulting in more and more samples being skipped.
@@ -1416,6 +1438,7 @@ There are different approaches for combining magnetometer, gyroscope and possibl
 In Figure \ref{rot_test} the estimated heading for such an algorithm is shown along with the true heading. The measurement was taken while walking due east for 91.5 meters in a corridor indoors. The difference between the mean estimated heading, 89.7$^\circ$, and true heading (90$^\circ$) is minuscule, but the estimation varies around $\pm$15$^\circ$ from the true heading. This method of estimating the heading does not posses longterm drifts, but, as the estimation relies on the magnetometer for longterm calibration, it may be corrupted by different environmental factors, see Section \ref{subsec:mag}. 
 %
 \subsection{Heading as a Particle Filter State}
+\label{subsec:PF_heading}
 %
 Another method for estimating the direction of movement is to extend the particle filter with a state representing the heading of each particle. A kinematics model could be
 %
@@ -1459,42 +1482,47 @@ Given a well determined step length of the user and an accurate gyroscope, the s
 %
 \begin{eqnarray}
 x_{k+1} &  = & x_k + N\cdot d_k\cdot\cos{\theta_k} \nonumber\\
-y_{k+1} & = &y_k + N\cdot d_k\cdot\sin{\theta_k}\label{eq:heading_step_kin_mod}\\
+y_{k+1} & = &y_k + N\cdot d_k\cdot\sin{\theta_k}\label{eq:heading_step_len_kin_mod}\\
 \theta_{k+1} & = & \theta_k +\Delta\theta_k+ v_{k+1} \nonumber \\
 d_{k+1} & = & d_k + r_{k+1}\nonumber
 \end{eqnarray}  
 %
 with the same notation as previous with the exception of $d_k$ being the particles step length at time step $k$. Particles with an appropriate step length will agree more with measurements of the position and tend to ''survive'' the re-sampling. This has the advantage of being independent of the users step length as the algorithm adapts for each user. On the other hand, we now have introduce two additional filter states compared to the simple case of only two states corresponding to $x$- and $y$-position. Adding states forces an increase in the number of particles which in turn leads to a more computational power demanding algorithm. Increasing the number of states by a factor two requires the number of particles to increase to the power of two to keep the density of particles in over the state space the same. This would result in the need to use between 100 000 and 1 000 000 particles, which would be to computationally intensive for todays smartphones, at least without extensive optimization. But, adding the additional states increases the knowledge of how the user has moved in between measurements, giving a much more narrow area where a true position is probable. Further, the possible variance, especially of the step length state is fairly small. The step length for most persons is in the region of 0.5 to 1 meter, and when an initial estimate has been determined, there are only a few cases where this length changes by more than a few centimeter or a decimeter at most. Concerning the heading, particles would initially need to be spread in all directions, however, when a approximate heading is obtained, the spread only needs to be enough to correct for biases and drifts of the gyro and small heading changes caused by the user inadvertently turns the device a small amount. Larger ''false'' changes in heading will be caught by the partial spread discussed earlier. In conjunction, this decreases the number of particles needed from almost a million to between 3 000 and 10 000 depending on the time between position measurements.       
 %
-\section{Dead Reckoning}
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_1}
-\caption{True versus, by dead reckoning, estimated path using gyroscope and pedometer.}\label{deadreckon_1}
+\caption{True versus, by pedestrian dead reckoning, estimated path using gyroscope and pedometer.}\label{deadreckon_1}
 \end{figure}
 %
+\section{Dead Reckoning}
+
 \emph{Dead reckoning} is the process of calculating the current position based on a previously determined position and advancing that position based on a known model \cite{ped_dead}. Dead reckoning has been used by e. g ships and airplanes for a long time, and in more resent time in networked computer games \cite{network_game}. However, as stated before, the error is cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and especially the heading error is clearly visible. 
+
+Dead reckoning estimations are subject to cumulative errors i.e. errors are added over time and depending on the accuracy of the dead reckoning system, the estimated position deviates from the true. This implies that the position and heading estimates need to be calibrated at a certain time interval to provide an accurate position.
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_2}
-\caption{True versus, by dead reckoning, estimated path using gyroscope and pedometer.}\label{deadreckon_2}
+\caption{True versus, by pedestrian dead reckoning, estimated path using gyroscope and pedometer.}\label{deadreckon_2}
 \end{figure}
 %
-
-Dead reckoning estimations are subject to cumulative errors i.e. errors are added over time and depending on the accuracy of the dead reckoning system, the estimated position deviates from the true. This implies that the position and heading estimates need to be calibrated at a certain time interval to provide an accurate position.
-
-For phones, a dead reckoning estimation would most likely include some form of step counting combined with one of the heading estimations previously mentioned. As an example, the true and estimated paths using a pedometer and a gyroscope during a walk of approximately 110 meters, are presented in Figure \ref{deadreckon_1}. The behavior is fairly good but there is a heading error present soon after the start, and this grows as the walk continues. The distance estimated by the pedometer is also larger than the true distance traveled.  
-It is apparent that both position and heading need to be calibrated to obtain a good position estimate. How this is done is explained in the following chapters.
+For phones, a method witch extends normal dead reckoning, called \emph{pedestrian dead reckoning}, PDR, could be used. Position and direction estimation would most likely include some form of step counting for distance measurement combined with either gyroscope or a sensor fusion including the magnetometer for heading estimation. As an example, the true and estimated paths using a pedometer and a gyroscope during a walk of approximately 110 meters, are presented in Figure \ref{deadreckon_1}. The behavior is fairly good but there is a heading error present soon after the start, and this grows as the walk continues. The distance estimated by the pedometer is also larger than the true distance traveled. Further, the estimation grows with time, as seen in Figure \ref{deadreckon_2}, making PDR useful only for short term estimation, if no calibration of position and direction is performed.  
 %
 \chapter{Indoor positioning - Sensor Fused Approach} 
 %
 In this chapter, a method of how to include the information from the sensors in the positioning algorithm will be presented. The dead reckoning presented in the previous chapter works well for short distances (see e.g. Figure \ref{deadreckon_1}), whereas information from WiFi signals do not have the disadvantage of drifts. The main strategy is now to combine these, in order to get the best properties from both  parts.
 
+
+
 \section{Extension of Particle State Space}
 
 In the previous chapters, the particles consisted of two states; the coordinates of the position. Now, we introduce the direction of movement, and the step length of the user, as two new states. 
+
+In Section \ref{subsec:PF_heading} two extensions to the state space, \ref{eq:heading_step_kin_mod} and \ref{eq:heading_step_len_kin_mod}, to accommodate for heading and heading plus step length in congregation with a step counter is presented. Both of these models will be used to estimate positions in latter parts of this chapter.
+
+Two sensors will be used to aid in the positioning, an accelerometer and a gyroscope. The accelerometer will have two different uses, to serve as the basis for the step counting algorithm and to estimate the orientation of the phone in relation to the earths gravity. Using this orientation the gyroscope will be used to measure the changes in heading.  
 
 Initially, the position of each particle is uniformly random distributed in $[0,2\pi]$, and the step length is normally random distributed around 0.75 m. When the user takes a step, each particle moves its own step length in its own direction. Then, particles with good estimations of the step length and direction will reach accurate estimations of the position, and be more likely to multiply in the next step.
 
@@ -1557,13 +1585,38 @@ Measurement noise $e^{RSSI}$ & $N(0,25)$ \\
 
 The test was then repeated, but this time, the initial average step length was set to 0.4 m. The purpose of this was to investigate how the states adapt to the actual step length, which was 0.83 m.
 
+The positioning estimation error is computed by dividing the path into equidistant point according to the number of steps taken during the walk. The position error is the computed as the absolute distance between estimated position  and corresponding point on the path. 
+%
 \section{Results}
+%
+In this section the results obtained when fusing sensor data together with Wi-Fi measurements are presented. First the results obtained while a predetermined step length was used is presented. Afterwards the position estimation when the step length is treated as a part of the state space is presented along with positioning from a least squares algorithm, particle filter using only Wi-Fi measurements and a pedestrian dead reckoning algorithm. This section is followed by a presentation of findings concerning the step length estimation when the algorithm is tried on different users. The last section deals with detection and compensation of ''false'' user induced turns.   
+%
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/sensor_fused/path_no_step_est}
+\caption{Position estimation using both WiFi and the sensors. Here, the step length was considered as known and set to 0.83 m.}\label{path_no_step_est}
+\end{figure}
+%
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/sensor_fused/error_no_step_est}
+\caption{Error of the position estimation using both WiFi and the sensors. The step length was set to 0.83 m.}\label{error_no_step_est}
+\end{figure}
+%
 
+%
+\subsection{Fixed Step Length}
+In Figure \ref{path_no_step_est}, the estimated path of a walk in \emph{Environment three} is presented. The positioning errors are shown in Figure \ref{error_no_step_est} and have a mean of 1.3 meters and a max of 6 meters. 
+%
 
+The time until a approximate initial error is clearly visible in the plot of the error, corresponding to the peak at 7 samples. An initial heading would of course improve on this error. 
+
+\subsection{Estimated Step Length}
+%
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/sensor_fused/path_multi}
-\caption{Position estimations of different algorithms in \emph{Environment three}.}\label{path_multi}
+\caption{Position estimations using four different algorithms utilizing sensors and/or Wi-Fi in \emph{Environment three} .}\label{path_multi}
 \end{figure}
 %
 
@@ -1574,25 +1627,32 @@ The test was then repeated, but this time, the initial average step length was s
 \caption{Position errors of different algorithms. Note that the scales on the y-axis are different.}\label{error_multi}
 \end{figure}
 %
-
-\begin{table}
+Figure \ref{path_multi} shows the estimated path of four different positioning algorithms, least squares, pedestrian dead reckoning and particle filter with and without sensor data. The positioning error is, for each algorithm, displayed in Figure \ref{error_multi} and to high light some of the features of the error, the mean, max and median values for each is available in Table \ref{table:error_different_algorithms}.
+%
+\begin{table}[!hbt]
 \begin{center}
 \begin{tabular}{|l|l|l|l|}
 \hline
 \multicolumn{1}{|c|}{Positioning algorithm} & Maximum error & Average error & Median error \\
 \hline
 \hline
-Particle filter - WiFi & 11.6 & 3.5 & 3.1  \\
+Least Squares - Wi-Fi Only & 11.2 & 4.8 & 4.1 \\
 \hline
-Pedestrian dead reckoning & 7.7 & 4.2 & 4.8  \\
+Particle Filter - Wi-Fi Only & 11.6 & 3.5 & 3.1  \\
 \hline
-Particle filter - WiFi \& sensors & 5.8 & 1.8 & 1.8 \\
+Pedestrian Dead Reckoning & 7.7 & 4.2 & 4.8  \\
+\hline
+Particle Filter - Wi-Fi \& Sensors & 5.8 & 1.8 & 1.8 \\
 \hline
 \end{tabular}
 \end{center}
-\caption{Error of the different positioning algorithms}\label{table:error_different_algorithms}
+\caption{Position estimations using four different algorithms utilizing sensors and/or \newline Wi-Fi in \emph{Environment three}.}\label{table:error_different_algorithms}
 \end{table}
 
+The error of the particle filter with sensor data is larger when the step length also is estimated. This behavior is to be expected the estimation relies on relatively noise RSSI measurements to estimate the step length. However, this walk was conducted at a approximatively constant speed by a single user, and a different user may have a quite different stride length. In such a case, the positioning will improve if the  step length is estimated. Additionally, a user may change stride length over the course of a walk, which will be caught by the estimation.  
+%
+
+\subsection{Evaluation of the Step Length Estimation}
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -1600,28 +1660,10 @@ Particle filter - WiFi \& sensors & 5.8 & 1.8 & 1.8 \\
 \caption{Average step length of the particles, with initial value 0.4 m. It gets considerably closer to the true step length, which is 0.83 m in this test.}\label{step_length}
 \end{figure}
 %
-
+\subsection{Finding ''False'' Turns}
 %
-\begin{figure}[!hbt]
-\include{graphics}
-\includegraphics[width=1\textwidth ]{images/sensor_fused/path_no_step_est}
-\caption{Position estimation using both WiFi and the sensors. Here, the step length was considered as known and set to 0.83 m.}\label{path_no_step_est}
-\end{figure}
+\section{Concluding Remarks}
 %
-
-%
-\begin{figure}[!hbt]
-\include{graphics}
-\includegraphics[width=1\textwidth ]{images/sensor_fused/error_no_step_est}
-\caption{Error of the position estimation unsing both WiFi and the sensors. The step length was set to 0.83 m.}\label{error_no_step_est}
-\end{figure}
-%
-
-
-
-
-
-
 \chapter{Algorithm Implementation in Android}
 %
 In previous chapters offline computations are used to obtain the position estimate. Here an online java implementation of the developed algorithms will be presented briefly. The particle filter is quite computationally demanding, and therefor it is important to discern if handheld devices are capable of performing these computations sufficiently fast. 
