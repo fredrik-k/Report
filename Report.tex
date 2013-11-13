@@ -1153,7 +1153,7 @@ Test 1) and 2) were performed again, but this time with the compensating algorit
 
 
 \section{Conclusion}
-In this chapter, an algorithm that updates the model parallel to the positioning has been suggested. The purpose is to increase the generality of the application, and making it improve while in a new environment.
+In this chapter, an algorithm that updates the model parallel to the positioning has been suggested. The purpose is to increase the generality of the application, and making it improve while in a new environment. If the initial parameter values are inaccurate, this part of the algorithm improves the positioning significantly. However, if the initial parameter values are too far from the true, the positioning never gets accurate enough for the parameter update to work. Hence, the algorithm has to start with feasible parameter values in order to make them more accurate. In order to achieve this, $C$ could be estimated from the peak RSSI values.
 
 
 Compensating for the hand attenuation clearly improved the positioning. However, $H$ can not be determined exactly, due to noise and obstacles in the environment. In addition, the hand attenuation is only detected if the phone is covered fast enough. If it goes from uncovered to covered successively, during several time steps, this can not be distinguished from other causes of lowered RSSI. Naturally, going from covered to uncovered works analogously.
