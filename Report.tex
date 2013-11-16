@@ -32,6 +32,7 @@ These people helped me a lot with my work.
 In this thesis smartphones running the \emph{Android operating system} will be used. Android is a open source software on which around 80 \% of current smartphones operate. 
 %
 \chapter{Background on Navigation}
+\label{chap:background}
 %
 This chapter gives a brief introduction to the background and history of navigation. First a overview of some of the different stages navigational technology have conquered over the course of history. Further, an introduction to the different coordinate systems used in this thesis will be presented and special emphasis will be put on the system used when evaluation the positioning algorithm. In connection with this a brief presentation of the \emph{longitude and latitude} coordinate system will be given. 
 %
@@ -43,7 +44,9 @@ In the 20th century the improvements in measuring accelerations and angular velo
 
 Another technological leap was taken with the introduction of the \emph{Global Positioning System} (GPS). A system using the time difference between signals received from satellites with known location made it possible for almost anyone to find their position with an accuracy of around 15 meters. Today GPS receivers are readily available both as standalone devices or integrated in cars or smartphones.
 
-A problem however exists with the GPS system. To obtain a good position, signals from at least  four satellites must be available. This could of course be improved by placing more satellites in orbit but this only solves part of the problem. In some location, like suburban areas or indoors, there is no           
+A problem however exists with the GPS system. To obtain a good position, signals from at least three (or four if the altitude should be determined along with the longitude and latitude) satellites must be available. Preferably these satellites should be in line-of-sight from the GPS receiver. Putting mor satellites in orbit increases the amount of time enough satellites are visible, however this only partly solves the problem. In some areas, like a suburban environment or indoors, the path between the GPS receiver and the satellites are obstructed either by the building it is in or buildings in its surroundings. An obstructed path results in that the GPS signal has to travel a longer distance, ie. by reflection, diffraction or scattering, to reach the receiver. Because the distance is estimated by the difference in time between when the signal was sent and received, an obstruction increases the estimated distance between receiver and satellite. Further, as the GPS signal is sent from space, it is weak when it reaches the earth surface and an obstruction may even make it to weak for the receiver to detect.
+
+Altogether this makes GPS a good positioning technique in open outdoor areas, but in a suburban or indoor environment other techniques must be used to obtain accurate positioning. A multitude of techniques trying to solve this problem with different accuracies and constraints exists. There are no single technology these attempts are based on, instead they are spread over a wide range of areas, including inertial sensors, signal power, magnetic fields, cameras etc. \cite{positioning_overview}. 
 %
 \section{Coordinate Systems}
 It should be apparent to the reader that a well defined coordinate system is of great importance for positioning applications. Further, to be able to receive a meaningful position, the coordinate system needs to be fixed in reference to the phone. In the sections below two different such coordinate systems are presented along with the coordinate system of the phone. 
@@ -1685,21 +1688,44 @@ The chapter is closed by discussing some further optimizations possible, if it i
 %
 \subsection{Introducing SonyMap}
 %
-\section{Choice of Coordinate System}
-%
 \section{Java Implementations}
 %
-\subsection{Finding Building \& Floor}
+Going from offline simulations to a real time implementations of course requires certain considerations to achieve desired performance. Further, to scale a positioning algorithm from use in a single building and a single floor to a system that is used in multiple sites around the globe provides additional challenges. In this section some of the considerations made when the algorithm was implemented is presented. 
+%
+\subsection{Finding Correct Building \& Floor}
+%
+One of the first obstacles encountered when trying to upscale the algorithm was that, on a cite with several multistory buildings, finding the correct building and floor. 
+
+To find the correct building a couple of different techniques could be used. The most simple of these is to use the GPS output when the user enters the building. This, however, is not a weary robust way, either the user may want to start the navigation when inside the building or the GPS output might be inaccurate. A better estimation can be obtained by watching the RSSI values of the available known wi-fi APs, and position the user in the building from where the strongest RSSI value is obtained. If needed this could be refined further by taking more than the AP with larges RSSI value into account, however, as the buildings at Sony is separated by fairly large distances, regarding only one AP was sufficient.
+
+A more challenging task is to determine the correct floor within the correct building. Here it is insufficient to regard only the received known AP with larges RSSI value. In areas with openings between different floors, like stairwells, in close proximity to windows or when the distance to APs on other floors is short, it is not unlikely that the larges RSSI value comes from a floor different from the one the user is currently on. To obtain an accurate estimation information from several APs needs to be used. This can be done in several different ways and during the application implementation two off these where tested.
+
+In REFERENCE HERE a floor detection scheme based on the  three APs with largest RSSI values are presented. The floor the user is currently on is determined by 
+%
+\begin{itemize}
+\item If the APs with the second and third largest RSSI value is located on the same floor, that floor is chosen.
+\item If not, the floor of the AP with largest RSSI value is chosen.   
+\end{itemize}      
+%
+This scheme mitigates the problem of having one strongly transmitting AP on the ''wrong'' floor. However, if there are attest two APs from the ''wrong'' floor among the three, this floor will always be chosen. Therefor an alternative method has been suggested by the authors. 
+
+Simply determining the mean received power from each floor suffers from the same problems as earlier discussed. If, on the other hand, the aggregate received power from each floor is instead determined a more robust methods is obtained. As RSSI values are reported from the driver in the range of around 0 to $-$100 where 0 indicates the highest received power, a simple addition will not suffice. Instead, the smallest received RSSI could be used to scale all RSSI values before adding them together. This is done by determining how much to add to the smallest RSSI value to obtain $+$1 and add this to all RSSI values. Now the scaled values originating from each floor can be added and the largest value determined and subsequently the corresponding floor is chosen.
+
+To test the performance of the algorithms, each was implemented in a version of SonyMap whereafter the applications where installed on identical phones. A $\sim$30 minute walk was the made throughout the Sony building and the number of faulty floor estimations was noted. The scheme proposed in REFERENCE HERE reported the wrong floor 10 times during the walk while the one proposed by the authors was wrong three times. 
+
+If a consistent floor estimation is of more importance then a speedy change when the user changes floor, both algorithms could be further refined. A check on the number of times a different floor has been reported and the floor estimation is not changed until the algorithm has reported the same floor a specified number of consecutive times.    
+
+%
+\subsection{Coordinate Conversions}
+%
+In Chapter \ref{chap:background} the longitude/latitude coordinate system is presented. This system is used in most large scale positioning applications as it gives each point on earth a unique coordinate representation. However, it is impractical to use the longitude/latitude system for positioning on a local scale. This is due to, because of the earths spherical surface, the fact that the same difference in longitude/latitude will equal a different distance in meters on different locations on the earth. As all calculations, in this thesis and in many other applications, is done in meters a conversion between the two is needed. 
+
+In this thesis a open source solution called NAME AND REFERENCE HERE is used. This solution splits the earth into regions within which a distance in longitude/latitude is approximately constant converted into meters. Further, some extrapolation is done within each region to make the conversion even more exact.  
 %
 \subsection{The Particle Filter}
 %
 \section{Further Optimizations - Parallel Computations}
 %
-
-
-The sensors described in the (previous chapter) provide additional information for the positioning. The gyroscope indicates  if the user has changed direction, and how much, while the step counter provides an estimation of how far the user has moved since the last time step.
-
-One way to use the information from the gyroscope is to introduce the direction of movement as a new state of each particle. Initially, each particle is given a uniformly random direction in the interval $[0,2 \pi)$. 
 
 \printbibliography  %% Comment if you don't want to use bibtex
 
