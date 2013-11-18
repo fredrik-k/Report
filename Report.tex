@@ -1513,7 +1513,7 @@ Dead reckoning estimations are subject to cumulative errors i.e. errors are adde
 %
 For phones, a method witch extends normal dead reckoning, called \emph{pedestrian dead reckoning}, PDR, could be used. Position and direction estimation would most likely include some form of step counting for distance measurement combined with either gyroscope or a sensor fusion including the magnetometer for heading estimation. As an example, the true and estimated paths using a pedometer and a gyroscope during a walk of approximately 110 meters, are presented in Figure \ref{deadreckon_1}. The behavior is fairly good but there is a heading error present soon after the start, and this grows as the walk continues. The distance estimated by the pedometer is also larger than the true distance traveled. Further, the estimation grows with time, as seen in Figure \ref{deadreckon_2}, making PDR useful only for short term estimation, if no calibration of position and direction is performed.  
 %
-\chapter{Indoor positioning - Sensor Fused Approach} 
+\chapter{Indoor Positioning - Sensor Fused Approach} 
 %
 In this chapter, a method of how to include the information from the sensors in the positioning algorithm will be presented. The dead reckoning presented in the previous chapter works well for short distances (see e.g. Figure \ref{deadreckon_1}), whereas information from WiFi signals do not have the disadvantage of drifts. The main strategy is now to combine these, in order to get the best properties from both  parts.
 
@@ -1688,7 +1688,7 @@ The chapter is closed by discussing some further optimizations possible, if it i
 %
 \subsection{Introducing SonyMap}
 %
-\section{Java Implementations}
+\section{Java Implementation}
 %
 Going from offline simulations to a real time implementations of course requires certain considerations to achieve desired performance. Further, to scale a positioning algorithm from use in a single building and a single floor to a system that is used in multiple sites around the globe provides additional challenges. In this section some of the considerations made when the algorithm was implemented is presented. 
 %
@@ -1709,7 +1709,7 @@ In REFERENCE HERE a floor detection scheme based on the  three APs with largest 
 %
 This scheme mitigates the problem of having one strongly transmitting AP on the ''wrong'' floor. However, if there are attest two APs from the ''wrong'' floor among the three, this floor will always be chosen. Therefor an alternative method has been suggested by the authors. 
 
-Simply determining the mean received power from each floor suffers from the same problems as earlier discussed. If, on the other hand, the aggregate received power from each floor is instead determined a more robust methods is obtained. As RSSI values are reported from the driver in the range of around 0 to $-$100 where 0 indicates the highest received power, a simple addition will not suffice. Instead, the smallest received RSSI could be used to scale all RSSI values before adding them together. This is done by determining how much to add to the smallest RSSI value to obtain $+$1 and add this to all RSSI values. Now the scaled values originating from each floor can be added and the largest value determined and subsequently the corresponding floor is chosen.
+Simply determining the mean received power from each floor suffers from the same problems as earlier discussed. If, on the other hand, the aggregate received power from each floor is determined a more robust methods is obtained. As RSSI values are reported from the driver in the range of around 0 to $-$100 where 0 indicates the highest received power, a simple addition will not suffice. Instead, the smallest received RSSI could be used to scale all RSSI values before adding them together. This is done by determining how much to add to the smallest RSSI value to obtain $+$1 and add this value to all RSSI values. Now the scaled values originating from each floor can be added and the largest value determined and subsequently, the corresponding floor is chosen.
 
 To test the performance of the algorithms, each was implemented in a version of SonyMap whereafter the applications where installed on identical phones. A $\sim$30 minute walk was the made throughout the Sony building and the number of faulty floor estimations was noted. The scheme proposed in REFERENCE HERE reported the wrong floor 10 times during the walk while the one proposed by the authors was wrong three times. 
 
@@ -1718,15 +1718,20 @@ If a consistent floor estimation is of more importance then a speedy change when
 %
 \subsection{Coordinate Conversions}
 %
-In Chapter \ref{chap:background} the longitude/latitude coordinate system is presented. This system is used in most large scale positioning applications as it gives each point on earth a unique coordinate representation. However, it is impractical to use the longitude/latitude system for positioning on a local scale. This is due to, because of the earths spherical surface, the fact that the same difference in longitude/latitude will equal a different distance in meters on different locations on the earth. As all calculations, in this thesis and in many other applications, is done in meters a conversion between the two is needed. 
+In Chapter \ref{chap:background} the longitude/latitude coordinate system is presented. This system is used in most large scale positioning applications as it gives each point on earth a unique coordinate representation. However, it is impractical to use the longitude/latitude system for positioning on a local scale. This is due to, because of the earths spherical surface, the fact that the same difference in longitude/latitude will equal a different distance in meters on different locations on the earth. As all calculations, in this thesis and in many other applications, are done in meters a conversion between the two is needed. 
 
-In this thesis a open source solution called NAME AND REFERENCE HERE is used. This solution splits the earth into regions within which a distance in longitude/latitude is approximately constant converted into meters. Further, some extrapolation is done within each region to make the conversion even more exact.  
+In this thesis a open source solution called NAME AND REFERENCE HERE is used. This solution splits the earth into regions within which a distance in longitude/latitude is approximately constant converted into meters. Further, some extrapolation is done within each region to make the conversion even more exact. To convert in the other direction, the region needs to be known, but otherwise the same general computations are made.   
 %
 \subsection{The Particle Filter}
 %
-\section{Further Optimizations - Parallel Computations}
-%
+In Chapter \ref{chap:PF}, the particle filter process is described in three steps, weighting, re-sampling and state update. Performing the operations in this order is not very computationally efficient, both concerning memory and computational power. A better way is to combine the state update and weighting, thus when a new set of RSSI values are available, for each particle, the state is updated and then the weight computed. During this step a sorted cumulative sum of the particle weights is also computed. The the re-sampling is performed along with the computation of the estimated position.
 
+If a step counter is added to aid the state update, the states can be updated at each detection of a step, as the time between consecutive RSSI measurements is no longer needed to perform an accurate state update. This further decreases the amount of time spent between receiving RSSI measurements and a position estimation is obtained. In addition, along with every registered step a new estimation of the position could be computed, allowing for faster updates than the RSSI measurements alone. 
+
+As each particle is an independent entity during most of the computations, the process could be greatly improved by parallel computations, either in separate threads on a single core, distributed over several CPU cores or even over GPU cores. In principle he computations for each particle could be run simultaneously utilizing the same number of threads as there are particles. There are, however, one bottle neck in the computations, the state update and weighting must, for each particle, be done before the re-sampling can be initialized. The explanation is simply that the re-sampling in dependent on the particle weights. However, the steps of state update and weighting, and re-sampling can be fully parallelized. 
+
+In the authors implementations a time cap of five seconds was placed on the algorithm, as the RSSI measurements where received with that time interval. To implement the positioning algorithm with this constraint, no need for parallelizations was needed and thus none where made. For 10 000 particles the algorithm could be run with a time consumption of  between 1 and 2 seconds. If RSSI measurements are available with shorter time intervals and/or more states and/or particles is used, parallelizations is needed.     
+%
 \printbibliography  %% Comment if you don't want to use bibtex
 
 \end{document}
