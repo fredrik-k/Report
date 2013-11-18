@@ -1662,13 +1662,24 @@ Figure \ref{step_length} shows how the average step length of the particles chan
 \caption{Average step length of the particles, with initial value 0.4 m. It gets considerably closer to the true step length, which is 0.83 m in this test.}\label{step_length}
 \end{figure}
 %
-\subsection{Finding ''False'' Turns}
+\section{Limit the Impact of ''False'' Turns}
 %
+If the orientation of the device changes severely in relation to the user, this will be interpreted as a turn by the user in the algorithm. In worst case, this might result in an erroneous position estimation that does not recover. A way to correct this, is to detect when the position estimation is unreasonable, and then change it to a rough estimation.
+
+If the RSSI from a certain AP is high (> -42 dB), whereas the distance between the estimation and the AP is more than 7 meters, this is used as an indicator of an unacceptably inaccurate estimation. Then, the algorithm is reinitialized around the current AP.
+
+Moreover, when a turn is detected, 30 \% of the particles keep their previous directions, in order to include the possibility that the phone merely changed orientation in relation to the user.
+
+This was tested in \emph{Environment three}, where the phone was rotated $\frac{\pi}{2}$ in relation to the user at three points along the path. The rotations were made in the same direction, adding up to a total rotation of $\frac{3\pi}{2}$. This resulted in an average position error of 3.4 m, and a maximum of 24.3 m. The maximum value occurred after the third rotation, and was followed by a reinitialization. The first two rotations resulted in much lower error peaks (6.6 m and 6.8 m).
+
+
+
+
 \section{Concluding Remarks}
 %
 Using information from the accelerometer and the gyroscope improved the positioning significantly. At the same time, this requires that the orientation of the phone in relation to the user does not chance too frequently. While these events may be detected and taken into account, there are situations where it takes some time for the algorithm to exclude a "false" turn, and if this happened too often, the position estimation would always be inaccurate.
 
-Even though the sensors contributes with important information about the movement of the user, it would not be an option to use these for pedestrian dead reckoning only, i.e without combining them with the WiFi measurements. The main reasons are that the initial states would have to be known, that the expected error grows with time, and that the orientation of the phone would always have to be fix in relation to the user. The conclusion is that WiFi measurements could be used without pedestrian dead reckoning, but not the other way around.
+Even though the sensors contribute with important information about the movement of the user, it would not be an option to use these for pedestrian dead reckoning only, i.e without combining them with the WiFi measurements. The main reasons are that the initial states would have to be known, that the expected error grows with time, and that the orientation of the phone would always have to be fix in relation to the user. The conclusion is that WiFi measurements could be used without pedestrian dead reckoning, but not the other way around.
 
 
 
