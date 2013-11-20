@@ -59,7 +59,7 @@ Altogether this makes GPS a good positioning technique in open outdoor areas, bu
 It should be apparent to the reader that a well defined coordinate system is of great importance for positioning applications. Further, to be able to receive a meaningful position, the coordinate system needs to be fixed in reference to the phone. In the sections below two different such coordinate systems are presented along with the coordinate system of the phone. 
 \subsection{World Frame}
 %
-The \emph{world frame} or the global coordinate system is commonly used for navigation, at least in a global perspective. The definition is as follows:
+The \emph{world frame} or the global coordinate system is commonly used for navigation, at least in a global perspective. The definition is, in accordance with Figure \ref{axis_globe} as follows:
 %
 \begin{description}
 \item[$x_w$:] Tangential to the ground at the current location, defined as $y_w\times z_w$. Points approximately east. 
@@ -67,17 +67,16 @@ The \emph{world frame} or the global coordinate system is commonly used for navi
 \item[$z_w$:] Perpendicular to the ground, pointing skywards.
 \end{description}
 %
-
-
-
 \begin{figure}[!hbt]
 \begin{center}
 \include{graphics}
 \includegraphics[width=0.3\textwidth ]{images/background_on_navigation/axis_globe.png}
 \end{center}
-\caption{World coordinate system.}\label{axis_globe}
+\caption[]{World coordinate system.\footnotemark}\label{axis_globe}
 \end{figure}
-
+%
+\footnotetext{This image is reproduced from work created and shared by the \emph{Android Open Source Community} \cite{aos} and used according to the terms described in the Creative Commons 2.5 Attribution License \cite{cc}.}
+%
 Noteworthy is that this system is not fixed in space and different positions on the earths surface will result in a differently oriented coordinate system. Further, as the world rotates around its own axes so does the coordinate system (15$^\circ$ per hour). In the sense of indoor positioning however, both of these effects can be considered small. The change in position is small and in a global perspective can be considered as a point, also, the timescale considered is often considerably shorter than one hour. 
 %
 \subsection{Local Frame}
