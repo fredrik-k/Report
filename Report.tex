@@ -68,10 +68,14 @@ The \emph{world frame} or the global coordinate system is commonly used for navi
 \end{description}
 %
 
+
+
 \begin{figure}[!hbt]
+\begin{center}
 \include{graphics}
-\includegraphics[width=1\textwidth ]{images/background_on_navigation/axis_device.png}
-\caption{device axis.}\label{axis_device}
+\includegraphics[width=0.3\textwidth ]{images/background_on_navigation/axis_globe.png}
+\end{center}
+\caption{World coordinate system.}\label{axis_globe}
 \end{figure}
 
 Noteworthy is that this system is not fixed in space and different positions on the earths surface will result in a differently oriented coordinate system. Further, as the world rotates around its own axes so does the coordinate system (15$^\circ$ per hour). In the sense of indoor positioning however, both of these effects can be considered small. The change in position is small and in a global perspective can be considered as a point, also, the timescale considered is often considerably shorter than one hour. 
@@ -99,6 +103,15 @@ In Android, the phone coordinate system is defined as:
 \item[$y_p$:] Pointing upward from the top of the screen.
 \item[$z_p$:] Orthogonal against the phones screen, pointing up if the phone is placed back down on a table.
 \end{description}
+
+\begin{figure}[!hbt]
+\begin{center}
+\include{graphics}
+\includegraphics[width=0.3\textwidth ]{images/background_on_navigation/axis_device.png}
+\end{center}
+\caption{Phone coordinate system.}\label{axis_device}
+\end{figure}
+
 %
 Further, the phones orientation may be expressed as three angles $(\phi_x \hspace{5pt} \phi_y \hspace{5pt} \phi_z)$ representing the difference in orientation between the each of the phones axis and the world frame.
 %
