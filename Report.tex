@@ -69,9 +69,11 @@ The \emph{world frame} or the global coordinate system is commonly used for navi
 %
 
 \begin{figure}[!hbt]
+\begin{center}
 \include{graphics}
-\includegraphics[width=1\textwidth ]{images/backround_on_navigation/axis_device.png}
-\caption{device axis.}\label{axis_device}
+\includegraphics[width=0.3\textwidth ]{images/background_on_navigation/axis_device.png}
+\end{center}
+\caption{Phone coordinate system.}\label{axis_device}
 \end{figure}
 
 Noteworthy is that this system is not fixed in space and different positions on the earths surface will result in a differently oriented coordinate system. Further, as the world rotates around its own axes so does the coordinate system (15$^\circ$ per hour). In the sense of indoor positioning however, both of these effects can be considered small. The change in position is small and in a global perspective can be considered as a point, also, the timescale considered is often considerably shorter than one hour. 
@@ -92,7 +94,7 @@ Such a coordinate system is defined as:
 %
 A unambiguous definition of a coordinate system with a fixed orientation in reference to the phone is crucial. This is due to most sensors reporting their measurements in coordinates fixed in reference to the phone. 
 
-In Android, the phone coordinate system is defined as: 
+In Android, the phone coordinate system is defined, according to Figure \ref{axis_device}: 
 %
 \begin{description}
 \item[$x_p$:] Pointing out of the side of the phone, defined as $y_p \times z_p$.
