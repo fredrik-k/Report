@@ -1821,7 +1821,7 @@ Simply determining the mean received power from each floor suffers from the same
   \caption{Flowchart of floor estimation algorithm. } \label{flowchart}
 \end{figure}
 
-This algorithm uses some heuristic assumptions concerning the power from different floors when estimating the current one. One of them is that if the signals from three consecutive floors are approximately equal the most probable location is on the middle floor. 
+This algorithm uses some heuristic assumptions concerning the power from different floors when estimating the current one. The assumptions are based on consecutive floors being relatively similar both in layout and AP distribution. One of the assumptions is that if the signals from three consecutive floors are comparable the most probable location is on the middle floor. Further, if two consecutive floors power are comparable but the third is not, it is more probable that the floor furthest from the third is the true floor. The same holds also when there only are two consecutive floors. In the implementation we have deemed two floors as comparable if their total powers is within a factor two from each other.  
 
 To test the performance of the algorithms, each was implemented in a version of SonyMap whereafter the applications where installed on identical phones. A $\sim$30 minute walk was the made throughout the Sony building and the number of faulty floor estimations was noted. The scheme proposed in REFERENCE HERE reported the wrong floor 10 times during the walk while the one proposed by the authors was wrong three times. 
 
@@ -1829,7 +1829,7 @@ If a consistent floor estimation is of more importance then a speedy change when
 
 %
 \subsection{Coordinate Conversions}
-%
+%s
 In Chapter \ref{chap:background} the longitude/latitude coordinate system is presented. This system is used in most large scale positioning applications as it gives each point on earth a unique coordinate representation. However, it is impractical to use the longitude/latitude system for positioning on a local scale. This is due to, because of the earths spherical surface, the fact that the same difference in longitude/latitude will equal a different distance in meters on different locations on the earth. As all calculations, in this thesis and in many other applications, are done in meters a conversion between the two is needed. 
 
 In this thesis a open source solution called NAME AND REFERENCE HERE is used. This solution splits the earth into regions within which a distance in longitude/latitude is approximately constant converted into meters. Further, some extrapolation is done within each region to make the conversion even more exact. To convert in the other direction, the region needs to be known, but otherwise the same general computations are made.   
