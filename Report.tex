@@ -9,6 +9,13 @@
 \usepackage[pdftex]{graphicx}
 \usepackage{epstopdf}
 \addbibresource{mybib.bib}  %  Comment if you don't want to use bibtex
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+%\usepackage{caption}
+\newcommand*{\h}{\hspace{5pt}}% for indentation
+\newcommand*{\hh}{\hspace{10pt}}% double indentation
+                         
 \begin{document}
 \begin{titlepages}
 \author{Fredrik Karlsson \& Martin Karlsson}
@@ -1720,7 +1727,94 @@ In REFERENCE HERE a floor detection scheme based on the  three APs with largest 
 %
 This scheme mitigates the problem of having one strongly transmitting AP on the ''wrong'' floor. However, if there are attest two APs from the ''wrong'' floor among the three, this floor will always be chosen. Therefor an alternative method has been suggested by the authors. 
 
-Simply determining the mean received power from each floor suffers from the same problems as earlier discussed. If, on the other hand, the aggregate received power from each floor is determined a more robust methods is obtained. As RSSI values are reported from the driver in the range of around 0 to $-$100 where 0 indicates the highest received power, a simple addition will not suffice. Instead, the smallest received RSSI could be used to scale all RSSI values before adding them together. This is done by determining how much to add to the smallest RSSI value to obtain $+$1 and add this value to all RSSI values. Now the scaled values originating from each floor can be added and the largest value determined and subsequently, the corresponding floor is chosen.
+Simply determining the mean received power from each floor suffers from the same problems as earlier discussed. If, on the other hand, the aggregate received power from each floor is determined a more robust methods is obtained. As RSSI values are reported from the driver in the range of around 0 to $-$100 where 0 indicates the highest received power, a simple addition will not suffice. Instead, the smallest received RSSI could be used to scale all RSSI values before adding them together. This is done by determining how much to add to the smallest RSSI value to obtain $+$1 and add this to all RSSI values. The set of accumulated powers from each floor can then be used to determine a probable floor according to the rules defined in the flowchart depicted in Figure \ref{flowchart}.
+
+\begin{figure}
+  % setting the typeface to sans serif and the font size to small
+  % the scope local to the environment
+  %\sffamily
+  \footnotesize
+  \begin{tikzpicture}[auto,
+    %decision/.style={diamond, draw=black, thick, fill=white,
+    %text width=8em, text badly centered,
+    %inner sep=1pt, font=\sffamily\small},
+    block_center/.style ={rectangle, draw=black, thick, fill=white,
+      text width=8em, text centered,
+      minimum height=4em},
+      block_emph/.style ={rectangle, draw=black, thick, fill=white,
+      text width=20em, text centered,
+      minimum height=6em},
+      line/.style ={draw, thick, -latex', shorten >=0pt}]
+    % outlining the flowchart using the PGF/TikZ matrix funtion
+    \matrix [column sep=7mm,row sep=7mm] {
+      % enrollment - row 1
+      \node[block_emph](){\begin{itemize}\item Top = Highest floor candidate  \\ \item Mid = Middle floor candidate\\ \item Low = Lowest floor candidate\end{itemize}};
+      & \node[block_center](){A and B comparable if 2$\cdot$A$>$B and 2$\cdot$B$>$A};\\
+      };
+      \end{tikzpicture}
+      
+  \begin{tikzpicture}[auto,
+    %decision/.style={diamond, draw=black, thick, fill=white,
+    %text width=8em, text badly centered,
+    %inner sep=1pt, font=\sffamily\small},
+    block_center/.style ={rectangle, draw=black, thick, fill=white,
+      text width=8em, text centered,
+      minimum height=4em},
+      block_phony/.style ={rectangle, draw=white, thick, fill=white,
+      text width=20em, text centered,
+      minimum height=6em},
+      block_choice/.style ={rectangle, draw=black, thick, fill=white,
+      text width=4em, text centered,
+      minimum height=4em},
+      line/.style ={draw, thick, -latex', shorten >=0pt}]
+    % outlining the flowchart using the PGF/TikZ matrix funtion
+    \matrix [column sep=5mm,row sep=7mm] {
+      % enrollment - row 1
+      \node [block_center] (ltt) {Signals from at least three floors};\\
+      % enrollment - row 2
+      \node [block_center] (power) {Largest power < 2$\cdot$Second largest power}; 
+      & \node [block_center] (largest) {Choose floor with largest power}; \\
+      % enrollment - row 3
+      \node [block_center] (cons) {Three consecutive floors}; \\
+      % follow-up - row 4
+      \node [block_center](mid) {Top, Mid and Low all comparable};
+      & \node [block_choice](cmid){Choose Mid};
+      & \node[block_center](top_two){Top and Mid consecutive and comparable};
+      &\node [block_choice](ctop){Choose Top};\\
+      %
+       \node [block_center](top) {Top and Mid comparable};
+      & \node [block_choice](ttop){Choose Top};
+      & \node[block_center](low_two){Mid and Low consecutive and comparable};
+      &\node [block_choice](lbot){Choose Low};\\
+      %
+       \node [block_center](low) {Mid and Low comparable};
+      & \node [block_choice](llow){Choose Low};\\
+       &\node[block_center](largest2){Choose floor with largest power};\\
+    };% end matrix
+    % connecting nodes with paths
+    \begin{scope}[every path/.style=line]
+     \path (ltt) -| node  {No}(largest);
+     \path (ltt) -- node  {Yes}(power);
+     \path (power) -- node {No}(largest);
+     \path (power) -- node {Yes}(cons);
+     \path(cons) -- node {Yes}(mid);
+     \path(cons) -| node {No}(top_two);
+     \path(mid) -- node{Yes}(cmid);
+     \path (top_two) -- node {Yes}(ctop);
+     \path(mid) -- node{No}(top);
+     \path (top_two) -- node {No}(low_two);
+     \path (top) -- node{Yes}(ttop);
+     \path (low_two) -- node {Yes}(lbot);
+     \path (low_two) |- node {No}(largest2);
+     \path (top) -- node {No}(low);
+     \path (low) -- node{Yes}(llow);
+     \path (low) |- node[near start]{No}(largest2);
+    \end{scope}
+  \end{tikzpicture}
+  \caption{Flowchart of floor estimation algorithm. } \label{flowchart}
+\end{figure}
+
+This algorithm uses some heuristic assumptions concerning the power from different floors when estimating the current one. One of them is that if the signals from three consecutive floors are approximately equal the most probable location is on the middle floor. 
 
 To test the performance of the algorithms, each was implemented in a version of SonyMap whereafter the applications where installed on identical phones. A $\sim$30 minute walk was the made throughout the Sony building and the number of faulty floor estimations was noted. The scheme proposed in REFERENCE HERE reported the wrong floor 10 times during the walk while the one proposed by the authors was wrong three times. 
 
