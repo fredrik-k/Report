@@ -96,26 +96,28 @@ Such a coordinate system is defined as:
 %
 A unambiguous definition of a coordinate system with a fixed orientation in reference to the phone is crucial. This is due to most sensors reporting their measurements in coordinates fixed in reference to the phone. 
 
-In Android, the phone coordinate system is defined as: 
+In Android, the phone coordinate system is defined, according to Figure \ref{axis_device}: 
 %
 \begin{description}
 \item[$x_p$:] Pointing out of the side of the phone, defined as $y_p \times z_p$.
 \item[$y_p$:] Pointing upward from the top of the screen.
 \item[$z_p$:] Orthogonal against the phones screen, pointing up if the phone is placed back down on a table.
 \end{description}
-
+%
+Further, the phones orientation may be expressed as three angles $(\phi_x \hspace{5pt} \phi_y \hspace{5pt} \phi_z)$ representing the difference in orientation between the each of the phones axis and the world frame.
+%
 \begin{figure}[!hbt]
 \begin{center}
 \include{graphics}
 \includegraphics[width=0.3\textwidth ]{images/background_on_navigation/axis_device.png}
 \end{center}
-\caption{Phone coordinate system.}\label{axis_device}
+\caption[]{Phone coordinate system.\footnotemark }\label{axis_device}
 \end{figure}
 
 %
-Further, the phones orientation may be expressed as three angles $(\phi_x \hspace{5pt} \phi_y \hspace{5pt} \phi_z)$ representing the difference in orientation between the each of the phones axis and the world frame.
-%
 \subsection{Coordinate System Used for Measurements}
+%
+\footnotetext{This image is reproduced from work created and shared by the \emph{Android Open Source Community} \cite{aos} and used according to the terms described in the Creative Commons 2.5 Attribution License \cite{cc}.}
 %
 As the measurements performed in this thesis are performed over a limited area, a local frame is a convenient choice. The chosen coordinate system is aligned with the building the measurements are being taken in, allowing for most movement to occur either parallel to the $x$- $y$-axis. Out of convenience, a local frame with an angular offset of roughly $180^\circ$, giving the system:
 %
