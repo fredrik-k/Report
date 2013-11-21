@@ -1912,7 +1912,38 @@ In the authors implementations a time cap of five seconds was placed on the algo
 In this chapter the contributions made throughout this thesis work are presented. Further, possible extensions and improvements are described in the future work section.
 %
 \label{chap:conclusion}
+
+
 \section{Contributions}
+
+\subsection{Positioning using both 2.4 and 5 GHz WiFi signals}
+A particle filter that uses both 2.4 and 5 GHz WiFi signals for positioning was developed. It was concluded that more information was obtained by using both frequencies rather than one of them, which improved the positioning. The path-loss models can be improved by adapting the model parameters during the positioning. This is done by using measurements from positions where the position error is expected to be low, and then use this to estimate the model parameters. Furthermore, the algorithm can compensate for signal attenuation induced by the hand of the user.
+
+
+
+\subsection{Sensor fused positioning}
+In addition to the WiFi signals, information from the sensors was used to model the motion of the user carrying the device. From this, an accurate positioning algorithm was implemented, with the constraint that the device must be reasonably fix in relation to the user. For the case where this is not fulfilled, a less accurate but more robust algorithm was developed. For these algorithms, the initial position and heading do not have to be known. This information is obtained from the WiFi signals. The algorithms were developed and tested for commonly used smart phones, and hence the sensors in these are accurate enough for the algorithms to work.
+
+
+\subsubsection{Step counter} ~\\
+A step counter using the accelerometer was developed, as an important part of the algorithm. The magnitude of the acceleration was differentiated and filtered, and when it passed a certain threshold level, this was used to indicate a step. This step counter works regardless of whether the phone is carried in the hand, in a pocket or in a bag. 
+
+\subsubsection{Heading} ~\\
+The accelerometer was also used to give the direction of gravity as a reference of the rotation, which was measured by the gyroscope, in order to get information about the heading of the user. To handle different hypothesis of the direction, each particle was given a direction as a state in the particle filter.
+
+
+
+\subsection{Implementation in Android}
+The robust version of the sensor fused positioning algorithm was implemented in SonyMap, an online positioning application developed by Sony Mobile.
+
+\subsubsection{Determine floor} ~\\
+To determine which floor the user is on is an important part of the indoor positioning. In the online implementation, a new algorithm to determine the current floor by using WiFi signals was included. This proved to be an improvement compared to the previous algorithm used in SonyMap.
+
+
+
+\subsection{Localization of WiFi access points}
+Hopefully, we will localize access points with unknown positions.
+
 
 \section{Future Work}
 
