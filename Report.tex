@@ -35,8 +35,42 @@ These people helped me a lot with my work.
 \section{Goal}
 \section{Limitations}
 \section{Platform}
+
 %
-In this thesis smartphones running the \emph{Android operating system} will be used. Android is a open source software on which around 80 \% of current smartphones operate. 
+In this thesis smartphones, \emph{Sony Xperia Z Ultra}, \emph{Sony Xperia Z1} and \emph{Sony Xperia LT29i}, hereafter reffered to as the phone in noting else is specified, are used. Each of these phones are running the \emph{Android} operating system and are equipped with an accelerometer and a gyroscope and a WiFi chip capable of communication over both 2.4 and 5 GHz.  
+%
+\subsection{Android} 
+%
+
+%
+\section{Outline}
+%
+This outline presents the large scale structure of this thesis.
+%
+\begin{description}
+\item[Chapter \ref{chap:background}] gives a brief introduction to the history of navigation and positioning and an overview of the coordinate systems used.  
+%
+\item[Chapter \ref{chap:RSP}] describes the theory of radio signal propagation and how to obtain a good model of the radio channel. 
+%
+\item[Chapter \ref{chap:PF}] introduces the particle filter and gives a description of the particle filter process. Further, a brief description of the least squares estimation is given. 
+%
+\item[Chapter \ref{chap:wifi}] covers some of the different technologies concerning WiFi and its uses for positioning application. Additionally the differences between different WiFi frequency bands are investigated. 
+%
+\item[Chapter \ref{chap:pure_rssi}] presents a method to obtain a position from WiFi RSSI measurements and this method is compared with the least squares estimation.  
+%
+\item[Chapter \ref{chap:adapt}] discusses how the models developed in Chapter \ref{chap:RSP} could be adapted using received RSSI measurements and an estimated location. 
+%
+\item[Chapter \ref{chap:kin}] models the kinematics of walking using different sensors. Theses sensors are given also given a description and a step detection algorithm is presented. 
+%
+\item[Chapter \ref{chap:sensor_fused}] merges the algorithm introduced in Chapter \ref{pure_rssi} with sensor data to a sensor fused indoor positioning algorithm using dual band WiFi measurements.
+%
+\item[Chapter \ref{chap:implement}] is dedicated to the java implementation of the algorithms presented in Chapter \ref{chap:pure_rssi} and \ref{chap:sensor_fused} and the specific considerations made. 
+%
+\item[Chapter \ref{chap:conclusion}] evaluates the result of the thesis and presents possible future work on the subject. 
+%
+\end{description}
+%
+In accordance with Lund University policy the contribution made by each author must be clear. During the process of creating this thesis, all work has been done in collaboration between the authors, both concerning the process of developing and implementing the algorithms, as well as condensing the work into this report. 
 %
 \chapter{Background on Navigation}
 \label{chap:background}
@@ -75,7 +109,7 @@ The \emph{world frame} or the global coordinate system is commonly used for navi
 \caption[]{World coordinate system.\footnotemark}\label{axis_globe}
 \end{figure}
 %
-\footnotetext{This image is reproduced from work created and shared by the \emph{Android Open Source Community} \cite{aos} and used according to the terms described in the Creative Commons 2.5 Attribution License \cite{cc}.}
+\footnotetext{This image is reproduced from work created and shared by the \emph{Android Open Source Community} \cite{aos} and used according to the terms described in the \emph{Creative Commons 2.5 Attribution License} \cite{cc}.}
 %
 Noteworthy is that this system is not fixed in space and different positions on the earths surface will result in a differently oriented coordinate system. Further, as the world rotates around its own axes so does the coordinate system (15$^\circ$ per hour). In the sense of indoor positioning however, both of these effects can be considered small. The change in position is small and in a global perspective can be considered as a point, also, the timescale considered is often considerably shorter than one hour. 
 %
@@ -116,7 +150,7 @@ Further, the phones orientation may be expressed as three angles $(\phi_x \hspac
 %
 \subsection{Coordinate System Used for Measurements}
 %
-\footnotetext{This image is reproduced from work created and shared by the \emph{Android Open Source Community} \cite{aos} and used according to the terms described in the Creative Commons 2.5 Attribution License \cite{cc}.}
+\footnotetext{This image is reproduced from work created and shared by the \emph{Android Open Source Community} \cite{aos} and used according to the terms described in the \emph{Creative Commons 2.5 Attribution License} \cite{cc}.}
 %
 As the measurements performed in this thesis are performed over a limited area, a local frame is a convenient choice. The chosen coordinate system is aligned with the building the measurements are being taken in, allowing for most movement to occur either parallel to the $x$- $y$-axis. Out of convenience, a local frame with an angular offset of roughly $180^\circ$, giving the system:
 %
@@ -493,6 +527,7 @@ The non-linear least squares can be used to estimate a position in two dimension
  strengths from at least three access points. 
 %
 \chapter{Introduction to WiFi} %Working title
+\label{chap:wifi}
 %Citation needed
 The \emph{WiFi Alliance} defines WiFi as any ''wireless local area network (WLAN) products that are based on the \emph{Institute of Electrical and Electronics Engineers} (IEEE) $802.11$ standards''. However, since most WLAN products use the $802.11$ standards, in common tongue, WiFi and WLAN are interchangeable.    
 
@@ -982,6 +1017,7 @@ A few objections with the technique must however be mentioned, first and foremos
 On the other hand, most newly constructed or renovated building already have plenty of APs and there this technique may provide a simple and cost effective way of providing indoor positioning. If methods for finding APs and estimating the path loss model in a simple way can be attained the setup may even be quite simple. If some of the user induced signal blockages can be registered and compensated for as well, the technique might be useful for tracking people even when they do not carry their device in hand. This only leaves the problem of characterizing the behavior of the antenna for each device, but as this only needs to be done one time for each type of device, it is no overwhelming task.        
 %
 \chapter{Adapting the Model Parameters} %Working title
+\label{chap:adapt}
 %
 
 In the previous chapter, the parameters $\alpha$ and $C$ in the path-loss model 
@@ -1190,6 +1226,7 @@ In this chapter, an algorithm that updates the model parallel to the positioning
 Compensating for the hand attenuation clearly improved the positioning. However, $H$ can not be determined exactly, due to noise and obstacles in the environment. In addition, the hand attenuation is only detected if the phone is covered fast enough. If it goes from uncovered to covered successively, during several time steps, this can not be distinguished from other causes of lowered RSSI. Naturally, going from covered to uncovered works analogously.
 
 \chapter{Modeling the Kinematics} %Working title
+\label{chap:kin}
 %
 Modeling the kinematics may greatly improve the performance of a positioning system, especially if the estimated position is noisy or biased. The kinematics may also be used to estimate the position in between the updates from the main positioning algorithm. The range of models stretches from simple random walk processes to estimating acceleration, velocity and position in a three dimensional space using sensor fusion.
 
@@ -1542,6 +1579,7 @@ Dead reckoning estimations are subject to cumulative errors i.e. errors are adde
 For phones, a method witch extends normal dead reckoning, called \emph{pedestrian dead reckoning}, PDR, could be used. Position and direction estimation would most likely include some form of step counting for distance measurement combined with either gyroscope or a sensor fusion including the magnetometer for heading estimation. As an example, the true and estimated paths using a pedometer and a gyroscope during a walk of approximately 110 meters, are presented in Figure \ref{deadreckon_1}. The behavior is fairly good but there is a heading error present soon after the start, and this grows as the walk continues. The distance estimated by the pedometer is also larger than the true distance traveled. Further, the estimation grows with time, as seen in Figure \ref{deadreckon_2}, making PDR useful only for short term estimation, if no calibration of position and direction is performed.  
 %
 \chapter{Indoor Positioning - Sensor Fused Approach} 
+\label{chap:sensor_fused}
 %
 In this chapter, a method of how to include the information from the sensors in the positioning algorithm will be presented. The dead reckoning presented in the previous chapter works well for short distances (see e.g. Figure \ref{deadreckon_1}), whereas information from WiFi signals do not have the disadvantage of drifts. The main strategy is now to combine these, in order to get the best properties from both  parts.
 
@@ -1718,6 +1756,7 @@ Even though the sensors contribute with important information about the movement
 
 
 \chapter{Algorithm Implementation in Android}
+\label{chap:implement}
 %
 In previous chapters offline computations are used to obtain the position estimate. Here an online java implementation of the developed algorithms will be presented briefly. The particle filter is quite computationally demanding, and therefor it is important to discern if handheld devices are capable of performing these computations sufficiently fast. 
 
@@ -1858,6 +1897,13 @@ As each particle is an independent entity during most of the computations, the p
 
 In the authors implementations a time cap of five seconds was placed on the algorithm, as the RSSI measurements where received with that time interval. To implement the positioning algorithm with this constraint, no need for parallelizations was needed and thus none where made. For 10 000 particles the algorithm could be run with a time consumption of  between 1 and 2 seconds. If RSSI measurements are available with shorter time intervals and/or more states and/or particles is used, parallelizations is needed.     
 %
+
+\chapter{Conclusion}
+\label{chap:conclusion}
+\section{Contributions}
+
+\section{Future Work}
+
 \printbibliography  %% Comment if you don't want to use bibtex
 
 \end{document}
