@@ -19,7 +19,7 @@
 \begin{document}
 \begin{titlepages}
 \author{Fredrik Karlsson \& Martin Karlsson}
-\title{Indoor Positioning Using Simultaneous Measurements of 2.4 and 5 GHz WiFi Signals}%Temporary
+\title{Sensor Fused Indoor Positioning Using Dual Band WiFi Signal Measurements}%Temporary
 \year{2014}
 \month{January}
 \TFRT{9999}  %%  You will get the number from the department.
@@ -1776,9 +1776,9 @@ One of the first obstacles encountered when trying to upscale the algorithm was 
 
 To find the correct building a couple of different techniques could be used. The most simple of these is to use the GPS output when the user enters the building. This, however, is not a weary robust way, either the user may want to start the navigation when inside the building or the GPS output might be inaccurate. A better estimation can be obtained by watching the RSSI values of the available known wi-fi APs, and position the user in the building from where the strongest RSSI value is obtained. If needed this could be refined further by taking more than the AP with larges RSSI value into account, however, as the buildings at Sony is separated by fairly large distances, regarding only one AP was sufficient.
 
-A more challenging task is to determine the correct floor within the correct building. Here it is insufficient to regard only the received known AP with larges RSSI value. In areas with openings between different floors, like stairwells, in close proximity to windows or when the distance to APs on other floors is short, it is not unlikely that the larges RSSI value comes from a floor different from the one the user is currently on. To obtain an accurate estimation information from several APs needs to be used. This can be done in several different ways and during the application implementation two off these where tested.
+A more challenging task is to determine the correct floor within the correct building. The signals are expected to get significantly attenuated when propagating between floors \cite{rappaport96}. Thus, the strengths of the signals from each floor are used to determine the current one. In this case, it is insufficient to regard only the received known AP with larges RSSI value. In areas with openings between different floors, like stairwells, in close proximity to windows or when the distance to APs on other floors is short, it is not unlikely that the larges RSSI value comes from a floor different from the one the user is currently on. To obtain an accurate estimation information from several APs needs to be used. This can be done in several different ways and during the application implementation two off these where tested.
 
-In REFERENCE HERE a floor detection scheme based on the  three APs with largest RSSI values are presented. The floor the user is currently on is determined by 
+In Figure \ref{flowchart} a floor detection scheme based on the  three APs with largest RSSI values are presented. The floor the user is currently on is determined by 
 %
 \begin{itemize}
 \item If the APs with the second and third largest RSSI value is located on the same floor, that floor is chosen.
@@ -1809,7 +1809,7 @@ Simply determining the mean received power from each floor suffers from the same
     \matrix [column sep=7mm,row sep=7mm] {
       % enrollment - row 1
       \node[block_emph](){\begin{itemize}\item Top = Highest floor candidate  \\ \item Mid = Middle floor candidate\\ \item Low = Lowest floor candidate\end{itemize}};
-      & \node[block_center](){A and B comparable if 2$\cdot$A$>$B and 2$\cdot$B$>$A};\\
+      & \node[block_center](){A and B comparable if 1.5$\cdot$A$>$B and 1.5$\cdot$B$>$A};\\
       };
       \end{tikzpicture}
       
@@ -1828,53 +1828,62 @@ Simply determining the mean received power from each floor suffers from the same
       minimum height=4em},
       line/.style ={draw, thick, -latex', shorten >=0pt}]
     % outlining the flowchart using the PGF/TikZ matrix funtion
-    \matrix [column sep=5mm,row sep=7mm] {
+    \matrix [column sep=5mm,row sep=4mm] {
       % enrollment - row 1
       \node [block_center] (ltt) {Signals from at least three floors};\\
       % enrollment - row 2
       \node [block_center] (power) {Largest power < 2$\cdot$Second largest power}; 
       & \node [block_center] (largest) {Choose floor with largest power}; \\
+      % enrollment
+      \node [block_center] (three) {Consider only the three floors with largest powers}; \\   
       % enrollment - row 3
       \node [block_center] (cons) {Three consecutive floors}; \\
       % follow-up - row 4
       \node [block_center](mid) {Top, Mid and Low all comparable};
       & \node [block_choice](cmid){Choose Mid};
-      & \node[block_center](top_two){Top and Mid consecutive and comparable};
-      &\node [block_choice](ctop){Choose Top};\\
+	  &       \node [block_center](allCompRight) {Top, Mid and Low all comparable}; \\
+	  \node [block_center](topLow) {Top and Low comparable, Mid largest}; \\	
       %
-       \node [block_center](top) {Top and Mid comparable};
-      & \node [block_choice](ttop){Choose Top};
-      & \node[block_center](low_two){Mid and Low consecutive and comparable};
-      &\node [block_choice](lbot){Choose Low};\\
+	  \node [block_center](midComp) {Mid comparable to Top and Low}; \\
+      
+       \node [block_center](top) {Top and Mid comparable, Top and Low are not};
+      & \node [block_choice](ttop){Choose Top}; \\
+
+
       %
-       \node [block_center](low) {Mid and Low comparable};
+       \node [block_center](low) {Mid and Low comparable, Top and Low are not};
       & \node [block_choice](llow){Choose Low};\\
-       &\node[block_center](largest2){Choose floor with largest power};\\
+       & & \node[block_center](largest2){Choose floor with largest power};\\
     };% end matrix
     % connecting nodes with paths
     \begin{scope}[every path/.style=line]
      \path (ltt) -| node  {No}(largest);
      \path (ltt) -- node  {Yes}(power);
      \path (power) -- node {No}(largest);
-     \path (power) -- node {Yes}(cons);
+     \path (power) -- node {Yes}(three);
+     \path (three) -- node {  }(cons);
      \path(cons) -- node {Yes}(mid);
-     \path(cons) -| node {No}(top_two);
+
      \path(mid) -- node{Yes}(cmid);
-     \path (top_two) -- node {Yes}(ctop);
-     \path(mid) -- node{No}(top);
-     \path (top_two) -- node {No}(low_two);
+ 
+     \path(mid) -- node{No}(topLow);
      \path (top) -- node{Yes}(ttop);
-     \path (low_two) -- node {Yes}(lbot);
-     \path (low_two) |- node {No}(largest2);
      \path (top) -- node {No}(low);
      \path (low) -- node{Yes}(llow);
      \path (low) |- node[near start]{No}(largest2);
-    \end{scope}
+     \path (cons) -| node{No}(allCompRight);
+     \path (allCompRight) -- node{Yes}(cmid):
+     \path (allCompRight) -- node[near start]{No}(largest2);
+     \path (midComp) -| node[near start]{Yes}(largest2);
+     \path (topLow) -| node[near start]{Yes}(cmid);
+     \path (topLow) -- node{No}(midComp);
+     \path (midComp) -- node{No}(top);
+     \end{scope}
   \end{tikzpicture}
   \caption{Flowchart of floor estimation algorithm. } \label{flowchart}
 \end{figure}
 
-This algorithm uses some heuristic assumptions concerning the power from different floors when estimating the current one. The assumptions are based on consecutive floors being relatively similar both in layout and AP distribution. One of the assumptions is that if the signals from three consecutive floors are comparable the most probable location is on the middle floor. Further, if two consecutive floors power are comparable but the third is not, it is more probable that the floor furthest from the third is the true floor. The same holds also when there only are two consecutive floors. In the implementation we have deemed two floors as comparable if their total powers is within a factor two from each other.  
+This algorithm uses some heuristic assumptions concerning the power from different floors when estimating the current one. The assumptions are based on consecutive floors being relatively similar both in layout and AP distribution. One of the assumptions is that if the signals from three consecutive floors are comparable the most probable location is on the middle floor. In the implementation we have deemed two floors as comparable if their total powers is within a factor 1.5 from each other.  
 
 To test the performance of the algorithms, each was implemented in a version of SonyMap whereafter the applications where installed on identical phones. A $\sim$30 minute walk was the made throughout the Sony building and the number of faulty floor estimations was noted. The scheme proposed in REFERENCE HERE reported the wrong floor 10 times during the walk while the one proposed by the authors was wrong three times. 
 
