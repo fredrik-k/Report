@@ -546,6 +546,7 @@ Wireless technologies are evolving towards higher frequencies. The radio channel
 Most devices using the IEEE $802.11$ standard have a \emph{Media Access Control} (MAC) address assigned as its network address \cite{IEEE:802.11}. The MAC address is usually assigned by the manufacturer and can be considered unique in a local area network. The address consists of twelve hexadecimal numbers. In its human readable form it is presented as six groups of two hexadecimal numbers, separated with either \verb|:| or \verb|-|, e.g. \verb|0a:1b:2c:3d:4e:5f|. They can be used to identify from which devices a signal originates.
 %
 \section{WiFi and Positioning}
+\label{sec:wifi_positioning}
 %
 The WiFi standard provides enticing possibilities for indoor positioning, especially in public or corporate areas. Some of the advantages compared to other positioning techniques is that the range of typical wireless products, like WiFi access points (AP:s), have limited range ($\sim 30$ meters) and thus need to be placed with relatively short intervals. Moreover, WiFi infrastructure is ubiquitous and already deployed at many places, making WiFi based positioning an attractive method. Further, more and more devices become capable of communication over WiFi and platforms like Android makes the deployment of applications easy and readily available for large amount of users. One of the disadvantages is that indoor signal environments are often complex, posing a harder modeling task and often rather high signal to noise ratio.
 
@@ -1872,7 +1873,7 @@ Simply determining the mean received power from each floor suffers from the same
      \path (low) -- node{Yes}(llow);
      \path (low) |- node[near start]{No}(largest2);
      \path (cons) -| node{No}(allCompRight);
-     \path (allCompRight) -- node{Yes}(cmid):
+     \path (allCompRight) -- node{Yes}(cmid);
      \path (allCompRight) -- node[near start]{No}(largest2);
      \path (midComp) -| node[near start]{Yes}(largest2);
      \path (topLow) -| node[near start]{Yes}(cmid);
@@ -1915,7 +1916,47 @@ In this chapter the contributions made throughout this thesis work are presented
 \section{Contributions}
 
 \section{Future Work}
+%
+During the work with this thesis several possible enhancements or extensions to the work have arisen, which have been deemed outside of the thesis scope. Some of these points may, however, be of interest for future work on the subject and are presented with a brief description below. 
+%
+\subsection{3D-Positioning}
+%
+In this thesis only a two dimensional model of the space, in which to navigate has been used. Motion along the $z-$axis of the local frame, i.e changing floor, has been determined using methods other than the particle filter. Further, possibly beneficial signal originating from other floors or building than the one the user is currently estimated to be in are disregarded.
 
+A more general approach is to consider a full three dimensional model of space. For this to be possible some extensions to the work done in this thesis must be done. A start could be to introduce current floors as a discrete particle state, making the need to have a separate algorithm to determine it unnecessary. To make this possible a multi-floor model of the RSSI values from each AP, taking into account the attenuation from floors and ceilings, needs to be developed. The 3D model could also contain a continuous state corresponding the altitude, making it possible to determine both $x$- and $y$- position along with the height of the phone. 
+%
+\subsection{Using More Signals and/or Sensors}
+%
+To estimate a position only RSSI measurements from WiFi access points and readings from an accelerometer and a gyroscope. But smartphone today contain sensors to measure a much wider array of signals and environmental properties. Some of these have a great potential to aid in the position estimation.
+
+A barometer is a sensor measuring the atmospheric pressure and this varies with the height above ground. Thus, a barometer could aid in the estimation of floor, either to be used to weight particles in a 3D model or to aid the heuristic floor estimation algorithm.
+
+Investigation of the magnetometer values have shown that these, in most cases, vary to much in indoor environments to be useful for heading estimation. If, on the other hand, the occasions when the magnetometer readings are correct could be identified, this could be used to correct the heading.
+
+In addition to WiFi, a smartphone has a large number of other wireless capabilities, like LTE, 3G, GSM, Bluetooth, NFC and RF-ID. These signals could all be used to improve the positioning, either by having a own model of signal power as a function of distance or in the case of NFC and RF-ID by sheer proximity.         
+
+\subsubsection{Measuring the Time Difference}~\\
+Instead of measuring signal strength from a transmitter a enticing possibility is to measure the difference in time between a sent and received signals. A few different methods of using this are given a brief explanation in Section \ref{sec:wifi_positioning}. If the measurement of time difference are made at both 2.4 and 5 GHz, as the \emph{speed of light} puts a limit on the time of flight. Thus, frequency yielding the shortest time of flight is also the most accurate measurer of the distance.   
+%
+\subsection{Map Data}
+\subsubsection{Using a Map}~\\
+%
+The work in this thesis assumes no knowledge, apart from the locations of the APs, concerning the layout of the building. This makes the developed system applicable in many different environment with relative ease. However, if map data is available this could be used in several ways to improve the positioning. One of theses is to put constraints on the path of each particle i.e forcing the particles to enter room only through doors and not to travel through furniture and walls. Another is that a user only is able to travel between floors when in proximity of elevators or stairs. 
+%  
+\subsubsection{Creating a Map}~\\
+%
+Another possibility is to use the estimated path of a large number of users to estimate where walls and furniture are located. This could then be combined to successively build a map of the building that could be used to aid future positioning. 
+%
+\subsection{Improved Usability and Crowdsourcing}
+%
+A positioning system for a single or a small set of buildings is in its way useful, at least for persons visiting them frequently. A system, whit which, it is possible to position in a large number buildings are a lot more usable. Such a system could be achieved in different ways, one being that APs could along with their MAC-address also report their location and altitude. This would however, require, industrial standardization and either new software for the APs or new APs  altogether. Another way is to create a system in which users can add AP locations or to estimate the AP locations by trilateration. If such a system also is integrated with GPS a truly ubiquitous positioning system could be achieved.
+
+Another advantages of having a large number of users is a large amount of data generated in the system. This data could be used, as in Chapter \ref{chap:adapt}, to over time improve the propagation model for each AP or to find misplaced APs.     
+%
+\subsection{Smart WiFI Channel Choice}
+%
+To obtain a total picture of the APs in the surroundings of the measuring device a scan of each possible wifi channel must be performed. Such a scan claims a large amount of time (around 3.5 second). If, on the other hand, the channel/channels on which APs in the vicinity are transmitting are known, only theses channels could be scanned. This will drastically decrease the amount of time spent scanning, as a single channel takes just over 100 ms to scan. And if the scans could be performed at shorter time intervals more information from the interesting APs could be obtained.   
+%
 \printbibliography  %% Comment if you don't want to use bibtex
 
 \end{document}
