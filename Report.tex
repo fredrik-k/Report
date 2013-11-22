@@ -35,14 +35,42 @@ These people helped me a lot with my work.
 This Master's thesis investigates possible algorithms for indoor positioning with smartphones. The project is a cooperation between Sony Mobile Communications (SOMC), the Department of Automatic Control, Lund University, and the Department of Electrical and Information Technology, Lund University. The major part of the work was done at SOMC, Lund.
 
 \section{Background}
+%
+Positioning in general
+
+GPS
+
+Indoor positioning
+
+Numerous wifi APs
+Techniques for finding APs
+
+2.4 and 5 GHz
+
+Sensor and wifi equipped smartphones
 
 
-
+%
 \section{Goal}
+Investiaget 2.4 and 5 GHz
 
+Develop a positioning algorithm using wifi only
+
+Improve this algorithm by including sensor data 
 
 
 \section{Limitations}
+%
+Known APs
+
+Approximately known C and $\alpha$ - depends on AP, building and smartphone. 
+
+2.4 and 5 GHz enabled smartphone
+
+Accelerometer and gyroscope
+
+Fixed phone for optimal performance
+%
 \section{Platform}
 
 %
@@ -1908,7 +1936,7 @@ In this thesis a open source solution called \emph{Jcoord} is used \cite{jcoord}
 %
 When implementing the particle filter, it is of interest to discern between different states or poses the user is in, like walking or being still. One of the reasons for this is that the state update of the particle filter can be changed according to the pose, i.e. when still no benefit is drawn from updating the heading, step length or movement and a random walk with a small variance is a good enough kinematics model. Another is that if the user is still, there is no need to sample the sensors at a high rate, conserving both computational power and battery. Further, as fewer filter states are required for a stationary, the number of particles can be decreased, which in turn, decreases the needed computational power further. 
 
-In the implementation a user has been deemed as still if no steps has been detected over the course of three seconds and subsequently deemed moving if not still. This is a fairly crude method of distinguishing between poses, but in the current use case, it displays sufficient performance.  
+In the implementation a user has been deemed as still if no steps has been detected over the course of three seconds and subsequently deemed moving if not still. This is a fairly crude method of distinguishing between poses, but in the current use case, the performance is sufficient.  
 %
 \subsection{The Particle Filter}
 %
