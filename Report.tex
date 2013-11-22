@@ -1762,8 +1762,6 @@ Even though the sensors contribute with important information about the movement
 In previous chapters offline computations are used to obtain the position estimate. Here an online java implementation of the developed algorithms will be presented briefly. The particle filter is quite computationally demanding, and therefor it is important to discern if handheld devices are capable of performing these computations sufficiently fast. 
 
 The implementation will be done in a positioning application developed by Sony Mobile, called SonyMap \cite{sonymap}. This application is intended for android smartphones and used to navigate and position the smartphone in Sony Mobiles buildings around the globe. 
-
-The chapter is closed by discussing some further optimizations possible, if it is necessary to decrease the computational time further. 
 %
 \subsection{Introducing SonyMap}
 %
@@ -1888,7 +1886,7 @@ This algorithm uses some heuristic assumptions concerning the power from differe
 
 To test the performance of the algorithms, each was implemented in a version of SonyMap whereafter the applications where installed on identical phones. A $\sim$30 minute walk was the made throughout the Sony building and the number of faulty floor estimations was noted. The scheme proposed in REFERENCE HERE reported the wrong floor 10 times during the walk while the one proposed by the authors was wrong three times. 
 
-If a consistent floor estimation is of more importance then a speedy change when the user changes floor, both algorithms could be further refined. A check on the number of times a different floor has been reported and the floor estimation is not changed until the algorithm has reported the same floor a specified number of consecutive times.    
+If a consistent floor estimation is of more importance then a speedy change when the user changes floor, both algorithms could be further refined. A check on the number of times a different floor has been reported could be introduced and the floor estimation would not be changed until the algorithm has reported the same floor a specified number of consecutive times.    
 
 %
 \subsection{Coordinate Conversions}
@@ -1899,7 +1897,9 @@ In this thesis a open source solution called \emph{Jcoord} is used \cite{jcoord}
 %
 \subsection{Pose Estimation}
 %
-When implementing the particle filter, it is of interest to discern between different states or poses the user is in, like walking or being still. One of the reasons for this is that the state update of the particle filter can be changed according to the pose, i.e. when still no benefit is drawn from updating the heading, step length or movement 
+When implementing the particle filter, it is of interest to discern between different states or poses the user is in, like walking or being still. One of the reasons for this is that the state update of the particle filter can be changed according to the pose, i.e. when still no benefit is drawn from updating the heading, step length or movement and a random walk with a small variance is a good enough kinematics model. Another is that if the user is still, there is no need to sample the sensors at a high rate, conserving both computational power and battery. Further, as fewer filter states are required for a stationary, the number of particles can be decreased, which in turn, decreases the needed computational power further. 
+
+In the implementation a user has been deemed as still if no steps has been detected over the course of three seconds and subsequently deemed moving if not still. This is a fairly crude method of distinguishing between poses, but in the current use case, it displays sufficient performance.  
 %
 \subsection{The Particle Filter}
 %
