@@ -50,7 +50,7 @@ In this thesis smartphones, \emph{Sony Xperia Z Ultra}, \emph{Sony Xperia Z1} an
 %
 \subsection{Android} 
 %
-
+Android is a open source operating system used mostly by different handheld devices, in the smartphone segment Android is used by around 80\% of the units in use. The Android standard development kit contains the necessary tools and API:s to develop applications for the Android platform using the Java programming language. Using the standard API:s it is possible to access the devices sensors and all data collection performed during this thesis has be done through Java applications developed by the authors. 
 %
 \section{Outline}
 %
@@ -1904,7 +1904,11 @@ If a consistent floor estimation is of more importance then a speedy change when
 %s
 In Chapter \ref{chap:background} the longitude/latitude coordinate system is presented. This system is used in most large scale positioning applications as it gives each point on earth a unique coordinate representation. However, it is impractical to use the longitude/latitude system for positioning on a local scale. This is due to, because of the earths spherical surface, the fact that the same difference in longitude/latitude will equal a different distance in meters on different locations on the earth. As all calculations, in this thesis and in many other applications, are done in meters a conversion between the two is needed. 
 
-In this thesis a open source solution called NAME AND REFERENCE HERE is used. This solution splits the earth into regions within which a distance in longitude/latitude is approximately constant converted into meters. Further, some extrapolation is done within each region to make the conversion even more exact. To convert in the other direction, the region needs to be known, but otherwise the same general computations are made.   
+In this thesis a open source solution called \emph{Jcoord} is used \cite{jcoord} which is published under the \emph{GNU General Public License (GPL)}\footnote{GNU General Public License (GPL): \url{www.gnu.org/copyleft/gpl.html}}. This solution splits the earth into regions within which a distance in longitude/latitude is approximately constant converted into meters. Further, some extrapolation is done within each region to make the conversion even more exact. To convert in the other direction, the region needs to be known, but otherwise the same general computations are made.   
+%
+\subsection{Pose Estimation}
+%
+When implementing the particle filter, it is of interest to discern between different states or poses the user is in, like walking or being still. One of the reasons for this is that the state update of the particle filter can be changed according to the pose, i.e. when still no benefit is drawn from updating the heading, step length or movement 
 %
 \subsection{The Particle Filter}
 %
@@ -1977,6 +1981,12 @@ In addition to WiFi, a smartphone has a large number of other wireless capabilit
 
 \subsubsection{Measuring the Time Difference}~\\
 Instead of measuring signal strength from a transmitter a enticing possibility is to measure the difference in time between a sent and received signals. A few different methods of using this are given a brief explanation in Section \ref{sec:wifi_positioning}. If the measurement of time difference are made at both 2.4 and 5 GHz, as the \emph{speed of light} puts a limit on the time of flight. Thus, frequency yielding the shortest time of flight is also the most accurate measurer of the distance.   
+%
+\subsection{Improved Pose Estimation}
+%
+When the developed algorithm was implemented only two poses where considered, being still and walking. Furthermore, the distinction  between the two was rather crude, a user was deemed as still if no steps had been taken for a certain amount of time, and deemed moving if not still. This is, however, a fairly good model of how people moving on a single floor in an indoor environment behave. 
+
+There is, of course, a multitude of poses that would be of interest to discern between, like walking, running, sitting, standing, riding an elevator or escalator etc. These poses could aid the positioning in several way, discerning between sitting, walking and running would give a more accurate particle spread and if the user is estimated to travel up or down the floor estimation could be improved.
 %
 \subsection{Map Data}
 \subsubsection{Using a Map}~\\
