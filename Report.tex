@@ -52,24 +52,26 @@ Sensor and wifi equipped smartphones
 
 %
 \section{Goal}
-Investiaget 2.4 and 5 GHz
 
-Develop a positioning algorithm using wifi only
+The goal of this thesis is to develop, implement and evaluate an algorithm for indoor positioning. The thesis describes the result of using both 2.4 and 5 GHz WiFi signals.
 
-Improve this algorithm by including sensor data 
+In the first part, the positioning is done using information from WiFi signals only. This will be combined with a particle filter to estimate the true position, and this method will be compared to the method of least squares, which is more conventional.
+
+In the second part, the goal is to improve the performance by adding information from the sensors, in order to receive information about the movement of the user.
+
+When the algorithm is developed, the project aims to implement it in SonyMap \cite{sonymap}, an indoor positioning application developed by SOMC.
+
+
 
 
 \section{Limitations}
 %
-Known APs
+The positioning application developed requires the positions of the access points used to be known. Furthermore, sufficiently good models of the indoor path loss are needed, which requires information about how strong the APs transmit, and how dense the environment is regarding obstacles such as walls and furniture. 
 
-Approximately known C and $\alpha$ - depends on AP, building and smartphone. 
+In order to include all parts of the algorithm, it is necessary to use a device that can receive both 2.4 and 5 GHz WiFi signals. Moreover, it is assumed to be equipped with accelerometer and gyroscope.
 
-2.4 and 5 GHz enabled smartphone
+For optimal performance, the smartphone should be fixed in relation to the user while the application is used. 
 
-Accelerometer and gyroscope
-
-Fixed phone for optimal performance
 %
 \section{Platform}
 
