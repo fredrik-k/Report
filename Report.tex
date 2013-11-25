@@ -42,12 +42,9 @@ In most outdoor environments the \emph{Global Navigation Satellite System} (GNSS
 
 Fueled by the lack of accurate positioning in the indoor environment, a multitude of techniques have been developed which solves the problem under different constraints \cite{positioning_overview}. 
 
-The advantages of using WiFi Access Points (APs) are several. The technique is well established and APs exists in almost every indoors environment, making no further investment in hardware required. Further, there are there are potential for techniques to locate APs with 
+The advantages of using WiFi Access Points (APs) are several. The technique is well established and APs exists in almost every indoors environment, making no further investment in hardware required. Another interesting development is the move to include transmitters at both 2.4 and 5 GHz in modern APs, in best case resulting in two independent measurements to each AP.  Further, there are there are potential for techniques to locate APs with reasonable accuracy, like the one presented in \cite{exjobb}. 
 
-2.4 and 5 GHz
-
-Sensor and wifi equipped smartphones
-
+However, WiFi signals are fickle and for accurate positioning aid from another measurement source is needed. Here different techniques could be used and an especially enticing one is inertial sensors, like accelerometers and gyroscopes. Most modern smartphones contain both sensor types along with the possibility to measure WiFi signals at both 2.4 and 5 GHz. Additionally the market penetration of smartphones is larges making it a suitable platform for a large scale roll out of an indoor positioning algorithm.  
 %
 \section{Goal}
 
@@ -58,9 +55,6 @@ In the first part, the positioning is done using information from WiFi signals o
 In the second part, the goal is to improve the performance by adding information from the sensors, in order to receive information about the movement of the user.
 
 When the algorithm is developed, the project aims to implement it in SonyMap \cite{sonymap}, an indoor positioning application developed by SOMC.
-
-
-
 
 \section{Limitations}
 %
