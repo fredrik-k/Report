@@ -50,7 +50,7 @@ However, WiFi signals are fickle and for an accurate positioning aid from anothe
 
 The goal of this thesis is to develop, implement and evaluate an algorithm for indoor positioning. The thesis describes the result of using both 2.4 and 5 GHz WiFi signals.
 
-In the first part, the positioning is done using information from WiFi signals only. This will be combined with a particle filter to estimate the true position, and this method will be compared to the method of least squares (LS), which is more conventional.
+In the first part, the positioning is done using information from WiFi signals only. This will be combined with a particle filter (PF) to estimate the true position, and this method will be compared to the method of least squares (LS), which is more conventional.
 
 In the second part, the goal is to improve the performance by adding information from the sensors, in order to receive information about the movement of the user.
 
@@ -58,7 +58,7 @@ When the algorithm is developed, the project aims to implement it as an Android 
 
 \section{Limitations}
 %
-The positioning application developed requires the positions of the access points used to be known. Furthermore, sufficiently good models of the indoor path loss are needed, which in turn requires information about how strong the APs transmit, and how dense the environment is regarding obstacles such as walls and furniture. 
+The positioning application developed requires the positions of the APs used to be known. Furthermore, sufficiently good models of the indoor path loss are needed, which in turn requires information about how strong the APs transmit, and how dense the environment is regarding obstacles such as walls and furniture. 
 
 In order to include all parts of the algorithm, it is necessary to use a device that can receive both 2.4 and 5 GHz WiFi signals. Moreover, it is assumed to be equipped with accelerometer and gyroscope.
 
@@ -83,7 +83,7 @@ This outline presents the large scale structure of this thesis.
 %
 \item[Chapter \ref{chap:RSP}] describes the theory of radio signal propagation and how to obtain a good model of the radio channel. 
 %
-\item[Chapter \ref{chap:PF}] introduces the particle filter and gives a description of the particle filter process. Further, a brief description of the least squares estimation is given. 
+\item[Chapter \ref{chap:PF}] introduces the PF and gives a description of the PF process. Further, a brief description of the LS estimation is given. 
 %
 \item[Chapter \ref{chap:wifi}] covers some of the different technologies concerning WiFi and its uses for positioning application. Additionally, the differences between separate WiFi frequency bands are investigated. 
 %
@@ -112,11 +112,11 @@ This chapter gives a brief introduction to the background and history of navigat
 %
 Mankind has always had a need to navigate in its surroundings. At an early stage these surroundings were fairly small and visual references to known landmarks were good enough to find one's way. As the distances traveled grew, so did the need for a more well defined frame of reference, so mankind turned to celestial bodies. Using the sun and the stars, with their relatively fixed positions in reference to the earth, gave the ability to keep a desired heading over a long distance. This ability was then refined over the centuries and triangulation was discovered as a mean to find one's position. The invention of the compass further improved the navigation. With a known orientation, only the relative angles to two landmarks or celestial bodies, are needed to find the position. 
 
-In the 20th century the improvements in measuring accelerations and angular velocities promoted a technology called \emph{dead reckoning}. From a known position and heading, it is possible, using an accelerometer and a gyroscope, to estimate current speed and heading to find the current position. With occasional fixes of the position and heading, the current position can be estimated for all times. However, the sizes of the devices involved make the technology suitable only for larger vehicles, like ships or airplanes.
+In the 20th century the improvements in measuring accelerations and angular velocities promoted a technology called \emph{dead reckoning} (DR). From a known position and heading, it is possible, using an accelerometer and a gyroscope, to estimate current speed and heading to find the current position. With occasional fixes of the position and heading, the current position can be estimated for all times. However, the sizes of the devices involved make the technology suitable only for larger vehicles, like ships or airplanes.
 
 Another technological leap was taken with the introduction of the \emph{Global Positioning System} (GPS). This system uses the time difference between signals received from satellites with known locations, which made it possible for almost anyone to find their position with an accuracy of around 15 meters. Today, GPS receivers are readily available both as standalone devices and integrated in cars or smartphones.
 
-A problem, however, exists with the GPS system. To obtain a good position, signals from at least three (or four, if the altitude should be determined along with the longitude and latitude) satellites must be available. Preferably these satellites should be in line-of-sight from the GPS receiver. Putting more satellites in orbit increases the probability that enough satellites are visible, but this only partly solves the problem. In some areas, like a suburban environment or indoors, the paths between the GPS receiver and the satellites are obstructed either by the building it is in or buildings in its surroundings. An obstructed path results in that the GPS signal has to travel a longer distance, i.e. by reflection, diffraction or scattering, to reach the receiver. Because the distance is estimated by the difference in time between when the signal was sent and received, an obstruction increases the estimated distance between receiver and satellite. Further, as the GPS signal is sent from space, it is weak when it reaches the Earth's surface and an obstruction may even make it too weak to be detected by the receiver.
+A problem, however, exists with the GPS system. To obtain a good position, signals from at least three (or four, if the altitude should be determined along with the longitude and latitude) satellites must be available. Preferably these satellites should be in line-of-sight (LOS) from the GPS receiver. Putting more satellites in orbit increases the probability that enough satellites are visible, but this only partly solves the problem. In some areas, like a suburban environment or indoors, the paths between the GPS receiver and the satellites are obstructed either by the building it is in or buildings in its surroundings. An obstructed path results in that the GPS signal has to travel a longer distance, i.e. by reflection, diffraction or scattering, to reach the receiver. Because the distance is estimated by the difference in time between when the signal was sent and received, an obstruction increases the estimated distance between receiver and satellite. Further, as the GPS signal is sent from space, it is weak when it reaches the Earth's surface and an obstruction may even make it too weak to be detected by the receiver.
 
 Altogether, this makes GPS a good positioning technique in open outdoor areas, but in a suburban or indoor environment other techniques must be used to obtain accurate positioning. A multitude of techniques that aim to solve this problem with different accuracies and constraints exists. There is no single technology that these attempts are based on. Instead, they are spread over a wide range of areas, including inertial sensors, signal intensities, magnetic fields, cameras etc. \cite{positioning_overview}. 
 %
@@ -294,7 +294,7 @@ where $n$ is the path loss exponent and  $X_\sigma$ is a zero-mean Gaussian dist
 \hline
 Free space & 2 \\
 \hline
-Indoor line-of-sight & 1.6-1.8 \\
+Indoor LOS & 1.6-1.8 \\
 \hline
 Indoor low number of obstructions & 2-3 \\
 \hline
@@ -328,7 +328,7 @@ In Figure \ref{log_norm_n_2} and \ref{log_norm_n_3_2}, measured values of the si
 \caption{The distance to the transmitting antenna in meters used in the measurements of the signal strength}\label{dist_trans}
 \end{figure}
 
-It is obvious that this model has its flaws. A low value of $n$ fails to predict good signal strengths when the distance to the transmitter is fairly large, and the high value does not perform satisfactory close to the transmitter. The measurement taken is similar to a real world use-case where one moves through an office space, sometimes under a transmitter in line-of-sight and sometimes being far away in an obstructed area. The flaws promote the search for a model with better performance.
+It is obvious that this model has its flaws. A low value of $n$ fails to predict good signal strengths when the distance to the transmitter is fairly large, and the high value does not perform satisfactory close to the transmitter. The measurement taken is similar to a real world use-case where one moves through an office space, sometimes under a transmitter in LOS and sometimes being far away in an obstructed area. The flaws promote the search for a model with better performance.
 %
 \subsection{Double Slope Model}
 %
@@ -408,9 +408,9 @@ The description presented above is brief, and for a more complete description of
 \chapter{The Particle Filter}
 \label{chap:PF}
 %
-The \emph{particle filter} or \emph{sequential Monte Carlo methods} are sets of estimation algorithms for estimating the posterior density of the state-space in a non-linear filtering problem. The particle filter uses a set of particles distributed over the state-space using a system model and state measurements are used to determine each particle's probability to represent the ''true'' state of the system.  
+The \emph{particle filter} or \emph{sequential Monte Carlo methods} are sets of estimation algorithms for estimating the posterior density of the state-space in a non-linear filtering problem. The PF uses a set of particles distributed over the state-space using a system model and state measurements are used to determine each particle's probability to represent the ''true'' state of the system.  
 
-In this chapter the non-linear filtering problem will be explained along with its solution using the particle filter. Some computational aspects will be investigated and the particle filter used in positioning briefly discussed. The chapter ends with a section about other estimation techniques, where most focus is placed on the \emph{least squares estimation}.
+In this chapter the non-linear filtering problem will be explained along with its solution using the PF. Some computational aspects will be investigated and the PF used in positioning briefly discussed. The chapter ends with a section about other estimation techniques, where most focus is placed on the \emph{least squares estimation}.
 %
 \section{Non-Linear Filtering Problem}
 \label{sec:nlfp}
@@ -425,18 +425,18 @@ y_k&=h(x_k,u_k) + e_k
 \end{align}
 \end{subequations} 
 %
-where $f$ and $h$ are arbitrary non-linear functions of the states $x_k$, inputs $u_k$ and process noise $v_k$, furthermore $y_k$ is the measurement at time $k$. The measurement noise $e_k$ and process noise $v_k$ are random processes with arbitrary probability density functions \cite{gson12}. 
+where $f$ and $h$ are arbitrary non-linear functions of the states $x_k$, inputs $u_k$ and process noise $v_k$, furthermore $y_k$ is the measurement at time $k$. The measurement noise $e_k$ and process noise $v_k$ are random processes with arbitrary probability density functions (PDFs) \cite{gson12}. 
 
-There is a large collection of filtering methods solving this estimation problem in different ways with different restrictions. One of the most common is the \emph{Kalman filter}. This method is intuitive, simple and computationally effective. On the other hand, it suffers from requiring the functions $f$ and $h$ to be linear, and the probability density functions of the process $v_k$ and measurement noise $e_k$ to be zero-mean Gaussian. The \emph{extended Kalman} filter solves the problem of $f$ and $h$ being non-linear, but still assumes $v_k$ and $e_k$ to be zero-mean Gaussian noise. Further, both Kalman approaches require the posterior distribution of the states to be zero mean Gaussian.
+There is a large collection of filtering methods solving this estimation problem in different ways with different restrictions. One of the most common is the \emph{Kalman filter}. This method is intuitive, simple and computationally effective. On the other hand, it suffers from requiring the functions $f$ and $h$ to be linear, and the PDFs of the process $v_k$ and measurement noise $e_k$ to be zero-mean Gaussian. The \emph{extended Kalman} filter solves the problem of $f$ and $h$ being non-linear, but still assumes $v_k$ and $e_k$ to be zero-mean Gaussian noise. Further, both Kalman approaches require the posterior distribution of the states to be zero mean Gaussian.
 
-Here we will instead focus on another filtering approach, the \emph{particle filter}, also called the \emph{Sequential Monte Carlo method}. This is a simulation based approach for solving the estimation problem \ref{equation:nonlinear_model}, only requiring the probability density function of $e_k$ and $v_k$ to be known \cite{gson12,fig_fra10}.  
+Here we will instead focus on another filtering approach, the \emph{particle filter}, also called the \emph{Sequential Monte Carlo method}. This is a simulation based approach for solving the estimation problem \ref{equation:nonlinear_model}, only requiring the PDF of $e_k$ and $v_k$ to be known \cite{gson12,fig_fra10}.  
 
-The particle filter consists of a set of $N$ particles $\left\{x^i\right\}_{i=1}^N$, which represent different samples of states. These particles are used to create an approximation of the distribution $p(x_k|y_{1:k})$  of the states $x_k$ given the set of measurements $y_{1:k}$. The strength of the particle filter is that the distribution $p(x_k|y_{1:k})$ can be arbitrary. On the other hand, to provide the same particle density the number of particles grows by the power of the number of states. Hence, if you have 10 particles and one state, you need 100 particles to provide the same density for two dimensions. For three dimensions, you then need 1000 particles. This makes the particle filter suitable only when the number of states is relatively small.
+The PF consists of a set of $N$ particles $\left\{x^i\right\}_{i=1}^N$, which represent different samples of states. These particles are used to create an approximation of the distribution $p(x_k|y_{1:k})$  of the states $x_k$ given the set of measurements $y_{1:k}$. The strength of the PF is that the distribution $p(x_k|y_{1:k})$ can be arbitrary. On the other hand, to provide the same particle density the number of particles grows by the power of the number of states. Hence, if you have 10 particles and one state, you need 100 particles to provide the same density for two dimensions. For three dimensions, you then need 1000 particles. This makes the PF suitable only when the number of states is relatively small.
 %
 \section{The Particle Filter Process}
 \label{sec:PF_process}
 %
-The process of the particle filter consists of three separate steps \cite{gson12}, 
+The process of the PF consists of three separate steps \cite{gson12}, 
 \begin{enumerate}
 \item \emph{Weighting of particles}: using the measurements each particle is assigned a weight, corresponding to the likelihood of its states being the true ones.
 \item \emph{Re-sampling}: From the existing $N$ particles, create $N$ new ones by a clever choice.
@@ -477,14 +477,14 @@ In Figure \ref{particle_weights} the normalized weights assigned to each particl
 %
 \subsection{Re-sampling}
 %
-The re-sampling step is introduced to eliminate the possibility of one or a few particles to be the only probable after a few iterations of the particle filter. If the re-sampling is omitted, the computing of weight and subsequent state update could dilute the particles in the state-space until only one particle is the probable one. This could be the case even if the most probable particle does not agree with the measurement. Thus, the purpose of the re-sampling is to use the weights to create $N$ new particles from the $N$ old ones. This can be done in many ways. One is to allow a number of the most probable particles to spawn new particles until $N$ particles are obtained. A statistically more stringent way is to compute a uniformly distributed random number $r$ between zero and one. Then, assuming the sum of all particle probabilities are one, start adding these until the sum is greater than $r$ Then, let the particle that caused the change spawn a new one. Using this method particles with high probabilities have a greater chance of spawning a new one, while particles with small weight still may create new ones.
+The re-sampling step is introduced to eliminate the possibility of one or a few particles to be the only probable after a few iterations of the PF. If the re-sampling is omitted, the computing of weight and subsequent state update could dilute the particles in the state-space until only one particle is the probable one. This could be the case even if the most probable particle does not agree with the measurement. Thus, the purpose of the re-sampling is to use the weights to create $N$ new particles from the $N$ old ones. This can be done in many ways. One is to allow a number of the most probable particles to spawn new particles until $N$ particles are obtained. A statistically more stringent way is to compute a uniformly distributed random number $r$ between zero and one. Then, assuming the sum of all particle probabilities are one, start adding these until the sum is greater than $r$ Then, let the particle that caused the change spawn a new one. Using this method particles with high probabilities have a greater chance of spawning a new one, while particles with small weight still may create new ones.
 
 After the re-sampling is done, it is crucial to give all particles the same weight, i.e $1/N$, as to avoid the dilution of probability.
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/PF/hist_dist_1_itr}
-\caption{Histogram over the particle distribution, after one iteration of the particle filter, in range $[-10,10]$ using 100 bins}\label{hist_dist_1_itr}
+\caption{Histogram over the particle distribution, after one iteration of the PF, in range $[-10,10]$ using 100 bins}\label{hist_dist_1_itr}
 \end{figure}
 
 After the re-sampling technique described above is applied to the particles of our example, their distribution is displayed in Figure \ref{hist_dist_1_itr}. After the re-sampling the states of the particles still existing tend more towards the true one, $X=0$. The mean of the states may now be used as an estimation of the true state.    
@@ -498,7 +498,7 @@ However, if there is little or no knowledge of the states behavior some type of 
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/PF/hist_dist_1_itr_dyn}
-\caption{Histogram over the particle distribution, after one iteration of the particle filter and a state update, in range $[-10,10]$ using 100 bins}\label{hist_dist_1_itr_dyn}
+\caption{Histogram over the particle distribution, after one iteration of the PF and a state update, in range $[-10,10]$ using 100 bins}\label{hist_dist_1_itr_dyn}
 \end{figure}
 
 In our example the ''true'' state is stationary, so the state update consists only of adding a Gaussian distributed random number with a small standard deviation ($0.1$) to each particle. This corresponds to letting each particle undergo \emph{Brownian motion}, and the resulting particle distribution may be viewed in Figure \ref{hist_dist_1_itr_dyn}.
@@ -506,7 +506,7 @@ In our example the ''true'' state is stationary, so the state update consists on
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/PF/hist_dist_10_itr}
-\caption{Histogram over the particle distribution, after ten iterations of the particle filter, in range $[-10,10]$ using 100 bins}\label{hist_dist_10_itr}
+\caption{Histogram over the particle distribution, after ten iterations of the PF, in range $[-10,10]$ using 100 bins}\label{hist_dist_10_itr}
 \end{figure}
 
 Finally, in Figure \ref{hist_dist_10_itr} the particle distribution after ten iterations is displayed, and the mean of the particle states is
@@ -517,7 +517,7 @@ Finally, in Figure \ref{hist_dist_10_itr} the particle distribution after ten it
 \section{Computational Aspects}
 \label{sec:com_asp}
 %
-The particle filter, like most \emph{Monte Carlo} based filters, suffers from high computational complexity. Especially as the number of particles necessary to keep a fixed particle density in the state space grows as the power of the number of states. A solution to this is proposed in \cite{gson12}, where only states bearing non-linear distributions are passed throughout the particle filter and states bearing Gaussian distributions may be filtered by a different method. This is called the \emph{marginalized particle filter} and aim to keep the number of states passed to the particle filter low. 
+The PF, like most \emph{Monte Carlo} based filters, suffers from high computational complexity. Especially as the number of particles necessary to keep a fixed particle density in the state space grows as the power of the number of states. A solution to this is proposed in \cite{gson12}, where only states bearing non-linear distributions are passed throughout the PF and states bearing Gaussian distributions may be filtered by a different method. This is called the \emph{marginalized particle filter} and aim to keep the number of states passed to the PF low. 
 
 The three steps discussed in section \ref{sec:PF_process} pose somewhat different computational difficulties. The weights need to be calculated for each particle and thus need to be computed $N$ times, giving an \emph{Ordo $N$} ($O(N)$) complexity. However, the calculation for each weight depends of the number of measurements $M$ giving a total complexity of $O(M*N)$. In most cases though, the number of measurements is small in comparison to the number of particles and may be neglected. Another pleasant feature of the weight computation is their independence of each other, thus making parallelization of computations simple.
 
@@ -529,9 +529,9 @@ In all, the filter has approximately $O(N*\log_2{N})$, at least when the number 
 %
 \section{Particle Filter for Positioning Applications}
 %
-The particle filter may be successfully used in positioning applications, especially if the states and models used possess certain features. More specific, the particle filter may be used with good results if the models are non-linear and the posterior distributions are non-Gaussian while the number of states is small \cite{gson12}. If the number of states grows, the ''curse'' of dimensionality makes the use the particle filter infeasible.
+The PF may be successfully used in positioning applications, especially if the states and models used possess certain features. More specific, the PF may be used with good results if the models are non-linear and the posterior distributions are non-Gaussian while the number of states is small \cite{gson12}. If the number of states grows, the ''curse'' of dimensionality makes the use the PF infeasible.
 
-A case where the particle filter is useful is the estimation of position or position and heading in a two-dimensional space, which is the case for most indoor positioning applications. Furthermore, using signal strengths from multiple sources as a measurement of position renders, both a non-linear model and non-Gaussian posterior distributions further promote the use of a particle filter. However, introducing more dynamic states ,e.g acceleration, unmeasured velocities or trying to filter sensor biases or drifts, introduces too many dimensions. Thus, such estimations require their own filter \cite{gson12}.        
+A case where the PF is useful is the estimation of position or position and heading in a two-dimensional space, which is the case for most indoor positioning applications. Furthermore, using signal strengths from multiple sources as a measurement of position renders, both a non-linear model and non-Gaussian posterior distributions further promote the use of a PF. However, introducing more dynamic states ,e.g acceleration, unmeasured velocities or trying to filter sensor biases or drifts, introduces too many dimensions. Thus, such estimations require their own filter \cite{gson12}.        
 %
 \section{Other Estimation Techniques}
 \label{sec:oet}
@@ -542,7 +542,7 @@ There are a few different techniques for state estimation given a set of measure
 %
 The method \emph{least squares} is a common estimation technique for overdetermined systems, and is based on minimizing the error between an observed value and a modeled one. 
 
-Given a series of $n$ measurements, $z_i$ and $n$ models $f_i(x_k)$ of the $m$ states $x_k$. The goal of the least squares estimation is the find the minimum of
+Given a series of $n$ measurements, $z_i$ and $n$ models $f_i(x_k)$ of the $m$ states $x_k$. The goal of the LS estimation is the find the minimum of
 %
 \begin{equation}
 S = \sum_{i=1}^n(z_i-f_i(x_k))^2
@@ -551,11 +551,11 @@ S = \sum_{i=1}^n(z_i-f_i(x_k))^2
 %
 given $n>m$. In the case of $f_i(x_k)$ being linear for all $i$, the algorithm is called the \emph{linear least squares} and $S$, in this case, has only one global minimum due to convexity. Also, an analytic solution is always present.
 
-Generalizing the linear least squares estimation to non-linear models is fairly simple. The sum in \ref{ls_sum} is still to be minimized, but in the non-linear case a closed-form analytical solution can not be found. Instead the minimum is found by numerical approximations. As $S$ in the non-linear case is not, in general, convex, there exist multiple local solutions to the minimization problem. This requires a guess of the approximate states to ''guide'' the algorithm to the correct solution, and if the guess is too far from the global minimum, a local minimum could be found instead.     
+Generalizing the linear LS estimation to non-linear models is fairly simple. The sum in \ref{ls_sum} is still to be minimized, but in the non-linear case a closed-form analytical solution can not be found. Instead the minimum is found by numerical approximations. As $S$ in the non-linear case is not, in general, convex, there exist multiple local solutions to the minimization problem. This requires a guess of the approximate states to ''guide'' the algorithm to the correct solution, and if the guess is too far from the global minimum, a local minimum could be found instead.     
 
-The non-linear least squares can be used to estimate a position in two dimensions from the models in Chapter \ref{chap:RSP}, together with measurements of signal
+The non-linear LS can be used to estimate a position in two dimensions from the models in Chapter \ref{chap:RSP}, together with measurements of signal
 % Fråga Fredrik:
- strengths from at least three access points. 
+ strengths from at least three APs. 
 %
 \chapter{Introduction to WiFi} %Working title
 \label{chap:wifi}
@@ -579,7 +579,7 @@ Most devices using the IEEE $802.11$ standard have a \emph{Media Access Control}
 \section{WiFi and Positioning}
 \label{sec:wifi_positioning}
 %
-The WiFi standard provides enticing possibilities for indoor positioning, especially in public or corporate areas. Some of the advantages compared to other positioning techniques is that the range of typical wireless products, like WiFi access points (AP:s), have limited range ($\sim 30$ meters) and thus need to be placed with relatively short intervals. Moreover, WiFi infrastructure is ubiquitous and already deployed at many places, making WiFi based positioning an attractive method. Further, more and more devices become capable of communication over WiFi and platforms like Android makes the deployment of applications easy and readily available for large amount of users. One of the disadvantages is that indoor signal environments are often complex, posing a harder modeling task and often rather high signal to noise ratio.
+The WiFi standard provides enticing possibilities for indoor positioning, especially in public or corporate areas. Some of the advantages compared to other positioning techniques is that the range of typical wireless products, like WiFi APs, have limited range ($\sim 30$ meters) and thus need to be placed with relatively short intervals. Moreover, WiFi infrastructure is ubiquitous and already deployed at many places, making WiFi based positioning an attractive method. Further, more and more devices become capable of communication over WiFi and platforms like Android makes the deployment of applications easy and readily available for large amount of users. One of the disadvantages is that indoor signal environments are often complex, posing a harder modeling task and often rather high signal to noise ratio.
 
 A few different techniques for indoor positioning are presented below.
 %
@@ -616,7 +616,7 @@ For the RSSI to be a meaningful measurement of the received signal strength it m
 
 An RSSI measurement on a device running the Android operating system is initiated by an application requesting a scan of the signal environment. The operating system performs the scan when the necessary system resources are available. Each channel specified by the IEEE $802.11$ standard and available in the current region is scanned. When a transmitter is found, a short-time average of the received signal power is measured and converted to an appropriate RSSI. The process is repeated until all reachable transmitters have been measured, and the results are returned along with information about each transmitter's MAC-address, its transmission frequency and a time-stamp. 
 
-To conserve battery life for the measuring device, a technique called \emph{passive scanning} is used. Simply explained, each AP sends a message approximately every 100 ms telling devices in the vicinity it is active, its MAC-address and some additional information. The measuring device scans each channel for a little more than 100 ms to catch all APs on that channel, resulting in a quite long scan time ($\sim 3$-$5$ s), depending on the number of channels to be scanned. Most commonly the channels related to 2.4 GHz will be scanned first and subsequently the 5 GHz channels. This will generally introduce a time difference between the two different frequency measurements from a single access point.
+To conserve battery life for the measuring device, a technique called \emph{passive scanning} is used. Simply explained, each AP sends a message approximately every 100 ms telling devices in the vicinity it is active, its MAC-address and some additional information. The measuring device scans each channel for a little more than 100 ms to catch all APs on that channel, resulting in a quite long scan time ($\sim 3$-$5$ s), depending on the number of channels to be scanned. Most commonly the channels related to 2.4 GHz will be scanned first and subsequently the 5 GHz channels. This will generally introduce a time difference between the two different frequency measurements from a single AP.
 
 Which channels to scan could be specified to reduce the scan time, but some AP data might then be lost. Another way of performing the scans is to have the measuring device actively probing (''asking'') for APs in its surroundings, but this would require almost constant sending of messages and listening for replies, thus draining the battery.               
 %
@@ -705,19 +705,19 @@ An extensive discussion about how path loss depends on the frequency is done in 
 \chapter{Indoor Positioning - Pure RSSI Approach}
 \label{chap:pure_rssi}
 %
-The signal propagation models described in Chapter \ref{chap:RSP} in combination with the particle filter from Chapter \ref{chap:PF} provides a framework for indoor positioning. This framework can be used to perform position estimation using RSSI measurements from multiple WiFi APs. 
+The signal propagation models described in Chapter \ref{chap:RSP} in combination with the PF from Chapter \ref{chap:PF} provides a framework for indoor positioning. This framework can be used to perform position estimation using RSSI measurements from multiple WiFi APs. 
 
-In this chapter, the considerations about, and parameter choices for, the particle filter in the context of indoor positioning are presented. The performance is then tested in a few different environments and compared to position estimation using a \emph{least squares} algorithm.  These tests then serves as a basis for an extensive error analysis, discussing the error behavior depending on different conditions. The resulting knowledge is then used in the next chapter, to ascertain if and how adaptive or crowd-sourced signal strength models may be used.
+In this chapter, the considerations about, and parameter choices for, the PF in the context of indoor positioning are presented. The performance is then tested in a few different environments and compared to position estimation using a \emph{least squares} algorithm.  These tests then serves as a basis for an extensive error analysis, discussing the error behavior depending on different conditions. The resulting knowledge is then used in the next chapter, to ascertain if and how adaptive or crowd-sourced signal strength models may be used.
 %
 \subsection{Importance of Geometry}
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/geometries}
-\caption{Probable positions for different access point configuration (\emph{white} \texttt{+}). \emph{Red} implies high probability and \emph{blue} low probability. The \emph{true} position is $[0, 20]$.}\label{geometries}
+\caption{Probable positions for different AP configuration (\emph{white} \texttt{+}). \emph{Red} implies high probability and \emph{blue} low probability. The \emph{true} position is $[0, 20]$.}\label{geometries}
 \end{figure}
 %
-How the access points are positioned in relation to the user (i.e. the position of interest to estimate), highly impacts the quality of the estimation. In Figure \ref{geometries}, three different AP geometries are shown along with the distribution of probable positions. It represents an idealized case where the noise in the measurements of the distance to each AP is zero-mean Gaussian. However, it provides an illustrating example of how the geometry impacts the distribution of the estimated position.
+How the APs are positioned in relation to the user (i.e. the position of interest to estimate), highly impacts the quality of the estimation. In Figure \ref{geometries}, three different AP geometries are shown along with the distribution of probable positions. It represents an idealized case where the noise in the measurements of the distance to each AP is zero-mean Gaussian. However, it provides an illustrating example of how the geometry impacts the distribution of the estimated position.
 
 In the leftmost case in Figure \ref{geometries} the APs are placed on a straight line, and in this case trilateration of the \emph{true} position, $[0,20]$, is impossible if no prior information is known. As the figure shows, APs positioned on a straight line gives two equally probable position estimates (more \emph{red} implies higher probability), i.e. it is not possible to distinguish between a position and its mirror image in the line formed by the APs. 
 
@@ -725,13 +725,13 @@ The second case displays a scenario where the APs are placed in the corners of a
 
 The third case represents a best-case scenario where the position to be estimated is centered in an equilateral triangle. Here, it is easy to distinguish the most probable position, and likewise the \emph{true} position.
 
-The particle filter uses information about the positions at previous time steps making it more likely to determine the true position even if the current geometry is disadvantageous. The least squares estimation, on the other hand, uses only instantaneous measurements and will suffer much more severely from a unfavorable environment. 
+The PF uses information about the positions at previous time steps making it more likely to determine the true position even if the current geometry is disadvantageous. The LS estimation, on the other hand, uses only instantaneous measurements and will suffer much more severely from a unfavorable environment. 
  
 The positioning will further benefit from a larger number of APs as both the number of measurements and the probability of having an advantageous geometry increase. Still, a few conclusions could be drawn from this discussion, the main one being that measurements are taken inside a polygon with corners consisting of the APs tend to provide the best information about the true position regardless of the used estimation algorithm. 
 %
 \section{On Parameter Choices}
 %
-There are four parts of the particle filter that can be chosen by the user to some extent. The number of particles $N$, the system model, the process noise $v_k$ and the measurement noise $e_k$.
+There are four parts of the PF that can be chosen by the user to some extent. The number of particles $N$, the system model, the process noise $v_k$ and the measurement noise $e_k$.
 %
 \subsection{System Model}
 %
@@ -812,11 +812,11 @@ R_x(d) = C - 2*10\log_{10}{d}-\alpha d
 %
 is determined appropriate to model the RSSI measurements. In this model, $R_x(d)$ is the RSSI measurement at a distance $d$ from the transmitter, $C$ is related to the power of the transmitter and $\alpha$ models path loss related to signal path obstruction. 
 
-The models are discussed in chapter \ref{chap:RSP} but appropriate values of the constants $C$ and $\alpha$ are yet to be determined. This may be done in a couple of fashions, two of which will be presented here. The resulting values, especially the value of $\alpha$, are highly dependent on the environment, thus making them, in this situation, suitable for a open office environment. The values of $C$ is also related to the power with which the Wi-Fi access points transmits, so a different AP will most likely have a different value.      
+The models are discussed in chapter \ref{chap:RSP} but appropriate values of the constants $C$ and $\alpha$ are yet to be determined. This may be done in a couple of fashions, two of which will be presented here. The resulting values, especially the value of $\alpha$, are highly dependent on the environment, thus making them, in this situation, suitable for a open office environment. The values of $C$ is also related to the power with which the Wi-Fi APs transmits, so a different AP will most likely have a different value.      
 
 \subsection{Model Driven Approach}
 %
-Given measurements at known locations, preferably with both obstructed and line of sight paths to the access points, it is possible to compute the model parameters.
+Given measurements at known locations, preferably with both obstructed and LOS paths to the APs, it is possible to compute the model parameters.
 
 The value of $\alpha$ from \ref{eq:RSSI_model} can be calculated as
 %
@@ -826,13 +826,13 @@ The value of $\alpha$ from \ref{eq:RSSI_model} can be calculated as
 %
 The estimation of $\alpha$ will improve if the paths between transmitters and receiver is representative for the desired environment.  
 
-To find the value of $C$, measurements of the RSSI should be performed in line of sight of the AP, at different locations and with different distances to the AP. The value can then be calculated from
+To find the value of $C$, measurements of the RSSI should be performed in LOS of the AP, at different locations and with different distances to the AP. The value can then be calculated from
 %
 \begin{equation}
 C=R_x(d) - 2*10\log_{10}(d)
 \end{equation}
 % 
-i.e from \ref{eq:RSSI_model} with $\alpha = 0$ (line-of-sight).
+i.e from \ref{eq:RSSI_model} with $\alpha = 0$ (LOS).
 
 This has been done at 20 different locations with 20 measurements of the RSSI from available APs taken at each. The estimated values of $\alpha$ and $C$ is presented in Table \ref{table:est_par}.
 
@@ -866,9 +866,9 @@ To illustrate this, the estimation error for $\alpha \in [0;1]$ and $C \in [-55;
 %
 A few interesting observations can be made from the two methods above. The first of these being that the range of possible values are large, indicated by the standard deviations obtained from the model driven method. This is somewhat to be expected as the obstruction between transmitter and receiver is vastly different from location to location. Thus, the obtained parameters will be an average of the different environments giving rise to their high standard deviation. 
 
-Further, it is noteworthy that the parameters obtained from the two approaches differ, especially for 5 GHz. One explanation for this is that the particle filter is able to find an accurate position given, for example, a positive model error for 2.4 GHz and a negative error for 5 GHz from the same AP. However, the parameters found trying to minimize the model error still produced small positioning errors when used together with the particle filter. 
+Further, it is noteworthy that the parameters obtained from the two approaches differ, especially for 5 GHz. One explanation for this is that the PF is able to find an accurate position given, for example, a positive model error for 2.4 GHz and a negative error for 5 GHz from the same AP. However, the parameters found trying to minimize the model error still produced small positioning errors when used together with the PF. 
 
-Looking at Figure \ref{err_vs_param} the particle filter exhibits an interesting behavior. The positioning error is relatively small for a large range of parameters but a change to substantial errors happens suddenly for certain parameters. Parameter choices along the approximate line from $C=-25$ and $\alpha=0.7$ to $C=-39$ and $\alpha=0$ needs to be changed only by a small amount to produce either good or truly poor results. A deeper investigation shows that this line roughly translates to the models switching from estimating a too low signal power to estimating a too high one, for a certain location. The smallest positioning errors is obtained when the modeled and received power are about the same, placing them slightly above the line described earlier. However, these parameters are sensitive if the environment changes, resulting in estimating to high signal powers for the given location. A more robust choice is to over estimate the signal attenuation resulting in a higher $\alpha$. This choice might produce slightly larger positioning errors but is less sensitive to changing environments.
+Looking at Figure \ref{err_vs_param} the PF exhibits an interesting behavior. The positioning error is relatively small for a large range of parameters but a change to substantial errors happens suddenly for certain parameters. Parameter choices along the approximate line from $C=-25$ and $\alpha=0.7$ to $C=-39$ and $\alpha=0$ needs to be changed only by a small amount to produce either good or truly poor results. A deeper investigation shows that this line roughly translates to the models switching from estimating a too low signal power to estimating a too high one, for a certain location. The smallest positioning errors is obtained when the modeled and received power are about the same, placing them slightly above the line described earlier. However, these parameters are sensitive if the environment changes, resulting in estimating to high signal powers for the given location. A more robust choice is to over estimate the signal attenuation resulting in a higher $\alpha$. This choice might produce slightly larger positioning errors but is less sensitive to changing environments.
 
 The conclusion of the discussion above is that it is far better to under estimate the signal power at a given location than to over estimate it. Taking this into account the values stated in Table \ref{table:model_par} will be used to model the received RSSI value at a distance, $d$ from the AP.  These values are more restrictive concerning the signal power than the parameters found previously. However, these choices provide a more robust estimation if the environmental properties change. The effect  of a small change in the true value of $C$, due to either variations in the power transmitted by the AP or different properties of the receiving device, will also be somewhat mitigated by a more restrictive choice of parameters.  
 %
@@ -908,7 +908,7 @@ Measurements of the RSSI is taken continuously while the user is walking a prede
 
 \emph{Case 2} provides a more natural use-case, where the user is moving while trying to find his position. This case lacks the ability of error analysis, as the measurements are taken continuously over an interval and the time between two consecutive measurements is not fixed. However, the estimated trajectory can be compared to the true one.   
 
-The tests were performed in a building called Glasgow, one of Sony's office buildings, on the 6:th floor. For different tests, different paths and a different setup of APs are used. Further, all tests are performed in the same type of open office environment, but the differences between the exact environments for each test are fairly large. During the tests, the user held the smart phone in one hand, with the screen pointing upwards. The smart phones used were one Togari and one Honami, both manufactured by Sony. These performed similarly except for a constant bias on the RSSI.
+The tests were performed in a building called Glasgow, one of Sony's office buildings, on the 6:th floor. For different tests, different paths and a different setup of APs are used. Further, all tests are performed in the same type of open office environment, but the differences between the exact environments for each test are fairly large. During the tests, the user held the smartphone in one hand, with the screen pointing upwards. The smartphones used were one Togari and one Honami, both manufactured by Sony. These performed similarly except for a constant bias on the RSSI.
 %
 \section{Results}
 \label{environment_results}
@@ -959,7 +959,7 @@ Median & $1.5$ \\
 \caption{Attributes of the absolute positioning error for \emph{environment one}.}\label{table:error_env-1}
 \end{table}
 
-In this environment the placement of the access point in relation to the path walked is beneficial. During the walk, measurements from at least four APs are available and almost always on both $2.4$ and $5$ GHz.  Further, the geometry of the APs is such that we always stay inside or at the border of a polygon where the APs compose the corners. These properties contributes to the fairly small positioning errors in Table \ref{table:error_env-1}  
+In this environment the placement of the AP in relation to the path walked is beneficial. During the walk, measurements from at least four APs are available and almost always on both $2.4$ and $5$ GHz.  Further, the geometry of the APs is such that we always stay inside or at the border of a polygon where the APs compose the corners. These properties contributes to the fairly small positioning errors in Table \ref{table:error_env-1}  
 %
 \subsection{Environment Two - WORKING TITLE}
 %
@@ -968,7 +968,7 @@ The test in \emph{environment two} uses the methodology of \emph{case 1} and the
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/true_vs_est_env_2_05}
-\caption{The true path (\emph{blue}), along with estimated path (\emph{black}), start point (\emph{red} \texttt{o}), initial heading (\emph{black} arrow) and access point (\emph{cyan} \texttt{o}).}\label{true_vs_est_env_2_05}
+\caption{The true path (\emph{blue}), along with estimated path (\emph{black}), start point (\emph{red} \texttt{o}), initial heading (\emph{black} arrow) and AP (\emph{cyan} \texttt{o}).}\label{true_vs_est_env_2_05}
 \end{figure}
 %
 \begin{table}[!hbt]
@@ -1002,19 +1002,19 @@ In Figure \ref{true_vs_est_env_3}, the true path along with estimated positions 
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/true_vs_est_env_3}
-\caption{The true path (\emph{blue}), along with estimated path (\emph{red}), estimated positions (\emph{black} \texttt{x}), start point (\emph{red} \texttt{o}), initial heading (\emph{black} arrow) and access point (\emph{cyan} \texttt{o}).}\label{true_vs_est_env_3}
+\caption{The true path (\emph{blue}), along with estimated path (\emph{red}), estimated positions (\emph{black} \texttt{x}), start point (\emph{red} \texttt{o}), initial heading (\emph{black} arrow) and AP (\emph{cyan} \texttt{o}).}\label{true_vs_est_env_3}
 \end{figure}
 %
 \subsection{Least Squares - a Comparison}
 %
-A common way of estimating a position from a RSSI measurements is to use a least squares (LS) estimation, for additional information see \ref{sec:oet}. Here the difference between the estimations from a particle filter (PF) and from a LS algorithm will be investigated. 
+A common way of estimating a position from a RSSI measurements is to use a LS estimation, for additional information see \ref{sec:oet}. Here the difference between the estimations from a PF and from a LS algorithm will be investigated. 
 
 The comparison will be made for environment \emph{one} and \emph{two} from the previous sections, but with new datasets. Further, the methodology from \emph{case }1 will be used, but with 3 m instead of $0.5$ m sample spacing.This methodology is used to be able to measure the absolute position error from the different estimators. Further, both estimators will use the same path loss models.   
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/ls_short_path}
-\caption{Least squares estimation versus particle filter estimation for environment \emph{one}. True path (\emph{blue}), LS estimated path and position (\emph{black})and PF estimated path and position (\emph{red})}\label{ls_short}
+\caption{Least squares estimation versus PF estimation for environment \emph{one}. True path (\emph{blue}), LS estimated path and position (\emph{black})and PF estimated path and position (\emph{red})}\label{ls_short}
 \end{figure}
 %
 \begin{figure}[!hbt]
@@ -1031,18 +1031,18 @@ The comparison will be made for environment \emph{one} and \emph{two} from the p
 
 The estimated path from both the PF and LS estimators is displayed in Figure \ref{ls_short} along with the true path for environment \emph{one}. It is clearly visible that the PF performs considerably better compared to the LS estimator. The positioning errors from Figure \ref{ls_error_short} makes this even more clear and the PF has a smaller positioning error for every sample compared to the LS estimator. The mean position error is, for the PF  $1.7$ m and for the LS estimation, $5.7$ m. 
 
-For environment \emph{two} the LS estimation perform better in comparison to the PF, as shown by the errors in Figure \ref{ls_error_medium}. The PF, however, does still provide the best position estimates and the error is lower for the PF in most of the samples and the LS estimator produces the larges position error. The difference in maximum error though is not large, then again, the mean error for the PF is $3.4$ m and for the LS estimation, $5.1$ m. The PF seams to produce considerably better results compared to the LS method when the environment is favorable i.e when a large number of access point are available and/or their geometry are good. When the conditions are disadvantageous both methods performs equally, giving positions around 10 meters off.
+For environment \emph{two} the LS estimation perform better in comparison to the PF, as shown by the errors in Figure \ref{ls_error_medium}. The PF, however, does still provide the best position estimates and the error is lower for the PF in most of the samples and the LS estimator produces the larges position error. The difference in maximum error though is not large, then again, the mean error for the PF is $3.4$ m and for the LS estimation, $5.1$ m. The PF seams to produce considerably better results compared to the LS method when the environment is favorable i.e when a large number of AP are available and/or their geometry are good. When the conditions are disadvantageous both methods performs equally, giving positions around 10 meters off.
 
-The conclusion to be drawn from these investigations is a particle filter is the better choice for estimating positions from noisy RSSI measurements, especially if the only sought after attribute is the smallest mean and maximum errors. The lest squares estimation may be desirable to use if simple implementation is important or if limited computing power is available.
+The conclusion to be drawn from these investigations is a PF is the better choice for estimating positions from noisy RSSI measurements, especially if the only sought after attribute is the smallest mean and maximum errors. The lest squares estimation may be desirable to use if simple implementation is important or if limited computing power is available.
 
 An interesting aspect is the performance when no previous measurements are available. Then, the PF loses its advantage of using these, whereas nothing changes for the LS. A new test was performed in \emph{Environment two}, and at each measure point, the previous position was treated as completely unknown. This means that the particles had to be spread out over the whole floor before each estimation. Then, one iteration was performed in the PF. The errors are shown in Figure XXXXXX. The mean error is 5.09 m for the PF and 5.14 m for the LS. It is difficult to decide which method that works best in this case. 
 
 %
 \section{Concluding remarks}
 %
-Using measurements of RSSI to position devices in a indoor environment can be a satisfactory technique if the need for precision is not too great. In a fairly homogenous building, i.e approximately the same path loss model within, with a reasonable number of access point placed in a acceptable geometry, the positioning may be quite good. 
+Using measurements of RSSI to position devices in a indoor environment can be a satisfactory technique if the need for precision is not too great. In a fairly homogenous building, i.e approximately the same path loss model within, with a reasonable number of AP placed in a acceptable geometry, the positioning may be quite good. 
 
-The position estimation may, with satisfactory result, be computed using a particle filter. The PF outperforms a least squares estimation in most cases and newer produces inferior results for a sustained timespan. The worse case error between the two estimators is on par when the environment is unfavorable but the PF produces better estimates in a beneficial environment and smaller mean errors in the long run. 
+The position estimation may, with satisfactory result, be computed using a PF. The PF outperforms an LS estimation in most cases and newer produces inferior results for a sustained timespan. The worse case error between the two estimators is on par when the environment is unfavorable but the PF produces better estimates in a beneficial environment and smaller mean errors in the long run. 
 
 A few objections with the technique must however be mentioned, first and foremost, more or less all buildings needs a specific path loss model and the power which each AP transmits, and their location, needs to be known. Also, to have a chance to obtain a reasonable position estimate measurements from at least three different APs must be available at all times. If fewer are available larger positioning errors are to be expected, if only two AP are visible at least two positions will be equally probable and if only measurements from one is available all point at a certain distance may be the true position. The position history of the PF can improve the estimation when the geometry is unfavorable if the initial position is fairly accurate and the time spent in the environment is rather short. The LS estimation lacks this property and will produce erroneous or inconsistent estimations independent of past positions. Further, antennas have different abilities to receive signals, thus the behavior of the specific device must be known. Lastly, how different users hold or carry their devices substantially affect the received signal power.  
 
@@ -1127,7 +1127,7 @@ Each AP corresponds to one circular section, centered at the AP and with radius 
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/alpha_sections}
-\caption{\emph{Environment three} divided into sections. Each circle corresponds to a section around a certain access point.}\label{alpha_sections}
+\caption{\emph{Environment three} divided into sections. Each circle corresponds to a section around a certain AP.}\label{alpha_sections}
 \end{figure}
 
 
@@ -1262,7 +1262,7 @@ Compensating for the hand attenuation clearly improved the positioning. However,
 %
 Modeling the kinematics may greatly improve the performance of a positioning system, especially if the estimated position is noisy or biased. The kinematics may also be used to estimate the position in between the updates from the main positioning algorithm. The range of models stretches from simple random walk processes to estimating acceleration, velocity and position in a three dimensional space using sensor fusion.
 
-After a short description of different random walk processes, quaternions are introduced and their use in three-dimensional pose  estimation, without risk of singularities, explained. A section about positioning using only sensors, named \emph{dead reckoning}, is presented, after which the chapter closes by a discussion of kinematics models used in indoor positioning and their effects on the performance.   
+After a short description of different random walk processes, quaternions are introduced and their use in three-dimensional pose  estimation, without risk of singularities, explained. A section about positioning using only sensors, named \emph{dead reckoning} (DR), is presented, after which the chapter closes by a discussion of kinematics models used in indoor positioning and their effects on the performance.   
 %
 \section{Sensors}
 Here follows a brief description of three sensors commonly available in modern smartphones, \emph{the accelerometer, the gyroscope} and \emph{the magnetometer}. A short description of their inner workings, advantages and disadvantages is given along with a description of their use in position estimation. For a deeper description of the sensors and a more extensive discussion about biases and drifts a reference is given to \cite{bently88} and \cite{morris96}. 
@@ -1487,7 +1487,7 @@ The step length of an individual, moving in a straight line with a constant spee
 
 For real world usage however, the length of a user's steps must be determined. This can be done in various ways, one is to have the user estimate their own step length with the same method as above. Another is to adaptively tune the step length by using approximately known distances travelled and the number of steps taken whilst traveling. A way of doing this is to use some sort of positioning technique (GPS, WiFi etc.) to estimate the distance while the step counter determines the number of steps.
 
-An alternative method is to add step length as a state in the particle filter corresponding to step length and spread the particles according to their step length. Particles with to long or to short step length would agree badly with measured RSSI-values and thus be given a small weight. A downside to this is that increasing the number of states would require more particles as discussed in section \ref{sec:nlfp} consequently increasing the computational power required to implement the filter.      
+An alternative method is to add step length as a state in the PF corresponding to step length and spread the particles according to their step length. Particles with to long or to short step length would agree badly with measured RSSI-values and thus be given a small weight. A downside to this is that increasing the number of states would require more particles as discussed in section \ref{sec:nlfp} consequently increasing the computational power required to implement the filter.      
 %
 \section{Dealing With a Non-Constant Sampling Rate}
 %
@@ -1540,7 +1540,7 @@ In Figure \ref{rot_test} the estimated heading for such an algorithm is shown al
 \subsection{Heading as a Particle Filter State}
 \label{subsec:PF_heading}
 %
-Another method for estimating the direction of movement is to extend the particle filter with a state representing the heading of each particle. A kinematics model could be
+Another method for estimating the direction of movement is to extend the PF with a state representing the heading of each particle. A kinematics model could be
 %
 \begin{eqnarray}
 x_{k+1} &  = & x_k + r\cdot\cos{\theta_k} \nonumber\\
@@ -1564,7 +1564,7 @@ Where,
 %
 with $N$ as the number of gyroscope measurements between $t_k$ and $t_{k+1}$, $\vec{\omega}$ as the sensor measurements and $t_n$ as the time of the $n$th measurement. $\Delta\theta$ is a measurement of the change in direction between $k$ and $k+1$, allowing the kinematics model to more accurately capture turn. Used in this sense the gyroscope is only used to compute the angular change in between two times. Thus, if the time between state updates is short enough, biases and drifts of the gyroscope may be neglected. Further, this model allows for a process noise, $v_k$, with a much smaller standard deviation as most of the dynamics of a turn is captured by the gyroscope. 
 
-The problem of ''false'' turns, which arrises when the devices turns when the user do not, is still present. However, the effect can be reduced quite substantially when the gyroscope is used collaboratively with the particle filter. Each particle is a independent entity and if a turn is detected, a portion, $p\in[0,1]$, of the particles may be selected to ignore the turn. Later when the particles are given their weights, these particles will, depending on weather a actual turn was made, either be given a large or small weight. Thus, if a turn was made, the portion, $p$, of particles that did not turn will not be re-sampled or vice versa. 
+The problem of ''false'' turns, which arrises when the devices turns when the user do not, is still present. However, the effect can be reduced quite substantially when the gyroscope is used collaboratively with the PF. Each particle is a independent entity and if a turn is detected, a portion, $p\in[0,1]$, of the particles may be selected to ignore the turn. Later when the particles are given their weights, these particles will, depending on weather a actual turn was made, either be given a large or small weight. Thus, if a turn was made, the portion, $p$, of particles that did not turn will not be re-sampled or vice versa. 
 
 \subsubsection{Adding the Step Counter}
 %
@@ -1593,27 +1593,27 @@ with the same notation as previous with the exception of $d_k$ being the particl
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_1}
-\caption{True versus, by pedestrian dead reckoning, estimated path using gyroscope and pedometer.}\label{deadreckon_1}
+\caption{True versus, by PDR, estimated path using gyroscope and pedometer.}\label{deadreckon_1}
 \end{figure}
 %
 \section{Dead Reckoning}
 
-\emph{Dead reckoning} is the process of calculating the current position based on a previously determined position and advancing that position based on a known model \cite{ped_dead}. Dead reckoning has been used by e. g ships and airplanes for a long time, and in more resent time in networked computer games \cite{network_game}. However, as stated before, the error is cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and especially the heading error is clearly visible. 
+\emph{Dead reckoning} (DR) is the process of calculating the current position based on a previously determined position and advancing that position based on a known model \cite{ped_dead}. DR has been used by e. g ships and airplanes for a long time, and in more resent time in networked computer games \cite{network_game}. However, as stated before, the error is cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and especially the heading error is clearly visible. 
 
-Dead reckoning estimations are subject to cumulative errors i.e. errors are added over time and depending on the accuracy of the dead reckoning system, the estimated position deviates from the true. This implies that the position and heading estimates need to be calibrated at a certain time interval to provide an accurate position.
+DR estimations are subject to cumulative errors i.e. errors are added over time and depending on the accuracy of the DR system, the estimated position deviates from the true. This implies that the position and heading estimates need to be calibrated at a certain time interval to provide an accurate position.
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_2}
-\caption{True versus, by pedestrian dead reckoning, estimated path using gyroscope and pedometer.}\label{deadreckon_2}
+\caption{True versus, by PDR, estimated path using gyroscope and pedometer.}\label{deadreckon_2}
 \end{figure}
 %
-For phones, a method witch extends normal dead reckoning, called \emph{pedestrian dead reckoning}, PDR, could be used. Position and direction estimation would most likely include some form of step counting for distance measurement combined with either gyroscope or a sensor fusion including the magnetometer for heading estimation. As an example, the true and estimated paths using a pedometer and a gyroscope during a walk of approximately 110 meters, are presented in Figure \ref{deadreckon_1}. The behavior is fairly good but there is a heading error present soon after the start, and this grows as the walk continues. The distance estimated by the pedometer is also larger than the true distance traveled. Further, the estimation grows with time, as seen in Figure \ref{deadreckon_2}, making PDR useful only for short term estimation, if no calibration of position and direction is performed.  
+For phones, a method witch extends normal DR, called \emph{pedestrian dead reckoning} (PDR) could be used. Position and direction estimation would most likely include some form of step counting for distance measurement combined with either gyroscope or a sensor fusion including the magnetometer for heading estimation. As an example, the true and estimated paths using a pedometer and a gyroscope during a walk of approximately 110 meters, are presented in Figure \ref{deadreckon_1}. The behavior is fairly good but there is a heading error present soon after the start, and this grows as the walk continues. The distance estimated by the pedometer is also larger than the true distance traveled. Further, the estimation grows with time, as seen in Figure \ref{deadreckon_2}, making PDR useful only for short term estimation, if no calibration of position and direction is performed.  
 %
 \chapter{Indoor Positioning - Sensor Fused Approach} 
 \label{chap:sensor_fused}
 %
-In this chapter, a method of how to include the information from the sensors in the positioning algorithm will be presented. The dead reckoning presented in the previous chapter works well for short distances (see e.g. Figure \ref{deadreckon_1}), whereas information from WiFi signals do not have the disadvantage of drifts. The main strategy is now to combine these, in order to get the best properties from both  parts.
+In this chapter, a method of how to include the information from the sensors in the positioning algorithm will be presented. The DR presented in the previous chapter works well for short distances (see e.g. Figure \ref{deadreckon_1}), whereas information from WiFi signals do not have the disadvantage of drifts. The main strategy is now to combine these, in order to get the best properties from both  parts.
 
 
 
@@ -1627,13 +1627,13 @@ Two sensors will be used to aid in the positioning, an accelerometer and a gyros
 
 Initially, the position of each particle is uniformly random distributed in $[0,2\pi]$, and the step length is normally random distributed around 0.75 m. When the user takes a step, each particle moves its own step length in its own direction. Then, particles with good estimations of the step length and direction will reach accurate estimations of the position, and be more likely to multiply in the next step.
 
-The new states offer two advantages. Firstly, this kinematics model is more accurate than a random walk, which means that the particles are moved to more probable positions at each step. Secondly, the average direction and step length can be used for dead-reckoning between the RSSI-measurements, providing a more frequent position estimation output.
+The new states offer two advantages. Firstly, this kinematics model is more accurate than a random walk, which means that the particles are moved to more probable positions at each step. Secondly, the average direction and step length can be used for DR between the RSSI-measurements, providing a more frequent position estimation output.
 
 In order to keep the particle density in the state space high enough, the number of particles used has to be larger for this algorithm. In order to model the noise, the directions and step lengths are spread randomly with normal distributions around their current values, during each state update (see Table \ref{table:parameter_distributions}). Standard deviations of 0.01 m for the step length, and 0.01 radians for the direction, seemed to be reasonable for the models. The states are updated each time a step is taken by the user. 
 
 \section{Test Setup}
 
-In order to test this algorithm, one of the authors walked one round in \emph{Environment three}, at normal walking pace, holding the smart phone with constant orientation in relation to the body. The initial position and direction were treated as unknown. The parameter values used in this test are listed in Table \ref{table:parameters_careful_user_test}, and the probability distributions of the models are listed in Table \ref{table:parameter_distributions}.
+In order to test this algorithm, one of the authors walked one round in \emph{Environment three}, at normal walking pace, holding the smartphone with constant orientation in relation to the body. The initial position and direction were treated as unknown. The parameter values used in this test are listed in Table \ref{table:parameters_careful_user_test}, and the probability distributions of the models are listed in Table \ref{table:parameter_distributions}.
 
 \begin{table}[!hbt]
 \begin{center}
@@ -1690,7 +1690,7 @@ The positioning estimation error is computed by dividing the path into equidista
 %
 \section{Results}
 %
-In this section the results obtained when fusing sensor data together with Wi-Fi measurements are presented. First the results obtained while a predetermined step length was used is presented. Afterwards the position estimation when the step length is treated as a part of the state space is presented along with positioning from a least squares algorithm, particle filter using only Wi-Fi measurements and a pedestrian dead reckoning algorithm. This section is followed by a presentation of findings concerning the step length estimation when the algorithm is tried on different users. The last section deals with detection and compensation of ''false'' user induced turns.   
+In this section the results obtained when fusing sensor data together with Wi-Fi measurements are presented. First the results obtained while a predetermined step length was used is presented. Afterwards the position estimation when the step length is treated as a part of the state space is presented along with positioning from an LS algorithm, PF using only Wi-Fi measurements and a PDR algorithm. This section is followed by a presentation of findings concerning the step length estimation when the algorithm is tried on different users. The last section deals with detection and compensation of ''false'' user induced turns.   
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -1728,7 +1728,7 @@ The time until a approximate initial error is clearly visible in the plot of the
 \caption{Position errors of different algorithms. Note that the scales on the y-axis are different.}\label{error_multi}
 \end{figure}
 %
-Figure \ref{path_multi} shows the estimated path of four different positioning algorithms, least squares, pedestrian dead reckoning and particle filter with and without sensor data. The positioning error is, for each algorithm, displayed in Figure \ref{error_multi} and to high light some of the features of the error, the mean, max and median values for each is available in Table \ref{table:error_different_algorithms}. In this test, WiFi measurements combined with information from the sensors performed best. Furthermore, Figure \ref{error_multi} shows that the error from the dead reckoning seems to grow with time, which is a typical property of this estimation method. 
+Figure \ref{path_multi} shows the estimated path of four different positioning algorithms, LS, PDR and PF with and without sensor data. The positioning error is, for each algorithm, displayed in Figure \ref{error_multi} and to high light some of the features of the error, the mean, max and median values for each is available in Table \ref{table:error_different_algorithms}. In this test, WiFi measurements combined with information from the sensors performed best. Furthermore, Figure \ref{error_multi} shows that the error from the DR seems to grow with time, which is a typical property of this estimation method. 
 %
 \begin{table}[!hbt]
 \begin{center}
@@ -1737,20 +1737,20 @@ Figure \ref{path_multi} shows the estimated path of four different positioning a
 \multicolumn{1}{|c|}{Positioning algorithm} & Maximum error  & Average error  & Median error \\
 \hline
 \hline
-Least Squares - Wi-Fi Only & 11.2 & 4.8 & 4.1 \\
+LS - WiFi Only & 11.2 & 4.8 & 4.1 \\
 \hline
-Particle Filter - Wi-Fi Only & 11.6 & 3.5 & 3.1  \\
+PF - WiFi Only & 11.6 & 3.5 & 3.1  \\
 \hline
-Pedestrian Dead Reckoning & 7.7 & 4.2 & 4.8  \\
+PDR & 7.7 & 4.2 & 4.8  \\
 \hline
-Particle Filter - Wi-Fi \& Sensors & 5.8 & 1.8 & 1.8 \\
+PF - WiFi \& Sensors & 5.8 & 1.8 & 1.8 \\
 \hline
 \end{tabular}
 \end{center}
 \caption{Position estimations using four different algorithms utilizing sensors and/or \newline Wi-Fi in \emph{Environment three}. All magnitudes are in meters.}\label{table:error_different_algorithms}
 \end{table}
 
-The error of the particle filter with sensor data is larger when the step length also is estimated. This behavior is to be expected the estimation relies on relatively noise RSSI measurements to estimate the step length. However, this walk was conducted at a approximatively constant speed by a single user, and a different user may have a quite different stride length. In such a case, the positioning will improve if the  step length is estimated. Additionally, a user may change stride length over the course of a walk, which will be caught by the estimation.  
+The error of the PF with sensor data is larger when the step length also is estimated. This behavior is to be expected the estimation relies on relatively noise RSSI measurements to estimate the step length. However, this walk was conducted at a approximatively constant speed by a single user, and a different user may have a quite different stride length. In such a case, the positioning will improve if the  step length is estimated. Additionally, a user may change stride length over the course of a walk, which will be caught by the estimation.  
 %
 
 \subsection{Evaluation of the Step Length Estimation}
@@ -1780,7 +1780,7 @@ This was tested in \emph{Environment three}, where the phone was rotated $\frac{
 %
 Using information from the accelerometer and the gyroscope improved the positioning significantly. At the same time, this requires that the orientation of the phone in relation to the user does not chance too frequently. While these events may be detected and taken into account, there are situations where it takes some time for the algorithm to exclude a "false" turn, and if this happened too often, the position estimation would always be inaccurate.
 
-Even though the sensors contribute with important information about the movement of the user, it would not be an option to use these for pedestrian dead reckoning only, i.e without combining them with the WiFi measurements. The main reasons are that the initial states would have to be known, that the expected error grows with time, and that the orientation of the phone would always have to be fix in relation to the user. The conclusion is that WiFi measurements could be used without pedestrian dead reckoning, but not the other way around.
+Even though the sensors contribute with important information about the movement of the user, it would not be an option to use these for PDR only, i.e without combining them with the WiFi measurements. The main reasons are that the initial states would have to be known, that the expected error grows with time, and that the orientation of the phone would always have to be fix in relation to the user. The conclusion is that WiFi measurements could be used without PDR, but not the other way around.
 
 
 
@@ -1790,7 +1790,7 @@ Even though the sensors contribute with important information about the movement
 \chapter{Algorithm Implementation in Android}
 \label{chap:implement}
 %
-In previous chapters offline computations are used to obtain the position estimate. Here an online java implementation of the developed algorithms will be presented briefly. The particle filter is quite computationally demanding, and therefor it is important to discern if handheld devices are capable of performing these computations sufficiently fast. 
+In previous chapters offline computations are used to obtain the position estimate. Here an online java implementation of the developed algorithms will be presented briefly. The PF is quite computationally demanding, and therefor it is important to discern if handheld devices are capable of performing these computations sufficiently fast. 
 
 The implementation will be done in a positioning application developed by Sony Mobile, called SonyMap \cite{sonymap}. This application is intended for android smartphones and used to navigate and position the smartphone in Sony Mobiles buildings around the globe. 
 %
@@ -1928,13 +1928,13 @@ In this thesis a open source solution called \emph{Jcoord} is used \cite{jcoord}
 %
 \subsection{Pose Estimation}
 %
-When implementing the particle filter, it is of interest to discern between different states or poses the user is in, like walking or being still. One of the reasons for this is that the state update of the particle filter can be changed according to the pose, i.e. when still no benefit is drawn from updating the heading, step length or movement and a random walk with a small variance is a good enough kinematics model. Another is that if the user is still, there is no need to sample the sensors at a high rate, conserving both computational power and battery. Further, as fewer filter states are required for a stationary, the number of particles can be decreased, which in turn, decreases the needed computational power further. 
+When implementing the PF, it is of interest to discern between different states or poses the user is in, like walking or being still. One of the reasons for this is that the state update of the PF can be changed according to the pose, i.e. when still no benefit is drawn from updating the heading, step length or movement and a random walk with a small variance is a good enough kinematics model. Another is that if the user is still, there is no need to sample the sensors at a high rate, conserving both computational power and battery. Further, as fewer filter states are required for a stationary, the number of particles can be decreased, which in turn, decreases the needed computational power further. 
 
 In the implementation a user has been deemed as still if no steps has been detected over the course of three seconds and subsequently deemed moving if not still. This is a fairly crude method of distinguishing between poses, but in the current use case, the performance is sufficient.  
 %
 \subsection{The Particle Filter}
 %
-In Chapter \ref{chap:PF}, the particle filter process is described in three steps, weighting, re-sampling and state update. Performing the operations in this order is not very computationally efficient, both concerning memory and computational power. A better way is to combine the state update and weighting, thus when a new set of RSSI values are available, for each particle, the state is updated and then the weight computed. During this step a sorted cumulative sum of the particle weights is also computed. The the re-sampling is performed along with the computation of the estimated position.
+In Chapter \ref{chap:PF}, the PF process is described in three steps, weighting, re-sampling and state update. Performing the operations in this order is not very computationally efficient, both concerning memory and computational power. A better way is to combine the state update and weighting, thus when a new set of RSSI values are available, for each particle, the state is updated and then the weight computed. During this step a sorted cumulative sum of the particle weights is also computed. The the re-sampling is performed along with the computation of the estimated position.
 
 If a step counter is added to aid the state update, the states can be updated at each detection of a step, as the time between consecutive RSSI measurements is no longer needed to perform an accurate state update. This further decreases the amount of time spent between receiving RSSI measurements and a position estimation is obtained. In addition, along with every registered step a new estimation of the position could be computed, allowing for faster updates than the RSSI measurements alone. 
 
@@ -1953,19 +1953,19 @@ In this chapter the contributions made throughout this thesis work are presented
 \section{Contributions}
 
 \subsection{Positioning using both 2.4 and 5 GHz WiFi signals}
-A particle filter that uses both 2.4 and 5 GHz WiFi signals for positioning was developed. It was concluded that more information was obtained by using both frequencies rather than one of them, which improved the positioning. The path-loss models can be improved by adapting the model parameters during the positioning. This is done by using measurements from positions where the position error is expected to be low, and then use this to estimate the model parameters. Furthermore, the algorithm can compensate for signal attenuation induced by the hand of the user.
+A PF that uses both 2.4 and 5 GHz WiFi signals for positioning was developed. It was concluded that more information was obtained by using both frequencies rather than one of them, which improved the positioning. The path-loss models can be improved by adapting the model parameters during the positioning. This is done by using measurements from positions where the position error is expected to be low, and then use this to estimate the model parameters. Furthermore, the algorithm can compensate for signal attenuation induced by the hand of the user.
 
 
 
 \subsection{Sensor fused positioning}
-In addition to the WiFi signals, information from the sensors was used to model the motion of the user carrying the device. From this, an accurate positioning algorithm was implemented, with the constraint that the device must be reasonably fix in relation to the user. For the case where this is not fulfilled, a less accurate but more robust algorithm was developed. For these algorithms, the initial position and heading do not have to be known. This information is obtained from the WiFi signals. The algorithms were developed and tested for commonly used smart phones, and hence the sensors in these are accurate enough for the algorithms to work.
+In addition to the WiFi signals, information from the sensors was used to model the motion of the user carrying the device. From this, an accurate positioning algorithm was implemented, with the constraint that the device must be reasonably fix in relation to the user. For the case where this is not fulfilled, a less accurate but more robust algorithm was developed. For these algorithms, the initial position and heading do not have to be known. This information is obtained from the WiFi signals. The algorithms were developed and tested for commonly used smartphones, and hence the sensors in these are accurate enough for the algorithms to work.
 
 
 \subsubsection{Step counter} ~\\
 A step counter using the accelerometer was developed, as an important part of the algorithm. The magnitude of the acceleration was differentiated and filtered, and when it passed a certain threshold level, this was used to indicate a step. This step counter works regardless of whether the phone is carried in the hand, in a pocket or in a bag. 
 
 \subsubsection{Heading} ~\\
-The accelerometer was also used to give the direction of gravity as a reference of the rotation, which was measured by the gyroscope, in order to get information about the heading of the user. To handle different hypothesis of the direction, each particle was given a direction as a state in the particle filter.
+The accelerometer was also used to give the direction of gravity as a reference of the rotation, which was measured by the gyroscope, in order to get information about the heading of the user. To handle different hypothesis of the direction, each particle was given a direction as a state in the PF.
 
 
 
@@ -1987,13 +1987,13 @@ During the work with this thesis several possible enhancements or extensions to 
 %
 \subsection{3D-Positioning}
 %
-In this thesis only a two dimensional model of the space, in which to navigate has been used. Motion along the $z-$axis of the local frame, i.e changing floor, has been determined using methods other than the particle filter. Further, possibly beneficial signal originating from other floors or building than the one the user is currently estimated to be in are disregarded.
+In this thesis only a two dimensional model of the space, in which to navigate has been used. Motion along the $z-$axis of the local frame, i.e changing floor, has been determined using methods other than the PF. Further, possibly beneficial signal originating from other floors or building than the one the user is currently estimated to be in are disregarded.
 
 A more general approach is to consider a full three dimensional model of space. For this to be possible some extensions to the work done in this thesis must be done. A start could be to introduce current floors as a discrete particle state, making the need to have a separate algorithm to determine it unnecessary. To make this possible a multi-floor model of the RSSI values from each AP, taking into account the attenuation from floors and ceilings, needs to be developed. The 3D model could also contain a continuous state corresponding the altitude, making it possible to determine both $x$- and $y$- position along with the height of the phone. 
 %
 \subsection{Using More Signals and/or Sensors}
 %
-To estimate a position only RSSI measurements from WiFi access points and readings from an accelerometer and a gyroscope. But smartphone today contain sensors to measure a much wider array of signals and environmental properties. Some of these have a great potential to aid in the position estimation.
+To estimate a position only RSSI measurements from WiFi APs and readings from an accelerometer and a gyroscope. But smartphone today contain sensors to measure a much wider array of signals and environmental properties. Some of these have a great potential to aid in the position estimation.
 
 A barometer is a sensor measuring the atmospheric pressure and this varies with the height above ground. Thus, a barometer could aid in the estimation of floor, either to be used to weight particles in a 3D model or to aid the heuristic floor estimation algorithm.
 
@@ -2027,7 +2027,7 @@ Another advantages of having a large number of users is a large amount of data g
 %
 \subsection{Smart WiFI Channel Choice}
 %
-To obtain a total picture of the APs in the surroundings of the measuring device a scan of each possible wifi channel must be performed. Such a scan claims a large amount of time (around 3.5 second). If, on the other hand, the channel/channels on which APs in the vicinity are transmitting are known, only theses channels could be scanned. This will drastically decrease the amount of time spent scanning, as a single channel takes just over 100 ms to scan. And if the scans could be performed at shorter time intervals more information from the interesting APs could be obtained.   
+To obtain a total picture of the APs in the surroundings of the measuring device a scan of each possible WiFi channel must be performed. Such a scan claims a large amount of time (around 3.5 second). If, on the other hand, the channel/channels on which APs in the vicinity are transmitting are known, only theses channels could be scanned. This will drastically decrease the amount of time spent scanning, as a single channel takes just over 100 ms to scan. And if the scans could be performed at shorter time intervals more information from the interesting APs could be obtained.   
 %
 \printbibliography  %% Comment if you don't want to use bibtex
 
