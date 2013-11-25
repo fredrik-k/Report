@@ -36,21 +36,21 @@ This Master's thesis investigates possible algorithms for indoor positioning wit
 
 \section{Background}
 %
-The research area concerning techniques for positioning of handheld devices is of great importance, both from a user and commercial standpoint. Many different services and applications depend on, or could be improved, by an ubiquitous localization system. In addition, the user experience of applications could be aided by including information based on the users current position. Another area of interest is positioning of emergency response teams, where the lack of an accurate position potentially could have lethal consequences.
+The research area concerning techniques for positioning of handheld devices is of great importance, both from a user and commercial standpoint. Many different services and applications depend on, or could be improved by, an ubiquitous localization system. In addition, the user experience of applications could be aided by including information based on the user's current position. Another area of interest is positioning of emergency response teams, where the lack of an accurate position potentially could have lethal consequences.
   
-In most outdoor environments the \emph{Global Navigation Satellite System} (GNSS), of which the \emph{Global Positioning System} (GPS) is a part, provides locations with an accuracy of a couple of meters. These type of systems requires signal connections to satellites to function and in obstructed outdoor and indoor areas the signals, i many cases, are to weak to enable accurate positioning. 
+In most outdoor environments the \emph{Global Navigation Satellite System} (GNSS), of which the \emph{Global Positioning System} (GPS) is a part, provides locations with an accuracy of a couple of meters. These types of systems require signal connections to satellites to function, and in obstructed outdoor and indoor areas the signals are often too weak to enable accurate positioning. 
 
-Fueled by the lack of accurate positioning in the indoor environment, a multitude of techniques have been developed which solves the problem under different constraints \cite{positioning_overview}. 
+Fueled by the lack of accurate positioning in the indoor environment, a multitude of techniques that solve the problem under different constraints has been developed \cite{positioning_overview}. 
 
-The advantages of using WiFi Access Points (APs) are several. The technique is well established and APs exists in almost every indoors environment, making no further investment in hardware required. Another interesting development is the move to include transmitters at both 2.4 and 5 GHz in modern APs, in best case resulting in two independent measurements to each AP.  Further, there are there are potential for techniques to locate APs with reasonable accuracy, like the one presented in \cite{exjobb}. 
+The advantages of using WiFi access points (APs) are several. The technique is well established and APs exist in almost every indoor environment, making no further investment in hardware necessary. Another interesting development is the move to include transmitters at both 2.4 and 5 GHz in modern APs, in best case resulting in two independent measurements from each AP. Further, there is potential for techniques to locate APs with reasonable accuracy, such as the one presented in e.g. \cite{exjobb}. 
 
-However, WiFi signals are fickle and for accurate positioning aid from another measurement source is needed. Here different techniques could be used and an especially enticing one is inertial sensors, like accelerometers and gyroscopes. Most modern smartphones contain both sensor types along with the possibility to measure WiFi signals at both 2.4 and 5 GHz. Additionally the market penetration of smartphones is larges making it a suitable platform for a large scale roll out of an indoor positioning algorithm.  
+However, WiFi signals are fickle and for an accurate positioning aid from another measurement source is needed. Here, different techniques could be used, and an especially enticing one is inertial sensors, like accelerometers and gyroscopes. Most modern smartphones contain both sensor types along with the possibility to measure WiFi signals at both 2.4 and 5 GHz. Additionally, the market penetration of smartphones is large, making it a suitable platform for a large scale roll out of an indoor positioning algorithm.
 %
 \section{Goal}
 
 The goal of this thesis is to develop, implement and evaluate an algorithm for indoor positioning. The thesis describes the result of using both 2.4 and 5 GHz WiFi signals.
 
-In the first part, the positioning is done using information from WiFi signals only. This will be combined with a particle filter to estimate the true position, and this method will be compared to the method of least squares, which is more conventional.
+In the first part, the positioning is done using information from WiFi signals only. This will be combined with a particle filter to estimate the true position, and this method will be compared to the method of least squares (LS), which is more conventional.
 
 In the second part, the goal is to improve the performance by adding information from the sensors, in order to receive information about the movement of the user.
 
@@ -58,7 +58,7 @@ When the algorithm is developed, the project aims to implement it as an Android 
 
 \section{Limitations}
 %
-The positioning application developed requires the positions of the access points used to be known. Furthermore, sufficiently good models of the indoor path loss are needed, which requires information about how strong the APs transmit, and how dense the environment is regarding obstacles such as walls and furniture. 
+The positioning application developed requires the positions of the access points used to be known. Furthermore, sufficiently good models of the indoor path loss are needed, which in turn requires information about how strong the APs transmit, and how dense the environment is regarding obstacles such as walls and furniture. 
 
 In order to include all parts of the algorithm, it is necessary to use a device that can receive both 2.4 and 5 GHz WiFi signals. Moreover, it is assumed to be equipped with accelerometer and gyroscope.
 
@@ -68,32 +68,32 @@ For optimal performance, the smartphone should be fixed in relation to the user 
 \section{Platform}
 
 %
-In this thesis smartphones, \emph{Sony Xperia Z Ultra}, \emph{Sony Xperia Z1} and \emph{Sony Xperia LT29i}, hereafter reffered to as the phone in noting else is specified, are used. Each of these phones are running the \emph{Android} operating system and are equipped with an accelerometer and a gyroscope and a WiFi chip capable of communication over both 2.4 and 5 GHz.  
+In this thesis the following smartphones are used: \emph{Sony Xperia Z Ultra}, \emph{Sony Xperia Z1} and \emph{Sony Xperia LT29i}. Hereafter, they are referred to as \emph{the phone} in nothing else is specified. Each of these phones is running the \emph{Android} operating system and is equipped with an accelerometer, a gyroscope and a WiFi chip capable of communication over both 2.4 and 5 GHz.
 %
 \subsection{Android} 
 %
-Android is a open source operating system used mostly by different handheld devices, in the smartphone segment Android is used by around 80\% of the units in use. The Android standard development kit contains the necessary tools and API:s to develop applications for the Android platform using the Java programming language. Using the standard API:s it is possible to access the devices sensors and all data collection performed during this thesis has be done through Java applications developed by the authors. 
+Android is an open source operating system used mostly by different handheld devices. In the smartphone segment, Android is used by around 80\% of the units in use. The Android standard development kit contains the necessary tools and API:s to develop applications for the Android platform using the Java programming language. Using the standard APIs, it is possible to access the device's sensors, and all data collection performed during this thesis has been done through Java applications developed by the authors. 
 %
 \section{Outline}
 %
 This outline presents the large scale structure of this thesis.
 %
 \begin{description}
-\item[Chapter \ref{chap:background}] gives a brief introduction to the history of navigation and positioning and an overview of the coordinate systems used.  
+\item[Chapter \ref{chap:background}] gives a brief introduction to the history of navigation and positioning, and an overview of the coordinate systems used.  
 %
 \item[Chapter \ref{chap:RSP}] describes the theory of radio signal propagation and how to obtain a good model of the radio channel. 
 %
 \item[Chapter \ref{chap:PF}] introduces the particle filter and gives a description of the particle filter process. Further, a brief description of the least squares estimation is given. 
 %
-\item[Chapter \ref{chap:wifi}] covers some of the different technologies concerning WiFi and its uses for positioning application. Additionally the differences between different WiFi frequency bands are investigated. 
+\item[Chapter \ref{chap:wifi}] covers some of the different technologies concerning WiFi and its uses for positioning application. Additionally, the differences between separate WiFi frequency bands are investigated. 
 %
-\item[Chapter \ref{chap:pure_rssi}] presents a method to obtain a position from WiFi RSSI measurements and this method is compared with the least squares estimation.  
+\item[Chapter \ref{chap:pure_rssi}] presents a method to obtain a position from WiFi RSSI measurements, and this method is compared with the least squares estimation.  
 %
-\item[Chapter \ref{chap:adapt}] discusses how the models developed in Chapter \ref{chap:RSP} could be adapted using received RSSI measurements and an estimated location. 
+\item[Chapter \ref{chap:adapt}] discusses how the models developed in Chapter \ref{chap:RSP} could be adapted using received RSSI measurements and an estimated location.
 %
-\item[Chapter \ref{chap:kin}] models the kinematics of walking using different sensors. Theses sensors are given also given a description and a step detection algorithm is presented. 
+\item[Chapter \ref{chap:kin}] models the kinematics of walking using different sensors. These sensors are described and a step detection algorithm is presented. 
 %
-\item[Chapter \ref{chap:sensor_fused}] merges the algorithm introduced in Chapter \ref{pure_rssi} with sensor data to a sensor fused indoor positioning algorithm using dual band WiFi measurements.
+\item[Chapter \ref{chap:sensor_fused}] merges the algorithm introduced in Chapter \ref{chap:pure_rssi} with sensor data to a sensor fused indoor positioning algorithm using dual band WiFi measurements.
 %
 \item[Chapter \ref{chap:implement}] is dedicated to the java implementation of the algorithms presented in Chapter \ref{chap:pure_rssi} and \ref{chap:sensor_fused} and the specific considerations made. 
 %
@@ -106,29 +106,29 @@ In accordance with Lund University policy the contribution made by each author m
 \chapter{Background on Navigation}
 \label{chap:background}
 %
-This chapter gives a brief introduction to the background and history of navigation. First a overview of some of the different stages navigational technology have conquered over the course of history. Further, an introduction to the different coordinate systems used in this thesis will be presented and special emphasis will be put on the system used when evaluation the positioning algorithm. In connection with this a brief presentation of the \emph{longitude and latitude} coordinate system will be given. 
+This chapter gives a brief introduction to the background and history of navigation. First, there is an overview of some of the different stages that navigational technology has conquered over the course of history. Then, an introduction to the different coordinate systems used in this thesis will be presented and special emphasis will be put on the system used when evaluating the positioning algorithm. In connection with this, a brief presentation of the \emph{longitude and latitude} coordinate system will be given. 
 %
 \section{Overview}
 %
-Mankind has always had a need to navigate in its surroundings. At an early stage these surroundings was fairly small and visual references to known landmarks was good enough to find ones way. As the distances traveled grew, so did the need for a more well defined frame of reference, so mankind turned to celestial bodies. Using the sun and the stars, with their relatively fixed position in reference to the earth, gave the ability to keep a desired heading over a long distance. This ability was then refined over the centuries and triangulation was discovered as a mean to find one's position. The invention of the compass further improved the navigation. With a known orientation only the relative angle to two landmarks or celestial bodies, is needed to find the position. 
+Mankind has always had a need to navigate in its surroundings. At an early stage these surroundings were fairly small and visual references to known landmarks were good enough to find one's way. As the distances traveled grew, so did the need for a more well defined frame of reference, so mankind turned to celestial bodies. Using the sun and the stars, with their relatively fixed positions in reference to the earth, gave the ability to keep a desired heading over a long distance. This ability was then refined over the centuries and triangulation was discovered as a mean to find one's position. The invention of the compass further improved the navigation. With a known orientation, only the relative angles to two landmarks or celestial bodies, are needed to find the position. 
 
-In the 20th century the improvements in measuring accelerations and angular velocities promoted a technology called \emph{dead reckoning}. From a known position and heading, it is possible, using an accelerometer and a gyroscope, to estimate current speed and heading to find the current position. With occasional fixes of the position and heading the current position is known at all times. However, the size of the devices involved makes the technology inly suitable for larger vehicles, like ships or airplanes.
+In the 20th century the improvements in measuring accelerations and angular velocities promoted a technology called \emph{dead reckoning}. From a known position and heading, it is possible, using an accelerometer and a gyroscope, to estimate current speed and heading to find the current position. With occasional fixes of the position and heading, the current position can be estimated for all times. However, the sizes of the devices involved make the technology suitable only for larger vehicles, like ships or airplanes.
 
-Another technological leap was taken with the introduction of the \emph{Global Positioning System} (GPS). A system using the time difference between signals received from satellites with known location made it possible for almost anyone to find their position with an accuracy of around 15 meters. Today GPS receivers are readily available both as standalone devices or integrated in cars or smartphones.
+Another technological leap was taken with the introduction of the \emph{Global Positioning System} (GPS). This system uses the time difference between signals received from satellites with known locations, which made it possible for almost anyone to find their position with an accuracy of around 15 meters. Today, GPS receivers are readily available both as standalone devices and integrated in cars or smartphones.
 
-A problem however exists with the GPS system. To obtain a good position, signals from at least three (or four if the altitude should be determined along with the longitude and latitude) satellites must be available. Preferably these satellites should be in line-of-sight from the GPS receiver. Putting mor satellites in orbit increases the amount of time enough satellites are visible, however this only partly solves the problem. In some areas, like a suburban environment or indoors, the path between the GPS receiver and the satellites are obstructed either by the building it is in or buildings in its surroundings. An obstructed path results in that the GPS signal has to travel a longer distance, ie. by reflection, diffraction or scattering, to reach the receiver. Because the distance is estimated by the difference in time between when the signal was sent and received, an obstruction increases the estimated distance between receiver and satellite. Further, as the GPS signal is sent from space, it is weak when it reaches the earth surface and an obstruction may even make it to weak for the receiver to detect.
+A problem, however, exists with the GPS system. To obtain a good position, signals from at least three (or four, if the altitude should be determined along with the longitude and latitude) satellites must be available. Preferably these satellites should be in line-of-sight from the GPS receiver. Putting more satellites in orbit increases the probability that enough satellites are visible, but this only partly solves the problem. In some areas, like a suburban environment or indoors, the paths between the GPS receiver and the satellites are obstructed either by the building it is in or buildings in its surroundings. An obstructed path results in that the GPS signal has to travel a longer distance, i.e. by reflection, diffraction or scattering, to reach the receiver. Because the distance is estimated by the difference in time between when the signal was sent and received, an obstruction increases the estimated distance between receiver and satellite. Further, as the GPS signal is sent from space, it is weak when it reaches the Earth's surface and an obstruction may even make it too weak to be detected by the receiver.
 
-Altogether this makes GPS a good positioning technique in open outdoor areas, but in a suburban or indoor environment other techniques must be used to obtain accurate positioning. A multitude of techniques trying to solve this problem with different accuracies and constraints exists. There are no single technology these attempts are based on, instead they are spread over a wide range of areas, including inertial sensors, signal power, magnetic fields, cameras etc. \cite{positioning_overview}. 
+Altogether, this makes GPS a good positioning technique in open outdoor areas, but in a suburban or indoor environment other techniques must be used to obtain accurate positioning. A multitude of techniques that aim to solve this problem with different accuracies and constraints exists. There is no single technology that these attempts are based on. Instead, they are spread over a wide range of areas, including inertial sensors, signal intensities, magnetic fields, cameras etc. \cite{positioning_overview}. 
 %
 \section{Coordinate Systems}
-It should be apparent to the reader that a well defined coordinate system is of great importance for positioning applications. Further, to be able to receive a meaningful position, the coordinate system needs to be fixed in reference to the phone. In the sections below two different such coordinate systems are presented along with the coordinate system of the phone. 
+It should be apparent to the reader that a well defined coordinate system is of great importance for positioning applications. Further, to be able to receive a meaningful position, the coordinate system needs to be fixed in reference to the phone --DISCUSS--. In the sections below, two such coordinate systems are presented along with the coordinate system of the phone. 
 \subsection{World Frame}
 %
 The \emph{world frame} or the global coordinate system is commonly used for navigation, at least in a global perspective. The definition is, in accordance with Figure \ref{axis_globe} as follows:
 %
 \begin{description}
 \item[$x_w$:] Tangential to the ground at the current location, defined as $y_w\times z_w$. Points approximately east. 
-\item[$y_w$:] Tangential to the ground at the current location, pointing towards magnetic North Pole.
+\item[$y_w$:] Tangential to the ground at the current location, pointing towards the magnetic North Pole.
 \item[$z_w$:] Perpendicular to the ground, pointing skywards.
 \end{description}
 %
@@ -142,11 +142,11 @@ The \emph{world frame} or the global coordinate system is commonly used for navi
 %
 \footnotetext{This image is reproduced from work created and shared by the \emph{Android Open Source Community} \cite{aos} and used according to the terms described in the \emph{Creative Commons 2.5 Attribution License} \cite{cc}.}
 %
-Noteworthy is that this system is not fixed in space and different positions on the earths surface will result in a differently oriented coordinate system. Further, as the world rotates around its own axes so does the coordinate system (15$^\circ$ per hour). In the sense of indoor positioning however, both of these effects can be considered small. The change in position is small and in a global perspective can be considered as a point, also, the timescale considered is often considerably shorter than one hour. 
+Noteworthy is that this system is not fixed in space and, different positions on the Earth's surface will result in a differently oriented coordinate systems. Further, as the world rotates around its own axis so does the coordinate system (15$^\circ$ per hour). In the sense of indoor positioning however, both of these effects can be considered small. The change in position is small and in a global perspective can be considered as a point, also, the timescale considered is often considerably shorter than one hour --HIGHLIGHT--. 
 %
 \subsection{Local Frame}
 %
-Using the world frame might is some cases be impractical or cumbersome for a certain location. As an example, take a  building with most corridors oriented with an angular offset of $\phi$ in reference to the global frame. For this location it would be considerably more practical to orient the coordinate system so that most movement are done in the $x-$ and $y-$ directions.   
+Using the world frame might is some cases be impractical or cumbersome for a certain location. As an example, consider a  building with most corridors oriented with an angular offset of $\phi$ in reference to the global frame. For this location it would be considerably more practical to orient the coordinate system so that most movement is done in the $x-$ and $y-$ directions.   
 
 Such a coordinate system is defined as:
 %
@@ -158,17 +158,17 @@ Such a coordinate system is defined as:
 %
 \subsection{Phone Frame}
 %
-A unambiguous definition of a coordinate system with a fixed orientation in reference to the phone is crucial. This is due to most sensors reporting their measurements in coordinates fixed in reference to the phone. 
+An unambiguous definition of a coordinate system with a fixed orientation in reference to the phone is crucial. This is due to most sensors reporting their measurements in coordinates that are fixed in reference to the phone. 
 
-In Android, the phone coordinate system is defined, according to Figure \ref{axis_device}: 
+In Android, the phone coordinate system is defined in the following way (see also Figure \ref{axis_device}): 
 %
 \begin{description}
 \item[$x_p$:] Pointing out of the side of the phone, defined as $y_p \times z_p$.
-\item[$y_p$:] Pointing upward from the top of the screen.
-\item[$z_p$:] Orthogonal against the phones screen, pointing up if the phone is placed back down on a table.
+\item[$y_p$:] Pointing upward through the top of the screen.
+\item[$z_p$:] Orthogonal against the phone's screen, pointing up if the phone is placed back down on a table.
 \end{description}
 %
-Further, the phones orientation may be expressed as three angles $(\phi_x \hspace{5pt} \phi_y \hspace{5pt} \phi_z)$ representing the difference in orientation between the each of the phones axis and the world frame.
+Further, the phone's orientation may be expressed as three angles, $(\phi_x \hspace{5pt} \phi_y \hspace{5pt} \phi_z)$, representing the difference in orientation between each of the phone's axis and the world frame.
 %
 \begin{figure}[!hbt]
 \begin{center}
@@ -183,7 +183,7 @@ Further, the phones orientation may be expressed as three angles $(\phi_x \hspac
 %
 \footnotetext{This image is reproduced from work created and shared by the \emph{Android Open Source Community} \cite{aos} and used according to the terms described in the \emph{Creative Commons 2.5 Attribution License} \cite{cc}.}
 %
-As the measurements performed in this thesis are performed over a limited area, a local frame is a convenient choice. The chosen coordinate system is aligned with the building the measurements are being taken in, allowing for most movement to occur either parallel to the $x$- $y$-axis. Out of convenience, a local frame with an angular offset of roughly $180^\circ$, giving the system:
+As the measurements in this thesis are taken over a limited area, a local frame is a convenient choice. The chosen coordinate system is aligned with the building the measurements are taken in, allowing most of the movement to occur parallel to either the $x$- or $y$-axis. For convenience, a local frame with an angular offset of roughly $180^\circ$ is used, giving the system:
 %
 \begin{description}
 \item[$x_t$:] Pointing roughly west. 
@@ -197,13 +197,13 @@ In Figure REF HERE, the chosen coordinate system used is shown along with a floo
 %
 \label{chap:RSP}
 %
-The performance of any wireless communication system is fundamentally limited by the properties of the radio signals. In the simplest of worlds these properties and hence the signal intensities, would depend only on the distance between transmitter and receiver. However, in fact they vary greatly depending on the environment, from a simple line-of-sight (LOS) case to a severely obstructed one, where walls, windows, furniture etc. distort the signal between transmitter and receiver. Furthermore, the signal is affected by a large number of small-scale effects. Among them are reflections from various surfaces, diffraction and Doppler shift due to a difference in speed between the receiver in reference to the transmitter \cite{rappaport96}. In this thesis the focus is put on obtaining good models for the indoor propagation of radio signals for the application of positioning. 
+The performance of any wireless communication system is fundamentally limited by the properties of the radio signals. In the simplest case these properties and hence the signal intensities, would depend only on the distance between transmitter and receiver. However, in fact they vary greatly depending on the environment, from a simple line-of-sight (LOS) case to a severely obstructed one, where walls, windows, furniture etc. distort the signal between transmitter and receiver. Furthermore, the signal is affected by a large number of small-scale effects. Among them are reflections from various surfaces, diffraction and Doppler shift due to a difference in speed between the receiver in reference to the transmitter \cite{rappaport96}. In this thesis the focus is put on obtaining good models for the indoor propagation of radio signals for the application of positioning. 
 
-The chapter consists of a recapitulation of free space signal propagation and path loss, together with different ways of modeling these. Different sources of disturbances and their influences are discussed. 
+The chapter consists of a recapitulation of free space signal propagation and path loss, together with different ways of modeling these. Different sources of disturbances and their influences are discussed.
 %
 \section{Free Space Propagation Model}
 %
-How the magnitude of radio signals decay with increasing transmitter-receiver (T-R) separation is of interest in many applications, especially if a position is to be obtained from the received signal strength. The free space propagation model is a relatively simple model of predicting the received signal power given a certain T-R separation and a LOS path in between. This model focuses on the large-scale propagation features, thus predicting the average signal strength received without small scale effects taken into account. As in most propagation models a power law function of how the signal power decays by distance is assumed$\left(\sim{1/d^2}\right)$ \cite{rappaport96}. The power received at a distance $d$ from a radiating transmitter is given by the Friis free space equation,
+How the magnitude of radio signals decay with increasing transmitter-receiver (T-R) separation is of interest in many applications, especially if a position is to be obtained from the received signal strength. The free space propagation model is a relatively simple model of the received signal power given a certain T-R separation and a LOS path in between. This model focuses on the large-scale propagation features, thus predicting the average signal strength received without small scale effects taken into account. As in most propagation models a power law function of how the signal power decays by distance is assumed$\left(\sim{1/d^2}\right)$ \cite{rappaport96}. The power received at a distance $d$ from a radiating transmitter is given by the Friis free space equation,
 %
 \begin{equation}
 P_r(d)=\frac{P_tG_tG_r\lambda^2}{(4\pi)^2d^2L}\label{equation:friis_equation}
