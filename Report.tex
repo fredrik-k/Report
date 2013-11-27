@@ -110,7 +110,7 @@ This chapter gives a brief introduction to the background and history of navigat
 %
 \section{Overview}
 %
-Mankind has always had a need to navigate in its surroundings. At an early stage these surroundings were fairly small and visual references to known landmarks were good enough to find one's way. As the distances traveled grew, so did the need for a more well defined frame of reference, so mankind turned to celestial bodies. Using the sun and the stars, with their relatively fixed positions in reference to the earth, gave the ability to keep a desired heading over a long distance. This ability was then refined over the centuries and triangulation was discovered as a mean to find one's position. The invention of the compass further improved the navigation. With a known orientation, only the relative angles to two known landmarks, are needed to find the position. 
+Mankind has always had a need to navigate in its surroundings. At an early stage these surroundings were fairly small and visual references to known landmarks were good enough to find one's way. As the distances traveled grew, so did the need for a more well defined frame of reference, so mankind turned to celestial bodies. Using the sun and the stars, with their relatively fixed positions in reference to the earth, gave the ability to keep a desired heading over a long distance. This ability was then refined over the centuries and triangulation was discovered as a mean to find one's position. The invention of the compass further improved the navigation. With a known orientation, only the relative angles to two known landmarks, are needed to find the position \cite{nav}. 
 
 In the 20th century the improvements in measuring accelerations and angular velocities promoted a technology called \emph{dead reckoning} (DR). From a known position and heading, it is possible, using an accelerometer and a gyroscope, to estimate current speed and heading to find the current position. With occasional fixes of the position and heading, the current position can be estimated for all times. However, the sizes of the devices involved make the technology suitable only for larger vehicles, like ships or airplanes. And if no heading and position fixes are available, the error grows over time.
 
@@ -121,7 +121,7 @@ A problem, however, exists with the GPS system. To obtain a good position, signa
 Altogether, this makes GPS a good positioning technique in open outdoor areas, but in a suburban or indoor environment other techniques must be used to obtain accurate positioning. A multitude of techniques that aim to solve this problem with different accuracies and constraints exists. There is no single technology that these attempts are based on. Instead, they are spread over a wide range of areas, including inertial sensors, signal strengths, magnetic fields, cameras etc. \cite{positioning_overview}. 
 %
 \section{Coordinate Systems}
-It should be apparent to the reader that a well defined coordinate system is of great importance for positioning applications. Further, to be able to receive a meaningful position, the coordinate system needs to be fixed in reference to the phone --DISCUSS--. In the sections below, two such coordinate systems are presented along with the coordinate system of the phone. 
+It should be apparent to the reader that a well defined coordinate system is of great importance for positioning applications. Further, to be able to receive a meaningful position, the coordinate system needs to be fixed in reference to the earth --DISCUSS--. In the sections below, two such coordinate systems are presented along with the coordinate system of the phone. 
 \subsection{World Frame}
 %
 The \emph{world frame} or the global coordinate system is commonly used for navigation, at least in a global perspective. The definition is, in accordance with Figure \ref{axis_globe} as follows:
@@ -168,7 +168,7 @@ In Android, the phone coordinate system is defined in the following way (see als
 \item[$z_p$:] Orthogonal against the phone's screen, pointing up if the phone is placed back down on a table.
 \end{description}
 %
-Further, the phone's orientation may be expressed as three angles, $(\phi_x \hspace{5pt} \phi_y \hspace{5pt} \phi_z)$, representing the difference in orientation between each of the phone's axis and the world frame.
+Further, the phone's orientation may be expressed as three angles, $(\phi_x \hspace{5pt} \phi_y \hspace{5pt} \phi_z)$, representing the difference in orientation between each of the phone's axis and those of the world frame.
 %
 \begin{figure}[!hbt]
 \begin{center}
@@ -177,11 +177,10 @@ Further, the phone's orientation may be expressed as three angles, $(\phi_x \hsp
 \end{center}
 \caption[]{Phone coordinate system.\footnotemark }\label{axis_device}
 \end{figure}
-
+\footnotetext{This image is reproduced from work created and shared by the \emph{Android Open Source Community} \cite{aos} and used according to the terms described in the \emph{Creative Commons 2.5 Attribution License} \cite{cc}.}
 %
 \subsection{Coordinate System Used for Measurements}
 %
-\footnotetext{This image is reproduced from work created and shared by the \emph{Android Open Source Community} \cite{aos} and used according to the terms described in the \emph{Creative Commons 2.5 Attribution License} \cite{cc}.}
 %
 As the measurements in this thesis are taken over a limited area, a local frame is a convenient choice. The chosen coordinate system is aligned with the building the measurements are taken in, allowing most of the movement to occur parallel to either the $x$- or $y$-axis. For convenience, a local frame with an angular offset of roughly $180^\circ$ is used, giving the system:
 %
@@ -197,35 +196,35 @@ In Figure REF HERE, the chosen coordinate system used is shown along with a floo
 %
 \label{chap:RSP}
 %
-The performance of any wireless communication system is fundamentally limited by the properties of the radio signals. In the simplest case these properties and hence the signal intensities, would depend only on the distance between transmitter and receiver. However, they vary greatly depending on the environment, from a simple line-of-sight (LOS) case to a severely obstructed one, where walls, windows, furniture etc. distort the signal between transmitter and receiver. Furthermore, the signal is affected by a large number of small-scale effects. Among them are reflections from various surfaces, diffraction and Doppler shift due to a difference in speed between the receiver in reference to the transmitter \cite{rappaport96}. In this thesis the focus is put on obtaining good models for the indoor propagation of radio signals for the application of positioning. 
+The performance of any wireless communication system is fundamentally limited by the properties of the radio signals. In the simplest case these properties and hence the signal intensities would depend only on the distance between transmitter and receiver. However, they vary greatly depending on the environment, from a simple line-of-sight (LOS) case to a severely obstructed one, where walls, windows, furniture etc. distort the signal between transmitter and receiver. Furthermore, the signal is affected by a large number of small-scale effects. Among them are reflections from various surfaces, diffraction and Doppler shift due to a difference in speed between the receiver in reference to the transmitter \cite{rappaport96}. In this thesis the focus is put on obtaining good models for the indoor propagation of radio signals for the application of positioning. 
 
 The chapter consists of a recapitulation of free space signal propagation and path loss, together with different ways of modeling these. Different sources of disturbances and their influences are discussed.
 %
 \section{Free Space Propagation Model}
 %
-How the magnitude of radio signals decay with increasing transmitter-receiver (T-R) separation is of interest in many applications, especially if a position is to be obtained from the received signal strength. The free space propagation model is a relatively simple model of the received signal power given a certain T-R separation and a LOS path in between. This model focuses on the large-scale propagation features, thus predicting the average signal strength received without small scale effects taken into account. As in most propagation models a power law function of how the signal power decays by distance is assumed$\left(\sim{1/d^2}\right)$ \cite{rappaport96}. The power received at a distance $d$ from a radiating transmitter is given by the Friis free space equation,
+How the magnitude of radio signals decay with increasing transmitter-receiver (T-R) separation is of interest in many applications, especially if a position is to be obtained from the received signal strength. The free space propagation model is a relatively simple model of the received signal power given a certain T-R separation and a LOS path in between. This model focuses on the large-scale propagation features, thus predicting the average signal strength received without small scale effects taken into account. As in most propagation models a power law function of how the signal intensity decays by distance is assumed$\left(\sim{1/d^2}\right)$ \cite{rappaport96}. The power received at a distance $d$ from a radiating transmitter is given by the Friis free space equation,
 %
 \begin{equation}
 P_r(d)=\frac{P_tG_tG_r\lambda^2}{(4\pi)^2d^2L}\label{equation:friis_equation}
 \end{equation}
 %
-where $P_r(d)$ is the received power at a T-R separation of $d$ meters, $P_t$ is the transmitted power, $G_t$ and $G_r$ are the gains of the transmitter and receiver antennas respectively, $L\geq1$ is the system loss factor which is not related to propagation, i.e hardware losses, and $\lambda$ is the wavelength of the transmitted signal in meters. Here the units of $P_t$ and $P_r$ are the same. The gains ($G_t$ and $G_r$) are dimensionless constants related to the antennas' effectiveness of receiving and transmitting a signal which is related to the construction and physical properties of the antennas. The wavelength $\lambda$ is related to the frequency of the signal by,
+where $P_r(d)$ is the received power in dBm at a T-R separation of $d$ meters, $P_t$ is the transmitted power in dBm, $G_t$ and $G_r$ are the gains of the transmitter and receiver antennas respectively, $L\geq1$ is the system loss factor which is not related to propagation, i.e hardware losses, and $\lambda$ is the wavelength of the transmitted signal. The gains ($G_t$ and $G_r$) are dimensionless constants related to the antennas' effectiveness of receiving and transmitting a signal which is related to the construction and physical properties of the antennas. The wavelength $\lambda$ is related to the frequency of the signal by
 \begin{equation}
-\lambda=\frac{c}{f}=\frac{2\pi c}{\omega_c}
+\lambda=\frac{c}{f}=\frac{2\pi c}{\omega_c},
 \end{equation} 
 %
 where $f$ is the signal frequency in Hertz, $\omega_c$ is the frequency in radians per second and $c$ is the speed of light in meters per second. 
 
-The Friis equation can only be used as a predictor for $P_r$ when $d$ is in the far-field or \emph{Fraunhofer region} of the transmitting antenna \cite{rappaport96}. The far-field region of a transmitter is defined as $d>d_f$ where $d_f$ is the far-field distance defined as,
+The Friis equation can only be used as a predictor for $P_r$ when $d$ is in the far-field, or \emph{Fraunhofer region}, of the transmitting antenna \cite{rappaport96}. The far-field region of a transmitter is defined as $d>d_f$ where $d_f$ is the far-field distance defined as
 %
 \begin{eqnarray}
-d_f=\frac{2D^2}{\lambda} & d_f\gg D & d_f\gg \lambda \label{equation:frau_dist}
+d_f=\frac{2D^2}{\lambda}, & d_f\gg D, & d_f\gg \lambda, \label{equation:frau_dist}
 \end{eqnarray}
 %
 where $D$ is the largest physical dimension of the transmitting antenna.
 
-For a radio signal with frequency ranging from 2.4 to 5 GHz (WiFi) and a largest antenna dimension $D$ of 0.1 meter, $d_f$ is in the
-range of $\left[0.36,0.75\right]$  and a $d_f>1$ meter fulfills both the additional requirements from \ref{equation:frau_dist}.
+For a radio signal with frequency ranging from 2.4 to 5 GHz (WiFi) and a largest antenna dimension $D$ of 0.1 m, $d_f$ is in the
+range of $\left[0.36,0.75\right]$  and a $d_f>1$ m fulfills both the additional requirements from \ref{equation:frau_dist}.
 %
 \section{Path Loss}
 %
@@ -235,13 +234,13 @@ The \emph{path loss} is defined as the difference in dB between the transmitted 
 PL\left(\text{dB}\right)=10\log_{10}{\frac{P_t}{P_r}}=-10\log_{10}{\left[\frac{\lambda^2}{\left(4\pi\right)^2d^2}\right]}\label{equation:pl}.
 \end{equation} 
 %
-It is obvious that \ref{equation:friis_equation}, and thus \ref{equation:pl} does not hold for $d=0$. To get around this large-scale fading models use a fixed distance $d_0$ with known power \cite[rappaport96]. At $d_0$ the power can either be measured or estimated from \ref{equation:friis_equation}. The distance $d_0$ needs to be in the far-field region of the transmitter, as defined in \ref{equation:frau_dist}. Furthermore, if $d_0$ is chosen to be smaller than any distance $d$ used in the application, the power at an arbitrary distance which is not $d_0$ may be related to the received power at $d_0$ by,
+It is obvious that \ref{equation:friis_equation}, and thus \ref{equation:pl}, does not hold for $d=0$. To get around this, large-scale fading models use a fixed distance $d_0$ with known power \cite{rappaport96}. At $d_0$ the power can either be measured or estimated from \ref{equation:friis_equation}. The distance $d_0$ needs to be in the far-field region of the transmitter, as defined in \ref{equation:frau_dist}. Furthermore, if $d_0$ is chosen to be smaller than any distance $d$ used in the application, the power at an arbitrary distance may be related to the received power at $d_0$ by,
 %
 \begin{equation}
 P_r(d)=P_r(d_o)\left(\frac{d_0}{d}\right)^2 \hspace{30pt} d\geq d_0\geq d_f.
 \end{equation}
 %
-For practical reasons, as most formulas expresses powers in dB, $d_0$ is chosen to be a power of 10. In outdoor environments $d_0$ a common value is 100 meter, and in indoor environments, 1 meter is suitable. Using the latter, the power can be expressed as,
+For practical reasons, as most formulas express the power in dB, $d_0$ is chosen to result in a power of 10 dB. In outdoor environments a common value is 100 meter, and in indoor environments, 1 meter is suitable. Using the latter, the power can be expressed as,
 %
 \begin{equation}
 10\log_{10}{P_r(d)}=10\log_{10}{P_r(d_0)}-20\log_{10}{d} \hspace{30pt} d\geq d_0\geq d_f,
@@ -257,13 +256,13 @@ In this section the three basic mechanisms for signal propagation, reflection, d
 %
 When a radio wave propagating through one medium encounters a medium with a different set of electrical properties, the wave is partially transmitted and partially reflected. The intensities of the transmitted and reflected waves may be related to each other through the \emph{Fresnel reflection coefficient} ($\Gamma$). This coefficient is dependent on the material properties, wave polarization, angle of incident and the frequency of the wave \cite{rappaport96}.
 
-The requirement of a surface to be considered as a possible source of reflection is that its dimensions are much larger than the wavelength of the incident wave and typical indoor sources include walls, floor, ceiling etc. The reflections cause the signal strength to be larger in some areas of the room and less in others than the free space model predicts.
+The requirement of a surface to be considered as a possible source of reflection is that its dimensions are much larger than the wavelength of the incident wave and typical indoor sources include walls, floor, ceiling etc. The reflections cause the signal strength to be larger in some areas of the room and smaller in others than the free space model predicts.
 %
 \subsection{Diffraction}
 %
 Diffraction is the property that allows waves to propagate around different obstructions, e.g propagate  around corners, travel beyond the horizon or behind obstructions. Huygens principle states 
 \begin{quote}
- \emph{All points on a wavefront can be considered as point sources for the new wavelet.} \cite{rappaport96}
+ \emph{All points on a wavefront can be considered as point sources for the new wavelet} \cite{rappaport96}.
  \end{quote}
 %
 Diffraction is caused by the propagation of a secondary wave into a shadowed region, and diffraction can be viewed as the wave ''bending'' around the edge of objects. Because only a fraction of the wave propagates into the shadowed region, the signal strength decays rapidly when moving further into the shadowed region \cite{rappaport96}.
@@ -325,35 +324,35 @@ In Figure \ref{log_norm_n_2} and \ref{log_norm_n_3_2}, measured values of the si
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/signal_model/dist_trans}
-\caption{The distance to the transmitting antenna in meters used in the measurements of the signal strength}\label{dist_trans}
+\caption{The distance to the transmitting antenna in meters used in the measurements of the signal strength.}\label{dist_trans}
 \end{figure}
 
-It is obvious that this model has its flaws. A low value of $n$ fails to predict accurate signal strengths when the distance to the transmitter is fairly large, and the high value does not perform satisfactory close to the transmitter. The measurement taken is similar to a real world use-case where one moves through an office space, sometimes passing under a transmitter in LOS and sometimes being far away in an obstructed area. The flaws promote the search for a model with better performance.
+It is obvious that this model has its flaws. A low value of $n$ fails to predict an accurate signal strength when the distance to the transmitter is fairly large, and the high value do not perform satisfactory close to the transmitter. The measurement taken is similar to a real world use-case where one moves through an office space, sometimes passing under a transmitter in LOS and sometimes far away in an obstructed area. The flaws promote the search for a model with better performance.
 %
 \subsection{Double Slope Model}
 %
-A simple extension of the log-normal shadowing model is combining different values of $n$ for use in various intervals of the distance to the transmitter. The most simple of these models is the double slope model where two different path loss exponent $n_1$ and $n_2$ are used together with a single break distance $d_1$, where the model changes from one to the other. This model then becomes,
+A simple extension of the log-normal shadowing model is combining different values of $n$ for use in various intervals of the distance to the transmitter. The most simple of these models is the double slope model where two different path loss exponents $n_1$ and $n_2$, are used together with a single break distance, $d_1$, where the model changes from one to the other. This model then becomes,
 \begin{subequations}
 \begin{align}
-\log_{10}({P_r(d)})&=\log_{10}({P_r(d_0)})-10n_1\log_{10}\left[{\frac{d}{d_0}}\right] + X_{\sigma_1}, & d_0<d<d_1\\
+\log_{10}({P_r(d)})&=\log_{10}({P_r(d_0)})-10n_1\log_{10}\left[{\frac{d}{d_0}}\right] + X_{\sigma_1}, & 0<d<d_1\\
 \log_{10}({P_r(d)})&=\log_{10}({P_r(d_0)})-10n_2\log_{10}\left[{\frac{d}{d_0}}\right] + X_{\sigma_2}, & d>d_1
 \end{align}
 \end{subequations} 
 where $X_{\sigma_1}$ and $X_{\sigma_2}$ are random Gaussian distributed variables with zero mean and standard deviation $\sigma_1$ and $\sigma_2$ respectively.
  
-In Figure \ref{double_slope} the double slope model for $n_1=2$, $n_2=3.2$ and $d_1=10$ meter, is displayed together with measurements using the distance trajectory in Figure \ref{dist_trans}.
+In Figure \ref{double_slope} the double slope model for $n_1=2$, $n_2=3.2$ and $d_1=10$ m, is displayed together with measurements using the distance trajectory in Figure \ref{dist_trans}.
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/signal_model/double_slope}
-\caption{Signal strength measurements (blue) versus double slope model predictions (red) with $n_1=2$, $n_2=3.2$ and $d_1=10$ meter.}\label{double_slope}
+\caption{Signal strength measurements (blue) versus double slope model predictions (red) with $n_1=2$, $n_2=3.2$ and $d_1=10$ m.}\label{double_slope}
 \end{figure}
 
 This model combines the good traits from the two log-normal shadowing models. However, at $d=d_1$ the model presents an undesirable ''jump'', and the predictions around $d_1$ are rather poor. Furthermore, a single $d_1$ might be hard to find for a set of transmitters, and the different values of $n$ may change between the transmitters.
 %
 \subsection{$\alpha$-Model} %Maybe something else
 %
-A third attempt to model the signal strength is to introduce a parameter $\alpha$ multiplied with the distance $d$ in the log-normal shadowing model to account for the extra decrease in signal strength. \cite{karlsson92} The model then becomes
+A third attempt to model the signal strength is to introduce a parameter $\alpha$ multiplied with the distance $d$ in the log-normal shadowing model to account for the extra decrease in signal strength \cite{karlsson92}. The model then becomes
 %
 \begin{equation}
 \log_{10}({P_r(d)})=\log_{10}({P_r(d_0)})-10n\log_{10}\left[{\frac{d}{d_0}}\right] - \alpha d+ X_\sigma.
@@ -373,17 +372,17 @@ This model possesses the desirable feature of having only one parameter, $\alpha
 \end{subequations} 
 and the second
 \begin{equation}
-\log_{10}({P_r(d)})=\log_{10}({P_r(d_0)})-10n\log_{10}\left[{\frac{d}{d_0}}\right] - \alpha*\min({d, d_{\text{max}})}+ X_\sigma.
+\log_{10}({P_r(d)})=\log_{10}({P_r(d_0)})-10n\log_{10}\left[{\frac{d}{d_0}}\right] - \alpha\cdot\min({d, d_{\text{max}})}+ X_\sigma.
 \label{equation:fixed_alpha}
 \end{equation}
 %
 Using one of these approaches, one loses some of the simplicity of having only one tunable parameter. However, these choices are simpler than for the double slope model, as there is no need to determine when the change from LOS occurs. 
-For \ref{equation:fixed_alpha} the predicted signal strengths for $n=2$, $\alpha=0.9$ and $d_{\text{max}}=20$ are shown together with measurements in Figure \ref{fixed_alpha}. 
+Equation \ref{equation:fixed_alpha} the predicted signal strengths for $n=2$, $\alpha=0.9$ and $d_{\text{max}}=20$ are shown together with measurements in Figure \ref{fixed_alpha}. 
  %
  \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/signal_model/fixed_alpha}
-\caption{Signal strength measurements (blue) versus fixed $\alpha$ model predictions (red) with $n=2$, $\alpha=0.9$ and $d_{\text{max}}=20$ meter.}\label{fixed_alpha}
+\caption{Signal strength measurements (blue) versus fixed $\alpha$ model predictions (red) with $n=2$, $\alpha=0.9$ and $d_{\text{max}}=20$ m.}\label{fixed_alpha}
 \end{figure}
 
 This model predicts the signal strength satisfactory both for small and large values of $d$, while removing the ''jump'' present in the double slope model.
@@ -394,7 +393,7 @@ In addition to the large scale propagation effects described above, a radio sign
 
 Another effect included in small scale fading is a random frequency modulation caused by different Doppler shifts on different multipath signals. The source of this is a relative movement between transmitter and receiver or movement by objects in the vicinity of the signals path. 
 
-The description presented above is brief, and for a more complete description of the small scale fading phenomenon readers are referred to chapter 4 in \cite{rappaport96}.  
+The description presented above is brief, and for a more complete description of the small-scale fading phenomenon readers are referred to chapter 4 in \cite{rappaport96}.  
  %
  \section{Aspects for Positioning Applications}
  \label{sec:AfPA}
@@ -408,7 +407,7 @@ The description presented above is brief, and for a more complete description of
 \chapter{The Particle Filter}
 \label{chap:PF}
 %
-The \emph{particle filter} or \emph{sequential Monte Carlo methods} are sets of estimation algorithms for estimating the posterior density of the state-space in a non-linear filtering problem. The PF uses a set of particles distributed over the state-space using a system model and measurements of one ore several states are used to determine each particle's probability to represent the ''true'' state of the system.  
+The \emph{particle filter} or \emph{sequential Monte Carlo method} are sets of estimation algorithms for estimating the posterior density of the state-space in a non-linear filtering problem. The PF uses a set of particles distributed over the state-space using a system model and measurements of one ore several states are used to determine each particle's probability to represent the ''true'' state of the system.  
 
 In this chapter the non-linear filtering problem will be explained along with its solution using the PF. Some computational aspects will be investigated and the PF used in positioning briefly discussed. The chapter ends with a section about other estimation techniques, where most focus is placed on the \emph{least squares estimation}.
 %
@@ -425,7 +424,7 @@ y_k&=h(x_k,u_k) + e_k
 \end{align}
 \end{subequations} 
 %
-where $f$ and $h$ are arbitrary non-linear functions of the states $x_k$, inputs $u_k$ and process noise $v_k$, furthermore $y_k$ is the measurement at time $k$. The measurement noise $e_k$ and process noise $v_k$ are random processes with arbitrary probability density functions (PDFs) \cite{gson12}. 
+where $f$ and $h$ are arbitrary non-linear functions of the states $x_k$, inputs $u_k$ and process noise $v_k$. Furthermore $y_k$ is the measurement at time $k$. The measurement noise $e_k$ and process noise $v_k$ are random processes with arbitrary probability density functions (PDFs) \cite{gson12}. 
 
 There is a large collection of filtering methods solving this estimation problem in different ways with different restrictions. One of the most common is the \emph{Kalman filter}. This method is intuitive, simple and computationally effective. On the other hand, it suffers from requiring the functions $f$ and $h$ to be linear, and the PDFs of the process $v_k$ and measurement noise $e_k$ to be zero-mean Gaussian. The \emph{extended Kalman} filter solves the problem of $f$ and $h$ being non-linear, but still assumes $v_k$ and $e_k$ to be zero-mean Gaussian noise. Further, both Kalman approaches require the posterior distribution of the states to be zero mean Gaussian.
 
@@ -438,7 +437,7 @@ The PF consists of a set of $N$ particles $\left\{x^i\right\}_{i=1}^N$, which re
 %
 The process of the PF consists of three separate steps \cite{gson12}, 
 \begin{enumerate}
-\item \emph{Weighting of particles}: using the measurements each particle is assigned a weight, corresponding to the likelihood of its states being the true ones.
+\item \emph{Weighting of particles}: using the measurements, each particle is assigned a weight, corresponding to the likelihood of its states being the true ones.
 \item \emph{Re-sampling}: From the existing $N$ particles, create $N$ new ones by a clever choice.
 \item \emph{State update}: Using some trajectory of the states, update the states of each particle.
 \end{enumerate}
@@ -446,7 +445,7 @@ The process of the PF consists of three separate steps \cite{gson12},
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/PF/hist_ini_dist}
-\caption{Histogram over the initial particle distribution in range $[-10,10]$ using 100 bins}\label{hist_ini_dist}
+\caption{Histogram over the initial particle distribution in the range $[-10,10]$ using 100 bins.}\label{hist_ini_dist}
 \end{figure}
 %
 In the following sections these steps will be explored more in-depth along with a simple one dimensional example using $N=1000$ particles. We start by distributing the particles using a uniform distribution in the range $[-10,10]$, using $0$ as our true state and Gaussian distributed zero-mean random variable with standard deviation 1 as the measurement noise, $e_k$ from equation \ref{equation:nonlinear_model_second}. The initial particle distribution is displayed in Figure  \ref{hist_ini_dist}
@@ -459,7 +458,7 @@ Given that the measurement noise $e_k$ is known, the weighting of the particles 
 p(x^i_k|y_k)=\prod_{l=1}^{L}p^l(x^i_k|y^l_{1:k}), 
 \end{equation}
 %
-where $L$ is the number of measurements. It is also useful to have the probabilities satisfying,
+where $L$ is the number of measurements. It is also important to have the probabilities satisfying,
 %
 \begin{equation}
 \sum^{N}_{i=1}p(x^i_k|y_k)\equiv 1
@@ -477,14 +476,14 @@ In Figure \ref{particle_weights} the normalized weights assigned to each particl
 %
 \subsection{Re-sampling}
 %
-The re-sampling step is introduced to eliminate the possibility of one or a few particles to be the only probable after a few iterations of the PF. If the re-sampling is omitted, the computing of weight and subsequent state update could dilute the particles in the state-space until only one particle is the probable one. This could be the case even if the most probable particle does not agree with the measurement. Thus, the purpose of the re-sampling is to use the weights to create $N$ new particles from the $N$ old ones. This can be done in many ways. One is to allow a number of the most probable particles to spawn new particles until $N$ particles are obtained. A statistically more stringent way is to compute a uniformly distributed random number $r$ between zero and one. Then, assuming the sum of all particle probabilities are one, start adding these until the sum is greater than $r$ Then, let the particle that caused the change from below to above $r$, spawn a new one. Using this method particles with high probabilities have a greater chance of spawning a new one, while particles with small weight still may create new ones.
+The re-sampling step is introduced to eliminate the possibility of one or a few particles to be the only probable after a few iterations of the PF. If the re-sampling is omitted, the computing of weight and subsequent state update could dilute the particles in the state-space until only one particle is the probable one. This could be the case even if the most probable particle does not agree with the measurement. Thus, the purpose of the re-sampling is to use the weights to create $N$ new particles from the $N$ old ones. This can be done in many ways. One is to allow a number of the most probable particles to spawn new particles until $N$ particles are obtained. A statistically more stringent way is to compute a uniformly distributed random number $r$ between zero and one. Then, assuming the sum of all particle probabilities is one, start adding these until the sum is greater than $r$ Then, let the particle that caused the change from below to above $r$, spawn a new one. Using this method particles with large weights have a greater chance of spawning a new one, while particles with small weight still may create new ones.
 
 After the re-sampling is done, it is crucial to give all particles the same weight, i.e $1/N$, as to avoid the dilution of probability.
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/PF/hist_dist_1_itr}
-\caption{Histogram over the particle distribution, after one iteration of the PF, in range $[-10,10]$ using 100 bins}\label{hist_dist_1_itr}
+\caption{Histogram over the particle distribution, after one iteration of the PF, in the range $[-10,10]$ using 100 bins.}\label{hist_dist_1_itr}
 \end{figure}
 
 After the re-sampling technique described above is applied to the particles of our example, their distribution is displayed in Figure \ref{hist_dist_1_itr}. After the re-sampling the states of the particles still existing tend more towards the true one, $X=0$. The mean of the states may now be used as an estimation of the true state.    
@@ -493,12 +492,12 @@ After the re-sampling technique described above is applied to the particles of o
 %
 In the state update step some model of the system behavior, $f(x_k,u_k,v_k)$ in equation \ref{equation:nonlinear_model_first}, is used to update the states of each particle in each time step, $k$. If the system behavior is well known, for one or all of the states, the use  of an elaborate model improves the convergence rate of the particles and thus the estimation accuracy. This usually allows the use of fewer particles, since there is no need to move particles to improbable states.
 
-However, if there is little or no knowledge of the states behavior some type of random walk update can be used, only trying to capture the variance of the state over a time step. If the variance is large, this calls for a large number of particles to keep the particle density for all probable states high. 
+However, if there is little or no knowledge of the state's behavior, some type of random walk update can be used, only trying to capture the variance of the state over a time step. If the variance is large, this calls for a large number of particles to keep the particle density for all probable states high. 
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/PF/hist_dist_1_itr_dyn}
-\caption{Histogram over the particle distribution, after one iteration of the PF and a state update, in range $[-10,10]$ using 100 bins}\label{hist_dist_1_itr_dyn}
+\caption{Histogram over the particle distribution, after one iteration of the PF and a state update, in the range $[-10,10]$ using 100 bins.}\label{hist_dist_1_itr_dyn}
 \end{figure}
 
 In our example the ''true'' state is stationary, so the state update consists only of adding a Gaussian distributed random number with a small standard deviation ($0.1$) to each particle. This corresponds to letting each particle undergo a\emph{Gaussian random walk}, and the resulting particle distribution may be viewed in Figure \ref{hist_dist_1_itr_dyn}.
@@ -517,30 +516,30 @@ Finally, in Figure \ref{hist_dist_10_itr} the particle distribution after ten it
 \section{Computational Aspects}
 \label{sec:com_asp}
 %
-The PF, like most \emph{Monte Carlo} based filters, suffers from high computational complexity. Especially as the number of particles necessary to keep a fixed particle density in the state space grows as the power of the number of states. A solution to this is proposed in \cite{gson12}, where only states bearing non-linear distributions are passed throughout the PF and states bearing Gaussian distributions may be filtered by a different method. This is called the \emph{marginalized particle filter} and aim to keep the number of states passed to the PF low. 
+The PF, like most \emph{Monte Carlo} based filters, suffers from high computational complexity. Especially as the number of particles necessary to keep a fixed particle density in the state space grows as the power of the number of states. A solution to this is proposed in \cite{gson12}, where only states bearing non-linear distributions are passed throughout the PF and states bearing Gaussian distributions may be filtered by a different method. This is called the \emph{marginalized particle filter} and aims to keep the number of states passed to the PF low. 
 
-The three steps discussed in section \ref{sec:PF_process} pose somewhat different computational difficulties. The weights need to be calculated for each particle and thus need to be computed $N$ times, giving an \emph{Ordo $N$} ($O(N)$) complexity. However, the calculation for each weight depends of the number of measurements $M$ giving a total complexity of $O(M*N)$. In most cases though, the number of measurements is small in comparison to the number of particles and may be neglected. Another pleasant feature of the weight computation is their independence of each other, thus making parallelization of computations simple.
+The three steps discussed in section \ref{sec:PF_process} pose somewhat different computational difficulties. The weights need to be calculated for each particle and thus need to be computed $N$ times, giving an \emph{Ordo $N$} ($O(N)$) complexity. However, the calculation for each weight depends of the number of measurements $M$ giving a total complexity of $O(M\cdot N)$. In most cases though, the number of measurements is small in comparison to the number of particles and may be neglected. Another pleasant feature of the weight computation is their independence of each other, thus making parallelization of computations simple.
 
-The re-sampling step, assuming the number of samples before and after is constant, the algorithm described in section \ref{sec:PF_process} comprises two distinct steps. First the \emph{cumulative sum} of the weights are computed. This is of complexity $O(N)$ but can depending on the implementation be computed alongside the weights. Next, for the $N$ new particles, it is needed to determine which of the $N$ old ones is to be its clone. This is done by, for each new particle, computing a uniformly distributed random number in the range [0,1]. This random number is then compared to the cumulative sum of weights to find the index where the cumulative sum for the first time is equal to or larger than the random number. This can be done using a \emph{binary search} as the cumulative sum is sorted by its nature, giving the step complexity $O(N*\log_2{N})$. Furthermore, the weights needs to be computed before the re-sampling is initialized, making it impossible to parallelize the particle filter process from start to finish. However, when the weights have been computed, the particles, once again, are independent. 
+For the re-sampling step, assuming the number of samples before and after is constant, the algorithm described in section \ref{sec:PF_process} comprises two distinct steps. First the \emph{cumulative sum} of the weights is computed. This is of complexity $O(N)$ but can, depending on the implementation, be computed alongside the weights. Next, for the $N$ new particles, it is needed, for each, to determine which of the $N$ old ones to inherit states from. This is done by, for each new particle, computing a uniformly distributed random number in the range [0,1]. This random number is then compared to the cumulative sum of weights to find the index where the cumulative sum for the first time is equal to or larger than the random number. This can be done using a \emph{binary search} as the cumulative sum is sorted by its nature, giving the step complexity $O(N\cdot\log_2{N})$. Furthermore, the weights needs to be computed before the re-sampling is initialized, making it impossible to parallelize the particle filter process from start to finish. However, when the weights have been computed, the particles, once again, are independent. 
 
 Updating the states is done for each particle and it depends on the number of states $K$ along with the complexity of the state model, resulting in roughly $O(N*K)$ complexity. During this step, the particles, once again, are entirely independent, which makes parallelization possible.
 
-In all, the filter has approximately a complexity of $O(N*\log_2{N}) + O(N*M) + O(N*K)$.
+In all, the filter has approximately a complexity of $O(N\cdot\log_2{N}) + O(N\cdot M) + O(N\cdot K)$.
 %
 \section{Particle Filter for Positioning Applications}
 %
-The PF may be successfully used in positioning applications, especially if the states and models used possess certain features. More specific, the PF may be used with good results if the models are non-linear and the posterior distributions are non-Gaussian while the number of states is small \cite{gson12}. If the number of states grows, the ''curse'' of dimensionality makes the use the PF infeasible.
+The PF may be successfully used in positioning applications, especially if the states and models used possess certain features. More specific, the PF may be used with good results if the models are non-linear and the posterior distributions are non-Gaussian while the number of states is small \cite{gson12}. If the number of states grows, the required number of particles makes the use the PF infeasible.
 
 A case where the PF is useful is the estimation of position or position and heading in a two-dimensional space, which is the case for most indoor positioning applications. Furthermore, using signal strengths from multiple sources as a measurement of position renders, both a non-linear model and non-Gaussian posterior distributions further promote the use of a PF. However, introducing more dynamic states ,e.g acceleration, unmeasured velocities or trying to filter sensor biases or drifts, introduces too many dimensions. Thus, such estimations require their own filter \cite{gson12}.        
 %
 \section{Other Estimation Techniques}
 \label{sec:oet}
 %
-There are a few different techniques for state estimation given a set of measurements, the \emph{Kalman} methods mentioned earlier, a couple of \emph{maximum.-likelihood} base ones and the \emph{least squares estimation} methods. \cite{gson12}
+There are some different techniques for state estimation given a set of measurements, the \emph{Kalman} methods mentioned earlier, a couple of \emph{maximum.-likelihood} based method and the \emph{least squares estimation} method \cite{gson12}.
 %
  \subsection{Least Squares Estimation}
 %
-The method \emph{least squares} is a common estimation technique for overdetermined systems, and is based on minimizing the error between an observed value and a modeled one. 
+The method of \emph{least squares} (LS) is a common estimation technique for overdetermined systems, and is based on minimizing the error between an observed value and a modeled one. 
 
 Given a series of $n$ measurements, $z_i$ and $n$ models $f_i(x_k)$ of the $m$ states $x_k$. The goal of the LS estimation is the find the minimum of
 %
@@ -551,7 +550,7 @@ S = \sum_{i=1}^n(z_i-f_i(x_k))^2
 %
 given $n>m$. In the case of $f_i(x_k)$ being linear for all $i$, the algorithm is called the \emph{linear least squares} and $S$, in this case, has only one global minimum due to convexity. Also, an analytic solution is always present.
 
-Generalizing the linear LS estimation to non-linear models is fairly simple. The sum in \ref{ls_sum} is still to be minimized, but in the non-linear case a closed-form analytical solution can not be found. Instead the minimum is found by numerical approximations. As $S$ in the non-linear case is not, in general, convex, there exist multiple local solutions to the minimization problem. This requires a guess of the approximate states to ''guide'' the algorithm to the correct solution, and if the guess is too far from the global minimum, a local minimum could be found instead.     
+Generalizing the linear LS estimation to non-linear models is fairly simple. The sum in Equation \ref{ls_sum} is still to be minimized, but in the non-linear case a closed-form analytical solution can not be found. Instead the minimum is found by numerical approximations. As $S$ in the non-linear case is not, in general, convex, there exist multiple local solutions to the minimization problem. This requires a guess of the approximate states to ''guide'' the algorithm to the correct solution, and if the guess is too far from the global minimum, a local minimum could be found instead.     
 
 The non-linear LS can be used to estimate a position in two dimensions from the models in Chapter \ref{chap:RSP}, together with measurements of signal
 % Fråga Fredrik:
@@ -568,9 +567,9 @@ This chapter is intended to give an introduction to the WiFi technologies and wh
 %
 The IEEE $802.11$ standard consists of a series of techniques for over-the-air radio modulation using the same basic protocol \cite{IEEE:802.11}. The standard allows different products, computers, smart-phones etc. to implement the protocol to communicate wirelessly. Historically the communication has taken place over the frequency 2.4 GHz, however in later years devices implementing 5 GHz communication protocol have become increasingly common \cite{walrand10}.
 
-The standard splits each frequency range into several channels over which the communication takes place. The frequency 2.4 GHz is split into 14 channels with 5 MHz spacing. For 5 GHz the situation is more complicated and will not be explained in detail. Local regulations affects which channels are allowed in a certain region.   
+The standard splits each frequency range into several channels over which the communication takes place. The frequency 2.4 GHz is split into 14 channels with 5 MHz spacing. For 5 GHz the situation is more complicated and will not be explained in detail. Local regulations affect which channels are allowed in a certain region.   
 
-Wireless technologies are evolving towards higher frequencies. The radio channel  surrounding 2.4 GHz is well populated and a move to other frequency domains is necessary to continue to the technology expansion. Further, a near to full frequency environment promotes high noise levels and dropped connections due to interference between devices. Another advantage with transmitting information over a radio channel at a higher frequency is that the signal can contain more information per time unit, resulting in higher bit rates.    
+Wireless technologies are evolving towards higher frequencies. The radio channel  surrounding 2.4 GHz is well populated and a move to other frequency domains is necessary to continue the technology expansion. Further, a near to full frequency environment promotes high noise levels and dropped connections due to interference between devices. Another advantage with transmitting information over a radio channel at a higher frequency is that the signal can contain more information per time unit, resulting in higher bit rates.    
 %
 \subsection{The MAC-Address}
 %
@@ -579,22 +578,22 @@ Most devices using the IEEE $802.11$ standard have a \emph{Media Access Control}
 \section{WiFi and Positioning}
 \label{sec:wifi_positioning}
 %
-The WiFi standard provides enticing possibilities for indoor positioning, especially in public or corporate areas. Some of the advantages compared to other positioning techniques is that the range of typical wireless products, like WiFi APs, have limited range ($\sim 30$ meters) and thus need to be placed with relatively short intervals. Moreover, WiFi infrastructure is ubiquitous and already deployed at many places, making WiFi based positioning an attractive method. Further, more and more devices become capable of communication over WiFi and platforms like Android makes the deployment of applications easy and readily available for large amount of users. One of the disadvantages is that indoor signal environments are often complex, posing a harder modeling task and often rather high signal to noise ratio.
+The WiFi standard provides enticing possibilities for indoor positioning, especially in public or corporate areas. Some of the advantages compared to other positioning techniques is that the range of typical wireless products, like WiFi APs, have limited range ($\sim 30$ meters) and thus need to be placed with relatively short intervals. Moreover, WiFi infrastructure is ubiquitous and already deployed at many places, making WiFi based positioning an attractive method. Further, more and more devices become capable of communication over WiFi and platforms like Android make the deployment of applications easy and readily available for a large amount of users. One of the disadvantages is that indoor signal environments are often complex, posing a harder modeling task (and often rather high signal to noise ratio).
 
 A few different techniques for indoor positioning are presented below.
 %
 \begin{itemize}
 \item \emph{MAC-Address}:  
 
-Receiving a signal, and thereby a MAC-address from an AP, indicates that the receiving device is within approximately $30$ meters, depending on building, transmitted power and effectivity of the receiving antenna. This is a rather crude positioning, but may be used to pinpoint a device to a certain area. Furthermore, receiving signals from multiple devices will improve the positioning, if the transmitter locations are different i.e reducing the possible position to a subsection of the area. 
+Receiving a signal, and thereby a MAC-address from an AP, indicates that the receiving device is within approximately $30$ meters, depending on building, transmitted power and effectivity of the receiving antenna. This is a rather crude positioning, but may be used to pinpoint a device to a certain area. Furthermore, receiving signals from multiple devices will improve the positioning, if the transmitter locations are different, i.e reducing the possible position to a subsection of the area. 
 %
 \item \emph{Received Signal Strength (RSS)}:
 
-Measuring the signal strength from an AP puts the devices not just in the vicinity, but gives a rough indication of the distance to the AP. Multiple APs may then be used to trilaterate a position, but noisy measurements give a rather large uncertainty. 
+Measuring the signal strength from an AP puts the devices not just in the vicinity, but gives a indication of the distance to the AP. Multiple APs may then be used to trilaterate a position, but noisy measurements give a rather large uncertainty. 
 %
 \item \emph{Time of Arrival (ToA)}:
 
-If the APs and measuring device are synchronized in time, the time difference between when a message was sent and received may be used to compute the distances between the device and the APs. However, the time differences involved are usually very short ($\sim 3*10^{-9}$ seconds per meter), especially in indoor environments, requiring the time synchronization to be precise.  
+If the APs and the measuring device are synchronized in time, the time difference between when a message was sent and received may be used to compute the distances between the device and the APs. However, the time differences involved are usually very short ($\sim 3*10^{-9}$ seconds per meter), especially in indoor environments, requiring the time synchronization to be precise.  
 %
 \item \emph{Time Difference of Arrival (TDoA)}:
 
@@ -602,7 +601,7 @@ If only the APs are synchronized, the measurement of the time difference between
 
 \item \emph{Round Trip Time (RTT)}: 
 
-A way to eliminate the requirement of synchronized APs, is to measure the time it takes for a message travel to the AP and back again. This time is called the \emph{round trip time}. As only one device performs the time measurement the need for synchronization is eliminated, but instead the time from when an AP receives a message until it sends the response has to be known.
+A way to eliminate the requirement of synchronized APs, is to measure the time it takes for a message to travel the AP and back again. This time is called the \emph{round trip time}. As only one device performs the time measurement the need for synchronization is eliminated, but instead the time from when an AP receives a message until it sends the response has to be known.
 %
 \end{itemize}
 %
@@ -611,9 +610,9 @@ In this thesis however, the focus will be placed on the received signal strength
 %
 \subsection{Received Signal Strength Indication}
 %
-The \emph{Received Signal Strength Indication} (RSSI) is a value indicating the short-time-average of the received signal power \cite{fig_fra10}. The RSSI is given in an arbitrary unit, but usually dBm, and there is no standard of how RSSI should be related to the physical properties of the received signal. This means different manufacturers of devices able to communicate over Wi-Fi may choose the range in which the RSSI is presented. 
+The \emph{Received Signal Strength Indication} (RSSI) is a value indicating the short-time average of the received signal power \cite{fig_fra10}. The RSSI is given in an arbitrary unit, but usually dBm, and there is no standard of how RSSI should be related to the physical properties of the received signal. This means different manufacturers of devices able to communicate over WiFi may choose the range in which the RSSI is presented. 
 
-For the RSSI to be a meaningful measurement of the received signal strength it must somehow be related to the physical properties of the signal. Usually, a measurement of the RSSI at a known distance is used together with an investigation of how the RSSI changes with the distance. The models discussed in chapter \ref{chap:RSP} can then be applied. Different devices may posses different parameters, thus requiring modeling for a specific device or an adaptive estimation scheme. 
+For the RSSI to be a meaningful measurement of the received signal strength it must somehow be related to the physical properties of the signal. Usually, a measurement of the RSSI at a known distance is used together with an investigation of how the RSSI changes with the distance. The models discussed in Chapter \ref{chap:RSP} can then be applied. Different devices may posses different parameters, thus requiring modeling for a specific device or an adaptive estimation scheme. 
 %
 
 \subsection{RSSI Measurements in Android}
@@ -626,21 +625,21 @@ Which channels to scan could be specified to reduce the scan time, but some AP d
 %
 \section{Performance of 2.4 GHz Versus 5 GHz}
 %
-The evolution of WiFi has prompted many AP:s to implement standards for both 2.4 and 5 GHz communications. Alongside the performance boost to devices able to use both frequencies, this poses an enticing possibility for higher performing indoor positioning. Different frequencies may, in the best case, provide two independent measurements of the distance to an AP. To investigate if this is the case, the correlation between the two frequencies must be determined.  
+The evolution of WiFi has prompted many APs to implement standards for both 2.4 and 5 GHz communications. Alongside the performance boost to devices able to use both frequencies, this poses an enticing possibility for higher performing indoor positioning. Different frequencies may, in the best case, provide two independent measurements of the distance to an AP. To investigate if this is the case, the correlation between the two frequencies must be determined.  
 %
 \subsection{Signal Correlation}
 %
-Of course, some of the signal behavior is expected to be highly correlated. For one, the large scale distance dependent path loss is largely the same in both signals, and it is from this path loss the distance to the AP is determined. Nevertheless, independence is a desirable feature for the signal noise, which includes the \emph{small scale fading}. 
+Of course, some of the signal behavior is expected to be highly correlated. For one, the large scale distance dependent path loss is largely the same for both signals, and it is from this path loss the distance to the AP is determined. Nevertheless, independence is a desirable feature for the signal noise, which includes the \emph{small scale fading}. 
 
-To investigate the correlation between 2.4 and 5 GHz signals, measurements could be taken, with an increasing distance, to an AP transmitting on both frequencies. After the path loss dependent behavior is removed from the signals, the correlation of the noise could be computed. This process is illustrated for one series of data in Figure \ref{noise_corr_los} 
+To investigate the correlation between 2.4 and 5 GHz signals, measurements were taken, with an increasing distance, to an AP transmitting on both frequencies. After the path loss dependent behavior is removed from the signals, the correlation of the noise could be computed. This process is illustrated for one series of data in Figure \ref{noise_corr_los} 
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/wifi/noise_corr_los}
-\caption{Signal power, signal power together with linear trend and signal power minus linear trend for the 2.4 and 5 GHz channel. Measurements taken while traversing a distance of 15 meters, moving away from the AP.}\label{noise_corr_los}
+\caption{Signal power, signal power together with linear trend and signal power minus linear trend for the 2.4 and 5 GHz channels. The measurements were taken while traversing a distance of 15 meters, moving away from the AP.}\label{noise_corr_los}
 \end{figure}
 
-The \emph{correlation coefficient $\hat  r_{xy}$} between the two can be estimated using,
+The \emph{correlation coefficient $\hat  r_{xy}$} between the two can be estimated using
 \begin{equation}
 \hat r_{xy}=\frac{\sum\limits_{i=1}^{N}{(x_i-\bar{x})(y_i-\bar{y})}}{(N-1)\sigma_x\sigma_y},
 \end{equation}
@@ -648,7 +647,7 @@ where $N$ is the number of measurements, $x_i$ and $y_i$ are the 2.4 and 5 GHz m
 
 To construct a confidence interval for the covariance some statistic processing of the data is required. This presentation will be brief, and interested readers are referred to \cite{fisher15, fisher21}  for a more in-depth description. 
 
-Since the distribution of $\hat r_xy$ is not Gaussian, \emph{Fisher's z-tranform}
+Since the distribution of $\hat r_{xy}$ is not Gaussian, \emph{Fisher's z-tranform}
 %
 \begin{equation}
 z'=\frac{1}{2}\ln{\left(\frac{1+\hat r_{xy}}{1-\hat r_{xy}}\right)}
@@ -704,14 +703,14 @@ NLOS stationary  & -0.1191 &$[-0.1754;-0.0620]$ \\
 %
 \subsection{Difference in Modeling}
 %
-An extensive discussion about how path loss depends on the frequency is done in \cite{rappaport96}, the gist of which is that higher frequencies lose power faster with distance. The difference between the behavior  2.4 and 5 GHz is not large (a factor $\sim 2$), however some extra attention is needed to model the two. To extend the models in chapter \ref{chap:RSP} to the difference in frequency, usually different $n$ or $\alpha$, depending on the choice of model, will be needed. Furthermore, an AP may transmit 5 GHz with a greater power than 2.4 GHz to mitigate some of the increased path loss, requiring measurements of the transmitted power for both frequencies.  
+An extensive discussion about how path loss depends on the frequency is done in \cite{rappaport96}, the gist of which is that higher frequencies lose power faster with distance. The difference between the behavior of 2.4 and 5 GHz is not large (a factor $\sim 2$), however some extra attention is needed to model the two. To extend the models in chapter \ref{chap:RSP} to the difference in frequency, usually different $n$ or $\alpha$, depending on the choice of model, will be needed. Furthermore, an AP may transmit 5 GHz with a greater power than 2.4 GHz to mitigate some of the increased path loss, requiring measurements of the transmitted power for both frequencies.  
 %
 \chapter{Indoor Positioning - Pure RSSI Approach}
 \label{chap:pure_rssi}
 %
-The signal propagation models described in Chapter \ref{chap:RSP} in combination with the PF from Chapter \ref{chap:PF} provides a framework for indoor positioning. This framework can be used to perform position estimation using RSSI measurements from multiple WiFi APs. 
+The signal propagation models described in Chapter \ref{chap:RSP} in combination with the PF from Chapter \ref{chap:PF} provide a framework for indoor positioning. This framework can be used to perform position estimation using RSSI measurements from multiple WiFi APs. 
 
-In this chapter, the considerations about, and parameter choices for, the PF in the context of indoor positioning are presented. The performance is then tested in a few different environments and compared to position estimation using a \emph{least squares} algorithm.  These tests then serves as a basis for an extensive error analysis, discussing the error behavior depending on different conditions. The resulting knowledge is then used in the next chapter, to ascertain if and how adaptive or crowd-sourced signal strength models may be used.
+In this chapter, the considerations about, and parameter choices for, the PF in the context of indoor positioning are presented. The performance is then tested in a few different environments and compared to position estimation using a LS algorithm.  These tests then serves as a basis for an extensive error analysis, discussing the error behavior depending on different conditions. The resulting knowledge is then used in the next chapter, to ascertain if and how adaptive or crowd-sourced signal strength models may be used.
 %
 \subsection{Importance of Geometry}
 %
@@ -725,13 +724,13 @@ How the APs are positioned in relation to the user (i.e. the position of interes
 
 In the leftmost case in Figure \ref{geometries} the APs are placed on a straight line, and in this case trilateration of the \emph{true} position, $[0,20]$, is impossible if no prior information about past positions is known. As the figure shows, APs positioned on a straight line gives two equally probable position estimates (more \emph{red} implies higher probability), i.e. it is not possible to distinguish between a position and its mirror image in the line formed by the APs. 
 
-The second case displays a scenario where the APs are placed in the corners of a obtuse triangle (largest angle greater than $90^\circ$). In this rather ideal case it is possible to discern the \emph{true} position as the most probable one. However, higher noise levels and/or biased noise in the measurements will make this increasingly hard, as there are two different positions with relatively high probabilities.
+The second case displays a scenario where the APs are placed in the corners of a obtuse triangle (largest angle greater than $90^\circ$). In this ideal case it is possible to discern the \emph{true} position as the most probable one. However, higher noise levels and/or biased noise in the measurements will make this increasingly hard, as there are two different positions with relatively high probabilities.
 
 The third case represents a best-case scenario where the position to be estimated is centered in an equilateral triangle. Here, it is easy to distinguish the most probable position, and likewise the \emph{true} position.
 
-The PF uses information about the positions at previous time steps making it more likely to determine the true position even if the current geometry is disadvantageous. The LS estimation, on the other hand, uses only instantaneous measurements and will suffer much more severely from a unfavorable environment. 
+The PF uses information about the positions at previous time steps making it more likely to determine the true position even if the current geometry is disadvantageous. The LS estimation, on the other hand, uses only instantaneous measurements and will suffer much more severely from an unfavorable environment. 
  
-The positioning will further benefit from a larger number of APs as both the number of measurements and the probability of having an advantageous geometry increase. Still, a few conclusions could be drawn from this discussion, the main one being that measurements are taken inside a polygon with corners consisting of the APs tend to provide the best information about the true position regardless of the used estimation algorithm. 
+The positioning will further benefit from a larger number of APs as both the number of measurements and the probability of having an advantageous geometry increase. Still, a few conclusions could be drawn from this discussion, the main one being that measurements taken inside a polygon with corners consisting of the APs tend to provide the best information about the true position regardless of the used estimation algorithm. 
 %
 \section{On Parameter Choices}
 %
@@ -763,9 +762,9 @@ where
 \alpha_k \sim \mathsf U(0,2\pi).
 \end{equation}
 %
-$\mathsf{U}(0,2\pi)$ is a uniform distribution between $0$ and $2\pi$. $\sigma$ is the standard deviation of the normal distribution. In this case $r$ is a approximation of how far the phone travels between two measurements and $\sigma$ measures the uncertainty of this distance. 
+$\mathsf{U}(0,2\pi)$ is a uniform distribution between $0$ and $2\pi$. $\sigma$ is the standard deviation of the normal distribution. In this case $r$ is an approximation of how far the phone travels between two measurements and $\sigma$ measures the uncertainty of this distance. 
 
-A fair estimation is that a walking person travels at between 1 and 2 meters per second, and given an interval $\Delta t$ between measurements it holds that $r \approx 1.5*\Delta t$ and $\sigma \approx 0.5*\Delta t$. Thus,
+A fair estimation is that a walking person travels between 1 and 2 meters per second, and given an interval $\Delta t$ between measurements it holds that $r \approx 1.5\cdot\Delta t$ and $\sigma \approx 0.5\cdot\Delta t$. Thus,
 %
 \begin{eqnarray}
 v^x_k&\sim 1.5\Delta t \sin{\alpha_k} + N \left(0, \left(\frac{\Delta t}{2}\right)^2\right)\\
@@ -789,7 +788,7 @@ This has been done for a quite large number of AP:s, and in environments ranging
 
 The resulting variance in the measurements ranged from $9$ to $60$, with a mean of $25$. The reason for the large span is that some of the APs were in LOS for most of the measurements even though the distance to them was fairly large. Other AP:s were, on the other hand, highly obstructed while at a quite short distance, and yet others followed the models well. 
 
-During the position estimations in the rest of this chapter the mean of the variance, $25$, will be used. Further, the measurement noise will be assumed to be Gaussian with zero mean. This assumption is valid for data sets covering large distances. However, over a short traveled distance the noise is expected to be biased in some cases as it is highly dependent on the environment. This is somewhat mitigated by having measurements from numerous AP:s, allowing positive and negative biases to cancel.
+During the position estimations in the rest of this chapter the mean of the variance, $25$, will be used. Further, the measurement noise will be assumed to be Gaussian with zero mean. This assumption is valid for data sets covering large distances. However, over a short traveled distance the noise is expected to be biased in some cases as it is highly dependent on the environment. This is somewhat mitigated by having measurements from numerous APs, allowing positive and negative biases to cancel.
 
 \subsection{Number of Particles}
 %
@@ -799,7 +798,7 @@ During the position estimations in the rest of this chapter the mean of the vari
 \caption{Mean error in estimated position versus number of particles, $N$, for a two dimensional positioning.}\label{err_vs_N}
 \end{figure}
 
-The number of particles required to maintain a high enough distribution over the relevant part of the state space, is dependent on the size of the state space and the distance traveled in between filter updates. In this case, the size of the state space is two, position in x- and y-direction respective, as the positioning is done in two dimensions. The distance in between filter updates i.e distance between consecutive RSSI measurements changes for different test cases. The range starts at 0.5 meters with a close to zero variance, when measurements are taken every 0.5 meters around a predefined path. The other limit of the range is around 4 meters with considerably larger variance when measurements are taken around every third second while walking a predetermined path. 
+The number of particles required to maintain a high enough distribution over the relevant part of the state space, is dependent on the size of the state space and the distance traveled in between filter updates. In this case, the size of the state space is two, the position in x- and y-direction , as the positioning is done in two dimensions. The distance in between filter updates, i.e. distance between consecutive RSSI measurements changes for different test cases. The range starts at 0.5 meters with a close to zero variance, when measurements are taken every 0.5 meters around a predefined path. The other limit of the range is around 4 meters with considerably larger variance when measurements are taken around every third second while walking a predetermined path. 
 
 In Figure \ref{err_vs_N}, the mean positioning error for the same data set is shown, for different numbers of particles, $N$, ranging from $1$ to 10 000. The data was generated by measurements taken with 3 meters of relative spacing along a predetermined path. For small $N$, the error improves dramatically when $N$ is increased. However, for $N$ larger than $\sim 40$ no further improvements are noticeable and the mean estimation error settles at $\sim 3.5$ meters. 
 
@@ -810,13 +809,13 @@ For some of the test cases used later in this chapter, the distance between meas
 From chapter \ref{chap:RSP}, a model on the form
 %
 \begin{equation}
-R_x(d) = C - 2*10\log_{10}{d}-\alpha d
+R_x(d) = C - 2\cdot10\log_{10}{d}-\alpha d
 \label{eq:RSSI_model}
 \end{equation}
 %
 is determined appropriate to model the RSSI measurements. In this model, $R_x(d)$ is the RSSI measurement at a distance $d$ from the transmitter, $C$ is related to the power of the transmitter and $\alpha$ models path loss related to signal path obstruction. 
 
-The models are discussed in chapter \ref{chap:RSP} but appropriate values of the constants $C$ and $\alpha$ are yet to be determined. This may be done in a couple of fashions, two of which will be presented here. The resulting values, especially the value of $\alpha$, are highly dependent on the environment, thus making them, in this situation, suitable for a open office environment. The values of $C$ is also related to the power with which the Wi-Fi APs transmits, so a different AP will most likely have a different value.      
+The models are discussed in Chapter \ref{chap:RSP} but appropriate values of the constants $C$ and $\alpha$ are yet to be determined. This may be done in a couple of fashions, two of which will be presented here. The resulting values, especially the value of $\alpha$, are highly dependent on the environment, thus making them, in this situation, suitable for an open office environment. The values of $C$ are also related to the power with which the WiFi APs transmit, so a different AP will most likely have a different value.      
 
 \subsection{Model Driven Approach}
 %
@@ -825,10 +824,10 @@ Given measurements at known locations, preferably with both obstructed and LOS p
 The value of $\alpha$ from \ref{eq:RSSI_model} can be calculated as
 %
 \begin{equation}
-\alpha = \frac{C-2*10\log_{10}(d)-R_x(d)}{d}.
+\alpha = \frac{C-2\cdot10\log_{10}(d)-R_x(d)}{d}.
 \end{equation}
 %
-The estimation of $\alpha$ will improve if the paths between transmitters and receiver is representative for the desired environment.  
+The estimation of $\alpha$ will improve if the paths between transmitters and receiver are representative for the current environment.  
 
 To find the value of $C$, measurements of the RSSI should be performed in LOS of the AP, at different locations and with different distances to the AP. The value can then be calculated from
 %
@@ -836,9 +835,9 @@ To find the value of $C$, measurements of the RSSI should be performed in LOS of
 C=R_x(d) - 2*10\log_{10}(d)
 \end{equation}
 % 
-i.e from \ref{eq:RSSI_model} with $\alpha = 0$ (LOS).
+i.e. from \ref{eq:RSSI_model} with $\alpha = 0$ (LOS).
 
-This has been done at 20 different locations with 20 measurements of the RSSI from available APs taken at each. The estimated values of $\alpha$ and $C$ is presented in Table \ref{table:est_par}.
+This has been done at 20 different locations with 20 measurements of the RSSI from available APs taken at each location. The estimated values of $\alpha$ and $C$ are presented in Table \ref{table:est_par}.
 
 \begin{table}
 \begin{center}
@@ -856,7 +855,7 @@ This has been done at 20 different locations with 20 measurements of the RSSI fr
 \end{table}
 %
 \subsection{Estimation Error Approach}
-The other method is a bit more heuristic, but might produce equal or better performance. Instead of finding the values of $\alpha$ and $C$ by measurements it is possible to find the parameters resulting in the smallest average positioning error. This is done by taking a set of RSSI measurements at a few different known locations and use them in the position estimation algorithm with different $\alpha$ and $C$, to find the parameters producing the smallest mean estimation error.   
+The other method is more heuristic, but might produce equal or better performance. Instead of finding the values of $\alpha$ and $C$ by measurements it is possible to find the parameters resulting in the smallest average positioning error. This is done by taking a set of RSSI measurements at a few different known locations and use them in the position estimation algorithm with different $\alpha$ and $C$, to find the parameters producing the smallest mean estimation error.   
 
 \begin{figure}[!hbt]
 \include{graphics}
@@ -864,17 +863,17 @@ The other method is a bit more heuristic, but might produce equal or better perf
 \caption{Average estimation error as a function of $\alpha$ and $C$ for 2.4 and 5 GHz RSSI measurements. Values in deep blue (bottom left corner) are set to zero since these values resulted in very large positioning errors.}\label{err_vs_param}
 \end{figure}
 %
-To illustrate this, the estimation error for $\alpha \in [0;1]$ and $C \in [-55;-25]$ is shown in Figure \ref{err_vs_param} for 2.4 and 5 GHz. The parameters yielding the smallest average positioning errors is $C=-38$ and $\alpha = 0.3$ for 2.4 GHz and $C=-39$ and $\alpha = 0.2$ for 5 GHz. 
+To illustrate this, the estimation error for $\alpha \in [0;1]$ and $C \in [-55;-25]$ are shown in Figure \ref{err_vs_param} for 2.4 and 5 GHz. The parameters yielding the smallest average positioning errors are $C=-38$ and $\alpha = 0.3$ for 2.4 GHz, and $C=-39$ and $\alpha = 0.2$ for 5 GHz. 
 %
 \subsection{Final Parameter Choice}
 %
-A few interesting observations can be made from the two methods above. The first of these being that the range of possible values are large, indicated by the standard deviations obtained from the model driven method. This is somewhat to be expected as the obstruction between transmitter and receiver is vastly different from location to location. Thus, the obtained parameters will be an average of the different environments giving rise to their high standard deviation. 
+A few interesting observations can be made from the two methods above. The first of these is that the range of possible values is large, indicated by the standard deviations obtained from the model driven method. This is somewhat to be expected as the obstruction between transmitter and receiver is vastly different from location to location. Thus, the obtained parameters will be an average of the different environments, giving rise to their high standard deviation. 
 
 Further, it is noteworthy that the parameters obtained from the two approaches differ, especially for 5 GHz. One explanation for this is that the PF is able to find an accurate position given, for example, a positive model error for 2.4 GHz and a negative error for 5 GHz from the same AP. However, the parameters found trying to minimize the model error still produced small positioning errors when used together with the PF. 
 
-Looking at Figure \ref{err_vs_param} the PF exhibits an interesting behavior. The positioning error is relatively small for a large range of parameters but a change to substantial errors happens suddenly for certain parameters. Parameter choices along the approximate line from $C=-25$ and $\alpha=0.7$ to $C=-39$ and $\alpha=0$ needs to be changed only by a small amount to produce either good or truly poor results. A deeper investigation shows that this line roughly translates to the models switching from estimating a too low signal power to estimating a too high one, for a certain location. The smallest positioning errors is obtained when the modeled and received power are about the same, placing them slightly above the line described earlier. However, these parameters are sensitive if the environment changes, resulting in estimating to high signal powers for the given location. A more robust choice is to over estimate the signal attenuation resulting in a higher $\alpha$. This choice might produce slightly larger positioning errors but is less sensitive to changing environments.
+Looking at Figure \ref{err_vs_param} the PF exhibits an interesting behavior. The positioning error is relatively small for a large range of parameters, but a change to substantial errors happens suddenly for certain parameters. Parameter choices along the approximate line from $C=-25$ and $\alpha=0.7$ to $C=-39$ and $\alpha=0$ need to be changed only by a small amount to produce either good or truly poor results. A deeper investigation shows that this line roughly translates to the models switching from estimating a too low signal power to estimating a too high one, for a certain location. The smallest positioning errors are obtained when the modeled and received powers are about the same, placing them slightly above the line described earlier. However, these parameters are sensitive if the environment changes, resulting in estimating too high signal powers for the given location. A more robust choice is to over estimate the signal attenuation resulting in a higher $\alpha$. This choice might produce slightly larger positioning errors, but is less sensitive to changing environments.
 
-The conclusion of the discussion above is that it is far better to under estimate the signal power at a given location than to over estimate it. Taking this into account the values stated in Table \ref{table:model_par} will be used to model the received RSSI value at a distance, $d$ from the AP.  These values are more restrictive concerning the signal power than the parameters found previously. However, these choices provide a more robust estimation if the environmental properties change. The effect  of a small change in the true value of $C$, due to either variations in the power transmitted by the AP or different properties of the receiving device, will also be somewhat mitigated by a more restrictive choice of parameters.  
+The conclusion of the discussion above is that it is far better to under estimate the signal power at a given location than to over estimate it. Taking this into account, the values stated in Table \ref{table:model_par} will be used to model the received RSSI value at a distance, $d$ from the AP.  These values are more restrictive concerning the signal power than the parameters found previously. However, these choices provide a more robust estimation if the environmental properties change. The effect  of a small change in the true value of $C$, due to either variations in the power transmitted by the AP or different properties of the receiving device, will also be somewhat mitigated by a more restrictive choice of parameters.  
 %
 \begin{table}
 \begin{center}
@@ -895,7 +894,7 @@ Frequency, GHz & $C$ & $\alpha$ \\
 \section{Test Setup}
 \label{sec:test_setup}
 %
-During the sections of this chapter two different test cases will be used,
+During the sections of this chapter two different test cases will be used.
 \begin{description}
 %
 \item[Case 1:] \hfill \\
@@ -904,7 +903,7 @@ Measurements of the RSSI are taken at equally spaced points with $0.5$ meters sp
 %
 \item[Case 2:] \hfill \\
 %
-Measurements of the RSSI is taken continuously while the user is walking a predetermined path at a relatively constant speed. The time between each measurement is approximately 4 seconds. Only measurements from APs with known positions are used.  
+Measurements of the RSSI are taken continuously while the user is walking a predetermined path at a relatively constant speed. The time between each measurement is approximately 4 seconds. Only measurements from APs with known positions are used.  
 %
 \end{description}
 %
@@ -912,36 +911,36 @@ Measurements of the RSSI is taken continuously while the user is walking a prede
 
 \emph{Case 2} provides a more natural use-case, where the user is moving while trying to find his position. This case lacks the ability of error analysis, as the measurements are taken continuously over an interval and the time between two consecutive measurements is not fixed. However, the estimated trajectory can be compared to the true one.   
 
-The tests were performed in a building called Glasgow, one of Sony's office buildings, on the 6:th floor. For different tests, different paths and a different setup of APs are used. Further, all tests are performed in the same type of open office environment, but the differences between the exact environments for each test are fairly large. During the tests, the user held the smartphone in one hand, with the screen pointing upwards. The smartphones used were one Togari and one Honami, both manufactured by Sony. These performed similarly except for a constant bias on the RSSI.
+The tests were performed in a building called Glasgow, one of Sony's office buildings, on the 6:th floor. For different tests, different paths and different setups of APs are used. Further, all tests are performed in the same type of open office environment, but the differences between the exact environments for each test are fairly large. During the tests, the user held the smartphone in one hand, with the screen pointing upwards. The smartphones used were one Xperia Z Ultra and one Xperia Z1, both manufactured by Sony. These performed similarly except for a constant bias on the RSSI.
 %
 \section{Results}
 \label{environment_results}
 %
 The results of the different tests performed are presented in the sections below. 
 %
-\subsection{Environment One - WORKING TITLE} 
+\subsection{Environment One} 
 %
 
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/env_one}
-\caption{The path (\emph{blue} line) used in the \emph{environment one}, along with measurement points (\emph{blue} \texttt{x}), start point (\emph{black} \texttt{x}) and end point (\emph{red} \texttt{o}) }\label{env_one}
+\caption{The path (\emph{blue} line) used in the \emph{Environment one}, along with measurement points (\emph{blue} \texttt{x}), start point (\emph{black} \texttt{x}) and end point (\emph{red} \texttt{o}) }\label{env_one}
 \end{figure}
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/true_vs_est_env_1_05}
-\caption{Comparison between the true (\emph{blue}) and estimated (\emph{black}) path for \emph{environment one}.}\label{true_vs_est_env_1_05}
+\caption{Comparison between the true (\emph{blue}) and estimated (\emph{black}) path for \emph{Environment one}.}\label{true_vs_est_env_1_05}
 \end{figure}
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/error_env_1_05}
-\caption{The absolute errors in estimated position for \emph{environment one}.}\label{error_env_1_05}
+\caption{The absolute errors in estimated position for \emph{Environment one}.}\label{error_env_1_05}
 \end{figure}
 %
-The methodology from \emph{case 1} was used during this test and measurements from seven APs along a path of approximately one hundred meters. The locations of the APs together with the path taken may be found in Figure \ref{env_one}.
+The methodology from \emph{Case 1} was used during this test and measurements from seven APs along a path of approximately one hundred meters. The locations of the APs together with the path taken may be found in Figure \ref{env_one}.
 
 The estimated walked path using RSSI measurements is presented in Figure \ref{true_vs_est_env_1_05} and the absolute position errors in Figure \ref{error_env_1_05}. Some additional data concerning the error is presented in Table \ref{table:error_env-1} together with the positioning errors when using only 2.4 and 5 GHz for reference.
 %
@@ -961,14 +960,14 @@ Median & $1.6$ & $2.5$ & $2.9$ \\
 \hline 
 \end{tabular}
 \end{center}
-\caption{Attributes of the absolute positioning error for \emph{environment one}.}\label{table:error_env-1}
+\caption{Attributes of the absolute positioning error for \emph{Environment one}.}\label{table:error_env-1}
 \end{table}
 
-In this environment the placement of the AP in relation to the path walked is beneficial. During the walk, measurements from at least four APs are available and almost always on both $2.4$ and $5$ GHz.  Further, the geometry of the APs is such that we always stay inside or at the border of a polygon where the APs compose the corners. These properties contributes to the fairly small positioning errors in Table \ref{table:error_env-1}  
+In this environment, the placement of the AP in relation to the path walked is beneficial. During the walk, measurements from at least four APs are available and almost always on both $2.4$ and $5$ GHz.  Further, the geometry of the APs is such that we always stay inside or at the border of a polygon where the APs compose the corners. These properties contribute to the fairly small positioning errors in Table \ref{table:error_env-1}  
 %
-\subsection{Environment Two - WORKING TITLE}
+\subsection{Environment Two}
 %
-The test in \emph{environment two} uses the methodology of \emph{case 1} and the measurements are taken over a distance of $176.5$ meters, for a reference of the actual path see Figure \ref{true_vs_est_env_2_05}.    
+The test in \emph{Environment two} uses the methodology of \emph{Case 1}, and the measurements are taken over a distance of $176.5$ meters. For a reference of the actual path see Figure \ref{true_vs_est_env_2_05}.    
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -991,18 +990,18 @@ Median & $3.2$ \\
 \hline 
 \end{tabular}
 \end{center}
-\caption{Attributes for the absolute positioning errors for \emph{environment two}.}\label{table:error_env_2}
+\caption{Attributes for the absolute positioning errors for \emph{Environment two}.}\label{table:error_env_2}
 \end{table}
 
-A plot of the estimated path along with the true one is shown in Figure \ref{true_vs_est_env_2_05} and some attributes of the absolute positioning error can be found in Table \ref{table:error_env_2}.
+A plot of the estimated path along with the true one is shown in Figure \ref{true_vs_est_env_2_05}, and some attributes of the absolute positioning error can be found in Table \ref{table:error_env_2}.
 
-The maximum positioning error here is considerably worse than the maximum from \emph{environment one}. This is largely due a unfavorable geometry of the APs during the last part of the path where only measurements from the three rightmost APs where available. Theses APs compose a quite obtuse triangle further impairing the positioning.  
+The maximum positioning error here is considerably worse than the maximum from \emph{Environment one}. This is largely due to an unfavorable geometry of the APs during the last part of the path where only measurements from the three rightmost APs were available. Theses APs compose a quite obtuse triangle further impairing the positioning.  
 %
-\subsection{Environment Three - WORKING TITLE}
+\subsection{Environment Three}
 %
-For environment three which was a substantially longer path of around 300 meters (273 m), the \emph{case 2} methodology was used. Measurements where received around once every 3rd second, resulting in the measurements being taken over a distance of around $4.5$ meters and a total of 61 different measurements points were collected. 
+For Environment three which was a substantially longer path of around 300 meters (273 m), the \emph{Case 2} methodology was used. Measurements were received around once every 3rd second, resulting in the measurements being taken over a distance of around $4.5$ meters, and a total of 61 different measurements points were collected. 
 
-In Figure \ref{true_vs_est_env_3}, the true path along with estimated positions and path, may be viewed. For this test case, it is hard to give a absolute measurement of the error. Instead, one has to consider the difference between true and estimated path. Further, the measurements was taken while moving at constant speed and the time between each measurements is more or less constant. Thus, the estimated positions should be approximately equally spaced over the path. The estimated path differs from the true one at times, but the difference is, in absolute terms, not large. Also, most of the estimated positions are equally spaced. However, a few of them stands out and the minimum distance between two is $0.49$ m and maximum $8.2$ m. Another interesting observation is that the mean distance between two consecutive estimated positions is $4.1$ m giving a total distance of $250$ m, which is $23$ m less than the true path. This is also visible in Figure \ref{true_vs_est_env_3} in that the estimated path have a tendency to cut corners.         
+In Figure \ref{true_vs_est_env_3}, the true path along with estimated positions and path may be viewed. For this test case, it is hard to give a absolute measurement of the error. Instead, one has to consider the difference between true and estimated path. Further, the measurements were taken while moving at constant speed and the time between each measurement is more or less constant. Thus, the estimated positions should be approximately equally spaced over the path. The estimated path differs from the true one at times, but the difference is, in absolute terms, not large. Also, most of the estimated positions are equally spaced. However, a few of them stands out and the minimum distance between two is $0.49$ m and the maximum is $8.2$ m. Another interesting observation is that the mean distance between two consecutive estimated positions is $4.1$ m, giving a total distance of $250$ m, which is $23$ m less than the true path. This is also visible in Figure \ref{true_vs_est_env_3} in that the estimated path has a tendency to cut corners.         
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -1012,9 +1011,9 @@ In Figure \ref{true_vs_est_env_3}, the true path along with estimated positions 
 %
 \subsection{Least Squares - a Comparison}
 %
-A common way of estimating a position from a RSSI measurements is to use a LS estimation, for additional information see Section \ref{sec:oet}. Here the difference between the estimations from a PF and from a LS algorithm will be investigated. 
+A common way of estimating a position from an RSSI measurement is to use a LS estimation, for additional information see Section \ref{sec:oet}. Here the difference between the estimations from a PF and from an LS algorithm will be investigated. 
 
-The comparison will be made for environment \emph{one} and \emph{two} from the previous sections, but with new datasets. Further, the methodology from \emph{case }1 will be used, but with 3 m instead of $0.5$ m sample spacing.This methodology is used to be able to measure the absolute position error from the different estimators. Further, both estimators will use the same path loss models.   
+The comparison will be made for \emph{Environment one} and \emph{two} from the previous sections, but with new datasets. Further, the methodology from \emph{Case }1 will be used, but with 3 m instead of $0.5$ m sample spacing.This methodology is used to be able to measure the absolute position error from the different estimators. Further, both estimators will use the same path loss models.   
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -1034,24 +1033,24 @@ The comparison will be made for environment \emph{one} and \emph{two} from the p
 \caption{Absolute position error for the LS (\emph{red}) and PF (\emph{blue}) estimators for environment \emph{two}.}\label{ls_error_medium}
 \end{figure}
 
-The estimated path from both the PF and LS estimators is displayed in Figure \ref{ls_short} along with the true path for environment \emph{one}. It is clearly visible that the PF performs considerably better compared to the LS estimator. The positioning errors from Figure \ref{ls_error_short} makes this even more clear and the PF has a smaller positioning error for every sample compared to the LS estimator. The mean position error is, for the PF  $1.7$ m and for the LS estimation, $5.7$ m. 
+The estimated paths from both the PF and LS estimators are displayed in Figure \ref{ls_short}, along with the true path for \emph{Environment one}. It is clearly visible that the PF performs considerably better compared to the LS estimator. The positioning errors from Figure \ref{ls_error_short} make this even more clear and the PF has a smaller positioning error for every sample compared to the LS estimator. The mean position error is, $1.7$ m for the PF, and $5.7$ m for the LS estimation.
 
-For environment \emph{two} the LS estimation perform better in comparison to the PF, as shown by the errors in Figure \ref{ls_error_medium}. The PF, however, does still provide the best position estimates and the error is lower for the PF in most of the samples and the LS estimator produces the larges position error. The difference in maximum error though is not large, then again, the mean error for the PF is $3.4$ m and for the LS estimation, $5.1$ m. The PF seams to produce considerably better results compared to the LS method when the environment is favorable i.e when a large number of AP are available and/or their geometry are good. When the conditions are disadvantageous both methods performs equally, giving positions around 10 meters off.
+For environment \emph{two} the LS estimation performs more equal to to the PF, than in \emph{Environment 1}, as shown by the errors in Figure \ref{ls_error_medium}. The PF, however, does still provide the best position estimates and the error is lower for the PF in most of the samples. The difference in maximum error is not large but the mean error for the PF is $3.4$ m and for the LS estimation, $5.1$ m. The PF produces considerably better results compared to the LS method when the environment is favorable, i.e. when a large number of APs are available and/or their geometry is good. When the conditions are disadvantageous both methods perform equally, giving positions around 10 meters off.
 
-The conclusion to be drawn from these investigations is a PF is the better choice for estimating positions from noisy RSSI measurements, especially if the only sought after attribute is the smallest mean and maximum errors. The lest squares estimation may be desirable to use if computational power is limited or only measurements with long time separation is available.
+The conclusion to be drawn from these investigations is that a PF is the better choice for estimating positions from noisy RSSI measurements, especially if the only sought after attribute is the smallest mean and maximum errors. The LS estimation may be desirable to use if computational power is limited or only measurements with long time separation is available.
 
 An interesting aspect is the performance when no previous measurements are available. Then, the PF loses its advantage of using these, whereas nothing changes for the LS. A new test was performed in \emph{Environment two}, and at each measure point, the previous position was treated as completely unknown. This means that the particles had to be spread out over the whole floor before each estimation. Then, one iteration was performed in the PF. The errors are shown in Figure XXXXXX. The mean error is 5.09 m for the PF and 5.14 m for the LS. It is difficult to decide which method that works best in this case. 
 
 %
-\section{Concluding remarks}
+\section{Concluding Remarks}
 %
-Using measurements of RSSI to position devices in a indoor environment can be a satisfactory technique if the need for precision is not too great. In a fairly homogenous building, i.e approximately the same path loss model within, with a reasonable number of AP placed in a acceptable geometry, the positioning may be quite good. 
+Using measurements of RSSI to position devices in an indoor environment can be a satisfactory technique if the need for precision is not too large. In a fairly homogenous building, with a reasonable number of AP placed in an acceptable geometry, the positioning may be quite good. 
 
-The position estimation may, with satisfactory result, be computed using a PF. The PF outperforms an LS estimation in most cases and newer produces inferior results for a sustained timespan. The worse case error between the two estimators is on par when the environment is unfavorable but the PF produces better estimates in a beneficial environment and smaller mean errors in the long run. 
+The position estimation may, with satisfactory result, be computed using a PF. The PF outperforms an LS estimation in most cases and never produces inferior results for a sustained timespan. The worst case errors of the two estimators are comparable when the environment is unfavorable, but the PF produces better estimates in a beneficial environment and smaller mean errors in the long run. 
 
-A few objections with the technique must however be mentioned, first and foremost, more or less all buildings needs a specific path loss model and the power which each AP transmits, and their location, needs to be known. Also, to have a chance to obtain a reasonable position estimate measurements from at least three different APs must be available at all times. If fewer are available larger positioning errors are to be expected, if only two AP are visible at least two positions will be equally probable and if only measurements from one is available all point at a certain distance may be the true position. The position history of the PF can improve the estimation when the geometry is unfavorable if the initial position is fairly accurate and the time spent in the environment is rather short. The LS estimation lacks this property and will produce erroneous and/or inconsistent estimations independent of past positions. Further, antennas have different abilities to receive signals, thus the behavior of the specific device must be known. Lastly, how different users hold or carry their devices substantially affect the received signal power.  
+A few objections with the technique must however be mentioned. First and foremost, more or less all buildings need a specific path loss model and the power which each AP transmits, and their locations need to be known. Also, to have a chance to obtain a reasonable position estimate, measurements from at least three different APs must be available at all times. If fewer are available, larger positioning errors are to be expected. If only two AP are visible at least two positions will be equally probable, and if only measurements from one is available, all point, at a certain distance may be the true position. The position history of the PF can improve the estimation when the geometry is unfavorable if the initial position is fairly accurate and the time spent in the environment is rather short. The LS estimation lacks this property and will produce erroneous and/or inconsistent estimations independent of past positions. Further, antennas have different abilities to receive signals, thus the behavior of the specific device must be known. Lastly, how different users hold or carry their devices substantially affect the received signal power.  
 
-On the other hand, most newly constructed or renovated building already have plenty of APs and there, this technique may provide a simple and cost effective way of providing indoor positioning. If methods for finding APs and estimating the path loss model in a simple way can be attained the setup may even be quite simple. If some of the user induced signal blockages can be registered and compensated for as well, the technique might be useful for tracking people even when they do not carry their device in hand. This only leaves the problem of characterizing the behavior of the antenna for each device, but as this only needs to be done one time for each type of device, it is no overwhelming task.        
+On the other hand, most newly constructed or renovated building already have plenty of APs ,and there, this technique may provide a simple and cost effective way of providing indoor positioning. If methods for finding APs and estimating the path loss model in a simple way can be attained the setup may even be quite simple. If some of the user induced signal blockages can be registered and compensated for as well, the technique might be useful for tracking people even when they do not carry their device in hand. This only leaves the problem of characterizing the behavior of the antenna for each device, but as this only needs to be done one time for each type of device, it is no overwhelming task.        
 %
 \chapter{Adapting the Model Parameters} %Working title
 \label{chap:adapt}
