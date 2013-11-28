@@ -68,7 +68,7 @@ For optimal performance, the smartphone should be fixed in relation to the user 
 \section{Platform}
 
 %
-In this thesis the following smartphones are used: \emph{Sony Xperia Z Ultra}, \emph{Sony Xperia Z1} and \emph{Sony Xperia LT29i}. Hereafter, they are referred to as \emph{the phone} in nothing else is specified. Each of these phones is running the \emph{Android} operating system and is equipped with an accelerometer, a gyroscope and a WiFi chip capable of communication over both 2.4 and 5 GHz.
+In this thesis the following smartphones are used: \emph{Sony Xperia Z Ultra}, \emph{Sony Xperia Z1} and \emph{Sony Xperia LT29i}. Hereafter, they are referred to as \emph{the phone} if nothing else is specified. Each of these phones is running the \emph{Android} operating system and is equipped with an accelerometer, a gyroscope and a WiFi chip capable of communication over both 2.4 and 5 GHz.
 %
 \subsection{Android} 
 %
@@ -196,7 +196,7 @@ In Figure REF HERE, the chosen coordinate system used is shown along with a floo
 %
 \label{chap:RSP}
 %
-The performance of any wireless communication system is fundamentally limited by the properties of the radio signals. In the simplest case these properties and hence the signal intensities would depend only on the distance between transmitter and receiver. However, they vary greatly depending on the environment, from a simple line-of-sight (LOS) case to a severely obstructed one, where walls, windows, furniture etc. distort the signal between transmitter and receiver. Furthermore, the signal is affected by a large number of small-scale effects. Among them are reflections from various surfaces, diffraction and Doppler shift due to a difference in speed between the receiver in reference to the transmitter \cite{rappaport96}. In this thesis the focus is put on obtaining good models for the indoor propagation of radio signals for the application of positioning. 
+The performance of any wireless communication system is fundamentally limited by the properties of the radio signals. In the simplest case, these properties and hence the signal intensities would depend only on the distance between transmitter and receiver. However, they vary greatly depending on the environment, from a simple line-of-sight (LOS) case to a severely obstructed one, where walls, windows, furniture etc. distort the signal between transmitter and receiver. Furthermore, the signal is affected by a large number of small-scale effects. Among them are reflections from various surfaces, diffraction and Doppler shift due to a difference in speed between the receiver in reference to the transmitter \cite{rappaport96}. In this thesis the focus is put on obtaining good models for the indoor propagation of radio signals for the application of positioning. 
 
 The chapter consists of a recapitulation of free space signal propagation and path loss, together with different ways of modeling these. Different sources of disturbances and their influences are discussed.
 %
@@ -240,7 +240,7 @@ It is obvious that \ref{equation:friis_equation}, and thus \ref{equation:pl}, do
 P_r(d)=P_r(d_o)\left(\frac{d_0}{d}\right)^2 \hspace{30pt} d\geq d_0\geq d_f.
 \end{equation}
 %
-For practical reasons, as most formulas express the power in dB, $d_0$ is chosen to result in a power of 10 dB. In outdoor environments a common value is 100 meter, and in indoor environments, 1 meter is suitable. Using the latter, the power can be expressed as,
+For practical reasons, as most formulas express the power in dB, $d_0$ is chosen to result in a power of 10 dB. In outdoor environments a common value is 100 meters, and in indoor environments, 1 meter is suitable. Using the latter, the power can be expressed as
 %
 \begin{equation}
 10\log_{10}{P_r(d)}=10\log_{10}{P_r(d_0)}-20\log_{10}{d} \hspace{30pt} d\geq d_0\geq d_f,
@@ -327,7 +327,7 @@ In Figure \ref{log_norm_n_2} and \ref{log_norm_n_3_2}, measured values of the si
 \caption{The distance to the transmitting antenna in meters used in the measurements of the signal strength.}\label{dist_trans}
 \end{figure}
 
-It is obvious that this model has its flaws. A low value of $n$ fails to predict an accurate signal strength when the distance to the transmitter is fairly large, and the high value do not perform satisfactory close to the transmitter. The measurement taken is similar to a real world use-case where one moves through an office space, sometimes passing under a transmitter in LOS and sometimes far away in an obstructed area. The flaws promote the search for a model with better performance.
+It is obvious that this model has its flaws. A low value of $n$ fails to predict an accurate signal strength when the distance to the transmitter is fairly large, and the high value does not perform satisfactory close to the transmitter. The measurement taken is similar to a real world use-case where one moves through an office space, sometimes passing under a transmitter in LOS and sometimes far away in an obstructed area. The flaws promote the search for a model with better performance.
 %
 \subsection{Double Slope Model}
 %
@@ -387,11 +387,11 @@ Equation \ref{equation:fixed_alpha} the predicted signal strengths for $n=2$, $\
 
 This model predicts the signal strength satisfactory both for small and large values of $d$, while removing the ''jump'' present in the double slope model.
  %
- \section{Small Scale Fading}
+ \section{Small-Scale Fading}
  %
-In addition to the large scale propagation effects described above, a radio signal usually displays a phenomenon called small scale fading. The small scale fading causes the signal strength to fluctuate rapidly over small distances or short time-spans \cite{rappaport96}. This effect is caused by different waves of the transmitted signal, called \emph{multipath waves}, arriving at the receiver with a phase difference and thus causing interference. It can be a reflected or scattered wave arriving right after the direct wave, or reflected/scattered waves from different sources reaching the receiver at slightly different times. 
+In addition to the large scale propagation effects described above, a radio signal usually displays a phenomenon called small-scale fading. The small-scale fading causes the signal strength to fluctuate rapidly over small distances or short time-spans \cite{rappaport96}. This effect is caused by different waves of the transmitted signal, called \emph{multipath waves}, arriving at the receiver with a phase difference and causing interference. It can be a reflected or scattered wave arriving right after the direct wave, or reflected/scattered waves from different sources reaching the receiver at slightly different times. 
 
-Another effect included in small scale fading is a random frequency modulation caused by different Doppler shifts on different multipath signals. The source of this is a relative movement between transmitter and receiver or movement by objects in the vicinity of the signals path. 
+Another effect included in small-scale fading is a random frequency modulation caused by different Doppler shifts on different multipath signals. The source of this is a relative movement between transmitter and receiver or movement by objects in the vicinity of the signals path. 
 
 The description presented above is brief, and for a more complete description of the small-scale fading phenomenon readers are referred to chapter 4 in \cite{rappaport96}.  
  %
@@ -407,7 +407,7 @@ The description presented above is brief, and for a more complete description of
 \chapter{The Particle Filter}
 \label{chap:PF}
 %
-The \emph{particle filter} or \emph{sequential Monte Carlo method} are sets of estimation algorithms for estimating the posterior density of the state-space in a non-linear filtering problem. The PF uses a set of particles distributed over the state-space using a system model and measurements of one ore several states are used to determine each particle's probability to represent the ''true'' state of the system.  
+The \emph{particle filter} (PF), or \emph{sequential Monte Carlo method}, are sets of estimation algorithms for estimating the posterior density of the state-space in a non-linear filtering problem. The PF uses a set of particles distributed over the state space using a system model, and measurements of one ore several states are used to determine each particle's probability to represent the ''true'' state of the system.  
 
 In this chapter the non-linear filtering problem will be explained along with its solution using the PF. Some computational aspects will be investigated and the PF used in positioning briefly discussed. The chapter ends with a section about other estimation techniques, where most focus is placed on the \emph{least squares estimation}.
 %
@@ -448,7 +448,7 @@ The process of the PF consists of three separate steps \cite{gson12},
 \caption{Histogram over the initial particle distribution in the range $[-10,10]$ using 100 bins.}\label{hist_ini_dist}
 \end{figure}
 %
-In the following sections these steps will be explored more in-depth along with a simple one dimensional example using $N=1000$ particles. We start by distributing the particles using a uniform distribution in the range $[-10,10]$, using $0$ as our true state and Gaussian distributed zero-mean random variable with standard deviation 1 as the measurement noise, $e_k$ from equation \ref{equation:nonlinear_model_second}. The initial particle distribution is displayed in Figure  \ref{hist_ini_dist}
+In the following sections these steps will be explored more in-depth along with a simple one dimensional example using $N=1000$ particles. We start by distributing the particles using a uniform distribution in the range $[-10,10]$, using $0$ as our true state and Gaussian distributed zero-mean random variable with standard deviation 1 as the measurement noise, $e_k$, from equation \ref{equation:nonlinear_model_second}. The initial particle distribution is displayed in Figure  \ref{hist_ini_dist}
 %
 \subsection{Computing the Weights}
 %
@@ -518,7 +518,7 @@ Finally, in Figure \ref{hist_dist_10_itr} the particle distribution after ten it
 %
 The PF, like most \emph{Monte Carlo} based filters, suffers from high computational complexity. Especially as the number of particles necessary to keep a fixed particle density in the state space grows as the power of the number of states. A solution to this is proposed in \cite{gson12}, where only states bearing non-linear distributions are passed throughout the PF and states bearing Gaussian distributions may be filtered by a different method. This is called the \emph{marginalized particle filter} and aims to keep the number of states passed to the PF low. 
 
-The three steps discussed in section \ref{sec:PF_process} pose somewhat different computational difficulties. The weights need to be calculated for each particle and thus need to be computed $N$ times, giving an \emph{Ordo $N$} ($O(N)$) complexity. However, the calculation for each weight depends of the number of measurements $M$ giving a total complexity of $O(M\cdot N)$. In most cases though, the number of measurements is small in comparison to the number of particles and may be neglected. Another pleasant feature of the weight computation is their independence of each other, thus making parallelization of computations simple.
+The three steps discussed in section \ref{sec:PF_process} pose somewhat different computational difficulties. The weights need to be calculated for each particle and thus need to be computed $N$ times, giving an \emph{Ordo $N$} ($O(N)$) complexity. However, the calculation for each weight depends of the number of measurements $M$ giving a total complexity of $O(M\cdot N)$. In most cases however, the number of measurements is small in comparison to the number of particles and may be neglected. Another pleasant feature of the weight computation is their independence of each other, thus making parallelization of computations simple.
 
 For the re-sampling step, assuming the number of samples before and after is constant, the algorithm described in section \ref{sec:PF_process} comprises two distinct steps. First the \emph{cumulative sum} of the weights is computed. This is of complexity $O(N)$ but can, depending on the implementation, be computed alongside the weights. Next, for the $N$ new particles, it is needed, for each, to determine which of the $N$ old ones to inherit states from. This is done by, for each new particle, computing a uniformly distributed random number in the range [0,1]. This random number is then compared to the cumulative sum of weights to find the index where the cumulative sum for the first time is equal to or larger than the random number. This can be done using a \emph{binary search} as the cumulative sum is sorted by its nature, giving the step complexity $O(N\cdot\log_2{N})$. Furthermore, the weights needs to be computed before the re-sampling is initialized, making it impossible to parallelize the particle filter process from start to finish. However, when the weights have been computed, the particles, once again, are independent. 
 
@@ -530,7 +530,7 @@ In all, the filter has approximately a complexity of $O(N\cdot\log_2{N}) + O(N\c
 %
 The PF may be successfully used in positioning applications, especially if the states and models used possess certain features. More specific, the PF may be used with good results if the models are non-linear and the posterior distributions are non-Gaussian while the number of states is small \cite{gson12}. If the number of states grows, the required number of particles makes the use the PF infeasible.
 
-A case where the PF is useful is the estimation of position or position and heading in a two-dimensional space, which is the case for most indoor positioning applications. Furthermore, using signal strengths from multiple sources as a measurement of position renders, both a non-linear model and non-Gaussian posterior distributions further promote the use of a PF. However, introducing more dynamic states ,e.g acceleration, unmeasured velocities or trying to filter sensor biases or drifts, introduces too many dimensions. Thus, such estimations require their own filter \cite{gson12}.        
+A case where the PF is useful is the estimation of position or position and heading in a two-dimensional space, which is the case for most indoor positioning applications. Furthermore, using signal strengths from multiple sources as a measurement of position renders, both a non-linear model and non-Gaussian posterior distributions further promote the use of a PF. However, introducing more dynamic states, e.g. acceleration, unmeasured velocities or trying to filter sensor biases or drifts, introduces too many dimensions. Thus, such estimations require their own filter \cite{gson12}.        
 %
 \section{Other Estimation Techniques}
 \label{sec:oet}
@@ -578,7 +578,7 @@ Most devices using the IEEE $802.11$ standard have a \emph{Media Access Control}
 \section{WiFi and Positioning}
 \label{sec:wifi_positioning}
 %
-The WiFi standard provides enticing possibilities for indoor positioning, especially in public or corporate areas. Some of the advantages compared to other positioning techniques is that the range of typical wireless products, like WiFi APs, have limited range ($\sim 30$ meters) and thus need to be placed with relatively short intervals. Moreover, WiFi infrastructure is ubiquitous and already deployed at many places, making WiFi based positioning an attractive method. Further, more and more devices become capable of communication over WiFi and platforms like Android make the deployment of applications easy and readily available for a large amount of users. One of the disadvantages is that indoor signal environments are often complex, posing a harder modeling task (and often rather high signal to noise ratio).
+The WiFi standard provides enticing possibilities for indoor positioning, especially in public or corporate areas. Some of the advantages compared to other positioning techniques is that the range of typical wireless products, like WiFi APs, have limited range ($\sim 30$ meters) and thus need to be placed with relatively short intervals. Moreover, WiFi infrastructure is ubiquitous and already deployed at many places, making WiFi based positioning an attractive method. Further, more and more devices become capable of communication over WiFi and platforms like Android make the deployment of applications easy and readily available for a large amount of users. One of the disadvantages is that indoor signal environments are often complex, posing a harder modeling task.
 
 A few different techniques for indoor positioning are presented below.
 %
@@ -589,7 +589,7 @@ Receiving a signal, and thereby a MAC-address from an AP, indicates that the rec
 %
 \item \emph{Received Signal Strength (RSS)}:
 
-Measuring the signal strength from an AP puts the devices not just in the vicinity, but gives a indication of the distance to the AP. Multiple APs may then be used to trilaterate a position, but noisy measurements give a rather large uncertainty. 
+Measuring the signal strength from an AP puts the device not just in the vicinity, but gives a rough indication of the distance to the AP. Multiple APs may then be used to trilaterate a position, but noisy measurements give a rather large uncertainty. 
 %
 \item \emph{Time of Arrival (ToA)}:
 
@@ -832,7 +832,7 @@ The estimation of $\alpha$ will improve if the paths between transmitters and re
 To find the value of $C$, measurements of the RSSI should be performed in LOS of the AP, at different locations and with different distances to the AP. The value can then be calculated from
 %
 \begin{equation}
-C=R_x(d) - 2*10\log_{10}(d)
+C=R_x(d) - 2\cdot10\log_{10}(d),
 \end{equation}
 % 
 i.e. from \ref{eq:RSSI_model} with $\alpha = 0$ (LOS).
