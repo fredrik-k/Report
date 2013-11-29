@@ -1190,7 +1190,13 @@ Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable a
 
 \section{Compensating for Signal Block} %Working title
 %
+\begin{figure}
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/adapt_parameters/positioning_pocket}
+\caption{Phone in pocket. Wearing the phone in the pocket did not affect the positioning significantly}\label{positioning_pocket}
+\end{figure}
 
+%
 The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, the RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
 
 \subsection{Evaluation of different use cases}
@@ -1206,26 +1212,19 @@ Again, the phone was carried one round in the hand. Then, the user tried to bloc
 Like the previous test, but during the second round, the signals were blocked and unblocked repeatedly. 
 
 The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
-
-
-
-\begin{figure}[!hbt]
-\include{graphics}
-\includegraphics[width=1\textwidth ]{images/adapt_parameters/positioning_pocket}
-\caption{Phone in pocket. Wearing the phone in the pocket did not affect the positioning significantly}\label{positioning_pocket}
-\end{figure}
-
-\begin{figure}[!hbt]
+\begin{figure}
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block}
 \caption{Blocking with hands, once. Attenuation by the hands had a severe impact on the positioning.}\label{hand_block}
 \end{figure}
 
-\begin{figure}[!hbt]
+\begin{figure}
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly}
 \caption{Blocking with hands, repeatedly. Attenuation by the hands had a severe impact on the positioning.}\label{hand_block_repeatedly}
 \end{figure}
+
+
 %
 Carrying the phone in the pocket did not affect the RSSI significantly, and hence the positioning was unaffected. However, blocking the signals with the hands lowered the RSSI considerably, causing the positioning to be inaccurate. Hence, this use case has to be detected and compensated for.
 
@@ -1242,13 +1241,13 @@ When an attenuation is detected, a constant term $H$ is added to the model, whic
 
 Test 1) and 2) were performed again, but this time with the compensating algorithm. The results are shown in Figure \ref{hand_block_comp} and \ref{hand_block_repeatedly_comp}.
 
-\begin{figure}[!htb]
+\begin{figure}
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_comp}
 \caption{Blocking with hands, once. The algorithm compensates for the attenuation.}\label{hand_block_comp}
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly_comp}
 \caption{Blocking with hands, repeatedly. The algorithm compensates for the attenuation.}\label{hand_block_repeatedly_comp}
