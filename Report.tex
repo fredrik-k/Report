@@ -26,18 +26,18 @@
 \printer{Media-Tryck}  %% Probably. You may get other information from the department.
 \end{titlepages}
 \chapter*{Abstract}
-An ubiquitous and accurate positioning system for mobile devices is of great importance both to business and research du to the large number of applications and services it enables. In most outdoors environments this problem was solved by the introduction of the \emph{Global Positioning System} (GPS). In indoors or suburban areas, where most people spend most of their time, however, the GPS signals are often to weak to enable a reliable position estimate. Instead, other techniques must be utilized to provide accurate positioning. One of these is trilateration based on WiFi signal strengths.
+A ubiquitous and accurate positioning system for mobile devices is of great importance both to business and research due to the large number of applications and services it enables. In most outdoors environments this problem was solved by the introduction of the \emph{Global Positioning System} (GPS). In indoors or suburban areas, where most people spend most of their time, however, the GPS signals are often too weak to enable a reliable position estimate. Instead, other techniques must be utilized to provide accurate positioning. One of these is trilateration based on WiFi signal strengths.
 
-WiFi signal strength is an auspicious technology to use partly because of the large number of access points (AP) in our everyday environment and partly due to the possibility of measuring signal strength by a normal smartphone. The technique is further enabled by the move to include transmitters at 2.4  as well as 5 GHz in modern APs, providing a better basis for accurate position estimations. Furthermore, the sensors precent in today's smartphones is accurate enough to provide a short-time estimate of the users movement with high accuracy. In this thesis both of these technologies are used to develop an accurate method for indoor positioning and the contributions can be summed up into two points.
+WiFi signal strength is an auspicious technology to use partly because of the large number of access points (APs) in our everyday environment, and partly due to the possibility of measuring signal strength by a normal smartphone. The technique is further enabled by the move to include transmitters at 2.4  as well as 5 GHz in modern APs, providing a better basis for accurate position estimations. Furthermore, the sensors present in today's smartphones are accurate enough to provide a short-time estimate of the user's movement with high accuracy. In this thesis, both of these technologies are used to develop an accurate method for indoor positioning, and the contributions can be summed up into two points.
 
-The first contribution is a investigation of the behavior of two WiFi frequencies, 2.4 and 5 GHz, where their time dependent noise is proven to be almost uncorrelated with each other. This is then exploited to develop a WiFi-only trilateration algorithm by the use of a particle filter (PF), with the only restriction is that the locations of the APs needs to be known. 
+The first contribution is an investigation of the behavior of two WiFi frequencies, 2.4 and 5 GHz, where their time dependent noise is proven to be almost uncorrelated with each other. This is then exploited to develop a WiFi-only trilateration algorithm by the use of a particle filter (PF), with the only restriction is that the locations of the APs need to be known. 
 
-The second contribution is adding an accelerometer and a gyroscope to the estimation algorithm, to provide a more accurate position estimation. A step counter is developed using the accelerometer and the gyroscope detects changes in heading while the WiFi signal strengths gives information about position. This makes it possible to alongside the position also estimate both heading and step length, while still keeping the only restriction of knowing the AP locations.
+The second contribution is adding an accelerometer and a gyroscope to the estimation algorithm, to provide a more accurate position estimation. A step counter is developed using the accelerometer and the gyroscope detects changes in heading while the WiFi signal strengths give information about the position. This makes it possible to alongside the position also estimate both heading and step length, while still keeping the only restriction of knowing the AP locations.
     
 \chapter*{Acknowledgements}
 Several people have contributed with technical expertise, new and alternative ideas, practical solutions and great opinions. Without these, this thesis would never have been possible to create. 
 
-First of all, we would like to show appreciation for our advisor at SOMC, Magnus Persson. If not for your help, excellent ideas and feedback along the way, this thesis would not exist. Secondly, our advisors at Lund university, Fredrik Tufvesson and Bo Bernhardsson, have contributed with great ideas on how to improve our project and advise on topics of a more technical nature. Your help has been most appreciated. Further, Oskar Gr\"{o}nquist has helped allot with practical problems which has arisen along the way and supplied improvements to the developed solutions. Finally, Peter Karlsson deserves mentioning for the providing of great technical insight, especially concerning radio signal propagation.     
+First of all, we would like to show appreciation to our advisor at SOMC, Magnus Persson. If not for your help, excellent ideas and feedback along the way, this thesis would not exist. Secondly, our advisors at Lund University, Fredrik Tufvesson and Bo Bernhardsson, have contributed with great ideas on how to improve our project and advise on topics of a more technical nature. Your help has been most appreciated. Further, Oskar Gr\"{o}nquist has helped to solve practical problems which have arisen along the way, and supplied improvements to the developed solutions. Finally, Peter Karlsson deserves mentioning for the providing of great technical insight, especially concerning radio signal propagation.     
 
 To all, thank you!
 \tableofcontents
@@ -153,7 +153,7 @@ The \emph{world frame} or the global coordinate system is commonly used for navi
 %
 \footnotetext{This image is reproduced from work created and shared by the \emph{Android Open Source Community} \cite{aos} and used according to the terms described in the \emph{Creative Commons 2.5 Attribution License} \cite{cc}.}
 %
-Noteworthy is that this system is not fixed in space and, different positions on the Earth's surface will result in a differently oriented coordinate systems. Further, as the world rotates around its own axis so does the coordinate system (15$^\circ$ per hour). In the sense of indoor positioning however, both of these effects can be considered small. The change in position is small and in a global perspective can be considered as a point, also, the timescale considered is often considerably shorter than one hour --HIGHLIGHT--. 
+Noteworthy is that this system is not fixed in space and, different positions on the Earth's surface will result in a differently oriented coordinate systems. Further, as the world rotates around its own axis so does the coordinate system (15$^\circ$ per hour). In the sense of indoor positioning however, both of these effects can be neglected.
 %
 \subsection{Local Frame}
 %
@@ -533,7 +533,7 @@ The three steps discussed in section \ref{sec:PF_process} pose somewhat differen
 
 For the re-sampling step, assuming the number of samples before and after is constant, the algorithm described in section \ref{sec:PF_process} comprises two distinct steps. First the \emph{cumulative sum} of the weights is computed. This is of complexity $O(N)$ but can, depending on the implementation, be computed alongside the weights. Next, for the $N$ new particles, it is needed, for each, to determine which of the $N$ old ones to inherit states from. This is done by, for each new particle, computing a uniformly distributed random number in the range [0,1]. This random number is then compared to the cumulative sum of weights to find the index where the cumulative sum for the first time is equal to or larger than the random number. This can be done using a \emph{binary search} as the cumulative sum is sorted by its nature, giving the step complexity $O(N\cdot\log_2{N})$. Furthermore, the weights needs to be computed before the re-sampling is initialized, making it impossible to parallelize the particle filter process from start to finish. However, when the weights have been computed, the particles, once again, are independent. 
 
-Updating the states is done for each particle and it depends on the number of states $K$ along with the complexity of the state model, resulting in roughly $O(N*K)$ complexity. During this step, the particles, once again, are entirely independent, which makes parallelization possible.
+Updating the states is done for each particle and it depends on the number of states $K$ along with the complexity of the state model, resulting in roughly $O(N \cdot K)$ complexity. During this step, the particles, once again, are entirely independent, which makes parallelization possible.
 
 In all, the filter has approximately a complexity of $O(N\cdot\log_2{N}) + O(N\cdot M) + O(N\cdot K)$.
 %
@@ -1161,7 +1161,7 @@ Please note that each particle gets its own set of parameters, and that the esti
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/adaptation_vs_none}
-\caption{Estimated path with and without parameter estimation, using the erroneous parameters, $C=-25$ and $\alpha=0.3$ as initial values.}
+\caption{Estimated path with and without parameter estimation, using the erroneous parameters, $C=-25$ and $\alpha=0.3$ as initial values. The mean error was 7.7 m and 18.3 m, respectively.}
 \label{adaptation_vs_none}
 \end{figure}
 %
@@ -1205,20 +1205,21 @@ Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable a
 \begin{figure}
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/positioning_pocket}
-\caption{Phone in pocket. Wearing the phone in the pocket did not affect the positioning significantly}\label{positioning_pocket}
+\caption{Phone in pocket. Wearing the phone in the pocket did not affect the positioning significantly. The mean error was 5.3 m when carried in the hand, and 5.6 m when carried in the pocket.}\label{positioning_pocket}
 \end{figure}
 
 \begin{figure}
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block}
-\caption{Blocking with hands, once. Attenuation by the hands had a severe impact on the positioning.}\label{hand_block}
+\caption{Blocking with hands, once. Attenuation by the hands had a severe impact on the positioning. The mean error was 6.3 m while carrying the phone normally, and 38.5 m while blocking.}\label{hand_block}
 \end{figure}
 
 \begin{figure}
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly}
-\caption{Blocking with hands, repeatedly. Attenuation by the hands had a severe impact on the positioning.}\label{hand_block_repeatedly}
+\caption{Blocking with hands, repeatedly. Attenuation by the hands had a severe impact on the positioning. Average error: 9.3 m.}\label{hand_block_repeatedly}
 \end{figure}
+%
 
 %
 The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, the RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
@@ -1257,7 +1258,7 @@ Test 1) and 2) were performed again, but this time with the compensating algorit
 \begin{figure}[!htb]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_comp}
-\caption{Blocking with hands, once. The algorithm compensates for the attenuation.}\label{hand_block_comp}
+\caption{Blocking with hands, once. The algorithm compensates for the attenuation. The mean error was 7.3 m while blocking, and 7.2 m while carrying the device normally.}\label{hand_block_comp}
 \end{figure}
 
 \begin{figure}[!htb]
@@ -2003,7 +2004,7 @@ During the work with this thesis several possible enhancements or extensions to 
 %
 \subsection{3D-Positioning}
 %
-In this thesis only a two dimensional model of the space in which to navigate has been used. Motion along the $z-$axis of the local frame, i.e changing floor, has been determined using methods other than the PF. Further, possibly beneficial signals originating from other floors or buildings than the one the user is currently estimated to be in are disregarded.
+In this thesis only a two dimensional model of the space in which to navigate has been used. Motion along the $z-$axis of the local frame, i.e. changing floor, has been determined using methods other than the PF. Further, possibly beneficial signals originating from other floors or buildings than the one the user is currently estimated to be in are disregarded.
 
 A more general approach is to consider a full three dimensional model of space. For this to be possible some extensions to the work done in this thesis must be done. A start could be to introduce the current floors as a discrete particle state, removing the need to have a separate algorithm to determine it. To make this possible a multi-floor (and multi-building) model of the RSSI values from each AP, taking into account the attenuation from floors and ceilings, needs to be developed. The 3D model could also contain a continuous state corresponding to the altitude, making it possible to determine both $x$- and $y$- position along with the height of the phone. 
 %
@@ -2018,7 +2019,7 @@ Investigation of the magnetometer values have shown that these, in most cases, v
 In addition to WiFi, a smartphone has a large number of other wireless capabilities, like LTE, 3G, GSM, Bluetooth, NFC and RF-ID. These signals could all be used to improve the positioning, either by having an own model of signal power as a function of distance, or, in the case of NFC and RF-ID, by sheer proximity.         
 
 \subsubsection{Measuring the Time Difference}~\\
-Instead of measuring signal strength from a transmitter an enticing possibility is to measure the difference in time between a sent and received signal. A few different methods of using this are given a brief explanation in Section \ref{sec:wifi_positioning}. If the measurement of time difference are made at both 2.4 and 5 GHz, as the \emph{speed of light} puts a limit on the time of flight, the frequency yielding the shortest time of flight is also the most accurate measurere of the distance.   
+Instead of measuring signal strength from a transmitter an enticing possibility is to measure the difference in time between a sent and received signal. A few different methods of using this are given a brief explanation in Section \ref{sec:wifi_positioning}. If the measurements of time difference are made at both 2.4 and 5 GHz, as the \emph{speed of light} puts a limit on the time of flight, the frequency yielding the shortest time of flight is also the most accurate measure of the distance.   
 %
 \subsection{Improved Pose Estimation}
 %
