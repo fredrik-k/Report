@@ -59,14 +59,13 @@ However, WiFi signals are fickle and for an accurate positioning aid from compli
 %
 
 \section{Previous Work}
-Indoor positioning is a large research area, and various techniques have been proposed. They range from using only one portable device, to attaching several sensors on different parts of the user's body. 
+Indoor positioning is a large research area, and various techniques have been proposed. They range from using only one portable device, to attaching several sensors on different parts of the user's body \cite{body_mounted}.
 
-There are numerous examples where WiFi APs with known locations are used to trilaterate the position of the user. The distance to each AP is often estimated using the signal strength, see e.g REF. This can also be done by measuring the time it takes for a signal to travel between the device and an AP, kanske see REF. 
+There are numerous examples where WiFi APs with known locations are used to trilaterate the position of the user. The distance to each AP is often estimated using the signal strength. This can also be done by measuring the time it takes for a signal to travel between the device and an AP, see e.g \cite{wlan_pos}.
 
-Another method is \emph{pedestrian dead reckoning} (PDR), where sensors such as accelerometer and gyroscope are used to determine the motion of the user. An example of this is presented in \cite{exjobb}. Here, the accelerometer was used for counting steps, and the gyroscope was used to determine the change of heading. The step length, and the initial position and heading, were assumed to be known.
+Another method is \emph{Pedestrian Dead Reckoning} (PDR), where sensors such as accelerometer and gyroscope are used to determine the motion of the user. An example of this is presented in \cite{exjobb}. Here, the accelerometer was used for counting steps, and the gyroscope was used to determine the change of heading. The step length, and the initial position and heading, were assumed to be known. The device used was a sensor equipped smartphone. Further attempts have been made, where the sensors are attached to certain parts of the user's body. In \cite{foot_mounted}, a method using a single set of foot mounted sensors is described. This gives the advantage that, since the foot has zero velocity once every step, the sensors can be calibrated, which mitigates drifts. This idea is extended in \cite{body_mounted}, where arrays of sensors are attached on various body parts, allowing even better error mitigation.
 
-PDR has also been combined with e.g. WiFi signals into sensor fused approaches. 
-
+Dead reckoning has also been combined with e.g. WiFi signals into sensor fused approaches. In \cite{inteli_nav,navio}, two different approaches to this are presented using wide ranges of sensors including accelerometer, gyroscope, WiFi, magnetometer, GPS, barometer etc. Both methods are based on an extended Kalman filter to perform the position estimation. The first technique is developed for pedestrians, whereas the other one is geared towards vehicles. Another contribution to this area is presented in \cite{closer_to_everywhere}. Here, PDR is combined with GPS for an initial position estimation, and with magnetic field and radio signal strength fingerprinting. One important feature of this procedure is that the algorithm is learning the radiation environment with time, and this is used to detect when the user returns to a previously visited area. Then, errors from the PDR are corrected. This method is an a example of \emph{Simultaneous Localization and Mapping} (SLAM), where a map of the radiation environment is developed during the positioning. The positioning is in turn aided by the map.
 
 
 
