@@ -51,12 +51,25 @@ The research area concerning techniques for positioning of handheld devices is o
   
 In most outdoor environments the \emph{Global Navigation Satellite System} (GNSS), of which the \emph{Global Positioning System} (GPS) is a part, provides locations with an accuracy of a couple of meters. These types of systems require signal connections to satellites to function, and in obstructed outdoor and indoor areas these signals are often too weak to enable accurate positioning. 
 
-Fueled by the lack of accurate positioning in the indoor environment, a multitude of techniques that solve the problem under different constraints has been developed \cite{positioning_overview}. Attempts has been made using WiFi received signal strength, inertial sensors, ultrasound etc. requiring different properties of the environment. 
+Fueled by the lack of accurate positioning in the indoor environment, a multitude of techniques that solve the problem under different constraints has been developed \cite{positioning_overview}. Attempts have been made using WiFi received signal strength, inertial sensors, ultrasound etc. requiring different properties of the environment. 
 
 The advantages of using WiFi access points (APs) are several. The technique is well established and APs exist in almost every indoor environment, making no further investment in hardware necessary. Another interesting development is the move to include transmitters at both 2.4 and 5 GHz in modern APs, in best case resulting in two independent measurements from each AP. Further, there is potential for techniques to locate APs with reasonable accuracy, such as the one presented in e.g. \cite{exjobb}. 
 
 However, WiFi signals are fickle and for an accurate positioning aid from complimentary techniques is needed. Here, different techniques could be used, and an especially enticing one is inertial sensors, like accelerometers and gyroscopes. Most modern smartphones contain both sensor types along with the possibility to measure WiFi signals at both 2.4 and 5 GHz. Additionally, the market penetration of smartphones is large, making it a suitable platform for a large scale roll out of an indoor positioning application.
 %
+
+\section{Previous Work}
+Indoor positioning is a large research area, and various techniques have been proposed. They range from using only one portable device, to attaching several sensors on different parts of the user's body. 
+
+There are numerous examples where WiFi APs with known locations are used to trilaterate the position of the user. The distance to each AP is often estimated using the signal strength, see e.g REF. This can also be done by measuring the time it takes for a signal to travel between the device and an AP, kanske see REF. 
+
+Another method is \emph{pedestrian dead reckoning} (PDR), where sensors such as accelerometer and gyroscope are used to determine the motion of the user. An example of this is presented in \cite{exjobb}. Here, the accelerometer was used for counting steps, and the gyroscope was used to determine the change of heading. The step length, and the initial position and heading, were assumed to be known.
+
+PDR has also been combined with e.g. WiFi signals into sensor fused approaches. 
+
+
+
+
 \section{Goal}
 
 The goal of this thesis is to develop, implement and evaluate an algorithm for indoor positioning. The thesis describes the result of using both 2.4 and 5 GHz WiFi signals together with inertial sensors.
