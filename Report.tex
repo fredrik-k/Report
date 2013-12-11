@@ -862,7 +862,7 @@ i.e. from \ref{eq:RSSI_model} with $\alpha = 0$ (LOS).
 
 This has been done at 20 different locations with 20 measurements of the RSSI from available APs taken at each location. The estimated values of $\alpha$ and $C$ are presented in Table \ref{table:est_par}.
 
-\begin{table}
+\begin{table}[!hbt]
 \begin{center}
 \begin{tabular}{|l|l|l|l|l|}
 \hline
@@ -877,7 +877,7 @@ This has been done at 20 different locations with 20 measurements of the RSSI fr
 \caption{Estimated model parameters and the standard deviation of the estimation, indicated by $\sigma$.}\label{table:est_par}
 \end{table}
 %
-\subsection{Estimation Error Approach}
+\subsection{Error Estimation Approach}
 The other method is more heuristic, but might produce equal or better performance. Instead of finding the values of $\alpha$ and $C$ by measurements it is possible to find the parameters resulting in the smallest average positioning error. This is done by taking a set of RSSI measurements at a few different known locations and use them in the position estimation algorithm with different $\alpha$ and $C$, to find the parameters producing the smallest mean estimation error.   
 
 \begin{figure}[!hbt]
@@ -898,7 +898,7 @@ Looking at Figure \ref{err_vs_param} the PF exhibits an interesting behavior. Th
 
 The conclusion of the discussion above is that it is far better to under estimate the signal power at a given location than to over estimate it. Taking this into account, the values stated in Table \ref{table:model_par} will be used to model the received RSSI value at a distance, $d$ from the AP.  These values are more restrictive concerning the signal power than the parameters found previously. However, these choices provide a more robust estimation if the environmental properties change. The effect  of a small change in the true value of $C$, due to either variations in the power transmitted by the AP or different properties of the receiving device, will also be somewhat mitigated by a more restrictive choice of parameters.  
 %
-\begin{table}
+\begin{table}[!hbt]
 \begin{center}
 \begin{tabular}{|c|l|l|}
 \hline
@@ -930,9 +930,9 @@ Measurements of the RSSI are taken continuously while the user is walking a pred
 %
 \end{description}
 %
-\emph{Case 1} allows the analysis of error between true position and estimated position as the measurements are taken at fixed points. Further, the distance between measurements can be changed in increments of 0.5 meters by using only a subset of the available data. 
+For \emph{Case 1}, the distance between measurements can be changed in increments of 0.5 meters by using only a subset of the available data. 
 
-\emph{Case 2} provides a more natural use-case, where the user is moving while trying to find his position. This case lacks the ability of error analysis, as the measurements are taken continuously over an interval and the time between two consecutive measurements is not fixed. However, the estimated trajectory can be compared to the true one.   
+\emph{Case 2} provides a more natural use-case, where the user is moving while trying to find the position.
 
 The tests were performed in a building called Glasgow, one of Sony's office buildings, on the 6:th floor. For different tests, different paths and different setups of APs are used. Further, all tests are performed in the same type of open office environment, but the differences between the exact environments for each test are fairly large. During the tests, the user held the smartphone in one hand, with the screen pointing upwards. The smartphones used were one Xperia Z Ultra and one Xperia Z1, both manufactured by Sony. These performed similarly except for a constant bias on the RSSI.
 %
@@ -967,7 +967,7 @@ The methodology from \emph{Case 1} was used during this test and measurements fr
 
 The estimated walked path using RSSI measurements is presented in Figure \ref{true_vs_est_env_1_05} and the absolute position errors in Figure \ref{error_env_1_05}. Some additional data concerning the error is presented in Table \ref{table:error_env-1} together with the positioning errors when using only 2.4 and 5 GHz for reference.
 %
-\begin{table}
+\begin{table}[!hbt]
 \begin{center}
 \begin{tabular}{|l|c|c|c|}
 \hline
@@ -1776,7 +1776,7 @@ PF - WiFi \& Sensors & 5.8 & 1.8 & 1.8 \\
 \hline
 \end{tabular}
 \end{center}
-\caption{Position estimations using four different algorithms utilizing sensors and/or \newline Wi-Fi in \emph{Environment three}.}\label{table:error_different_algorithms}
+\caption{Position estimations using four different algorithms utilizing sensors and/or \newline WiFi in \emph{Environment three}.}\label{table:error_different_algorithms}
 \end{table}
 
 The error of the PF with sensor data is larger when the step length is also estimated. This behavior is expected since the estimation relies on relatively noisy RSSI measurements to estimate the step length. However, this walk was conducted at an approximatively constant speed by a single user, and a different user may have a quite different stride length. In such a case, the positioning will improve if the  step length is estimated. Additionally, a user may change stride length over the course of a walk, which will be caught by the estimation.  
