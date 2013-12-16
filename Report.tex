@@ -1284,7 +1284,7 @@ Test 1) and 2) were performed again, but this time with the compensating algorit
 \begin{figure}[!htb]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly_comp}
-\caption{Blocking with hands, repeatedly. The algorithm compensates for the attenuation.}\label{hand_block_repeatedly_comp}
+\caption{Blocking with hands, repeatedly. The algorithm compensates for the attenuation, which supports the positioning. See Figure \ref{hand_block_repeatedly} for a comparison with the same use case, but without compensation.} \label{hand_block_repeatedly_comp}
 \end{figure}
 
 
@@ -1351,7 +1351,7 @@ where $v_k$ is a random process. Usually $v_k$ is considered independent for eac
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/rand_walk}
-\caption{Four series of random walk using $\sigma = 1$ and $10000$ steps.}\label{rand_walk}
+\caption{Four Gaussian random walks using a standard deviation $\sigma = 1$ and an expectation value of 0. Each walk starts in the origin, and then $10^4$ steps are taken. This is a simple way of modeling the kinematics, i.e. of updating the states of the particles.}\label{rand_walk}
 \end{figure}
 %
 \section{Quaternions}
@@ -1488,7 +1488,7 @@ which is considerably more similar between use cases.
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/avr_acc}
-\caption{Average acceleration during 10 seconds of a typical walk.}\label{avr_acc}
+\caption{Acceleration during 10 seconds of a typical walk, when the phone is carried in the hand. Here, it is hard to distinguish when a step has been taken. In order to make this easier, the signal is first differentiated (see Figure \ref{avr_acc_dif}), and then filtered (see Figure \ref{avr_acc_dif_filt}).} \label{avr_acc}
 \end{figure}
 
 A 10 second sample of the average acceleration measured by a phone placed in the front pocket during a typical walk is displayed in Figure \ref{avr_acc}. A flaw of this approach is easily noticed. Due to gravity, the average acceleration is centered around this value, ($9.81$ m/s$^2$). A way around this is to differentiate the signal according to 
@@ -1500,7 +1500,7 @@ A 10 second sample of the average acceleration measured by a phone placed in the
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/avr_acc_dif}
-\caption{Differentiation of average acceleration during 10 seconds of a typical walk.}\label{avr_acc_dif}
+\caption{Differentiation of acceleration during 10 seconds of a typical walk. This signal is filtered before the steps are detected (see Figure \ref{avr_acc_dif_filt}).}\label{avr_acc_dif}
 \end{figure}
 %
 yielding the signal depicted in Figure \ref{avr_acc_dif}. This signal is centered around zero, but possesses unnecessary high frequency behavior. The sampling frequency of the accelerometer is $\sim 20$ Hz, giving a frequency content of the signal between 0 and 10 Hz. The normal step frequency for a person is no larger than 3 Hz, which promotes filtering the signal. Doing this with a fourth order \emph{Butterworth filter} with a cut-of frequency of 3 Hz results in the signal shown in Figure \ref{avr_acc_dif_filt} \cite{pro07}.
@@ -1508,7 +1508,7 @@ yielding the signal depicted in Figure \ref{avr_acc_dif}. This signal is centere
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/avr_acc_dif_filt}
-\caption{Filtered differentiation of average acceleration during 10 seconds of a typical walk with phone carried in hand (Red) and threshold to determine when step has been taken (blue). }\label{avr_acc_dif_filt}
+\caption{Filtered differentiation of average acceleration during 10 seconds of a typical walk with the phone carried in hand (red), and a threshold level (blue). Here, each step is considerably easier to distinguish than in Figure \ref{avr_acc} and \ref{avr_acc_dif}. When the signal goes from below to above the threshold, this is used to indicate that a step has been taken. In this case, 17 steps were taken and registered. This step counter works regardless of if the phone is carried in a bag, in a pocket or in the hand.}\label{avr_acc_dif_filt}
 \end{figure}
 
 Here, the steps are clearly distinguishable and each peak corresponds to a step taken. In Figure \ref{avr_acc_dif_filt} a threshold for determining weather a step has been taken or not is also present. A simple rule to count the number of steps taken could be to count the number of times the signal passes from below to above the threshold. Using this rule 17 steps were taken during the 10 seconds interval displayed in Figure \ref{avr_acc_dif_filt}.
@@ -1567,12 +1567,13 @@ A way to get around some parts of the last flaw is to use the accelerometer to a
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/rot_test}
+
 \caption{True heading versus heading output from Android rotation vector sensor. The true heading was due east.}\label{rot_test}
 \end{figure}
 %
 There are different approaches for combining magnetometer, gyroscope and possibly other sensors to produce a sensor fused estimation of the heading. Most Android phones implement such an algorithm, using gyroscope, magnetometer and accelerometer to produce an estimate of how the phone is oriented in the world coordinate system. The algorithm uses gyroscope and accelerometer to determine when the magnetometer output is corrupted, and uses their measurements to estimate the heading until the magnetometer can be trusted. 
 
-In Figure \ref{rot_test} the estimated heading for such an algorithm is shown along with the true heading. The measurement was taken while walking due east for 91.5 m in a corridor indoors. The difference between the mean estimated heading, 89.7$^\circ$, and true heading (90$^\circ$) is minuscule, but the estimation varies around $\pm$15$^\circ$ from the true heading. This method of estimating the heading does not possess longterm drifts, but, as the estimation relies on the magnetometer for longterm calibration, it may be corrupted by different environmental factors, see Section \ref{subsec:mag}. 
+In Figure \ref{rot_test} the estimated heading for such an algorithm is shown along with the true heading. The measurement was taken while walking due east for 91.5 meters in a corridor indoors. The difference between the mean estimated heading, 89.7$^\circ$, and true heading (90$^\circ$) is minuscule, but the estimation varies around $\pm$15$^\circ$ from the true heading. This method of estimating the heading does not possess longterm drifts, but, as the estimation relies on the magnetometer for longterm calibration, it may be corrupted by different environmental factors, see Section \ref{subsec:mag}. 
 %
 \subsection{Heading as a Particle Filter State}
 \label{subsec:PF_heading}
@@ -1630,7 +1631,7 @@ with the same notation as previous with the exception of $d_k$ being the particl
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_1}
-\caption{True versus, by PDR, estimated path using gyroscope and pedometer.}\label{deadreckon_1}
+\caption{True versus, by PDR, estimated path using gyroscope and pedometer. The initial heading is in the negative $x$-direction. The error gets larger with time.}\label{deadreckon_1}
 \end{figure}
 %
 \section{Dead Reckoning}
@@ -1642,7 +1643,7 @@ DR estimations are subject to cumulative errors, i.e. errors are added over time
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_2}
-\caption{True versus, by PDR, estimated path using gyroscope and pedometer.}\label{deadreckon_2}
+\caption{True versus, by PDR, estimated path using pedestrian dead reckoning. The error gets larger with time.}\label{deadreckon_2}
 \end{figure}
 %
 For phones, a method which extends normal DR, called \emph{pedestrian dead reckoning} (PDR) could be used. Position and direction estimation would most likely include some form of step counting for distance measurement combined with either gyroscope or a sensor fusion including the magnetometer for heading estimation. As an example, the true and estimated paths using a pedometer and a gyroscope during a walk of approximately 110 meters, are presented in Figure \ref{deadreckon_1}. The behavior is fairly good but there is a heading error present soon after the start, and this grows as the walk continues. The distance estimated by the pedometer is also larger than the true distance traveled. Further, the estimation error grows with time, as seen in Figure \ref{deadreckon_2}, making PDR useful only for short term estimation, if no calibration of position and direction is performed.  
@@ -1732,13 +1733,13 @@ In this section the results obtained when fusing sensor data together with WiFi 
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/sensor_fused/path_no_step_est}
-\caption{Position estimation using both WiFi and the sensors. Here, the step length was considered as known and set to 0.83 m.}\label{path_no_step_est}
+\caption{Position estimates using both WiFi and pedestrian dead reckoning, along a reference path of 273 meters. This method improves the positioning significantly. The mean error is 1.8 meters (see also Figure \ref{error_no_step_est}). The start and stop point is (109.5;10), and the initial heading is in the negative $x$-direction. Here, the step length is considered as known and set to 0.83 m. See Table \ref{table:error_different_algorithms} and Figure \ref{path_multi} for a comparison with other methods.}\label{path_no_step_est}
 \end{figure}
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/sensor_fused/error_no_step_est}
-\caption{Error of the position estimation using both WiFi and the sensors. The step length was set to 0.83 m.}\label{error_no_step_est}
+\caption{Error of the position estimates using both WiFi and PDR. The step length is set to 0.83 m. The error grows towards its maximum value during the first few steps, since the heading is not well estimated in the beginning. The average error is 1.8 meters. See also Figure \ref{path_no_step_est}.}\label{error_no_step_est}
 \end{figure}
 %
 
@@ -1754,7 +1755,7 @@ The time until an approximate initial heading is found, is clearly visible in th
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/sensor_fused/path_multi}
-\caption{Position estimations using four different algorithms utilizing sensors and/or WiFi in \emph{Environment three} .}\label{path_multi}
+\caption{Position estimates using four different algorithms utilizing pedestrian dead reckoning (PDR) and/or WiFi, together with a reference path of 273 meters. It is clearly visible that the combination of WiFi signals and PDR gives estimates that are closest to the true path. It also gives more frequent estimates than the methods that only use WiFi. The errors are presented in Table \ref{table:error_different_algorithms} and Figure \ref{error_multi}.}\label{path_multi}
 \end{figure}
 %
 
@@ -1762,7 +1763,7 @@ The time until an approximate initial heading is found, is clearly visible in th
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/sensor_fused/error_multi}
-\caption{Position errors of different algorithms. Note that the scales on the y-axis are different.}\label{error_multi}
+\caption{Position error of different algorithms. Note that the scales on the y-axis are different. Using PDR only gives an error that grows with time. Combining WiFi and PDR gave the lowest error. See also Figure \ref{path_multi} and Table \ref{table:error_different_algorithms}.}\label{error_multi}
 \end{figure}
 %
 Figure \ref{path_multi} shows the estimated path of four different positioning algorithms, LS, PDR and PF with and without sensor data. The positioning error is, for each algorithm, displayed in Figure \ref{error_multi} and to high light some of the features of the error, the mean, max and median values for each are available in Table \ref{table:error_different_algorithms}. In this test, WiFi measurements combined with information from the sensors performed best. Furthermore, Figure \ref{error_multi} shows that the error from the DR seems to grow with time, which is a typical property of this estimation method. 
@@ -1784,7 +1785,7 @@ PF - WiFi \& Sensors & 5.8 & 1.8 & 1.8 \\
 \hline
 \end{tabular}
 \end{center}
-\caption{Position estimations using four different algorithms utilizing sensors and/or \newline WiFi in \emph{Environment three}.}\label{table:error_different_algorithms}
+\caption{Position error using four different algorithms utilizing sensors and/or WiFi along the true path in Figure \ref{path_multi}. Combining WiFi and PDR gave the lowest error. Plots of the error are shown in Figure \ref{error_multi}.} \label{table:error_different_algorithms}
 \end{table}
 
 The error of the PF with sensor data is larger when the step length is also estimated. This behavior is expected since the estimation relies on relatively noisy RSSI measurements to estimate the step length. However, this walk was conducted at an approximatively constant speed by a single user, and a different user may have a quite different stride length. In such a case, the positioning will improve if the  step length is estimated. Additionally, a user may change stride length over the course of a walk, which will be caught by the estimation.  
@@ -1797,7 +1798,7 @@ Figure \ref{step_length} shows how the average step length of the particles chan
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/sensor_fused/step_length}
-\caption{Average step length of the particles, with initial value 0.4 m. It gets considerably closer to the true step length, which is 0.83 m in this test.}\label{step_length}
+\caption{Each particle was assigned with a step length as a fourth state. In order to investigate if this could be advantageous when the step length of the user is unknown, a test user carried the device along a path of 273 m. This plot shows the average step length of the particles, with initial value 0.4 m, intentionally set too low. It gets considerably closer to the true step length, which is 0.83 m in this test.}\label{step_length}
 \end{figure}
 %
 \section{Limit the Impact of ''False'' Turns}
@@ -1947,7 +1948,7 @@ Simply determining the mean received power from each floor suffers from the same
      \path (midComp) -- node{No}(top);
      \end{scope}
   \end{tikzpicture}
-  \caption{Flowchart of floor estimation algorithm. } \label{flowchart}
+  \caption{Flowchart of floor estimation algorithm. It is based on the floors from which the largest total signal intensities are received. A large signal intensity from a certain floor is used to indicate that the user is close to that floor.} \label{flowchart}
 \end{figure}
 
 This algorithm uses some heuristic assumptions concerning the power from different floors when estimating the current one. The assumptions are based on consecutive floors being relatively similar, both in layout and AP distribution. One of the assumptions is that if the signals from three consecutive floors are comparable, the most probable location is on the middle floor. In the implementation we have deemed two floors as comparable if their total powers are within a factor 1.5 from each other.  
