@@ -332,19 +332,19 @@ In Figure \ref{log_norm_n_2} and \ref{log_norm_n_3_2}, measured values of the si
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth]{images/signal_model/log_norm_n_2.eps}
-\caption{Measured signal strength (blue) versus signal strength modeled using the log-normal shadowing model with $n=2$ (red).}\label{log_norm_n_2}
+\caption{Measured signal strength (blue) versus signal strength modeled using the log-normal shadowing model with $n=2$ (red). The model provides good estimation of the signal power close to the AP i.e. when it is in LOS. For greater distances to the AP, the model predicts higher powers than the ones received. At larger distances the signal is often further attenuated by objects in the surroundings and the model does not take that into account.}\label{log_norm_n_2}
 \end{figure}
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/signal_model/log_norm_n_3_2}
-\caption{Measured signal strength (blue) versus signal strength modeled using the same log-normal shadowing model as Figure \ref{log_norm_n_2} but with $n=3.2$ (red).}\label{log_norm_n_3_2}
+\caption{Measured signal strength (blue) versus signal strength modeled using the same log-normal shadowing model as Figure \ref{log_norm_n_2} but with $n=3.2$ (red). This model performs good when the separation between receiver and transmitter is large. However, it predicts too low powers when the distance is short, due to the large path loss constant even when the AP is in LOS. }\label{log_norm_n_3_2}
 \end{figure}
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/signal_model/dist_trans}
-\caption{The distance to the transmitting antenna in meters used in the measurements of the signal strength.}\label{dist_trans}
+\caption{The distance to the transmitting antenna in meters used in the measurements of the signal strength. Measurements are taken both right underneath the AP and at distances of almost 30 meters. Further, the number of objects between the transmitter and receiver range form none to several.}\label{dist_trans}
 \end{figure}
 
 It is obvious that this model has its flaws. A low value of $n$ fails to predict an accurate signal strength when the distance to the transmitter is fairly large, and the high value does not perform satisfactory close to the transmitter. The measurement taken is similar to a real world use-case where one moves through an office space, sometimes passing under a transmitter in LOS and sometimes far away in an obstructed area. The flaws promote the search for a model with better performance.
@@ -365,7 +365,7 @@ In Figure \ref{double_slope} the double slope model for $n_1=2$, $n_2=3.2$ and $
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/signal_model/double_slope}
-\caption{Signal strength measurements (blue) versus double slope model predictions (red) with $n_1=2$, $n_2=3.2$ and $d_1=10$ m.}\label{double_slope}
+\caption{Signal strength measurements (blue) versus double slope model predictions (red) with $n_1=2$, $n_2=3.2$ and $d_1=10$ m. Here the two models from Figure \ref{log_norm_n_2} and \ref{log_norm_n_3_2}}\label{double_slope} are combined. This gives good estimations of the power when the distance is short as well as long, but when the switch between the models occur a large jump is present in the estimations. 
 \end{figure}
 
 This model combines the good traits from the two log-normal shadowing models. However, at $d=d_1$ the model presents an undesirable ''jump'', and the predictions around $d_1$ are rather poor. Furthermore, a single $d_1$ might be hard to find for a set of transmitters, and the different values of $n$ may change between the transmitters.
@@ -402,7 +402,7 @@ Using one of these approaches, one loses some of the simplicity of having only o
  \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/signal_model/fixed_alpha}
-\caption{Signal strength measurements (blue) versus fixed $\alpha$ model predictions (red) with $n=2$, $\alpha=0.9$ and $d_{\text{max}}=20$ m.}\label{fixed_alpha}
+\caption{Signal strength measurements (blue) versus fixed $\alpha$ model predictions (red) with $n=2$, $\alpha=0.9$ and $d_{\text{max}}=20$ m. This type of model gives satisfactory estimations for both short and long distances. Further, it does not have the jump in predicted signal power present in the previous method.}\label{fixed_alpha}
 \end{figure}
 
 This model predicts the signal strength satisfactory both for small and large values of $d$, while removing the ''jump'' present in the double slope model.
@@ -489,7 +489,7 @@ as to have the probabilities normalized.
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/PF/particle_weights}
-\caption{Particles versus their normalized weights.}\label{particle_weights}
+\caption{Particles versus their normalized weights, as expected this is a good estimation of the Gaussian normal distribution.}\label{particle_weights}
 \end{figure}
 
 In Figure \ref{particle_weights} the normalized weights assigned to each particle in our example are displayed. It comes as no surprise that the weights resemble the normally distributed measurement noise. 
@@ -503,7 +503,7 @@ After the re-sampling is done, it is crucial to give all particles the same weig
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/PF/hist_dist_1_itr}
-\caption{Histogram over the particle distribution, after one iteration of the PF, in the range $[-10,10]$ using 100 bins.}\label{hist_dist_1_itr}
+\caption{Histogram over the particle distribution, after one iteration of the PF, in the range $[-10,10]$ using 100 bins. The particles tends more towards the true distribution.}\label{hist_dist_1_itr}
 \end{figure}
 
 After the re-sampling technique described above is applied to the particles of our example, their distribution is displayed in Figure \ref{hist_dist_1_itr}. The states of the particles still existing tend more towards the true one, $X=0$. The mean of the states may now be used as an estimation of the true state.    
@@ -525,7 +525,7 @@ In our example the ''true'' state is stationary, so the state update consists on
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/PF/hist_dist_10_itr}
-\caption{Histogram over the particle distribution, after ten iterations of the PF, in range $[-10,10]$ using 100 bins}\label{hist_dist_10_itr}
+\caption{Histogram over the particle distribution, after ten iterations of the PF, in range $[-10,10]$ using 100 bins. After this many iterations the mean of the particles are 0.04 compared to the true value, 0.}\label{hist_dist_10_itr}
 \end{figure}
 
 Finally, in Figure \ref{hist_dist_10_itr} the particle distribution after ten iterations is displayed, and the mean of the particle states is
@@ -656,7 +656,7 @@ To investigate the correlation between 2.4 and 5 GHz signals, measurements were 
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/wifi/noise_corr_los}
-\caption{Signal power, signal power together with linear trend and signal power minus linear trend for the 2.4 and 5 GHz channels. The measurements were taken while traversing a distance of 15 meters, moving away from the AP.}\label{noise_corr_los}
+\caption{Signal power, signal power together with linear trend and signal power minus linear trend for the 2.4 and 5 GHz channels. The measurements were taken while traversing a distance of 15 meters, moving away from the AP. The power is of course attenuated in a similar way due to the increasing distance to the AP, but when this effect is subtracted, the noise of the 2.4 and 5 GHz signal is not entirely correlated.}\label{noise_corr_los}
 \end{figure}
 
 The \emph{correlation coefficient $\hat  r_{xy}$} between the two can be estimated using
@@ -725,7 +725,7 @@ NLOS stationary  & -0.12 &$[-0.18;-0.06]$ \\
 \hline
 \end{tabular}
 \end{center}
-\caption{Estimated covariances and 95 \% confidence interval for 2.4 and 5 GHz in different environments.}\label{corr_conf}
+\caption{Estimated covariances and 95 \% confidence interval for 2.4 and 5 GHz in different environments. There seams to be a small correlation but the signals are not entirely correlated, allowing for additional information to be obtained if both are used.}\label{corr_conf}
 \end{table}
 %
 \subsection{Difference in Modeling}
@@ -744,7 +744,7 @@ In this chapter, the considerations about, and parameter choices for, the PF in 
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/geometries}
-\caption{Probable positions for different AP configuration (\emph{white} \texttt{+}). \emph{Red} implies high probability and \emph{blue} low probability. The \emph{true} position is $[0, 20]$.}\label{geometries}
+\caption{Probable positions for different AP configuration (\emph{white} \texttt{+}). \emph{Red} implies high probability and \emph{blue} low probability. The \emph{true} position is $[0, 20]$. It is easy to see that a geometry like the one in the rightmost figure produces the best position estimates while it is hard to determine the position without prior position history if the geometry is similar to the left figure. }\label{geometries}
 \end{figure}
 %
 How the APs are positioned in relation to the user (i.e. the position of interest to estimate), highly impacts the quality of the estimation. In Figure \ref{geometries}, three different AP geometries are shown along with the distribution of probable positions. It represents an idealized case where the noise in the measurements of the distance to each AP is zero-mean Gaussian. However, it provides an illustrating example of how the geometry impacts the distribution of the estimated position.
@@ -810,7 +810,7 @@ This has been done for a quite large number of AP:s, and in environments ranging
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/noise_behaviour}
-\caption{The difference between measurements and model for a few different APs for different environments and distances.}\label{noise_behaviour}
+\caption{The difference between measurements and model for a few different APs for different environments and distances. Here it is clearly visible that the indoor signal environment is hard to model. Depending on the number of objects between transmitter and receiver the received signal power at a given separation varies substantially. Because of this large measurement noise, the particle filter needs to take into account that the received signal power at a given distance have a large variance. }\label{noise_behaviour}
 \end{figure}
 
 The resulting variance in the measurements ranged from $9$ to $60$, with a mean of $25$. The reason for the large span is that some of the APs were in LOS for most of the measurements even though the distance to them was fairly large. Other AP:s were, on the other hand, highly obstructed while at a quite short distance, and yet others followed the models well. 
@@ -822,7 +822,7 @@ During the position estimations in the rest of this chapter the mean of the vari
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/err_vs_N}
-\caption{Mean error in estimated position versus number of particles, $N$, for a two dimensional positioning.}\label{err_vs_N}
+\caption{Mean error in estimated position versus number of particles, $N$, for a two dimensional positioning. For a small number of particles, the mean estimation error can be greatly improved by increasing the number of particles. However, when reaching around 100 particles, this improvement stops, and only minor differences are noticed.}\label{err_vs_N}
 \end{figure}
 
 The number of particles required to maintain a high enough distribution over the relevant part of the state space, is dependent on the size of the state space and the distance traveled between filter updates. In this case, the size of the state space is two,  as the positioning is done in two dimensions. The distance  between filter updates, i.e. distance between consecutive RSSI measurements, changes for different test cases. The range starts at 0.5 meters with a close to zero variance, when measurements are taken every 0.5 meters around a predefined path. The other limit of the range is around 4 meters with considerably larger variance when measurements are taken around every third second while walking a predetermined path. 
@@ -887,7 +887,7 @@ The other method is more heuristic, but might produce equal or better performanc
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/err_vs_param}
-\caption{Average estimation error as a function of $\alpha$ and $C$ for 2.4 and 5 GHz RSSI measurements. Errors larger than 13 m for 2.4 GHz and 9 m for 5 GHz are capped to put emphasis on the interesting behavior. }\label{err_vs_param}
+\caption{Average estimation error as a function of $\alpha$ and $C$ for 2.4 and 5 GHz RSSI measurements. Errors larger than 13 m for 2.4 GHz and 9 m for 5 GHz are capped to put emphasis on the interesting behavior. The interesting take from this figure is that there is a large range of parameters that provides estimations with similar properties, at least if comparing the mean error. The values producing the best results are the ones predicting the correct received signal power most of the time. If these values, on the other hand, is changed a small amount in the wrong direction, really bad estimations could be obtained. This happens when the received power at a certain location is estimated as higher than it actually are. The overall conclusion is that, when using a particle filter, it is considerably better to underestimate the signal power, than to overestimate it.}\label{err_vs_param}
 \end{figure}
 %
 To illustrate this, the estimation error for $\alpha \in [0;1]$ and $C \in [-55;-25]$ are shown in Figure \ref{err_vs_param} for 2.4 and 5 GHz. The parameters yielding the smallest average positioning errors are $C=-38$ and $\alpha = 0.3$ for 2.4 GHz, and $C=-39$ and $\alpha = 0.2$ for 5 GHz. 
@@ -954,13 +954,13 @@ The results of the different tests performed are presented in the sections below
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/env_one}
-\caption{The path (\emph{blue} line) used in the \emph{Environment one}, along with measurement points (\emph{blue} \texttt{x}), start point (\emph{black} \texttt{x}) and end point (\emph{red} \texttt{o}) }\label{env_one}
+\caption{The path (\emph{blue} line) used in the \emph{Environment one}, along with measurement points (\emph{blue} \texttt{x}), start point (\emph{black} \texttt{x}) and end point (\emph{red} \texttt{o}).}\label{env_one}
 \end{figure}
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/true_vs_est_env_1_05}
-\caption{Comparison between the true (\emph{blue}) and estimated (\emph{black}) path for \emph{Environment one}.}\label{true_vs_est_env_1_05}
+\caption{Comparison between the true (\emph{blue}) and estimated (\emph{black}) path for \emph{Environment one}. The mean positioning error is 1.7 meters and the estimated path follows the true one relatively well during the entire walk.}\label{true_vs_est_env_1_05}
 \end{figure}
 %
 \begin{figure}[!hbt]
@@ -989,7 +989,7 @@ Median & $1.6$ & $2.5$ & $2.9$ \\
 \hline 
 \end{tabular}
 \end{center}
-\caption{Attributes of the absolute positioning error for \emph{Environment one}.}\label{table:error_env-1}
+\caption{Attributes of the absolute positioning error for \emph{Environment one}. It is clear that using 2.4 and 5 GHz WiFi in combination is producing better results, both in terms of mean as well as maximum, than using either one alone.}\label{table:error_env-1}
 \end{table}
 
 In this environment, the placement of the AP in relation to the path walked is beneficial. During the walk, measurements from at least four APs are available and almost always on both $2.4$ and $5$ GHz.  Further, the geometry of the APs is such that we always stay inside or at the border of a polygon where the APs compose the corners. These properties contribute to the fairly small positioning errors in Table \ref{table:error_env-1}  
@@ -1001,7 +1001,7 @@ The test in \emph{Environment two} uses the methodology of \emph{Case 1}, and th
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/true_vs_est_env_2_05}
-\caption{The true path (\emph{blue}), along with estimated path (\emph{black}), start point (\emph{red} \texttt{o}), initial heading (\emph{black} arrow) and AP (\emph{cyan} \texttt{o}).}\label{true_vs_est_env_2_05}
+\caption{The true path (\emph{blue}), along with estimated path (\emph{black}), start point (\emph{red} \texttt{o}), initial heading (\emph{black} arrow) and AP (\emph{cyan} \texttt{o}). The estimation follows the true path well for the most parts of the walk, but a part near the end stands out where the errors are large (maximum of 11.5 meters). This is due to the unfavorable geometry, when only signals from the three rightmost AP are obtain. The mean error for this estimation is 4.0 m and the maximum error is 11.5 m.}\label{true_vs_est_env_2_05}
 \end{figure}
 %
 \begin{table}[!hbt]
@@ -1037,7 +1037,7 @@ For this environment similar results were produced both when the phone was held 
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/true_vs_est_env_3}
-\caption{The true path (\emph{blue}), along with estimated path (\emph{red}), estimated positions (\emph{black} \texttt{x}), start point (\emph{red} \texttt{o}), initial heading (\emph{black} arrow) and AP (\emph{cyan} \texttt{o}). Mean error: 5.5 m.}\label{true_vs_est_env_3}
+\caption{The true path (\emph{blue}), along with estimated path (\emph{red}), estimated positions (\emph{black} \texttt{x}), start point (\emph{red} \texttt{o}), initial heading (\emph{black} arrow) and AP (\emph{cyan} \texttt{o}). The estimated path is fairly close to the true one, but some of the estimated locations are around 10 meters from the true one. The  mean error is 5.5 m.}\label{true_vs_est_env_3}
 \end{figure}
 %
 \subsection{Least Squares - a Comparison}
@@ -1049,19 +1049,19 @@ The comparison will be made for \emph{Environment one} and \emph{two} from the p
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/ls_short_path}
-\caption{Least squares estimation versus PF estimation for environment \emph{one}. True path (\emph{blue}), LS estimated path and position (\emph{black})and PF estimated path and position (\emph{red})}\label{ls_short}
+\caption{Least squares estimation versus PF estimation for environment \emph{one}. True path (\emph{blue}), LS estimated path and position (\emph{black})and PF estimated path and position (\emph{red}). It is clearly visible that the PF outperforms the LS algorithm in every respect in this estimation. The mean error is 1.7 m for the PF and 5.7 m for the LS estimation.}\label{ls_short}
 \end{figure}
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/ls_error_short}
-\caption{Absolute position error for the LS (\emph{red}) and PF (\emph{blue}) estimators for environment \emph{one}.}\label{ls_error_short}
+\caption{Absolute position error for the LS (\emph{red}) and PF (\emph{blue}) estimators for environment \emph{one}. The Pf has a smaller estimation error for each of the estimated locations, and a considerably smaller maximum error.}\label{ls_error_short}
 \end{figure}
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/ls_error_medium}
-\caption{Absolute position error for the LS (\emph{red}) and PF (\emph{blue}) estimators for environment \emph{two}.}\label{ls_error_medium}
+\caption{Absolute position error for the LS (\emph{red}) and PF (\emph{blue}) estimators for environment \emph{two}. The particle filter has a smaller mean error, 3.4 m compared to 5.1. However, the PF is not better for every estimated position and the maximum error of both methods are comparable.}\label{ls_error_medium}
 \end{figure}
 
 The estimated paths from both the PF and LS estimators are displayed in Figure \ref{ls_short}, along with the true path for \emph{Environment one}. It is clearly visible that the PF performs considerably better compared to the LS estimator. The positioning errors from Figure \ref{ls_error_short} make this even more clear and the PF has a smaller positioning error for every sample compared to the LS estimator. The mean position error is $1.7$ m for the PF, and $5.7$ m for the LS estimation.
@@ -1104,13 +1104,13 @@ Another issue is that the signals reaching the phone might be attenuated conside
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/error_vs_maxP_all}
-\caption{Obtained position errors versus the maximum received RSSI.}\label{error_vs_maxp_all}
+\caption{Obtained position errors versus the maximum received RSSI. There is a clear correlation between small positioning errors and a large value of the maximum received RSSI. The reason for this is that the RSSI values decrease faster with distance if close to the AP thus giving a better position resolution at short distances, and in extension large RSSI values.}\label{error_vs_maxp_all}
 \end{figure}
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/prediction_interval}
-\caption{Obtained position errors versus the maximum received RSSI and a 99 \% confidence interval for the error as a function of RSSI.}\label{prediction_interval}
+\caption{Obtained position errors versus the maximum received RSSI and a 99 \% confidence interval for the error as a function of RSSI. Here, it is clear that the error can be deemed small (< 3.5 meters) if the maximum received signal power is larger than $-36$.}\label{prediction_interval}
 \end{figure}
 
 The method described in Chapter \ref{chap:pure_rssi} has proven to perform better at a closer distance to the nearest AP. At a certain time step, a large maximum RSSI-value indicates that the nearest AP is close. This, in turn, indicates that the position error is relatively small. Figure \ref{error_vs_maxp_all} shows this relation. The data is from the test setup \emph{Case 1} for \emph{Environment two}, defined in Section \ref{sec:test_setup} and \ref{environment_results}, respectively.
@@ -1181,7 +1181,7 @@ Please note that each particle gets its own set of parameters, and that the esti
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/adaptation_vs_none}
-\caption{Estimated path with and without parameter estimation, using the erroneous parameters, $C=-25$ and $\alpha=0.3$ as initial values. The mean error was 7.7 m and 18.3 m, respectively.}
+\caption{Estimated path with and without parameter estimation, using the erroneous parameters, $C=-25$ and $\alpha=0.3$ as initial values. The mean error was 7.7 m and 18.3 m, respectively. The algorithm performs considerably better when the adaptation is performed, compared to when erroneous model parameter are used. However, parameters obtained after a extensive survey of the signal environment still produces the best results.}
 \label{adaptation_vs_none}
 \end{figure}
 %
@@ -1214,7 +1214,7 @@ $C$ & $\alpha$ & $C$ & $\alpha$& $C$& $\alpha$\\
 \hline
 \end{tabular}
 \end{center}
-\caption{Parameter values before and after adaptation.}\label{table:parameter_adaptation}
+\caption{Parameter values before and after adaptation. If the initial parameters are chosen fare from the true ones, the adaptation manages to find parameters fairly close to the measured ones. }\label{table:parameter_adaptation}
 \end{table}
 
 Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable after the adaptation. Moreover, the algorithm moves the parameter values towards the region with relatively low position error in Figure \ref{err_vs_param}. The bottom row in Table \ref{table:parameter_adaptation} was investigated in more detail, as an example of how the adaptation affects the positioning. Figure \ref{adaptation_vs_none} shows the positioning with and without the parameter adaptation, respectively, with $C = -25$ and $\alpha = 0.3$ as initial values.
@@ -1225,19 +1225,19 @@ Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable a
 \begin{figure}
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/positioning_pocket}
-\caption{Phone in pocket. Wearing the phone in the pocket did not affect the positioning significantly. The mean error was 5.3 m when carried in the hand, and 5.6 m when carried in the pocket.}\label{positioning_pocket}
+\caption{Phone in pocket. Wearing the phone in the pocket did not affect the positioning significantly. The mean error was 5.3 m when carried in the hand, and 5.6 m when carried in the pocket. There seams to be little difference between carrying the phone in the pocket compared to the hand, which both the mean estimation error and the estimated path points to. A third estimation when the phone was carried in a bag was also performed, but the behavior was so close to the other two, it was decided to be omitted.}\label{positioning_pocket}
 \end{figure}
 
 \begin{figure}
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block}
-\caption{Blocking with hands, once. Attenuation by the hands had a severe impact on the positioning. The mean error was 6.3 m while carrying the phone normally, and 38.5 m while blocking.}\label{hand_block}
+\caption{Blocking with hands, once. Attenuation by the hands had a severe impact on the positioning. The mean error was 6.3 m while carrying the phone normally, and 38.5 m while blocking. Here a substantial block of the incoming signals are performed and without compensation the algorithm performs poorly and a large positioning error is present soon after the block was initialized. }\label{hand_block}
 \end{figure}
 
 \begin{figure}
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly}
-\caption{Blocking with hands, repeatedly. Attenuation by the hands had a severe impact on the positioning. Average error: 9.3 m.}\label{hand_block_repeatedly}
+\caption{Blocking with hands, repeatedly. Attenuation by the hands had a severe impact on the positioning. Average error: 9.3 m. It is possible to see when a attenuation of the signal is performed as the estimated position performs a large jump at those instances. The error here is not as large as for the case where the signals were attenuated for a long stretch of time, however, a fairly large mean error was obtained. }\label{hand_block_repeatedly}
 \end{figure}
 %
 
@@ -1278,7 +1278,7 @@ Test 1) and 2) were performed again, but this time with the compensating algorit
 \begin{figure}[!htb]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_comp}
-\caption{Blocking with hands, once. The algorithm compensates for the attenuation. The mean error was 7.3 m while blocking, and 7.2 m while carrying the device normally.}\label{hand_block_comp}
+\caption{Blocking with hands, once. The algorithm compensates for the attenuation. The mean error was 7.3 m while blocking, and 7.2 m while carrying the device normally. Compared to Figure \ref{hand_block}, the algorithms has a much better performance when the signal is blocked, and it is hard to discern between the compensated and non-blocked part of the estimation.}\label{hand_block_comp}
 \end{figure}
 
 \begin{figure}[!htb]
