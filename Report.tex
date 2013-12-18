@@ -1351,7 +1351,7 @@ where $v_k$ is a random process. Usually $v_k$ is considered independent for eac
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/rand_walk}
-\caption{Four Gaussian random walks using a standard deviation $\sigma = 1$ and an expectation value of 0. Each walk starts in the origin, and then $10^4$ steps are taken. This is a simple way of modeling the kinematics, i.e. of updating the states of the particles.}\label{rand_walk}
+\caption{Four Gaussian random walks using a standard deviation $\sigma = 1$ and an expectation value of 0. Each walk starts in the origin, and then $10^4$ steps are taken. This is a simple way of modeling the kinematics, i.e. of updating the states of the particles. It is clearly visible that a single random walk may end up almost anywhere and that the potential distance from zero grows with the number of steps taken. However, the mean of many walks are zero.}\label{rand_walk}
 \end{figure}
 %
 \section{Quaternions}
@@ -1488,7 +1488,7 @@ which is considerably more similar between use cases.
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/avr_acc}
-\caption{Acceleration during 10 seconds of a typical walk, when the phone is carried in the hand. Here, it is hard to distinguish when a step has been taken. In order to make this easier, the signal is first differentiated (see Figure \ref{avr_acc_dif}), and then filtered (see Figure \ref{avr_acc_dif_filt}).} \label{avr_acc}
+\caption{Acceleration during 10 seconds of a typical walk, when the phone is carried in the hand. Here, it is hard to distinguish when a step has been taken. In order to make this easier, the signal is first differentiated, to center it around zero (see Figure \ref{avr_acc_dif}), and then filtered (see Figure \ref{avr_acc_dif_filt}).} \label{avr_acc}
 \end{figure}
 
 A 10 second sample of the average acceleration measured by a phone placed in the front pocket during a typical walk is displayed in Figure \ref{avr_acc}. A flaw of this approach is easily noticed. Due to gravity, the average acceleration is centered around this value, ($9.81$ m/s$^2$). A way around this is to differentiate the signal according to 
@@ -1500,7 +1500,7 @@ A 10 second sample of the average acceleration measured by a phone placed in the
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/avr_acc_dif}
-\caption{Differentiation of acceleration during 10 seconds of a typical walk. This signal is filtered before the steps are detected (see Figure \ref{avr_acc_dif_filt}).}\label{avr_acc_dif}
+\caption{Differentiation of acceleration during 10 seconds of a typical walk,. This signal is low-pass filtered before the steps are detected (see Figure \ref{avr_acc_dif_filt}).}\label{avr_acc_dif}
 \end{figure}
 %
 yielding the signal depicted in Figure \ref{avr_acc_dif}. This signal is centered around zero, but possesses unnecessary high frequency behavior. The sampling frequency of the accelerometer is $\sim 20$ Hz, giving a frequency content of the signal between 0 and 10 Hz. The normal step frequency for a person is no larger than 3 Hz, which promotes filtering the signal. Doing this with a fourth order \emph{Butterworth filter} with a cut-of frequency of 3 Hz results in the signal shown in Figure \ref{avr_acc_dif_filt} \cite{pro07}.
@@ -1531,7 +1531,7 @@ An alternative method is to add step length as a state in the PF corresponding t
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/sample_diff}
-\caption{Histogram over time difference between consecutive samples given a specified time of 50 ms. Each interval is divided into 100 bins and the width of each bin is $7\cdot10^{-4}$, $2.5\cdot10^{-4}$ and $4\cdot10^{-5}$ seconds respectively.}\label{sample_diff}
+\caption{Histogram over time difference between consecutive samples given a specified time of 50 ms. Each interval is divided into 100 bins and the width of each bin is $7\cdot10^{-4}$, $2.5\cdot10^{-4}$ and $4\cdot10^{-5}$ seconds respectively. The time differences shown in the bottom figure shows occasions when a sample has been skipped by the subsystem, which occurs about once every 2000 samples.}\label{sample_diff}
 \end{figure}
 %
 The Android platform employs a sampling strategy called \emph{event based sampling}. An application may request sensor data with a specified time separation, e.g. 50 ms for a sampling frequency of 20 Hz. However, the system will forward data to the application when a new value is available in conjunction with the specified rate. The result is sensor data sampled at slightly different time intervals. Further, if the system is busy when the requested data is to be obtained, it may choose to skip that sample, resulting in a de facto doubling in sample time for the next sample. Disregarding sensor samples is more common when the system is under heavy load resulting in more and more samples being skipped.
@@ -1567,8 +1567,7 @@ A way to get around some parts of the last flaw is to use the accelerometer to a
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/rot_test}
-
-\caption{True heading versus heading output from Android rotation vector sensor. The true heading was due east.}\label{rot_test}
+\caption{True heading versus heading output from Android rotation vector sensor. The true heading was due east, marked by the green dotted line. The mean of the estimated heading is 89.7$^\circ$ which is good, however it deviates from this mean as much as 15$^\circ$ and is not accurate enough for our purpose.}\label{rot_test}
 \end{figure}
 %
 There are different approaches for combining magnetometer, gyroscope and possibly other sensors to produce a sensor fused estimation of the heading. Most Android phones implement such an algorithm, using gyroscope, magnetometer and accelerometer to produce an estimate of how the phone is oriented in the world coordinate system. The algorithm uses gyroscope and accelerometer to determine when the magnetometer output is corrupted, and uses their measurements to estimate the heading until the magnetometer can be trusted. 
@@ -1631,7 +1630,7 @@ with the same notation as previous with the exception of $d_k$ being the particl
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_1}
-\caption{True versus, by PDR, estimated path using gyroscope and pedometer. The initial heading is in the negative $x$-direction. The error gets larger with time.}\label{deadreckon_1}
+\caption{True versus, by PDR, estimated path using gyroscope and pedometer. The initial heading is in the negative $x$-direction. The error gets larger with time, but is only about three meters of after a 110 meter walk. However, as Figure \ref{deadreckon_2} shows, the performance only deteriorates form here.}\label{deadreckon_1}
 \end{figure}
 %
 \section{Dead Reckoning}
@@ -1643,7 +1642,7 @@ DR estimations are subject to cumulative errors, i.e. errors are added over time
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_2}
-\caption{True versus, by PDR, estimated path using pedestrian dead reckoning. The error gets larger with time.}\label{deadreckon_2}
+\caption{True versus, by PDR, estimated path using pedestrian dead reckoning. The error gets larger with time and after approximately 630 meters walked, the error is around 12 meters and the heading is almost $30^\circ$ off.}\label{deadreckon_2}
 \end{figure}
 %
 For phones, a method which extends normal DR, called \emph{pedestrian dead reckoning} (PDR) could be used. Position and direction estimation would most likely include some form of step counting for distance measurement combined with either gyroscope or a sensor fusion including the magnetometer for heading estimation. As an example, the true and estimated paths using a pedometer and a gyroscope during a walk of approximately 110 meters, are presented in Figure \ref{deadreckon_1}. The behavior is fairly good but there is a heading error present soon after the start, and this grows as the walk continues. The distance estimated by the pedometer is also larger than the true distance traveled. Further, the estimation error grows with time, as seen in Figure \ref{deadreckon_2}, making PDR useful only for short term estimation, if no calibration of position and direction is performed.  
@@ -1978,9 +1977,29 @@ If a step counter is added to aid the state update, the states can be updated at
 
 As each particle is an independent entity during most of the computations, the process could be greatly improved by parallel computations, either in separate threads on a single core, distributed over several CPU cores or even over GPU cores. In principle the computations for each particle could be run simultaneously utilizing the same number of threads as there are particles. There are, however, one bottle neck in the computations. The state update and weighting must, for each particle, be done before the re-sampling can be initialized. The explanation is simply that the re-sampling in dependent on the weights of all particles. However, the steps of state update and weighting, and afterwards the steps of the re-sampling can be parallel. 
 
-In the author's implementations a time cap of five seconds was placed on the algorithm, as the RSSI measurements were received with that time interval. Each of the particle filter process (\emph{State update}, \emph{Weighting} and \emph{Re-sampling} were parallelized using a number of threads corresponding to the available processor cores. On a device with four cores, the \emph{Xperia Z Ultra}, the algorithm was run with a time consumption of  between 200 and 400 milliseconds. This is significantly less than the time between RSSI measurements, allowing other tasks to be run alongside the particle filter algorithm. If either, RSSI measurements are received at a faster pace, or the more particles are needed, further optimization might be needed. 
+In the authors' implementations a time cap of five seconds was placed on the algorithm, as the RSSI measurements were received with that time interval. Each of the particle filter process (\emph{State update}, \emph{Weighting} and \emph{Re-sampling} were parallelized using a number of threads corresponding to the available processor cores. On a device with four cores, the \emph{Xperia Z Ultra}, the algorithm was run with a time consumption of  between 200 and 400 milliseconds. This is significantly less than the time between RSSI measurements, allowing other tasks to be run alongside the particle filter algorithm. If either, RSSI measurements are received at a faster pace, or the more particles are needed, further optimization might be needed. 
 %
+\subsection{Performance of the Implemented Algorithm}
+%
+Allowing for the user to stray from the ideal use case used when the algorithm was developed, i.e. holding the phone with a constant fixed orientation in reference to herself, of course impacts the performance. To test how the final algorithm performed a application was developed where the user was asked to walk a predefined path, trying to be at the same place along the path at all time as a desired reference position. The difference between this reference position and the estimated one was recorded and the result is displayed in Table \ref{table:imp_err}, along with the performance of a least squares algorithm using both 2.4 GHz, and 2.4 and 5 GHz Wifi. The particle filter with sensors shows the best performance, with 37 \% and 54 \% smaller mean error to each of the least squares methods. The maximum error also decreased a fair amount. Further, it is interesting to note that adding 5 GHz WiFi measurements to the least squares estimator, without giving any special attention to modeling, improved the mean error by 27 \%, showing that using dual band WiFi measurements actually improves the performance of indoor positioning algorithms. 
 
+\begin{table}[h!bt]
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\cline{2-3}
+\multicolumn{1}{c|}{ } & Mean error / m & Max error / m \\
+\hline
+Least Squares - 2.4 GHz only & 7.0 & 18.2\\
+\hline
+Least Squares - 2.4 and 5 GHz & 5.1 & 11.3 \\
+\hline
+Partilce Filter with sensors & 3.2 & 8.0 \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Mean and maximum error of the implemented particle filter algorithm along with the same values for a least squares algorithm using both 2.4 GHz, and 2.4 and 5 GHz WiFi. The particle filter show the best results, with 1.9 and 2.8 meters smaller mean error, compared to the two least squares estimations. Further, it is noteworthy that by adding 5 GHz measurements to the least squares estimator, without no further modeling effort, the mean error decreased by 27 \%.}\label{table:imp_err}
+\end{table}    
+%
 \chapter{Conclusion}
 %
 In this chapter the contributions made throughout this thesis work are presented. Further, possible extensions and improvements are described in the future work section.
