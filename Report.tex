@@ -26,16 +26,16 @@
 \printer{Media-Tryck}  %% Probably. You may get other information from the department.
 \end{titlepages}
 \chapter*{Abstract}
-A ubiquitous and accurate positioning system for mobile devices is of great importance both to business and research due to the large number of applications and services it enables. In most outdoor environments this problem was solved by the introduction of the \emph{Global Positioning System} (GPS). In indoor or suburban areas, where most people spend most of their time, however, the GPS signals are often too weak to enable a reliable position estimate. Instead, other techniques must be utilized to provide accurate positioning. One of these is trilateration based on WiFi signal strengths.
+A ubiquitous and accurate positioning system for mobile devices is of great importance both to business and research due to the large number of applications and services it enables. In most outdoor environments this problem was solved by the introduction of the \emph{Global Positioning System} (GPS). In indoor or suburban areas, where people spend most of their time, however, the GPS signals are often too weak to enable a reliable position estimate. Instead, other techniques must be utilized to provide accurate positioning. One of these is trilateration based on WiFi signal strengths.
 
 WiFi signal strength is an auspicious technology to use partly because of the large number of access points (APs) in our everyday environment, and partly due to the possibility of measuring signal strength with a normal smartphone. The technique is further enabled by the move to include transmitters at 2.4  as well as 5 GHz in modern APs, providing a better basis for accurate position estimations. Furthermore, the motion sensors present in today's smartphones are accurate enough to provide a short-time estimate of the user's movement with high accuracy. In this thesis, both of these technologies are used to develop an accurate method for indoor positioning, and the contributions can be summed up into two points.
 
 The first contribution is an investigation of the behavior of two WiFi frequencies, 2.4 and 5 GHz, where their time dependent noise is proven to be almost uncorrelated with each other. This is then exploited to develop a WiFi-only trilateration algorithm by the use of a particle filter (PF), where the only restriction is that the locations of the APs need to be known. 
 
-The second contribution is adding an accelerometer and a gyroscope to the estimation algorithm, to provide a more accurate position estimation. A step counter is developed using the accelerometer, and the gyroscope detects changes in heading while the WiFi signal strengths give information about the position. This makes it possible to alongside the position also estimate both heading and step length, while still keeping the only restriction of knowing the AP locations. The resulting algorithm produces position estimates with a mean error less than two meters, for most use cases. 
+The second contribution is adding an accelerometer and a gyroscope to the estimation algorithm, to provide a more accurate position estimation. A step counter is developed using the accelerometer, and the gyroscope detects changes in heading while the WiFi signal strengths give information about the position. This makes it possible to alongside the position also estimate both heading and step length, while still keeping the only restriction of knowing the AP locations. The resulting algorithm produces position estimates with a mean error less than two meters for a specific use case, and around three meters when a more lenient user behavior is allowed. 
     
 \chapter*{Acknowledgements}
-Several people have contributed with technical expertise, new and alternative ideas, practical solutions and great opinions. Without these, this thesis would never have been possible to create. 
+Several people have contributed with technical expertise, new and alternative ideas, practical solutions and great opinions. Without these, this thesis would never have been created. 
 
 First of all, we would like to show appreciation to our advisor at SOMC, Magnus Persson. If not for your help, excellent ideas and feedback along the way, this thesis would not exist. Secondly, our advisors at Lund University, Fredrik Tufvesson and Bo Bernhardsson, have contributed with great ideas on how to improve our project and advise on topics of a more technical nature. Your help has been most appreciated. Further, Oskar Gr\"{o}nqvist has helped to solve practical problems that have arisen along the way, and supplied improvements to the developed solutions. Finally, Peter Karlsson deserves mentioning for providing great technical insight, especially concerning radio signal propagation.     
 
@@ -47,13 +47,13 @@ This Master's thesis investigates possible algorithms for indoor positioning wit
 
 \section{Background}
 %
-The research area concerning techniques for positioning of handheld devices is of great importance, both from a user and commercial standpoint. Many different services and applications depend on, or could be improved by, a ubiquitous localization system. In addition, the user experience of applications could be aided by including information based on the user's current position. Another area of interest is positioning of emergency response teams, where the lack of an accurate position potentially could have lethal consequences.
+The research area concerning techniques for positioning of handheld devices is of great importance, both from a user and commercial standpoint. Many different services and applications depend on, or could be improved by, a ubiquitous localization system. In addition, the user experience of applications could be aided by including information based on the user's current position. %Another area of interest is positioning of emergency response teams, where the lack of an accurate position potentially could have lethal consequences.
   
 In most outdoor environments the \emph{Global Navigation Satellite System} (GNSS), of which the \emph{Global Positioning System} (GPS) is a part, provides locations with an accuracy around 10 meters. These types of systems require signal connections to satellites to function, and in obstructed outdoor and indoor areas these signals are often too weak to enable accurate positioning. 
 
-Fueled by the lack of accurate positioning in the indoor environment, a multitude of techniques that solve the problem under different constraints has been developed \cite{positioning_overview}. Attempts have been made using WiFi received signal strength, inertial sensors, ultrasound etc. requiring different properties of the environment. 
+Fueled by the lack of accurate positioning in the indoor environment, a multitude of techniques that solve the problem under different constraints has been developed \cite{positioning_overview}. Attempts have been made using WiFi received signal strength, inertial sensors, ultrasound etc. requiring different infrastructure and properties of the environment. 
 
-The advantages of using WiFi access points (APs) are several. The technique is well established and APs exist in almost every indoor environment, making no further investment in hardware necessary. Another interesting development is the move to include transmitters at both 2.4 and 5 GHz in modern APs, in best case resulting in two independent measurements from each AP. Further, there is potential for techniques to locate APs with reasonable accuracy, such as the one presented in e.g. \cite{exjobb}. 
+The advantages of using WiFi access points (APs) are several. The technique is well established and APs exist in almost every indoor environment, making no further infrastructure investments necessary. Another interesting development is the move to include transmitters at both 2.4 and 5 GHz in modern APs, in best case resulting in two independent measurements from each AP. Further, there is potential for techniques to locate APs with reasonable accuracy, such as the one presented in e.g. \cite{exjobb}. 
 
 However, WiFi signals are fickle and for an accurate positioning aid from complimentary methods is needed. Here, different approaches could be used, and an especially enticing one is inertial sensors, like accelerometers and gyroscopes. Most modern smartphones contain both sensor types along with the possibility to measure WiFi signals at both 2.4 and 5 GHz. Additionally, the market penetration of smartphones is large, making it a suitable platform for a large scale roll out of an indoor positioning application.
 %
@@ -65,7 +65,7 @@ There are numerous examples where WiFi APs with known locations are used to tril
 
 Another method is \emph{Pedestrian Dead Reckoning} (PDR), where sensors such as accelerometer and gyroscope are used to determine the motion of the user. An example of this is presented in \cite{exjobb}. Here, the accelerometer was used for counting steps, and the gyroscope was used to determine the change of heading. The step length, and the initial position and heading, were assumed to be known. The device used was a sensor equipped smartphone. Further attempts have been made, where the sensors are attached to certain parts of the user's body. In \cite{foot_mounted}, a method using a single set of foot mounted sensors is described. This gives the advantage that, since the foot has zero velocity once every step, the sensors can be calibrated, which mitigates drifts. This idea is extended in \cite{body_mounted}, where arrays of sensors are attached on various body parts, allowing even better error mitigation.
 
-Dead reckoning has also been combined with e.g. WiFi signals into sensor fused approaches. In \cite{inteli_nav,navio}, two different approaches to this are presented using wide ranges of sensors including accelerometer, gyroscope, WiFi, magnetometer, GPS, barometer etc. Both methods are based on an extended Kalman filter to perform the position estimation. The first technique is developed for pedestrians, whereas the other one is geared towards vehicles. Another contribution to this area is presented in \cite{closer_to_everywhere}. Here, PDR is combined with GPS for an initial position estimation, and with magnetic field and radio signal strength fingerprinting. One important feature of this procedure is that the algorithm is learning the radiation environment with time, and this is used to detect when the user returns to a previously visited area. Then, errors from the PDR are corrected. This method is an a example of \emph{Simultaneous Localization and Mapping} (SLAM), where a map of the radiation environment is developed during the positioning. The positioning is in turn aided by the map.
+Dead reckoning has also been combined with e.g. WiFi signals into sensor fused approaches. In \cite{inteli_nav,navio}, two different approaches to this are presented using wide ranges of sensors including accelerometer, gyroscope, WiFi, magnetometer, GPS, barometer etc. Both methods are based on an extended Kalman filter to perform the position estimation. The first technique is developed for pedestrians, whereas the other one is geared towards vehicles. Another contribution to this area is presented in \cite{closer_to_everywhere}. Here, PDR is combined with GPS for an initial position estimation, and with magnetic field and radio signal strength fingerprinting. One important feature of this procedure is that the algorithm is learning the radiation environment with time, and this is used to detect when the user returns to a previously visited area. Then, errors from the PDR are corrected. This method is an a example of \emph{Simultaneous Localization and Mapping} (SLAM), where a map of, in this case, the radiation environment is developed during the positioning \cite{gson12}. The positioning is in turn aided by the map.
 
 \section{Goal}
 
@@ -75,7 +75,7 @@ In the first part, positioning is done using information from WiFi signals only.
 
 In the second part, the goal is to improve the performance by adding information from the sensors, in order to receive a more accurate model of the users movement.
 
-When the algorithm is developed, the aim is to implement it as an Android application programming interface (API), for use in e.g. SonyMap \cite{sonymap}, an indoor positioning application developed by SOMC.
+When the algorithm is developed, the aim is to implement it as an Android \emph{application programming interface} (API), for use in e.g. SonyMap \cite{sonymap}, an indoor positioning application developed by SOMC.
 
 \section{Limitations}
 %
@@ -87,13 +87,13 @@ For optimal performance, the smartphone should be fixed in relation to the user 
 
 %
 \section{Platform}
-
+\label{sec:platform}
 %
 In this thesis the following smartphones are used: \emph{Sony Xperia Z Ultra}, \emph{Sony Xperia Z1} and \emph{Sony Xperia LT29i}. Hereafter, they are referred to as \emph{the phone} if nothing else is specified. Each of these phones are running an \emph{Android} operating system and are equipped with an accelerometer, a gyroscope and a WiFi chip capable of communication over both 2.4 and 5 GHz.
 %
 \subsection{Android} 
 %
-Android is an open source operating system used mostly by different handheld devices. In the smartphone segment, Android is used by around 80\% of the units in use today (2013) \cite{android}. The Android standard development kit contains the necessary tools and API:s to develop applications for the Android platform using the Java programming language. Using the standard APIs, it is possible to access the device's sensors, WiFi measurements etc. All data collection performed during this thesis has been done through Java applications developed by the authors. 
+Android is an open source operating system used mostly by different handheld devices. In the smartphone segment, Android is used by around 80\% of the units in use today (2013) \cite{android}. The Android standard development kit contains the necessary tools and API:s to develop applications for the Android platform using the Java programming language. Using the standard APIs, it is possible to access the device's sensors, take measurements of the WiFi environment etc. All data collection performed during this thesis has been done through Java applications developed by the authors running on the phones mentioned in Section \ref{sec:platform}. 
 %
 \section{Outline}
 %
@@ -106,7 +106,7 @@ This outline presents the large scale structure of this thesis.
 %
 \item[Chapter \ref{chap:PF}] introduces the PF and gives a description of the PF process. Further, a brief description of the LS estimation is given. 
 %
-\item[Chapter \ref{chap:wifi}] covers some of the different technologies concerning WiFi and its uses for positioning application. Additionally, the differences between separate WiFi frequency bands are investigated. 
+\item[Chapter \ref{chap:wifi}] covers some of the different technologies concerning WiFi and its uses for positioning application. Additionally, the differences between the two separate WiFi frequency bands used are investigated. 
 %
 \item[Chapter \ref{chap:pure_rssi}] presents a method to obtain a position from WiFi RSSI measurements, and this method is compared with the least squares estimation.  
 %
@@ -216,7 +216,7 @@ In Figure REF HERE, the chosen coordinate system used is shown along with a floo
 %
 \label{chap:RSP}
 %
-The performance of any wireless communication system is fundamentally limited by the properties of the radio signals. In the simplest case, these properties and hence the signal intensities would depend only on the distance between transmitter and receiver. However, they vary greatly depending on the environment, from a simple line-of-sight (LOS) case to a severely obstructed one, where walls, windows, furniture etc. distort the signal between transmitter and receiver. Furthermore, the signal is affected by a large number of small-scale effects. Among them are reflections from various surfaces, diffraction and Doppler shift due to a difference in speed between the receiver in reference to the transmitter \cite{rappaport96}. In this thesis the focus is put on obtaining good models for the indoor propagation of radio signals for the application of positioning. 
+The performance of any wireless communication system is fundamentally limited by the properties of the radio signals. In the simplest case, these properties and hence the signal intensities would depend only on the distance between transmitter and receiver. However, they vary greatly depending on the environment, from a simple line-of-sight (LOS) case to a severely obstructed one, where walls, windows, furniture etc. distort the signal between transmitter and receiver. Furthermore, the signal is affected by a large number of small-scale effects. Among them are reflections from various surfaces, diffraction and Doppler shift due to a difference in speed between the receiver in reference to the transmitter \cite{rappaport96}. In this thesis the focus is put on obtaining good models for the indoor propagation of radio signals in the rang $[2.4,5]$ GHz for application in indoor positioning.
 
 The chapter consists of a recapitulation of free space signal propagation and path loss, together with different ways of modeling these. Different sources of disturbances and their influences are discussed.
 %
@@ -429,7 +429,7 @@ The description presented above is brief, and for a more complete description of
 %
 The \emph{particle filter} (PF), or \emph{sequential Monte Carlo method}, are sets of estimation algorithms for estimating the posterior density of the state-space in a non-linear filtering problem. The PF uses a set of particles distributed over the state space using a system model, and measurements of one or several states are used to determine each particle's probability to represent the ''true'' state of the system.  
 
-In this chapter the non-linear filtering problem will be explained along with its solution using the PF. Some computational aspects will be investigated and the PF used in positioning briefly discussed. The chapter ends with a section about other estimation techniques, where most focus is placed on the \emph{least squares estimation}.
+In this chapter the non-linear filtering problem will be explained along with its solution using the PF. Some computational aspects will be investigated and the PF used in positioning briefly discussed. The chapter ends with a section about other estimation techniques, where most focus is placed on the \emph{least squares} (LS) estimation.
 %
 \section{Non-Linear Filtering Problem}
 \label{sec:nlfp}
@@ -831,7 +831,7 @@ In Figure \ref{err_vs_N}, the mean positioning error for the same data set is sh
 
 For some of the test cases used later in this chapter, the distance between measurements is considerably larger than 3 meters. To keep the particle density high even in those cases a value, $N=300$, is chosen and used for all tests in the following sections.    
 %
-\section{On model choice}
+\section{On Model Choice}
 %
 From chapter \ref{chap:RSP}, a model on the form
 %
@@ -878,7 +878,7 @@ This has been done at 20 different locations with 20 measurements of the RSSI fr
 \hline
 \end{tabular}
 \end{center}
-\caption{Estimated model parameters ,$\alpha$, $C$ , and their standard deviation.}\label{table:est_par}
+\caption{Estimated model parameters , $\alpha$, $C$ , and their standard deviation.}\label{table:est_par}
 \end{table}
 %
 \subsection{Error Estimation Approach}
@@ -898,7 +898,7 @@ A few interesting observations can be made from the two methods above. The first
 
 Further, it is noteworthy that the parameters obtained from the two approaches differ, especially for 5 GHz. One explanation for this is that the PF is able to find an accurate position given, for example, a positive model error for 2.4 GHz and a negative error for 5 GHz from the same AP. However, the parameters found trying to minimize the model error still produced small positioning errors when used together with the PF. 
 
-Looking at Figure \ref{err_vs_param} the PF exhibits an interesting behavior. The positioning error is relatively small for a large range of parameters, but a change to substantial errors happens suddenly for certain parameters. Parameter choices along the approximate line from $C=-25$ and $\alpha=0.7$ to $C=-39$ and $\alpha=0$ need to be changed only by a small amount to produce either good or truly poor results. A deeper investigation shows that this line roughly translates to the models switching from estimating a too low signal power to estimating a too high one, for a certain location. The smallest positioning errors are obtained when the modeled and received powers are about the same, placing them slightly above the line described earlier. However, these parameters are sensitive if the environment changes, resulting in estimating too high signal powers for the given location. A more robust choice is to over estimate the signal attenuation resulting in a higher $\alpha$. This choice might produce slightly larger positioning errors, but is less sensitive to changing environments.
+Looking at Figure \ref{err_vs_param} the PF exhibits an interesting behavior. The positioning error is relatively small for a large range of parameters, but a change to substantial errors happens suddenly for certain parameters. Parameter choices along the approximate line from  $C=-39$ and $\alpha=0$ to $C=-25$ and $\alpha=0.7$ need to be changed only by a small amount to produce either good or truly poor results. A deeper investigation shows that this line roughly translates to the models switching from estimating a too low signal power to estimating a too high one, for a certain location. The smallest positioning errors are obtained when the modeled and received powers are about the same, placing them slightly below the line described earlier. However, these parameters are sensitive if the environment changes, resulting in estimating too high signal powers for the given location. A more robust choice is to over estimate the signal attenuation resulting in a higher $\alpha$. This choice might produce slightly larger positioning errors, but is less sensitive to changing environments.
 
 The conclusion of the discussion above is that it is far better to under estimate the signal power at a given location than to over estimate it. Taking this into account, the values stated in Table \ref{table:model_par} will be used to model the received RSSI value at a distance, $d$ from the AP.  These values are more restrictive concerning the signal power than the parameters found previously. However, these choices provide a more robust estimation if the environmental properties change. The effect  of a small change in the true value of $C$, due to either variations in the power transmitted by the AP or different properties of the receiving device, will also be somewhat mitigated by a more restrictive choice of parameters.  
 %
@@ -1297,7 +1297,7 @@ Compensating for the hand attenuation clearly improved the positioning. However,
 \chapter{Modeling the Kinematics} %Working title
 \label{chap:kin}
 %
-Modeling the kinematics may greatly improve the performance of a positioning system, especially if the estimated position is noisy or biased. The kinematics may also be used to estimate the position in between the updates from the main positioning algorithm. The range of models stretches from simple random walk processes to estimating acceleration, velocity and position in a multi-dimensional space using sensor fusion.
+Modeling the kinematics may greatly improve the performance of a positioning system, especially if the estimated position is noisy or biased. The kinematics may also be used to estimate the position in between the updates from the main positioning algorithm. The range of models stretches from simple random walk processes to a more elaborate modeling of a walking person, including step detection and estimations of the step length and heading by using an accelerometer and a gyroscope. 
 
 After a short description of different sensors and random walk processes, quaternions and their use in three-dimensional pose  estimation,  are introduced, without risk of singularities, explained. A section about positioning using only sensors, named \emph{dead reckoning} (DR), is presented, after which the chapter closes by a discussion of kinematics models used in indoor positioning and their effects on the performance.   
 %
