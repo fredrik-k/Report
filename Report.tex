@@ -1541,12 +1541,32 @@ For real world usage however, the length of a user's steps must be determined. T
 
 An alternative method is to add a state in the PF corresponding to step length, and spread the particles accordingly. Particles with either too long or too short step lengths would agree badly with measured RSSI-values and thus be given small weights. A downside of this is that increasing the number of states would require more particles as discussed in section \ref{sec:nlfp} consequently increasing the computational power required to implement the filter.      
 %
+\section{Dead Reckoning}
+%
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_1}
+\caption{True versus, by PDR, estimated path using gyroscope and pedometer. The initial heading is in the negative $x$-direction. The error gets larger with time, but is only about three meters of after a 110 meter walk. However, as Figure \ref{deadreckon_2} shows, the performance only deteriorates form here.}\label{deadreckon_1}
+\end{figure}
+%
+\emph{Dead reckoning} (DR) is the process of calculating the current position based on a previously determined position and advancing that position based on a known model \cite{ped_dead}. DR has been used by e. g. ships and airplanes for a long time, and in more recent time in networked computer games \cite{network_game}. However, the error is cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and especially the heading error is clearly visible. 
+
+DR estimations are subject to cumulative errors, i.e. errors are added over time and depending on the accuracy of the DR system, the estimated position deviates from the true. This implies that the position and heading estimates need to be calibrated at a certain time interval to provide an accurate position.
+%
+\begin{figure}[!hbt]
+\include{graphics}
+\includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_2}
+\caption{True versus, by PDR, estimated path using pedestrian dead reckoning using the same method as in Figure \ref{deadreckon_1} but for a longer time. The error gets larger with time and after approximately 630 meters walked, the error is around 12 meters and the heading is almost $30^\circ$ off.}\label{deadreckon_2}
+\end{figure}
+%
+For phones, a method which extends normal DR, called \emph{pedestrian dead reckoning} (PDR) could be used. Position and direction estimation would most likely include some form of step counting for distance measurement combined with either gyroscope or a sensor fusion including the magnetometer for heading estimation. As an example, the true and estimated paths using a pedometer and a gyroscope during a walk of approximately 110 meters, are presented in Figure \ref{deadreckon_1}. The behavior is fairly good but there is a heading error present soon after the start, and this grows as the walk continues. The distance estimated by the pedometer is also larger than the true distance traveled. Further, the estimation error grows with time, as seen in Figure \ref{deadreckon_2}, making PDR useful only for short term estimation, if no calibration of position and direction is performed.  
+%
 \section{Dealing With a Non-Constant Sampling Rate}
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/sample_diff}
-\caption{Histogram over time difference between consecutive samples given a specified time of 50 ms. Each interval is divided into 100 bins and the width of each bin is $7\cdot10^{-4}$, $2.5\cdot10^{-4}$ and $4\cdot10^{-5}$ seconds respectively. The time differences shown in the bottom figure shows occasions when a sample has been skipped by the subsystem, which occurs about once every 2000 samples.}\label{sample_diff}
+\caption{Histogram over time difference between consecutive samples given a specified sampling frequency of 20 Hz. Each interval is divided into 100 bins and the width of each bin is $7\cdot10^{-4}$, $2.5\cdot10^{-4}$ and $4\cdot10^{-5}$ seconds respectively. The time differences shown in the bottom figure shows occasions when a sample has been skipped by the subsystem, which occurs about once every 2000 samples. Due to the large number of data points these are almost indistinguishable in the first plot.}\label{sample_diff}
 \end{figure}
 %
 The Android platform employs a sampling strategy called \emph{event based sampling}. An application may request sensor data with a specified time separation, e.g. 50 ms for a sampling frequency of 20 Hz. However, the system will forward data to the application when a new value is available in conjunction with the specified rate. The result is sensor data sampled at slightly different time intervals. Further, if the system is busy when the requested data is to be obtained, it may choose to skip that sample, resulting in a de facto doubling in sample time for the next sample. Disregarding sensor samples is more common when the system is under heavy load resulting in more and more samples being skipped.
@@ -1616,7 +1636,7 @@ Where,
 %
 with $N$ as the number of gyroscope measurements between $t_k$ and $t_{k+1}$, $\vec{\omega}$ as the sensor measurements and $t_n$ as the time of the $n$:th measurement. $\Delta\theta$ is a measurement of the change in direction between $k$ and $k+1$, allowing the kinematics model to more accurately capture turns. Used in this sense the gyroscope is only used to compute the angular change in between two times. Thus, if the time between state updates is short enough, biases and drifts of the gyroscope may be neglected. Further, this model allows for a process noise, $v_k$, with a much smaller standard deviation as most of the dynamics of a turn is captured by the gyroscope. 
 
-The problem of ''false'' turns, which arrises when the device turns when the user does not, is still present. However, the effect can be reduced quite substantially when the gyroscope is used collaboratively with the PF. Each particle is an independent entity and if a turn is detected, a portion, $p\in[0,1]$, of the particles may be selected to ignore the turn. Later, when the particles are given their weights, these particles will, depending on weather an actual turn was made, either be given large or small weights. Thus, if a turn was made, the portion, $p$, of particles that did not turn will not be re-sampled and vice versa. 
+The problem of ''false'' turns, which arrise when the device turns when the user does not, is still present. However, the effect can be reduced quite substantially when the gyroscope is used collaboratively with the PF. Each particle is an independent entity and if a turn is detected, a portion, $p\in[0,1]$, of the particles may be selected to ignore the turn. Later, when the particles are given their weights, these particles will, depending on weather an actual turn was made, either be given large or small weights. Thus, if a turn was made, the portion, $p$, of particles that did not turn will not be re-sampled and vice versa. 
 
 \subsubsection{Adding the Step Counter}
 %
@@ -1639,28 +1659,7 @@ y_{k+1} & = &y_k + N\cdot d_k\cdot\sin{\theta_k}\label{eq:heading_step_len_kin_m
 d_{k+1} & = & d_k + r_{k+1}\nonumber
 \end{eqnarray}  
 %
-with the same notation as previous with the exception of $d_k$ being the particles step length at time step $k$. Particles with appropriate step lengths will agree more with measurements of the position and tend to ''survive'' the re-sampling. This has the advantage of being independent of the user's step length as the algorithm adapts for each user. On the other hand, we now have now introduced two additional filter states compared to the simple case of only two states corresponding to $x$- and $y$-positions. Adding states forces an increase in the number of particles which in turn leads to a more computational and power demanding algorithm. Increasing the number of states by a factor two requires the number of particles to increase to the power of two to keep the same density of particles in the state space. This would result in the need to use between 100 000 and 1 000 000 particles, which would be too computationally demanding for todays smartphones, at least without extensive optimization. But, adding the additional states increases the knowledge of how the user has moved in between measurements, giving a much more narrow area where a true position is probable. Further, the possible variance, especially of the step length state, is fairly small. The step length for most persons is in the region of 0.5 to 1 meter, and when an initial estimate has been determined, there are only a few cases where this length changes by more than a few centimeters. Concerning the heading, particles would initially need to be spread in all directions. However, when an approximate heading is obtained, the spread only needs to be enough to correct for biases and drifts of the gyro and small heading changes caused by the user inadvertently turning the device a small amount. Larger ''false'' changes in heading will be caught by the partial spread discussed earlier. In conjunction, this decreases the number of particles needed from almost a million to between 3 000 and 10 000, depending on the time between the RSSI measurements.       
-%
-%
-\begin{figure}[!hbt]
-\include{graphics}
-\includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_1}
-\caption{True versus, by PDR, estimated path using gyroscope and pedometer. The initial heading is in the negative $x$-direction. The error gets larger with time, but is only about three meters of after a 110 meter walk. However, as Figure \ref{deadreckon_2} shows, the performance only deteriorates form here.}\label{deadreckon_1}
-\end{figure}
-%
-\section{Dead Reckoning}
-
-\emph{Dead reckoning} (DR) is the process of calculating the current position based on a previously determined position and advancing that position based on a known model \cite{ped_dead}. DR has been used by e. g. ships and airplanes for a long time, and in more recent time in networked computer games \cite{network_game}. However, the error is cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and especially the heading error is clearly visible. 
-
-DR estimations are subject to cumulative errors, i.e. errors are added over time and depending on the accuracy of the DR system, the estimated position deviates from the true. This implies that the position and heading estimates need to be calibrated at a certain time interval to provide an accurate position.
-%
-\begin{figure}[!hbt]
-\include{graphics}
-\includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_2}
-\caption{True versus, by PDR, estimated path using pedestrian dead reckoning. The error gets larger with time and after approximately 630 meters walked, the error is around 12 meters and the heading is almost $30^\circ$ off.}\label{deadreckon_2}
-\end{figure}
-%
-For phones, a method which extends normal DR, called \emph{pedestrian dead reckoning} (PDR) could be used. Position and direction estimation would most likely include some form of step counting for distance measurement combined with either gyroscope or a sensor fusion including the magnetometer for heading estimation. As an example, the true and estimated paths using a pedometer and a gyroscope during a walk of approximately 110 meters, are presented in Figure \ref{deadreckon_1}. The behavior is fairly good but there is a heading error present soon after the start, and this grows as the walk continues. The distance estimated by the pedometer is also larger than the true distance traveled. Further, the estimation error grows with time, as seen in Figure \ref{deadreckon_2}, making PDR useful only for short term estimation, if no calibration of position and direction is performed.  
+with the same notation as previous with the exception of $d_k$ being the particles step length at time step $k$. Particles with appropriate step lengths will agree more with measurements of the position and tend to ''survive'' the re-sampling. This has the advantage of being independent of the user's step length as the algorithm adapts for each user. On the other hand, we now have introduced two additional filter states compared to the simple case of only two states corresponding to $x$- and $y$-positions. Adding states forces an increase in the number of particles which in turn leads to a more computational and power demanding algorithm. Increasing the number of states by a factor two requires the number of particles to increase to the power of two to keep the same density of particles in the state space. This would result in the need to use between 100 000 and 1 000 000 particles, which would be too computationally demanding for todays smartphones, at least without extensive optimization. But, adding the additional states increases the knowledge of how the user has moved in between measurements, giving a much more narrow area where a true position is probable. Further, the possible variance, especially of the step length state, is fairly small. The step length for most persons is in the region of 0.5 to 1 meter, and when an initial estimate has been determined, there are only a few cases where this length changes by more than a few centimeters. Concerning the heading, particles would initially need to be spread in all directions. However, when an approximate heading is obtained, the spread only needs to be enough to correct for biases and drifts of the gyro and small heading changes caused by the user inadvertently turning the device a small amount. Larger ''false'' changes in heading will be caught by the partial spread discussed earlier. In conjunction, this decreases the number of particles needed from almost a million to between 3 000 and 10 000, depending on the time between the RSSI measurements.       
 %
 \chapter{Indoor Positioning - Sensor Fused Approach} 
 \label{chap:sensor_fused}
@@ -1721,13 +1720,13 @@ Number of particles $N$ & $10^4$ \\
 \hline
 Initial direction $\theta$ & $U(0,2\pi)$ \\
 \hline
-Process noise $v ^\theta$ & $N(0,10^{-4})$ \\
+Process noise $v ^\theta$ & $N(0,10^{-4})$ (m)\\
 \hline
-Initial step length $r$ & $N(0.75, 4 \cdot 10^{-2})$ \\
+Initial step length $r$ & $N(0.75, 4 \cdot 10^{-2})$ (m) \\
 \hline
-Process noise $v^r$ & $N(0,10^{-4})$ \\
+Process noise $v^r$ & $N(0,10^{-4})$ (m) \\
 \hline
-Measurement noise $e^{RSSI}$ & $N(0,25)$ \\
+Measurement noise $e^{RSSI}$ & $N(0,25)$ (dB) \\
 \hline
 
 
@@ -1742,7 +1741,7 @@ The positioning estimation error is computed by dividing the path into equidista
 %
 \section{Results}
 %
-In this section the results obtained when fusing sensor data together with WiFi measurements are presented. First, the results obtained while a predetermined step length was used are presented. Afterwards, the position estimation when the step length is treated as a part of the state space is presented along with positioning from an LS algorithm, PF using only WiFi measurements and a PDR algorithm. This section is followed by a presentation of findings concerning the step length estimation when the algorithm is tested with an erroneous initial value. The last section deals with detection and compensation of ''false'' user induced turns.   
+This section presents the results obtained when fusing sensor data together with WiFi measurements. First, the results obtained while a predetermined step length was used are presented. Afterwards, the position estimation when the step length is treated as a part of the state space is presented along with positioning from an LS algorithm, PF using only WiFi measurements and a PDR algorithm. This section is followed by a presentation of findings concerning the step length estimation when the algorithm is tested with an erroneous initial value. The last section deals with detection and compensation of ''false'' user induced turns.   
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -1762,7 +1761,7 @@ In this section the results obtained when fusing sensor data together with WiFi 
 In Figure \ref{path_no_step_est}, the estimated path of a walk in \emph{Environment three} is presented. The positioning errors are shown in Figure \ref{error_no_step_est} and have a mean of 1.3 m and a max of 6 m. 
 %
 
-The time until an approximate initial heading is found, is clearly visible in the plot of the error, corresponding to the peak at 7 samples. An initial heading would of course improve on this error. 
+The time until an approximate initial heading is found, is clearly visible in the plot of the error, corresponding to the peak at 7 samples. A known initial heading would of course improve on this error. 
 
 \subsection{Estimated Step Length}
 %
@@ -1777,7 +1776,7 @@ The time until an approximate initial heading is found, is clearly visible in th
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/sensor_fused/error_multi}
-\caption{Position error of different algorithms. Note that the scales on the y-axis are different. Using PDR only gives an error that grows with time. Combining WiFi and PDR gave the lowest error. See also Figure \ref{path_multi} and Table \ref{table:error_different_algorithms}.}\label{error_multi}
+\caption{Position error of different algorithms. Note that the scales on both the axis are different. Using PDR only gives an error that grows with time. Combining WiFi and PDR gave the lowest error. See also Figure \ref{path_multi} and Table \ref{table:error_different_algorithms}.}\label{error_multi}
 \end{figure}
 %
 Figure \ref{path_multi} shows the estimated path of four different positioning algorithms, LS, PDR and PF with and without sensor data. The positioning error is, for each algorithm, displayed in Figure \ref{error_multi} and to high light some of the features of the error, the mean, max and median values for each are available in Table \ref{table:error_different_algorithms}. In this test, WiFi measurements combined with information from the sensors performed best. Furthermore, Figure \ref{error_multi} shows that the error from the DR seems to grow with time, which is a typical property of this estimation method. 
@@ -1846,19 +1845,17 @@ In the previous chapters, offline computations are used to obtain the position e
 
 The implementation will be done in a positioning application developed by Sony Mobile, called SonyMap \cite{sonymap}. This application is intended for Android smartphones and used to  position the smartphone in Sony Mobile's buildings around the globe. 
 %
-\subsection{Introducing SonyMap}
-%
 \section{Java Implementation}
 %
 Going from offline simulations to a real time implementation naturally requires certain considerations to achieve desired performance. Further, to scale a positioning algorithm from use in a single building and a single floor to a system that is used in multiple sites around the globe provides additional challenges. In this section, some of the considerations made when the algorithm was implemented are presented. 
 %
 \subsection{Finding Correct Building \& Floor}
 %
-One of the first obstacles encountered when trying to upscale the algorithm was, on a cite with several multistory buildings, to finding the correct building and floor. 
+One of the first obstacles encountered when trying to upscale the algorithm was, on a cite with several multistory buildings, to find the correct building and floor. 
 
-To find the correct building a couple of different techniques could be used. The most simple of these is to use the GPS output when the user enters the building. This, however, is not a very robust way. Either the user may want to start the navigation when inside the building or the GPS output might be inaccurate. A better estimation can be obtained by evaluating the RSSI values of the available known WiFi APs, and position the user in the building from where the strongest RSSI value is obtained. If needed, this could be refined further by taking more than the AP with larges RSSI value into account. However, as the buildings at Sony are separated by fairly large distances, regarding only one AP is sufficient.
+To find the correct building a couple of different techniques could be used. The most simple of these is to use the GPS output when the user enters the building. This, however, is not a very robust way. Either the user may want to start the navigation when inside the building or the GPS output might be inaccurate. A better estimation can be obtained by evaluating the RSSI values of the available known WiFi APs, and position the user in the building from where the strongest RSSI value is obtained. If needed, this could be refined further by taking more than the AP with largest RSSI value into account. However, as the buildings at Sony are separated by fairly large distances, regarding only one AP is sufficient.
 
-A more challenging task is to determine the correct floor within the correct building. The signals are expected to get significantly attenuated when propagating between floors \cite{rappaport96}. Thus, the strengths of the signals from each floor are used to determine the current one. In this case, it is insufficient to regard only the known AP with larges RSSI value. In areas with openings between different floors, like stairwells, in close proximity to windows or when the distances to APs on other floors are short, it is not unlikely that the larges RSSI value comes from a floor different from the one the user is currently on. To obtain an accurate estimation, information from several APs needs to be used. This can be done in several different ways and during the application implementation two off these where tested.
+A more challenging task is to determine the correct floor within the correct building. The signals are expected to get significantly attenuated when propagating between floors \cite{rappaport96}. Thus, the strengths of the signals from each floor are used to determine the current one. In this case, it is insufficient to regard only the known AP with largest RSSI value. In areas with openings between different floors, like stairwells, in close proximity to windows or when the distances to APs on other floors are short, it is not unlikely that the largest RSSI value comes from a floor different from the one the user is currently on. To obtain an accurate estimation, information from several APs needs to be used. This can be done in several different ways and during the application implementation two of these where tested.
 
 Bellow a floor detection scheme based on the three APs with largest RSSI values are presented \cite{floor_det}. The floor the user is currently on is determined by 
 %
@@ -1869,7 +1866,7 @@ Bellow a floor detection scheme based on the three APs with largest RSSI values 
 %
 This scheme mitigates the problem of having one strongly transmitting AP on the ''wrong'' floor. However, if there are at least two APs from the ''wrong'' floor among the three, this floor will always be chosen. Therefore an alternative method has been suggested by the authors. 
 
-Simply determining the mean received power from each floor suffers from the same problems as earlier discussed. If, on the other hand, the aggregate received power from each floor is determined, a more robust method is obtained. As RSSI values are reported from the driver in the range of 0 to $-$100 dB where 0 indicates the highest received power, a simple addition will not suffice. Instead, the smallest received RSSI could be used to scale all RSSI values before adding them together. This is done by determining how much to add to the smallest RSSI value to obtain $+$1, and add this to all RSSI values. The set of accumulated power from each floor can then be used to determine a probable floor according to the rules defined in the flowchart depicted in Figure \ref{flowchart}.
+Simply determining the mean received power from each floor suffers from the same problems as earlier discussed. If, on the other hand, the aggregate received power from each floor is determined, a more robust method is obtained. As RSSI values are reported from the driver in the range of 0 to $-$100 dB where 0 indicates the highest received power, a simple addition will not suffice. Instead, the smallest received RSSI, $R_{\mbox{min}}$, is used to scale all RSSI values before adding them together. This is done by determining how much to add to the smallest RSSI value to obtain $0$ i.e. $-R_{\mbox{min}} $, and add this to all RSSI values. The set of accumulated power from each floor can then be used to determine a probable floor according to the rules defined in the flowchart depicted in Figure \ref{flowchart}.
 
 \begin{figure}
   % setting the typeface to sans serif and the font size to small
@@ -1965,7 +1962,7 @@ Simply determining the mean received power from each floor suffers from the same
   \caption{Flowchart of floor estimation algorithm. It is based on the floors from which the largest total signal intensities are received. A large signal intensity from a certain floor is used to indicate that the user is close to that floor.} \label{flowchart}
 \end{figure}
 
-This algorithm uses some heuristic assumptions concerning the power from different floors when estimating the current one. The assumptions are based on consecutive floors being relatively similar, both in layout and AP distribution. One of the assumptions is that if the signals from three consecutive floors are comparable, the most probable location is on the middle floor. In the implementation we have deemed two floors as comparable if their total powers are within a factor 1.5 from each other.  
+This algorithm uses some heuristic assumptions concerning the power from different floors when estimating the current one. The assumptions are based on consecutive floors being relatively similar, both in layout and AP distribution. Further, to assumes that the antennas of the APs are designed to direct the signal downwards. One of the assumptions is that if the signals from three consecutive floors are comparable, the most probable location is on the middle floor. In the implementation we have deemed two floors as comparable if their total powers are within a factor 1.5 from each other.  
 
 To test the performance of the algorithms, each was implemented in a version of SonyMap whereafter the applications were installed on identical phones. A $\sim$30 minute walk was the made throughout the Sony building and the number of faulty floor estimations was noted. The scheme proposed in \cite{floor_det} reported the wrong floor 10 times during the walk while the one proposed by the authors was wrong three times. 
 
@@ -1976,7 +1973,7 @@ If a consistent floor estimation is of more importance than a speedy change when
 %s
 In Chapter \ref{chap:background} the longitude/latitude coordinate system is presented. This system is used in most large scale positioning applications as it gives each point on Earth a unique coordinate representation. However, it is impractical to use the longitude/latitude system for positioning on a local scale. This is due to, because of the earths spherical surface, the same difference in longitude/latitude will equal a different distance in meters on different locations. As all calculations, in this thesis and in many other applications, are done in meters a conversion between the two is needed. 
 
-In this thesis a, open source solution called \emph{Jcoord} is used \cite{jcoord}, which is published under the \emph{GNU General Public License (GPL)}\footnote{GNU General Public License (GPL): \url{www.gnu.org/copyleft/gpl.html}}. This solution splits the Earth into regions within which a distance in longitude/latitude is approximately constant converted into meters. Further, some extrapolation is done within each region to make the conversion even more exact. To convert in the other direction, the region needs to be known, but otherwise the same general computations are made.   
+In this thesis an open source solution called \emph{Jcoord} is used \cite{jcoord}, which is published under the \emph{GNU General Public License (GPL)}\footnote{GNU General Public License (GPL): \url{www.gnu.org/copyleft/gpl.html}}. This solution splits the Earth into regions within which a distance in longitude/latitude is approximately constant converted into meters. Further, some extrapolation is done within each region to make the conversion even more exact. To convert in the other direction, the region needs to be known, but otherwise the same general computations are made.   
 %
 \subsection{Pose Estimation}
 %
@@ -1990,7 +1987,7 @@ In Chapter \ref{chap:PF}, the PF process is described in three steps, weighting,
 
 If a step counter is added to aid the state update, the states can be updated at each detection of a step, as the time between consecutive RSSI measurements is no longer needed to perform an accurate state update. This further decreases the amount of computing time spent between receiving new RSSI measurements and a position estimation is obtained. In addition, along with every registered step, a new estimation of the position could be computed, allowing for faster updates than the RSSI measurements alone. 
 
-As each particle is an independent entity during most of the computations, the process could be greatly improved by parallel computations, either in separate threads on a single core, distributed over several CPU cores or even over GPU cores. In principle the computations for each particle could be run simultaneously utilizing the same number of threads as there are particles. There are, however, one bottle neck in the computations. The state update and weighting must, for each particle, be done before the re-sampling can be initialized. The explanation is simply that the re-sampling in dependent on the weights of all particles. However, the steps of state update and weighting, and afterwards the steps of the re-sampling can be parallel. 
+As each particle is an independent entity during most of the computations, the process could be greatly improved by parallel computations, either in separate threads on a single core, distributed over several CPU cores or even over GPU cores. In principle the computations for each particle could be run simultaneously utilizing the same number of threads as there are particles. There are, however, one bottle neck in the computations. The state update and weighting must, for each particle, be done before the re-sampling can be initialized. The explanation is simply that the re-sampling is dependent on the weights of all particles. However, the steps of state update and weighting, and afterwards the steps of the re-sampling can be parallel. 
 
 In the authors' implementations a time cap of five seconds was placed on the algorithm, as the RSSI measurements were received with that time interval. Each of the particle filter process (\emph{State update}, \emph{Weighting} and \emph{Re-sampling} were parallelized using a number of threads corresponding to the available processor cores. On a device with four cores, the \emph{Xperia Z Ultra}, the algorithm was run with a time consumption of  between 200 and 400 milliseconds. This is significantly less than the time between RSSI measurements, allowing other tasks to be run alongside the particle filter algorithm. If either, RSSI measurements are received at a faster pace, or the more particles are needed, further optimization might be needed. 
 %
@@ -2021,17 +2018,13 @@ In this chapter the contributions made throughout this thesis work are presented
 %
 \label{chap:conclusion}
 
-
 \section{Contributions}
 
 \subsection{Positioning Using Both 2.4 and 5 GHz WiFi Signals}
 A PF that uses both 2.4 and 5 GHz WiFi signals for positioning was developed. It was concluded that more information was obtained by using both frequencies rather than one of them, which improved the positioning. The path-loss models can be improved by adapting the model parameters during the positioning. This is done by using measurements from positions where the position error is expected to be low, and then use this to estimate the model parameters. Furthermore, the algorithm can compensate for signal attenuation induced by the hand of the user.
 
-
-
 \subsection{Sensor Fused Positioning}
 In addition to the WiFi signals, information from the sensors was used to model the motion of the user carrying the device. From this, an accurate positioning algorithm was implemented, with the constraint that the device must be reasonably fix in relation to the user. For the case where this is not fulfilled, a less accurate but more robust algorithm was developed. For these algorithms, the initial position and heading do not have to be known. This information is obtained from the WiFi signals. The algorithms were developed and tested for commonly used smartphones, and hence the sensors in these are accurate enough for the algorithms to work.
-
 
 \subsubsection{Step counter} ~\\
 A step counter using the accelerometer was developed, as an important part of the algorithm. The magnitude of the acceleration was differentiated and filtered, and when it passed a certain threshold level, this was used to indicate a step. This step counter works regardless of whether the phone is carried in the hand, in a pocket or in a bag. 
@@ -2039,17 +2032,11 @@ A step counter using the accelerometer was developed, as an important part of th
 \subsubsection{Heading} ~\\
 The accelerometer was also used to give the direction of gravity as a reference of the rotation, which was measured by the gyroscope, in order to get information about the heading of the user. To handle different hypothesis of the direction, each particle was given a direction as a state in the PF.
 
-
-
 \subsection{Implementation in Android}
 The robust version of the sensor fused positioning algorithm was implemented in SonyMap, an online positioning application developed by Sony Mobile.
 
 \subsubsection{Determine floor} ~\\
-To determine which floor the user is on is an important part of the indoor positioning. In the online implementation, a new algorithm to determine the current floor by using WiFi signals was included. This proved to be an improvement compared to the previous algorithm used in SonyMap.
-
-
-
-
+In the online implementation, a new algorithm to determine the current floor by using WiFi signals was included. This proved to be an improvement compared to the previous algorithm used in SonyMap.
 
 \section{Future Work}
 %
@@ -2061,33 +2048,33 @@ In this thesis only a two dimensional model of the space in which to navigate ha
 
 A more general approach is to consider a full three dimensional model of space. For this to be possible some extensions to the work done in this thesis must be done. A start could be to introduce the current floors as a discrete particle state, removing the need to have a separate algorithm to determine it. To make this possible a multi-floor (and multi-building) model of the RSSI values from each AP, taking into account the attenuation from floors and ceilings, needs to be developed. The 3D model could also contain a continuous state corresponding to the altitude, making it possible to determine both $x$- and $y$- position along with the height of the phone. 
 %
+\subsection{Map Data}
+\subsubsection{Using a Map}~\\
+%
+The work in this thesis assumes no knowledge, apart from the locations of the APs, concerning the layout of the building. This makes the developed system applicable in many different environments with relative ease. However, if map data is available this could be used in several ways to improve the positioning. One of these is to put constraints on the path of each particle i.e. forcing the particles to enter rooms only through doors and not to travel through furniture and walls. Another is that a user only is able to travel between floors when in proximity of elevators or stairs. 
+%  
+\subsubsection{Creating a Map}~\\
+%
+Another possibility is to use the estimated paths of a large number of users to estimate where walls and furniture are located. This could then be combined to successively build a map of the building that could be used to aid future positioning. 
+%
 \subsection{Using More Signals and/or Sensors}
 %
-To estimate a position, only RSSI measurements from WiFi APs and readings from an accelerometer and a gyroscope were used in tho thesis. However, smartphone today contain sensors to measure a much wider array of signals and environmental properties. Some of these have a great potential to aid in the position estimation.
+To estimate a position, only RSSI measurements from WiFi APs and readings from an accelerometer and a gyroscope were used in this thesis. However, smartphone today contain sensors to measure a much wider array of signals and environmental properties. Some of these have a great potential to aid in the position estimation.
 
 A barometer is a sensor measuring the atmospheric pressure and this varies with the height above ground. Thus, a barometer could aid in the estimation of floor, either to be used to weight particles in a 3D model or to aid the heuristic floor estimation algorithm.
 
 Investigation of the magnetometer values have shown that these, in most cases, vary too much in indoor environments to be useful for heading estimation. If, on the other hand, the occasions when the magnetometer readings are correct could be identified, this could be used to correct the heading.
 
-In addition to WiFi, a smartphone has a large number of other wireless capabilities, like LTE, 3G, GSM, Bluetooth, NFC and RF-ID. These signals could all be used to improve the positioning, either by having an own model of signal power as a function of distance, or, in the case of NFC and RF-ID, by sheer proximity.         
+In addition to WiFi, a smartphone has a large number of other wireless capabilities, like LTE, 3G, GSM, Bluetooth, NFC and RF-ID. These signals could all be used to improve the positioning, either by having a model of signal power as a function of distance, or, in the case of NFC and RF-ID, by sheer proximity.         
 
 \subsubsection{Measuring the Time Difference}~\\
-Instead of measuring signal strength from a transmitter an enticing possibility is to measure the difference in time between a sent and received signal. A few different methods of using this are given a brief explanation in Section \ref{sec:wifi_positioning}. If the measurements of time difference are made at both 2.4 and 5 GHz, as the \emph{speed of light} puts a limit on the time of flight, the frequency yielding the shortest time of flight is also the most accurate measure of the distance.   
+Instead of measuring signal strength from a transmitter an enticing possibility is to measure the difference in time between a sent and received signal. A few different methods of using this are given a brief explanation in Section \ref{sec:wifi_positioning}. If the measurements of time difference are made at both 2.4 and 5 GHz, as the \emph{speed of light} puts a limit on the time of flight, the frequency yielding the shortest distance of flight is also the most accurate measure of the distance. This is due to, given perfect time synchronization, the signal taking the shortest path between transmitter and receiver, also yields the shortest time, and the signal can not take a shorter path than the actual distance.    
 %
 \subsection{Improved Pose Estimation}
 %
 When the developed algorithm was implemented only two poses were considered, being still and walking. Furthermore, the distinction  between the two was rather crude, a user was deemed as still if no steps had been taken for a certain amount of time, and deemed moving if not still. This is, however, a fairly good model of how people moving on a single floor in an indoor environment behave. 
 
 There is, of course, a multitude of poses that would be of interest to discern between, like walking, running, sitting, standing, riding an elevator or escalator etc. These poses could aid the positioning in several way, discerning between sitting, walking and running would give a more accurate particle spread and if the user is estimated to travel up or down the floor estimation could be improved.
-%
-\subsection{Map Data}
-\subsubsection{Using a Map}~\\
-%
-The work in this thesis assumes no knowledge, apart from the locations of the APs, concerning the layout of the building. This makes the developed system applicable in many different environments with relative ease. However, if map data is available this could be used in several ways to improve the positioning. One of these is to put constraints on the path of each particle i.e. forcing the particles to enter room only through doors and not to travel through furniture and walls. Another is that a user only is able to travel between floors when in proximity of elevators or stairs. 
-%  
-\subsubsection{Creating a Map}~\\
-%
-Another possibility is to use the estimated paths of a large number of users to estimate where walls and furniture are located. This could then be combined to successively build a map of the building that could be used to aid future positioning. 
 %
 \subsection{Improved Usability and Crowdsourcing}
 %
@@ -2097,7 +2084,7 @@ Another advantage of having a large number of users is a large amount of data ge
 %
 \subsection{Smart WiFi Channel Choice}
 %
-To obtain a total picture of the APs in the surroundings of the measuring device a scan of each possible WiFi channel must be performed. Such a scan claims a large amount of time (around 3.5 second). If, on the other hand, the channel/channels on which APs in the vicinity are transmitting are known, only these channels could be scanned. This would drastically decrease the amount of time spent scanning, as a single channel takes just over 100 ms to scan. If the scans could be performed at shorter time interval more information from the interesting APs could be obtained.   
+To obtain a total picture of the APs in the surroundings of the measuring device a scan of each possible WiFi channel must be performed. Such a scan claims a large amount of time (around 3.5 second). If, on the other hand, the channel/channels on which APs in the vicinity are transmitting are known, only these channels should be scanned. This would drastically decrease the amount of time spent scanning, as a single channel takes just over 100 ms to scan. If the scans could be performed at shorter time interval more information from the interesting APs could be obtained.   
 %
 \printbibliography  %% Comment if you don't want to use bibtex
 
