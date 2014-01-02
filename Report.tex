@@ -118,7 +118,7 @@ This outline presents the large scale structure of this thesis.
 %
 \item[Chapter \ref{chap:implement}] is dedicated to the java implementation of the algorithms presented in Chapter \ref{chap:pure_rssi} and \ref{chap:sensor_fused} and the specific considerations made. 
 %
-\item[Chapter \ref{chap:conclusion}] evaluates the result of the thesis and presents possible future work on the subject. 
+\item[Chapter \ref{chap:conclusion}] evaluates the result of this thesis and presents possible future work on the subject. 
 %
 \end{description}
 %
@@ -127,7 +127,7 @@ In accordance with Lund University policy the contribution made by each author m
 \chapter{Background on Navigation}
 \label{chap:background}
 %
-This chapter gives a brief introduction to the background and history of navigation. First, there is an overview of some of the different stages that navigational technology has conquered over the course of history. Then, an introduction to the different coordinate systems used in this thesis will be presented and special emphasis will be put on the system used when evaluating the positioning algorithm. In connection with this, a brief presentation of the \emph{longitude and latitude} coordinate system will be given. 
+This chapter gives a brief introduction to the background and history of navigation. First, there is an overview of some of the different stages that navigational technology has conquered over the course of history. Then, an introduction to the different coordinate systems used in this thesis will be presented and special emphasis will be put on the system used when evaluating the positioning algorithm. In connection with this, a brief presentation of the \emph{longitude and latitude} coordinate system will be given. Further, a few sensors are presented, including the accelerometer, the gyroscope and the magnetometer.
 %
 \section{Overview}
 %
@@ -147,11 +147,13 @@ It should be apparent to the reader that a well defined coordinate system is of 
 %
 The \emph{world frame} or the global coordinate system is commonly used for navigation, at least in a global perspective. The definition is, in accordance with Figure \ref{axis_globe} as follows:
 %
+\begin{quote}
 \begin{description}
 \item[$x_w$:] Tangential to the ground at the current location, defined as $y_w\times z_w$. Points approximately east. 
 \item[$y_w$:] Tangential to the ground at the current location, pointing towards the magnetic North Pole.
 \item[$z_w$:] Perpendicular to the ground, pointing skywards.
 \end{description}
+\end{quote}
 %
 \begin{figure}[!hbt]
 \begin{center}
@@ -171,11 +173,13 @@ Using the world frame might in some cases be impractical or cumbersome for a cer
 
 Such a coordinate system is defined as:
 %
+\begin{quote}
 \begin{description}
 \item[$x_l$:] Located in the plane defined by $x_w$ and $y_w$. Pointing as $x_w$ with an angular offset of $\phi$.
 \item[$y_l$:] Located in the plane defined by $x_w$ and $y_w$. Pointing as $y_w$ with an angular offset of $\phi$.
 \item[$z_l$:] Equivalent to $z_w$, pointing skywards.
 \end{description}
+\end{quote}
 %
 \subsection{Phone Frame}
 %
@@ -183,11 +187,13 @@ An unambiguous definition of a coordinate system with a fixed orientation in ref
 
 In Android, the phone coordinate system is defined in the following way (see also Figure \ref{axis_device}): 
 %
+\begin{quote}
 \begin{description}
 \item[$x_p$:] Pointing out of the side of the phone, defined as $y_p \times z_p$.
 \item[$y_p$:] Pointing upward through the top of the screen.
 \item[$z_p$:] Orthogonal against the phone's screen, pointing up if the phone is placed back down on a table.
 \end{description}
+\end{quote}
 %
 Further, the phone's orientation may be expressed as three angles, $(\phi_x \hspace{5pt} \phi_y \hspace{5pt} \phi_z)$, representing the difference in orientation between each of the phone's axis and those of the world frame.
 %
@@ -211,6 +217,43 @@ As the measurements in this thesis are taken over a limited area, the \emph{Glas
 \end{description}
 %
 In Figure REF HERE, the chosen coordinate system used is shown along with a floor plan of the building and the different paths used to evaluate the positioning algorithms. 
+%
+\section{Sensors}
+Here follows a brief description of three sensors commonly available in modern smartphones, \emph{the accelerometer, the gyroscope} and \emph{the magnetometer}. A short description of their inner workings, advantages and disadvantages is given along with a description of their use in position estimation. For a deeper description of the sensors and a more extensive discussion about biases and drifts references are given to \cite{bently88} and \cite{morris96}. 
+%
+\subsection{The Accelerometer}
+%
+An accelerometer is a sensor measuring acceleration (m/s$^2$) along one or several axes. The accelerometer measures the acceleration the sensor is subjected to. To exemplify, an accelerometer at rest on the Earths surface measures an acceleration of g = $9.81$m/s$^2$ and an accelerometer in free fall in space will measure zero acceleration. Today, most accelerometers measure acceleration along 3 orthogonal axes, thus giving information about the three dimensional acceleration. 
+
+The fact that every object at rest at Earth experiences the acceleration associated with gravity poses a problem when using the accelerometer, since the gravity always will be present in the measurements. This needs to be managed in some fashion. The simplest is to keep the accelerometer fixed in reference to the Earth's coordinate system introducing gravity as a constant bias along a certain direction, which is easy to subtract. A more challenging case is when the accelerometer changes its orientation compared to the Earth's coordinate system. Here, an algorithm to keep track of the accelerometer's orientation is needed if the effect of gravity is going to be deductible. 
+
+Another interesting aspect of gravity in relation to the accelerometer is the ability of finding out the accelerometer's orientation in reference to the Earth's coordinate system. This is possible if the accelerometer does not experience any significant acceleration except for gravity. Then the accelerometer's orientation may be determined by the component of gravity present on each of its axis. 
+
+In principle the accelerometer could be used to estimate a position by integrating its output twice in respect to time. In practice, however, this is hard as the gravity needs to be accurately subtracted from the measurements if not to introduce a large positioning error. If just 1 \% of gravity is left in the measurements it will introduce an error of  500 meters over 100 seconds. Further, the accelerometers present in today's smartphones suffer from biases and drifts which need to be accurately evaluated if not to further degrade the position estimate. 
+%
+\subsection{The Gyroscope}
+%
+A gyroscope measures the \emph{angular velocities} with which it is turning around each of its axis. Most gyroscopes use three orthogonal axis giving measurements of the angular velocities on the form $\vec\omega = (\omega_x \hspace{5pt} \omega_y \hspace{5pt} \omega_z)$.  Mechanically, a gyroscope consists of a spinning wheel or disc mounted in a gimbal, a pivoted support that allows the disc to rotate freely about all three axis. This construction allows the disc to keep an almost fixed position in reference to the mounting platform's motion. However, this is a fairly large device not well suited for modern electronic devices. These instead rely on \emph{MEMS gyroscopes} which can be fashioned into a more suitable size. MEMS, or \emph{vibrating structure} gyroscopes rely on the physical principle of vibrating objects tending to continue vibrating in the same plane as its supports rotate in.  
+
+As the MEMS gyroscope measures angular velocities and, in this thesis, the absolute change in angle is of interest. A method to compute the absolute change from the velocities are needed. Given two sets of angular velocities measured with a time difference of $\Delta t$, the angular change, $\theta$, may be computed using  numerical integration according to the \emph{trapezoidal rule} \cite{analysis},  
+\begin{equation}
+\theta=\Delta t \frac{\vec \omega _t +\vec \omega _{t+\Delta t}}{2}.\label{eq:trapetzoidal}
+\end{equation} 
+%
+This can, of course, be applied to each of the gyroscope's axis, resulting in an estimation of how the gyroscope is turning and in extension, its orientation, in three dimensions. 
+
+There are a few problems of using the gyroscope to determine the direction of movement. As it only measures how the angles change over time, the direction at the start of the navigation must be known and the orientation needs to be kept fixed in reference to the movement. For example, it is impossible do discern between a 90$^\circ$ turn of the user and a mere turn of the gyroscope.  Furthermore, the gyroscope suffers from drifts and biases resulting in a growing heading error. Hence, if it is to be used for long stretches of time, the heading needs to be calibrated.
+%
+\subsection{The Magnetometer}
+\label{subsec:mag}
+%
+A way around the problems of a known initial orientation is the use of a magnetometer, which measures the \emph{magnetic field strength} in each of the phone's three coordinate directions. Using the known electromagnetic field produced by the Earth's core, it is possible to find the phone's heading.
+
+There is a multitude of ways to measure the magnetic field strength. In most modern smartphones a measurement of the resistivity of a thin strip of magnetic film is used. The sensor contains a thin strip on permalloy (NiFe magnetic film) whose resistance is proportional to the magnetic field strength.  
+
+In theory the magnetometer along with a known phone orientation in reference to the Earth's coordinate system  could be used to give an accurate estimation of the heading of the user. This is possible in environments where the electromagnetic fields, apart from the Earth's own, are weak, e. g. outdoors. In most indoor environments however, fields from electronic devices and structural elements (metal beams, pipes etc.) produce their own magnetic fields. These fields are in many cases strong enough to interfere or even overpower the Earth's, causing the estimated heading to be wrong. 
+
+The \emph{fingerprinting} strategy for signal strengths described in Section \ref{sec:AfPA}, may also be utilized to characterize the magnetic field strengths in an indoor environment. These measurements can then be used to find the true heading, but this approach lacks generality as measurements at each location are needed.  
 %
 \chapter{Radio Signal Propagation}
 %
@@ -922,17 +965,23 @@ Frequency, GHz & $C$ & $\alpha$ \\
 \label{sec:test_setup}
 %
 During the sections of this chapter two different test cases will be used.
+\begin{quote}
+%
 \begin{description}
 %
 \item[Case 1:] \hfill \\
 %
 Measurements of the RSSI are taken at equally spaced points with $0.5$ meters spacing over a predetermined path. Only measurements from APs with known positions are used. The measurements are taken while the measuring phone is at rest at each point.  
 %
+\vspace{5pt}
+%
 \item[Case 2:] \hfill \\
 %
 Measurements of the RSSI are taken continuously while the user is walking a predetermined path at a relatively constant speed. The time between each measurement is approximately 4 seconds. Only measurements from APs with known positions are used.  
 %
 \end{description}
+
+\end{quote}
 %
 For \emph{Case 1}, the distance between measurements can be changed in increments of 0.5 meters by using only a subset of the available data. 
 
@@ -948,9 +997,7 @@ For both test cases, the estimated path is generated by connection subsequent es
 The results of the different tests performed are presented in the sections below. 
 %
 \subsection{Environment One} 
-%
-
-%
+%%
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/env_one}
@@ -1165,17 +1212,18 @@ Each AP corresponds to one circular section, centered at the AP and with radius 
 \caption{\emph{Environment three} divided into sections. Each circle corresponds to a section around a certain AP.}\label{alpha_sections}
 \end{figure}
 
-
-\subsubsection{1. Exactly one section}
+\begin{enumerate}
+\item \textbf{Exactly one section}
 If a certain particle is in section $k$ only, 
 the parameter set from row $k$ in alpha will be used for this particle. 
 
-\subsubsection{2. Several sections}
+\item \textbf{Several sections}
 If it is in several sections at the same time, an average of the parameter sets for these sections will be used.
 
-\subsubsection{3. No section}
+\item  \textbf{No section}
 Finally, if it is outside all sections, a default value of $\alpha$ will be used.
-
+\end{enumerate}
+%
 Please note that each particle gets its own set of parameters, and that the estimated position of the phone is not involved in choosing this set.
 %
 \begin{figure}[!hbt]
@@ -1243,19 +1291,21 @@ Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable a
 
 %
 The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, the RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
-
-\subsection{Evaluation of different use cases}
+%
+\begin{enumerate}
+\item \textbf{Evaluation of different use cases}
 In the tests this far, the phone has been held so that the signal is blocked as little as possible. In this section, three different use cases are tested, all in \emph{Environment three}. 
 
-\subsubsection{1. Phone in pocket}
+\item \textbf{Phone in pocket}
 In this test, the phone was first carried one round in the hand. After that, it was moved to the jeans side pocket, and then another round was walked.
 
-\subsubsection{2. Blocking with hands, once}
+\item \textbf{Blocking with hands, once}
 Again, the phone was carried one round in the hand. Then, the user tried to block as much of the signals with the hands as possible during the second round.
 
-\subsubsection{3. Blocking with hands, repeatedly}
+\item \textbf{Blocking with hands, repeatedly}
 Like the previous test, but during the second round, the signals were blocked and unblocked repeatedly. 
-
+\end{enumerate}
+%
 The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
 
 
@@ -1264,7 +1314,7 @@ Carrying the phone in the pocket did not affect the RSSI significantly, and henc
 
 \subsection{Compensation}
 
-The main strategy for detecting the attenuation is to note when the RSSI decreases fast. However, moving away from the AP:s, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal attenuation by the user only, the algorithm focuses on the six largest RSSI-values. If the average of these decreases more than 6 dB in one time step, this indicates a hand attenuation. Moving away from the APs would not make the RSSI decrease that fast, and if LOS is lost to some APs there is a chance that LOS is established to another. If, on the other hand, LOS is lost to several APs without gaining LOS to other APs, e.g. by entering a room without an AP, the compensation may be triggered. However, this is more likely to improve than to degrade the positioning as the standard RSSI models do not incorporate quick drops in signal level caused by walls and similar objects. If a user enters a room without an AP, the RSSI measurements would drop significantly for all APs, but the compensation would ideally remove this effect, allowing the walls to be taken into account by the positioning algorithm. 
+The main strategy for detecting the attenuation is to note when the RSSI decreases fast. However, moving away from the AP:s, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal attenuation by the user only, the algorithm focuses on the six largest RSSI-values. If fewer than six APs are available, every received signal is used. If the average of these decreases more than 6 dB in one time step, this indicates a hand attenuation. Moving away from the APs would not make the RSSI decrease that fast, and if LOS is lost to some APs there is a chance that LOS is established to another. If, on the other hand, LOS is lost to several APs without gaining LOS to other APs, e.g. by entering a room without an AP, the compensation may be triggered. However, this is more likely to improve than to degrade the positioning as the standard RSSI models do not incorporate quick drops in signal level caused by walls and similar objects. If a user enters a room without an AP, the RSSI measurements would drop significantly for all APs, but the compensation would ideally remove this effect, allowing the walls to be taken into account by the positioning algorithm. 
 
 When an attenuation is detected, a constant term $H$ is added to the model, which corresponds to how much the signals have been reduced. Hence, the new model is given by Equation (\ref{equation:hand_comp}),  When the phone is unblocked, this is detected in an analogous way, and then $H$ is set to 0. 
 
@@ -1273,7 +1323,7 @@ When an attenuation is detected, a constant term $H$ is added to the model, whic
 \label{equation:hand_comp}
 \end{equation}
 
-Test 1) and 2) were performed again, but this time with the compensating algorithm. The results are shown in Figure \ref{hand_block_comp} and \ref{hand_block_repeatedly_comp}.
+Test 1) and 2) were performed again, but this time with the compensating algorithm. The results are shown in Figure \ref{hand_block_comp} and \ref{hand_block_repeatedly_comp}. Compared to the results shown in Figure \ref{hand_block} and \ref{hand_block_repeatedly}, the compensation algorithm results in a significant improvement to the positioning. The is especially true when the signals are attenuated for a relatively long time, clearly visible when comparing Figure \ref{hand_block} to \ref{hand_block_comp}. However, the positioning is aided by the compensation algorithm even when the attenuation is present for a short time.  
 
 \begin{figure}[!htb]
 \include{graphics}
@@ -1299,44 +1349,7 @@ Compensating for the hand attenuation clearly improved the positioning. However,
 %
 Modeling the kinematics may greatly improve the performance of a positioning system, especially if the estimated position is noisy or biased. The kinematics may also be used to estimate the position in between the updates from the main positioning algorithm. The range of models stretches from simple random walk processes to a more elaborate modeling of a walking person, including step detection and estimations of the step length and heading by using an accelerometer and a gyroscope. 
 
-After a short description of different sensors and random walk processes, quaternions and their use in three-dimensional pose  estimation,  are introduced, without risk of singularities, explained. A section about positioning using only sensors, named \emph{dead reckoning} (DR), is presented, after which the chapter closes by a discussion of kinematics models used in indoor positioning and their effects on the performance.   
-%
-\section{Sensors}
-Here follows a brief description of three sensors commonly available in modern smartphones, \emph{the accelerometer, the gyroscope} and \emph{the magnetometer}. A short description of their inner workings, advantages and disadvantages is given along with a description of their use in position estimation. For a deeper description of the sensors and a more extensive discussion about biases and drifts references are given to \cite{bently88} and \cite{morris96}. 
-%
-\subsection{The Accelerometer}
-%
-An accelerometer is a sensor measuring acceleration (m/s$^2$) along one or several axes. The accelerometer measure the acceleration associated with the phenomenon of weight of a test mass at rest in the accelerometers frame of reference. To exemplify, an accelerometer at rest on the Earths surface measures an acceleration of g = $9.81$m/s$^2$ and an accelerometer in free fall in space will measure no acceleration. Today, most accelerometers measures acceleration along 3 orthogonal axes, thus giving information about the three dimensional acceleration. 
-
-The fact that every object at rest at Earth experiences the acceleration associated with gravity poses a problem when using the accelerometer, since the gravity always will be present in the measurements. This needs to be managed in some fashion. The simplest is to keep the accelerometer fixed in reference to the Earth's coordinate system introducing gravity as a constant bias along a certain direction, which is easy to subtract. A more challenging case is when the accelerometer changes its orientation compared to the Earth's coordinate system. Here, an algorithm to keep track of the accelerometer's orientation is needed if the effect of gravity is going to be deductible. 
-
-Another interesting aspect of gravity in relation to the accelerometer is the ability of finding out the accelerometer's orientation in reference to the Earth's coordinate system. This is possible if the accelerometer does not experience any significant acceleration except for gravity. Then the accelerometer's orientation may be determined by the component of gravity present on each of its axis. 
-
-In principle the accelerometer could be used to estimate a position by integrating its output twice in respect to time. In practice, however, this is hard as the gravity needs to be accurately subtracted from the measurements if not to introduce a large positioning error. If just 1 \% of gravity is left in the measurements it will introduce an error of  500 meters over 100 seconds. Further, the accelerometers present in today's smartphones suffer from biases and drifts which need to be accurately evaluated if not to further degrade the position estimate. 
-%
-\subsection{The Gyroscope}
-%
-A gyroscope measures the \emph{angular velocities} with which it is turning around each of its axis. Most gyroscopes use three orthogonal axis giving measurements of the angular velocities on the form $\vec\omega = (\omega_x \hspace{5pt} \omega_y \hspace{5pt} \omega_z)$.  Mechanically, a gyroscope consists of a spinning wheel or disc mounted in a gimbal, a pivoted support that allows the disc to rotate freely about all three axis. This construction allows the disc to keep an almost fixed position in reference to the mounting platform's motion. However, this is a fairly large device not well suited for modern electronic devices. These instead rely on \emph{MEMS gyroscopes} which can be fashioned into a more suitable size. MEMS, or \emph{vibrating structure} gyroscopes rely on the physical principle of vibrating objects tending to continue vibrating in the same plane as its supports rotate in.  
-
-As the MEMS gyroscope measures angular velocities and, in this thesis, the angular change is of interest, a method of computing them are needed. This is fairly simple. Given two sets of angular velocities measured with a time difference of $\Delta t$, the angular change, $\theta$, may be computed using  numerical integration according to the \emph{trapezoidal rule} \cite{analysis},  
-\begin{equation}
-\theta=\Delta t \frac{\vec \omega _t +\vec \omega _{t+\Delta t}}{2}.\label{eq:trapetzoidal}
-\end{equation} 
-%
-This can, of course, be applied to each of the gyroscope's axis, resulting in an estimation of how the gyroscope is turning and in extension, its orientation, in three dimensions. 
-
-There are a few problems of using the gyroscope to determine the direction of movement. As it only measures how the angles change over time, the direction at the start of the navigation must be known and the orientation needs to be kept fixed in reference to the movement. For example, it is impossible do discern between a 90$^\circ$ turn of the user and a mere turn of the gyroscope.  Furthermore, the gyroscope suffers from drifts and biases resulting in a growing heading error. Hence, if it is to be used for long stretches of time, the heading needs to be calibrated.
-%
-\subsection{The Magnetometer}
-\label{subsec:mag}
-%
-A way around the problems of a known initial orientation is the use of a magnetometer, which measures the \emph{magnetic field strength} in each of the phone's three coordinate directions. Using the known electromagnetic field produced by the Earth's core, it is possible to find the phone's heading.
-
-There is a multitude of ways to measure the magnetic field strength. In most modern smartphones a measurement of the resistivity of a thin strip of magnetic film is used. The sensor contains a thin strip on permalloy (NiFe magnetic film) whose resistance is proportional to the magnetic field strength.  
-
-In theory the magnetometer along with a known phone orientation in reference to the Earth's coordinate system  could be used to give an accurate estimation of the heading of the user. This is possible in environments where the electromagnetic fields, apart from the Earth's own, are weak, e. g. outdoors. In most indoor environments however, fields from electronic devices and structural elements (metal beams, pipes etc.) produce their own magnetic fields. These fields are in many cases strong enough to interfere or even overpower the Earth's, causing the estimated heading to be wrong. 
-
-The \emph{fingerprinting} strategy for signal strengths described in \ref{sec:AfPA}, may also be utilized to characterize the magnetic field strengths in an indoor environment. These measurements can then be used to find the true heading, but this approach lacks generality as measurements at each location are needed.  
+After a short description of random walk processes, quaternions and their use in three-dimensional pose  estimation are introduced. A section about positioning using only sensors, named \emph{dead reckoning} (DR), is presented, after which the chapter closes by a discussion of kinematics models used in indoor positioning and their effects on the performance.   
 %
 \section{Random Walk}
 %
@@ -1351,12 +1364,12 @@ where $v_k$ is a random process. Usually $v_k$ is considered independent for eac
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/rand_walk}
-\caption{Four Gaussian random walks using a standard deviation $\sigma = 1$ and an expectation value of 0. Each walk starts in the origin, and then $10^4$ steps are taken. This is a simple way of modeling the kinematics, i.e. of updating the states of the particles. It is clearly visible that a single random walk may end up almost anywhere and that the potential distance from zero grows with the number of steps taken. However, the mean of many walks are zero.}\label{rand_walk}
+\caption{Four Gaussian random walks using a standard deviation $\sigma = 1$ and an expectation value of 0. Each walk starts in the origin, and then $10^4$ steps are taken. This is a simple way of modeling the kinematics, i.e. of updating the states of the particles. It is clearly visible that a single random walk may end up almost anywhere and that the potential distance from zero grows with the number of steps taken. However, the mean position of many walks are $(0,0)$}\label{rand_walk}
 \end{figure}
 %
 \section{Quaternions}
 %
-The \emph{quaternions} are an extension of the complex numbers, first described in 1843 by the Irish mathematician William Rowan Hamilton. They were first used in three-dimensional mechanics and today they are, among other applications, used to estimate the pose (position and direction in relation to a fixed frame) in three dimensions \cite{mann13}.
+The \emph{quaternions} are an extension of the complex numbers, first described in 1843 by the Irish mathematician William Rowan Hamilton. They were first used in three-dimensional mechanics and today they are, among other applications, used to estimate the pose (position and direction in relation to a fixed frame) in three dimensions \cite{kuip98,mann13}.
 %
 \subsection{Quaternion Theory}
 %
@@ -1443,7 +1456,7 @@ where the quaternion norm $|q|$ is defined as
 %
 \subsection{Quaternions Interpreted as Rotations}
 %
-Why a certain subset of quaternions i.e. $|q|=1$, may be interpreted as rotations is beyond the scope of this thesis. Instead, here follows a recapitulation of how they can be uses. Readers interested in the mechanisms involved are referred to \cite{kuip98} for an in-depth discussion of the background and theory of quaternions. 
+Why a certain subset of quaternions i.e. $|q|=1$, may be interpreted as rotations is beyond the scope of this thesis to explain. Instead, here follows a recapitulation of how they can be used. Readers interested in the mechanisms involved are referred to \cite{kuip98} for an in-depth discussion of the background and theory of quaternions. 
 
 Rotations are defined by two elements, the amount (angle) of rotation and around what axis the rotation is performed. Suppose that a rotation of $\theta$ is performed around the three-dimensional unit vector $\vec n$. The quaternion representation of this would be
 \begin{equation}
@@ -1456,6 +1469,8 @@ Finding the vector $\vec v$ rotated clockwise by $\theta$ around $\vec n$, noted
 \left(\begin{array}{c}0\\ \vec{v_r}\end{array}\right) = q\otimes \left(\begin{array}{c}0\\ \vec{v}\end{array}\right) \otimes q^{-1}.
 \end{equation}
 %
+Many methods of computing rotations suffer from singularities when the rotations are performed around a certain axis. This is not the case for quaternions, e.g. if $\vec{v} = (0 \hspace{5pt}1 \hspace{5pt} 0)$ is rotated an angle $\theta$ around $\vec{n} = (1 \hspace{5pt} 0 \hspace{5pt} 0)$, $v_r = (0 \hspace{5pt} \cos{\theta} \hspace{5pt} \sin{\theta})$ is obtained as expected. For e.g. \emph{Euler angles}, this may not be the case, depending on the frame of reference \cite{euler}. 
+
 From here on, we use the naming convention
 %
 \begin{equation}
