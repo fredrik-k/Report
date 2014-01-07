@@ -125,7 +125,7 @@ In accordance with Lund University policy the contribution made by each author m
 \chapter{Background on Navigation}
 \label{chap:background}
 %
-This chapter gives a brief introduction to the background and history of navigation. First, there is an overview of some of the different stages that navigational technology has conquered over the course of history. Then, an introduction to the different coordinate systems used in this thesis will be presented and special emphasis will be put on the system used when evaluating the positioning algorithm. In connection with this, a brief presentation of the \emph{longitude and latitude} coordinate system will be given. 
+This chapter gives a brief introduction to the background and history of navigation. First, there is an overview of some of the different stages that navigational technology has conquered over the course of history. Then, an introduction to the different coordinate systems used in this thesis will be presented and special emphasis will be put on the system used when evaluating the positioning algorithm. In connection with this, a brief presentation of the \emph{longitude and latitude} coordinate system will be given. Further, a few sensors are presented, including the accelerometer, the gyroscope and the magnetometer.
 %
 \section{Overview}
 %
@@ -140,7 +140,7 @@ A problem, however, exists with the GPS system. To obtain a good position, signa
 Altogether, this makes GPS a good positioning technique in open outdoor areas, but in a suburban or indoor environment other techniques must be used to obtain accurate positioning. A multitude of techniques that aim to solve this problem with different accuracies and constraints exists. There is no single technology that these attempts are based on. Instead, they are spread over a wide range of areas, including inertial sensors, signal strengths, magnetic fields, cameras etc. \cite{positioning_overview}. 
 %
 \section{Coordinate Systems}
-It should be apparent to the reader that a well defined coordinate system is of great importance for positioning applications. Further, to be able to receive a meaningful position, the coordinate system needs to be fixed in reference to the Earth. In the sections below, two such coordinate systems are presented along with the coordinate system of the phone. 
+It should be apparent to the reader that a well defined coordinate system is of great importance for positioning applications. Further, to be able to receive a meaningful position, the coordinate system needs to be fixed in reference to the earth. In the sections below, two such coordinate systems are presented along with the coordinate system of the phone. 
 \subsection{World Frame}
 %
 The \emph{world frame} or the global coordinate system is commonly used for navigation, at least in a global perspective. The definition is, in accordance with Figure \ref{axis_globe} as follows:
@@ -161,7 +161,7 @@ The \emph{world frame} or the global coordinate system is commonly used for navi
 %
 \footnotetext{This image is reproduced from work created and shared by the \emph{Android Open Source Community} \cite{aos} and used according to the terms described in the \emph{Creative Commons 2.5 Attribution License} \cite{cc}.}
 %
-Noteworthy is that this system is not fixed in space, and different positions on the Earth's surface will result in a differently oriented coordinate systems. Further, as the world rotates around its own axis so does the coordinate system (approximately 15$^\circ$ per hour). In the sense of indoor positioning however, both of these effects can be neglected.
+Noteworthy is that this system is not fixed in space and, different positions on the Earth's surface will result in a differently oriented coordinate systems. Further, as the world rotates around its own axis so does the coordinate system (approximately 15$^\circ$ per hour). In the sense of indoor positioning however, both of these effects can be neglected.
 %
 \subsection{Local Frame}
 %
@@ -208,25 +208,25 @@ As the measurements in this thesis are taken over a limited area, the \emph{Glas
 \item[$z_t$:] Equivalent to $z_w$, pointing skywards.
 \end{description}
 %
-%In Figure REF HERE, the chosen coordinate system used is shown along with a floor plan of the building and the different paths used to evaluate the positioning algorithms. 
+In Figure REF HERE, the chosen coordinate system used is shown along with a floor plan of the building and the different paths used to evaluate the positioning algorithms. 
 %
 \chapter{Radio Signal Propagation}
 %
 \label{chap:RSP}
 %
-The performance of any wireless communication system is fundamentally limited by the properties of the radio signals. In the simplest case, these properties and hence the signal intensities would depend only on the distance between transmitter and receiver. However, they vary greatly depending on the environment, from a simple line-of-sight (LOS) case to a severely obstructed one, where walls, windows, furniture etc. distort the signal between transmitter and receiver. Furthermore, the signal is affected by a large number of small-scale effects. Among them are reflections from various surfaces, diffraction and Doppler shift due to a difference in speed between the receiver in reference to the transmitter \cite{rappaport96}. In this thesis the focus is put on obtaining good models for the indoor propagation of radio signals in the range $[2.4;5]$ GHz for application in indoor positioning.
+The performance of any wireless communication system is fundamentally limited by the properties of the radio signals. In the simplest case, these properties and hence the signal intensities would depend only on the distance between transmitter and receiver. However, they vary greatly depending on the environment, from a simple line-of-sight (LOS) case to a severely obstructed one, where walls, windows, furniture etc. distort the signal between transmitter and receiver. Furthermore, the signal is affected by a large number of small-scale effects. Among them are reflections from various surfaces, diffraction and Doppler shift due to a difference in speed between the receiver in reference to the transmitter \cite{rappaport96}. In this thesis the focus is put on obtaining good models for the indoor propagation of radio signals in the rang $[2.4,5]$ GHz for application in indoor positioning.
 
 The chapter consists of a recapitulation of free space signal propagation and path loss, together with different ways of modeling these. Different sources of disturbances and their influences are discussed.
 %
 \section{Free Space Propagation Model}
 %
-How the magnitude of radio signals decay with increasing transmitter-receiver (T-R) separation is of interest in many applications, especially if a position is to be obtained from the received signal strength. The free space propagation model is a relatively simple model of the received signal power given a certain T-R separation and a LOS path in between. This model focuses on the large-scale propagation features, thus predicting the average signal strength received without small scale effects taken into account. As in most propagation models a power law function of how the signal intensity decays by distance is assumed $\left(\sim{1/d^2}\right)$ \cite{rappaport96}. The power received at a distance $d$ from a radiating transmitter is given by the Friis free space equation,
+How the magnitude of radio signals decay with increasing transmitter-receiver (T-R) separation is of interest in many applications, especially if a position is to be obtained from the received signal strength. The free space propagation model is a relatively simple model of the received signal power given a certain T-R separation and a LOS path in between. This model focuses on the large-scale propagation features, thus predicting the average signal strength received without small scale effects taken into account. As in most propagation models a power law function of how the signal intensity decays by distance is assumed$\left(\sim{1/d^2}\right)$ \cite{rappaport96}. The power received at a distance $d$ from a radiating transmitter is given by the Friis free space equation,
 %
 \begin{equation}
 P_r(d)=\frac{P_tG_tG_r\lambda^2}{(4\pi)^2d^2L}\label{equation:friis_equation}
 \end{equation}
 %
-where $P_r(d)$ is the received power in dBm at a T-R separation of $d$ meters, $P_t$ is the transmitted power in dBm, $G_t$ and $G_r$ are the gains of the transmitter and receiver antennas respectively, $L\geq1$ is the system loss factor which is not related to propagation, i.e hardware losses, and $\lambda$ is the wavelength of the transmitted signal. The gains ($G_t$ and $G_r$) are dimensionless constants related to the antennas' effectiveness of receiving and transmitting a signal which is related to their construction and physical properties. The wavelength $\lambda$ is related to the frequency of the signal by
+where $P_r(d)$ is the received power in dBm at a T-R separation of $d$ meters, $P_t$ is the transmitted power in dBm, $G_t$ and $G_r$ are the gains of the transmitter and receiver antennas respectively, $L\geq1$ is the system loss factor which is not related to propagation, i.e hardware losses, and $\lambda$ is the wavelength of the transmitted signal. The gains ($G_t$ and $G_r$) are dimensionless constants related to the antennas' effectiveness of receiving and transmitting a signal which is related to the construction and physical properties of the antennas. The wavelength $\lambda$ is related to the frequency of the signal by
 \begin{equation}
 \lambda=\frac{c}{f}=\frac{2\pi c}{\omega_c},
 \end{equation} 
@@ -278,12 +278,12 @@ The requirement of a surface to be considered as a possible source of reflection
 %
 \subsection{Diffraction}
 %
-Diffraction is the property that allows waves to propagate around different obstructions, e.g. propagate  around corners, travel beyond the horizon or behind obstructions. Huygens principle states 
+Diffraction is the property that allows waves to propagate around different obstructions, e.g propagate  around corners, travel beyond the horizon or behind obstructions. Huygens principle states 
 \begin{quote}
  \emph{All points on a wavefront can be considered as point sources for the new wavelet} \cite{rappaport96}.
  \end{quote}
 %
-Diffraction is caused by the propagation of a secondary wave into a shadowed region, and it can be viewed as the wave ''bending'' around the edge of objects. Because only a fraction of the wave propagates into the shadowed region, the signal strength decays rapidly when moving further into it \cite{rappaport96}.
+Diffraction is caused by the propagation of a secondary wave into a shadowed region, and diffraction can be viewed as the wave ''bending'' around the edge of objects. Because only a fraction of the wave propagates into the shadowed region, the signal strength decays rapidly when moving further into the shadowed region \cite{rappaport96}.
 %
 \subsection{Scattering}
 %
@@ -349,7 +349,7 @@ It is obvious that this model has its flaws. A low value of $n$ fails to predict
 %
 \subsection{Double Slope Model}
 %
-A simple extension of the log-normal shadowing model is combining different values of $n$ for use in various intervals of the distance to the transmitter. The most simple of these models is the double slope model where two different path loss exponents, $n_1$ and $n_2$, are used together with a single break distance, $d_1$, where the model changes from one to the other. This model then becomes,
+A simple extension of the log-normal shadowing model is combining different values of $n$ for use in various intervals of the distance to the transmitter. The most simple of these models is the double slope model where two different path loss exponents $n_1$ and $n_2$, are used together with a single break distance, $d_1$, where the model changes from one to the other. This model then becomes,
 \begin{subequations}
 \begin{align}
 \log_{10}({P_r(d)})&=\log_{10}({P_r(d_0)})-10n_1\log_{10}\left[{\frac{d}{d_0}}\right] + X_{\sigma_1}, & 0<d<d_1\\
@@ -358,13 +358,12 @@ A simple extension of the log-normal shadowing model is combining different valu
 \end{subequations} 
 where $X_{\sigma_1}$ and $X_{\sigma_2}$ are random Gaussian distributed variables with zero mean and standard deviation $\sigma_1$ and $\sigma_2$ respectively.
  
-In Figure \ref{double_slope}, the double slope model for $n_1=2$, $n_2=3.2$ and $d_1=10$ m is displayed together with measurements using the distance trajectory in Figure \ref{dist_trans}. The value $n=2$, was chooses because at a short distance (0-5 m) the path to a AP is assumed to be unobstructed. The other value, $n=3$, was obtained by performing measurements of the received power from APs at distances ranging from 15 to 30 meters and using these measurements to find the average path loss exponent. The distance at which the parameter is switched, $d_1$, is then chosen as the middle point of the distance ranges of $n_1$ and $n_2$. 
+In Figure \ref{double_slope} the double slope model for $n_1=2$, $n_2=3.2$ and $d_1=10$ m, is displayed together with measurements using the distance trajectory in Figure \ref{dist_trans}. The value $n=2$, was chooses because at a short distance (0-5 m) the path to a AP is assumed to be unobstructed. The other value, $n=3$, was obtained by performing measurements of the received power from APs at distances ranging from 15 to 30 meters and using these measurements to find the average path loss exponent. The distance at which the parameter is switched, $d_1$, is then chosen as the middle point of the distance ranges of $n_1$ and $n_2$. 
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/signal_model/double_slope}
-\caption{Signal strength measurements (blue) versus double slope model predictions (red) with $n_1=2$, $n_2=3.2$ and $d_1=10$ m. Here the two models from Figure \ref{log_norm_n_2} and \ref{log_norm_n_3_2} are combined. This gives good estimations of the power when the distance is short as well as long, but when the switch between the models occurs a large jump is present in the estimations. }
-\label{double_slope} 
+\caption{Signal strength measurements (blue) versus double slope model predictions (red) with $n_1=2$, $n_2=3.2$ and $d_1=10$ m. Here the two models from Figure \ref{log_norm_n_2} and \ref{log_norm_n_3_2}}\label{double_slope} are combined. This gives good estimations of the power when the distance is short as well as long, but when the switch between the models occur a large jump is present in the estimations. 
 \end{figure}
 
 This model combines the good traits from the two log-normal shadowing models. However, at $d=d_1$ the model presents an undesirable ''jump'', and the predictions around $d_1$ are rather poor. Furthermore, a single $d_1$ might be hard to find for a set of transmitters, and the different values of $n$ may change between the transmitters.
@@ -447,7 +446,7 @@ where $f$ and $h$ are arbitrary non-linear functions of the states $x_k$, inputs
 
 There is a large collection of filtering methods solving this estimation problem in different ways with different restrictions. One of the most common is the \emph{Kalman filter}. This method is intuitive, simple and computationally effective. On the other hand, it suffers from requiring the functions $f$ and $h$ to be linear, and the PDFs of the process $v_k$ and measurement noise $e_k$ to be zero-mean Gaussian. The \emph{extended Kalman} filter solves the problem of $f$ and $h$ being non-linear, but still assumes $v_k$ and $e_k$ to be zero-mean Gaussian noise. Further, both Kalman approaches require the posterior distribution of the states to be zero mean Gaussian.
 
-Here we will instead focus on another filtering approach, the \emph{particle filter} (PF), also called the \emph{Sequential Monte Carlo method}. This is a simulation based approach for solving the estimation problem (\ref{equation:nonlinear_model}), only requiring the PDF of $e_k$ and $v_k$ to be known \cite{gson12,fig_fra10}.  
+Here we will instead focus on another filtering approach, the \emph{particle filter}, also called the \emph{Sequential Monte Carlo method}. This is a simulation based approach for solving the estimation problem (\ref{equation:nonlinear_model}), only requiring the PDF of $e_k$ and $v_k$ to be known \cite{gson12,fig_fra10}.  
 
 The PF consists of a set of $N$ particles $\left\{x^i\right\}_{i=1}^N$, which represent different samples of states. These particles are used to create an approximation of the distribution $p(x_k|y_{1:k})$  of the states $x_k$ given the set of measurements $y_{1:k}$. The strength of the PF is that the distribution $p(x_k|y_{1:k})$ can be arbitrary. On the other hand, to provide the same particle density the number of particles grows by the power of the number of states. Hence, if you have 10 particles and one state, you need 100 particles to provide the same density for two dimensions. For three dimensions, you then need 1000 particles. This makes the PF suitable only when the number of states is relatively small.
 %
@@ -488,14 +487,14 @@ as to have the probabilities normalized.
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/PF/particle_weights}
-\caption{Particles versus their normalized weights. As expected this is a good estimation of the Gaussian normal distribution.}\label{particle_weights}
+\caption{Particles versus their normalized weights, as expected this is a good estimation of the Gaussian normal distribution.}\label{particle_weights}
 \end{figure}
 
 In Figure \ref{particle_weights} the normalized weights assigned to each particle in our example are displayed. It comes as no surprise that the weights resemble the normally distributed measurement noise. 
 %
 \subsection{Re-sampling}
 %
-The re-sampling step is introduced to eliminate the possibility of one or a few particles to be the only probable after a few iterations of the PF. If the re-sampling is omitted, the computing of weight and subsequent state update could dilute the particles in the state-space until only one particle is the probable one. This could be the case even if the most probable particle does not agree with the measurement. Thus, the purpose of the re-sampling is to use the weights to create $N$ new particles from the $N$ old ones. This can be done in many ways. One is to allow a number of the most probable particles to spawn new particles until $N$ particles are obtained. A statistically more stringent way is to compute a uniformly distributed random number $r$ between zero and one. Then, assuming the sum of all particle probabilities is one, start adding these until the sum is greater than $r$. Then, let the particle that caused the change from below to above $r$, spawn a new one. Using this method particles with large weights have a larger chance of spawning a new one.
+The re-sampling step is introduced to eliminate the possibility of one or a few particles to be the only probable after a few iterations of the PF. If the re-sampling is omitted, the computing of weight and subsequent state update could dilute the particles in the state-space until only one particle is the probable one. This could be the case even if the most probable particle does not agree with the measurement. Thus, the purpose of the re-sampling is to use the weights to create $N$ new particles from the $N$ old ones. This can be done in many ways. One is to allow a number of the most probable particles to spawn new particles until $N$ particles are obtained. A statistically more stringent way is to compute a uniformly distributed random number $r$ between zero and one. Then, assuming the sum of all particle probabilities is one, start adding these until the sum is greater than $r$ Then, let the particle that caused the change from below to above $r$, spawn a new one. Using this method particles with large weights have a greater chance of spawning a new one, while particles with small weight still may create new ones.
 
 After the re-sampling is done, it is crucial to give all particles the same weight, i.e $1/N$, as to avoid the dilution of probability.
 %
@@ -505,13 +504,13 @@ After the re-sampling is done, it is crucial to give all particles the same weig
 \caption{Histogram over the particle distribution, after one iteration of the PF, in the range $[-10,10]$ using 100 bins. The particles tends more towards the true distribution.}\label{hist_dist_1_itr}
 \end{figure}
 
-After the re-sampling technique described above is applied to the particles of our example, their distribution is displayed in Figure \ref{hist_dist_1_itr}. The states of the particles still existing tend more towards the true one, $X=0$. The mean of the states may now be used as an estimate of the true state.    
+After the re-sampling technique described above is applied to the particles of our example, their distribution is displayed in Figure \ref{hist_dist_1_itr}. The states of the particles still existing tend more towards the true one, $X=0$. The mean of the states may now be used as an estimation of the true state.    
 % 
 \subsection{State Update}
 %
 In the state update step some model of the system behavior, $f(x_k,u_k,v_k)$ in equation (\ref{equation:nonlinear_model_first}), is used to update the states of each particle in each time step, $k$. If the system behavior is well known, for one or all of the states, the use  of an elaborate model improves the convergence rate of the particles and thus the estimation accuracy. This usually allows the use of fewer particles, since there is no need to move particles to improbable states.
 
-However, if there is little or no knowledge of the states' behavior, some type of random walk update can be used, only trying to capture the variance of the state over a time step. If the variance is large, this calls for a large number of particles to keep the particle density for all probable states high. 
+However, if there is little or no knowledge of the state's behavior, some type of random walk update can be used, only trying to capture the variance of the state over a time step. If the variance is large, this calls for a large number of particles to keep the particle density for all probable states high. 
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -527,7 +526,7 @@ In our example the ''true'' state is stationary, so the state update consists on
 \caption{Histogram over the particle distribution, after ten iterations of the PF, in range $[-10,10]$ using 100 bins. After this many iterations the mean of the particles are 0.04 compared to the true value, 0.}\label{hist_dist_10_itr}
 \end{figure}
 
-Finally, in Figure \ref{hist_dist_10_itr}, the particle distribution after ten iterations is displayed, and the mean of the particle states is
+Finally, in Figure \ref{hist_dist_10_itr} the particle distribution after ten iterations is displayed, and the mean of the particle states is
 \begin{equation}
 \sum^{N}_{i=1}{\frac{x^i_{10}}{N}} = 0.04.
 \end{equation} 
