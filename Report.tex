@@ -374,7 +374,7 @@ In Figure \ref{log_norm_n_2} and \ref{log_norm_n_3_2}, measured values of the si
 %
 \begin{figure}[!hbt]
 \include{graphics}
-\includegraphics[width=1\textwidth]{images/signal_model/log_norm_n_2.eps}
+\includegraphics[width=1\textwidth]{images/signal_model/log_norm_n_2}
 \caption{Measured signal strength (blue) versus signal strength modeled using the log-normal shadowing model with $n=2$ (red). The model provides good estimation of the signal power close to the AP i.e. when it is in LOS. For greater distances to the AP, the model predicts higher powers than the ones received. At larger distances the signal is often further attenuated by objects in the surroundings and the model does not take that into account.}\label{log_norm_n_2}
 \end{figure}
 %
@@ -463,7 +463,7 @@ The description presented above is brief, and for a more complete description of
  %
  For a signal strength model to be practical for positioning, it needs to possess two properties. It needs to predict the mean signal strength at a specific distance with satisfactory precision, and the variance around the mean should be sufficiently small. A few different approaches to reach this goal are available. One is to try to characterize the environment where the positioning is taking place, using measurements of the signal environment in numerous points. This is feasible only when the environment is fairly uniform, as the resulting model is an approximation for the entire environment. 
  
- Another approach is to create a signal strength map of the entire environment, by a large set of measurements. This is called \emph{fingerprinting}, and overcomes the problem of having a changing environment. However, it is impractical if used in a large area. 
+ Another approach is to create a signal strength map of the entire environment, by a large set of measurements. This is called \emph{fingerprinting}, and overcomes the problem of having a changing environment \cite{fingerprinting}. However, it is impractical if used in a large area. 
  
  A third way of finding a model is to try to estimate the model parameters while the positioning is ongoing. This requires that at some point during the positioning, the position error is known to be small. Using this knowledge suitable model parameters can be calculated. Estimating the model has the advantage of not being tied to a specific environment and whilst staying in the same environment the model will continue to improve. On the other hand it may not produce the best results, especially when moving between different environments or if small positioning errors are rare or hard to distinguish.        
  %
