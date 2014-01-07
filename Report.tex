@@ -597,20 +597,20 @@ A case where the PF is useful is the estimation of position or position and head
 \section{Other Estimation Techniques}
 \label{sec:oet}
 %
-There are some different techniques for state estimation given a set of measurements, the \emph{Kalman} methods mentioned earlier, a couple of \emph{maximum.-likelihood} based method and the \emph{least squares estimation} method \cite{gson12}.
+There are some different techniques for state estimation given a set of measurements, the \emph{Kalman} methods mentioned earlier, a couple of \emph{maximum-likelihood} based methods and the \emph{least squares estimation} method \cite{gson12}.
 %
  \subsection{Least Squares Estimation}
 %
 The method of \emph{least squares} (LS) is a common estimation technique for overdetermined systems, and is based on minimizing the error between an observed value and a modeled one. 
 
-Given a series of $n$ measurements, $z_i$ and $n$ models $f_i(x_k)$ of the $m$ states $x_k$. The goal of the LS estimation is the find the minimum of
+Given a series of $n$ measurements, $z_i$ and $n$ models $f_i(x_k)$ of the $m$ states $x_k$, the goal of the LS estimation is the find the minimum of
 %
 \begin{equation}
 S = \sum_{i=1}^n(z_i-f_i(x_k))^2
 \label{ls_sum}
 \end{equation}
 %
-given $n>m$. In the case of $f_i(x_k)$ being linear for all $i$, the algorithm is called the \emph{linear least squares} and $S$, in this case, has only one global minimum due to convexity. Also, an analytic solution is always present.
+for $n>m$. In the case of $f_i(x_k)$ being linear for all $i$, the algorithm is called the \emph{linear least squares} and $S$, in this case, has only one global minimum due to convexity. Also, an analytic solution is always present.
 
 Generalizing the linear LS estimation to non-linear models is fairly simple. The sum in Equation \ref{ls_sum} is still to be minimized, but in the non-linear case a closed-form analytical solution can not be found. Instead the minimum is found by numerical approximations. As $S$ in the non-linear case is not, in general, convex, there exist multiple local solutions to the minimization problem. This requires a guess of the approximate states to ''guide'' the algorithm to the correct solution, and if the guess is too far from the global minimum, a local minimum could be found instead.     
 
@@ -631,7 +631,7 @@ The IEEE $802.11$ standard consists of a series of techniques for over-the-air r
 
 The standard splits each frequency range into several channels over which the communication takes place. The frequency 2.4 GHz is split into 14 channels with 5 MHz spacing. For 5 GHz the situation is more complicated and will not be explained in detail. Local regulations affect which channels are allowed in a certain region.   
 
-Wireless technologies are evolving towards higher frequencies. The radio channel  surrounding 2.4 GHz is well populated and a move to other frequency domains is necessary to continue the technology expansion. Further, a near to full frequency environment promotes high noise levels and dropped connections due to interference between devices. Another advantage with transmitting information at higher frequency is that the signal can contain more information per time unit, resulting in higher bit rates.    
+Wireless technologies are evolving towards higher frequencies. The radio channel  surrounding 2.4 GHz is well populated and a move to other frequency domains is necessary to continue the technology expansion. Further, a near to full frequency environment promotes high noise levels and dropped connections due to interference between devices. Another advantage with transmitting information at higher frequencies is that the signal can contain more information per time unit, resulting in higher bit rates.    
 %
 \subsection{The MAC-Address}
 %
@@ -640,7 +640,7 @@ Most devices using the IEEE $802.11$ standard have a \emph{Media Access Control}
 \section{WiFi and Positioning}
 \label{sec:wifi_positioning}
 %
-The WiFi standard provides enticing possibilities for indoor positioning, especially in public or corporate areas. Some of the advantages compared to other positioning techniques is that the range of typical wireless products, like WiFi APs, is limited ($\sim 30$ meters) and thus need to be placed with relatively short intervals. Moreover, WiFi infrastructure is ubiquitous and already deployed at many places, making WiFi based positioning an attractive method. Further, more and more devices become capable of communication over WiFi and platforms like Android make the deployment of applications easy and readily available for a large amount of users. One of the disadvantages is that indoor signal environments are often complex, posing a harder modeling task.
+The WiFi standard provides enticing possibilities for indoor positioning, especially in public or corporate areas. Some of the advantages compared to other positioning techniques is that the range of typical wireless products, like WiFi APs, is limited ($\sim 30$ meters), and thus they need to be placed with relatively short intervals. Moreover, WiFi infrastructure is ubiquitous and already deployed at many places, making WiFi based positioning an attractive method. Further, more and more devices become capable of communication over WiFi and platforms like Android make the deployment of applications easy and readily available for a large amount of users. One of the disadvantages is that indoor signal environments are often complex, posing a harder modeling task.
 
 A few different techniques for indoor positioning are presented below.
 %
@@ -668,7 +668,7 @@ A way to eliminate the requirement of synchronized APs, is to measure the time i
 \end{itemize}
 %
 The techniques presented here assume that the measuring device is also performing the positioning. Similar approaches are available using the APs, to position devices in the environment. Furthermore, the technologies above could be combined or used together with different technologies such as Bluetooth, NFC, rfid etc \cite{nfc, rfid}. to increase the positioning accuracy. 
-In this thesis however, the focus will be placed on the received signal strength.
+In this thesis however, the focus will be placed on the received signal strength from WiFi.
 %
 \subsection{Received Signal Strength Indication}
 %
@@ -693,7 +693,7 @@ The evolution of WiFi has prompted many APs to implement standards for both 2.4 
 %
 Of course, some of the signal behavior is expected to be highly correlated. For one, the large scale distance dependent path loss is largely the same for both signals, and it is from this path loss the distance to the AP is determined. Nevertheless, independence is a desirable feature for the signal noise, which includes the \emph{small scale fading}. 
 
-To investigate the correlation between 2.4 and 5 GHz signals, measurements were taken, with an increasing distance, to an AP transmitting on both frequencies. After the path loss dependent behavior is removed from the signals, the correlation of the noise could be computed. This process is illustrated for one series of data in Figure \ref{noise_corr_los} 
+To investigate the correlation between 2.4 and 5 GHz signals, measurements were taken, with an increasing distance, to an AP transmitting on both frequencies. After the path loss dependent behavior was removed from the signals, the correlation of the noise could be computed. This process is illustrated for one series of data in Figure \ref{noise_corr_los} 
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -740,7 +740,7 @@ and may be transformed back to $\hat  r_{xy}$ using the \emph{inverse Fisher's z
 \hat r_{xy}=\frac{e^{2z'}-1}{e^{2z'}+1}.
 \end{equation}
 
-In Table \ref{corr_conf} six estimations of the correlation between the noise of the 2.4 and 5 GHz RSSI measurements are presented. Four of these are estimated from data where the distance varies by 15 meters to the AP. Two of these are taken in Line-of-sight (LOS) and two in non-line-of-sight (NLOS), and for each case one measurement is taken near the AP and one far from the AP. The other two sets of data are taken at stationary positions in LOS and NLOS respectively.
+In Table \ref{corr_conf} six estimates of the correlation between the noise of the 2.4 and 5 GHz RSSI measurements are presented. Four of these are estimated from data where the distance varies by 15 meters to the AP. Two of these are taken in line-of-sight (LOS) and two in non-line-of-sight (NLOS), and for each case one measurement is taken near the AP and one far from the AP. The other two sets of data are taken at stationary positions in LOS and NLOS respectively.
 
 The table shows that the correlations are significantly different from zero in some cases. At the same time, they are small with high probabilities. This means that additional information is added by using both frequencies, compared to using only one of them. It also means that the impact of the noise from one frequency can be reduced by using the other frequency as well.
 
@@ -767,7 +767,7 @@ NLOS stationary  & -0.12 &$[-0.18;-0.06]$ \\
 \hline
 \end{tabular}
 \end{center}
-\caption{Estimated covariances and 95 \% confidence interval for 2.4 and 5 GHz in different environments. There seams to be a small correlation but the signals are not entirely correlated, allowing for additional information to be obtained if both are used.}\label{corr_conf}
+\caption{Estimated covariances and 95 \% confidence intervals for 2.4 and 5 GHz in different environments. There seems to be a small correlation but the signals are not entirely correlated, allowing for additional information to be obtained if both are used.}\label{corr_conf}
 \end{table}
 %
 \subsection{Difference in Modeling}
