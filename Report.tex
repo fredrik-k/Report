@@ -779,21 +779,21 @@ An extensive discussion about how path loss depends on the frequency is done in 
 %
 The signal propagation models described in Chapter \ref{chap:RSP} in combination with the particle filter (PF) from Chapter \ref{chap:PF} provide a framework for indoor positioning. This framework can be used to perform position estimation using RSSI measurements from multiple WiFi APs. 
 
-In this chapter, the considerations about, and parameter choices for, the PF in the context of indoor positioning are presented. The performance is then tested in a few different environments and compared to position estimation using a least squares (LS) algorithm.  These tests then serves as a basis for an extensive error analysis, discussing the error behavior depending on different conditions. The resulting knowledge is then used in the next chapter, to ascertain if and how adaptive or crowd-sourced signal strength models may be used.
+In this chapter, the considerations about, and parameter choices for, the PF in the context of indoor positioning are presented. The performance is then tested in a few different environments and compared to position estimation using a least squares (LS) algorithm.  These tests then serve as a basis for an extensive error analysis, discussing the error behavior depending on different conditions. The resulting knowledge is then used in the next chapter, to ascertain if and how adaptive or crowd-sourced signal strength models may be used.
 %
 \subsection{Importance of Geometry}
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/geometries}
-\caption{Probable positions for different AP configuration (\emph{white} \texttt{+}). \emph{Red} implies high probability and \emph{blue} low probability. The \emph{true} position is $[0, 20]$. It is easy to see that a geometry like the one in the rightmost figure produces the best position estimates while it is hard to determine the position without prior position history if the geometry is similar to the left figure. }\label{geometries}
+\caption{Probable positions for different AP configurations (\emph{white} \texttt{+}). \emph{Red} implies high probability and \emph{blue} low probability. The \emph{true} position is $[0, 20]$. It is easy to see that a geometry like the one in the rightmost figure produces the best position estimates while it is hard to determine the position without prior position history if the geometry is similar to the left figure. }\label{geometries}
 \end{figure}
 %
 How the APs are positioned in relation to the user (i.e. the position of interest to estimate), highly impacts the quality of the estimation. In Figure \ref{geometries}, three different AP geometries are shown along with the distribution of probable positions. It represents an idealized case where the noise in the measurements of the distance to each AP is zero-mean Gaussian. However, it provides an illustrating example of how the geometry impacts the distribution of the estimated position.
 
 In the leftmost case in Figure \ref{geometries} the APs are placed on a straight line, and in this case trilateration of the \emph{true} position, $[0,20]$, is impossible if no prior information about past positions is known. As the figure shows, APs positioned on a straight line gives two equally probable position estimates (more \emph{red} implies higher probability), i.e. it is not possible to distinguish between a position and its mirror image in the line formed by the APs. 
 
-The second case displays a scenario where the APs are placed in the corners of a obtuse triangle (largest angle greater than $90^\circ$). In this ideal case it is possible to discern the \emph{true} position as the most probable one. However, higher noise levels and/or biased noise in the measurements will make this increasingly hard, as there are two different positions with relatively high probabilities.
+The second case displays a scenario where the APs are placed in the corners of an obtuse triangle (largest angle greater than $90^\circ$). In this  case it is possible to discern the \emph{true} position as the most probable one. However, higher noise levels and/or biased noise in the measurements will make this increasingly hard, as there are two different positions with relatively high probabilities.
 
 The third case represents a best-case scenario where the position to be estimated is centered in an equilateral triangle. Here, it is easy to distinguish the most probable position, and likewise the \emph{true} position.
 
@@ -807,7 +807,7 @@ There are four parts of the PF that can be chosen by the user to some extent. Th
 %
 \subsection{System Model}
 %
-The process model is the most extensive choice, where both the number of states and their respective dynamics need to be determined. Some parts of this are dependent on available measurements and how complex the model is allowed to be. Using only measurements of the RSSI from multiple APs, a simple model using two states $x$ and $y$, describing the position in a plane, are used. Moreover, a random walk process is used to model the dynamics, resulting in the state update
+The system model is the most extensive choice, where both the number of states and their respective dynamics need to be determined. Some parts of this are dependent on available measurements and how complex the model is allowed to be. Using only measurements of the RSSI from multiple APs, a simple model using two states $x$ and $y$, describing the position in a plane, are used. Moreover, a random walk process is used to model the dynamics, resulting in the state update
 %
 \begin{eqnarray}
 x_{k+1}&=&x_k + v^x_{k+1} \\
@@ -828,10 +828,10 @@ v^y_k &\sim &r\cos{\alpha_k}+N(0,\sigma^2)
 where
 %
 \begin{equation}
-\alpha_k \sim \mathsf U(0,2\pi).
+\alpha_k \sim \mathsf U(0,2\pi),
 \end{equation}
 %
-$\mathsf{U}(0,2\pi)$ is a uniform distribution between $0$ and $2\pi$ and where $\sigma$ is the standard deviation of the normal distribution. In this case $r$ is an approximation of how far the phone travels between two measurements and $\sigma$ measures the uncertainty of this distance. 
+$\mathsf{U}(0,2\pi)$ is a uniform distribution between $0$ and $2\pi$ and $\sigma$ is the standard deviation of the normal distribution. In this case $r$ is an approximation of how far the phone travels between two measurements and $\sigma$ measures the uncertainty of this distance. 
 
 A fair estimation is that a walking person travels between 1 and 2 meters per second, and given an interval $\Delta t$ between measurements it holds that $r \approx 1.5\cdot\Delta t$ and $\sigma \approx 0.5\cdot\Delta t$. Thus,
 %
@@ -852,7 +852,7 @@ This has been done for a quite large number of AP:s, and in environments ranging
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/noise_behaviour}
-\caption{The difference between measurements and model for a few different APs for different environments and distances. Here it is clearly visible that the indoor signal environment is hard to model. Depending on the number of objects between transmitter and receiver the received signal power at a given separation varies substantially. Because of this large measurement noise, the particle filter needs to take into account that the received signal power at a given distance have a large variance. }\label{noise_behaviour}
+\caption{The difference between measurements and model for a few different APs for different environments and distances. Here it is clearly visible that the indoor signal environment is hard to model. Depending on the number of objects between transmitter and receiver the received signal strength at a given separation varies substantially. Because of this large measurement noise, the particle filter needs to take into account that the received signal strength at a given distance has a large variance. }\label{noise_behaviour}
 \end{figure}
 
 The resulting variance in the measurements ranged from $9$ to $60$, with a mean of $25$. The reason for the large span is that some of the APs were in LOS for most of the measurements even though the distance to them was fairly large. Other AP:s were, on the other hand, highly obstructed while at a quite short distance, and yet others followed the models well. 
@@ -871,11 +871,11 @@ The number of particles required to maintain a high enough distribution over the
 
 In Figure \ref{err_vs_N}, the mean positioning error for the same data set is shown, for different numbers of particles, $N$, ranging from $1$ to 10 000. The data was generated by measurements taken with 3 meters of relative spacing along a predetermined path. For small $N$, the error improves dramatically when $N$ is increased. However, for $N$ larger than $\sim 40$ no further improvements are noticeable and the mean estimation error settles at $\sim 3.5$ meters. 
 
-For some of the test cases used later in this chapter, the distance between measurements is considerably larger than 3 meters. To keep the particle density high even in those cases a value, $N=300$, is chosen and used for all tests in the following sections.    
+For some of the test cases used later in this chapter, the distance between measurements is considerably larger than 3 meters. To keep the particle density high even in those cases, $N=300$, is chosen and used for all tests in the following sections.    
 %
 \section{On Model Choice}
 %
-From chapter \ref{chap:RSP}, a model on the form
+From Chapter \ref{chap:RSP}, a model on the form
 %
 \begin{equation}
 R_x(d) = C - 2\cdot10\log_{10}{d}-\alpha d
@@ -884,7 +884,7 @@ R_x(d) = C - 2\cdot10\log_{10}{d}-\alpha d
 %
 is appropriate for the RSSI measurements. In this model, $R_x(d)$ is the RSSI measurement at a distance $d$ from the transmitter, $C$ is related to the power of the transmitter and $\alpha$ models path loss related to signal path obstruction. 
 
-The models are discussed in Chapter \ref{chap:RSP} but appropriate values of the constants $C$ and $\alpha$ are yet to be determined. This may be done in a couple of fashions, two of which will be presented here. The resulting values, especially the value of $\alpha$, are highly dependent on the environment, thus making them, in this situation, suitable for an open office environment. The values of $C$ are also related to the power with which the WiFi APs transmit, so a different AP will most likely have a different value.      
+The models are discussed in Chapter \ref{chap:RSP} but appropriate values of the constants $C$ and $\alpha$ are yet to be determined. This may be done in a couple of fashions, two of which will be presented here. The value of $\alpha$ is dependent on the environment. The value of $C$ is related to the power of which the WiFi APs transmit, so different types of APs will most likely have different values.
 
 \subsection{Model Driven Approach}
 %
@@ -920,19 +920,19 @@ This has been done at 20 different locations with 20 measurements of the RSSI fr
 \hline
 \end{tabular}
 \end{center}
-\caption{Estimated model parameters , $\alpha$, $C$ , and their standard deviation.}\label{table:est_par}
+\caption{Estimated model parameters , $\alpha$, $C$ , and their standard deviations.}\label{table:est_par}
 \end{table}
 %
 \subsection{Error Estimation Approach}
-The other method is more heuristic, but might produce equal or better performance. Instead of finding the values of $\alpha$ and $C$ by measurements it is possible to find the parameters resulting in the smallest average positioning error. This is done by taking a set of RSSI measurements at a few different known locations and use them in the position estimation algorithm with different $\alpha$ and $C$, to find the parameters producing the smallest mean estimation error.   
+The other method is more heuristic, but might produce equal or better performance. Instead of finding the values of $\alpha$ and $C$ by measurements it is possible to find the parameters resulting in the smallest average positioning error. This is done by taking a set of RSSI measurements at a few different known locations and use them in the position estimation algorithm with different $\alpha$ and $C$, to find the parameters producing the smallest mean error.   
 
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/err_vs_param}
-\caption{Average estimation error as a function of $\alpha$ and $C$ for 2.4 and 5 GHz RSSI measurements. Errors larger than 13 m for 2.4 GHz and 9 m for 5 GHz are capped to put emphasis on the interesting behavior. The interesting take from this figure is that there is a large range of parameters that provides estimations with similar properties, at least if comparing the mean error. The values producing the best results are the ones predicting the correct received signal power most of the time. If these values, on the other hand, is changed a small amount in the wrong direction, really bad estimations could be obtained. This happens when the received power at a certain location is estimated as higher than it actually are. The overall conclusion is that, when using a particle filter, it is considerably better to underestimate the signal power, than to overestimate it.}\label{err_vs_param}
+\caption{Average estimation error as a function of $\alpha$ and $C$ for 2.4 and 5 GHz RSSI measurements. Errors larger than 13 m for 2.4 GHz and 9 m for 5 GHz are capped to put emphasis on the interesting behavior. The interesting take from this figure is that there is a large range of parameters that provides estimates with similar properties, at least if comparing the mean error. The values producing the best results are the ones predicting the correct received signal power most of the time. If these values, on the other hand, are changed by a small amount in the wrong direction, very bad estimates could be obtained. This happens when the received power at a certain location is estimated as higher than it actually is. The overall conclusion is that, when using a particle filter, it is considerably better to underestimate the signal power, than to overestimate it.}\label{err_vs_param}
 \end{figure}
 %
-To illustrate this, the estimation error for $\alpha \in [0;1]$ and $C \in [-55;-25]$ are shown in Figure \ref{err_vs_param} for 2.4 and 5 GHz. The parameters yielding the smallest average positioning errors are $C=-38$ and $\alpha = 0.3$ for 2.4 GHz, and $C=-39$ and $\alpha = 0.2$ for 5 GHz. 
+To illustrate this, the error for $\alpha \in [0;1]$ and $C \in [-55;-25]$ is shown in Figure \ref{err_vs_param} for 2.4 and 5 GHz. The parameters yielding the smallest average positioning errors are $C=-38$ and $\alpha = 0.3$ for 2.4 GHz, and $C=-39$ and $\alpha = 0.2$ for 5 GHz. 
 %
 \subsection{Final Parameter Choice}
 %
@@ -940,9 +940,9 @@ A few interesting observations can be made from the two methods above. The first
 
 Further, it is noteworthy that the parameters obtained from the two approaches differ, especially for 5 GHz. One explanation for this is that the PF is able to find an accurate position given, for example, a positive model error for 2.4 GHz and a negative error for 5 GHz from the same AP. However, the parameters found trying to minimize the model error still produced small positioning errors when used together with the PF. 
 
-Looking at Figure \ref{err_vs_param} the PF exhibits an interesting behavior. The positioning error is relatively small for a large range of parameters, but a change to substantial errors happens suddenly for certain parameters. Parameter choices along the approximate line from  $C=-39$ and $\alpha=0$ to $C=-25$ and $\alpha=0.7$ need to be changed only by a small amount to produce either good or truly poor results. A deeper investigation shows that this line roughly translates to the models switching from estimating a too low signal power to estimating a too high one, for a certain location. The smallest positioning errors are obtained when the modeled and received powers are about the same, placing them slightly below the line described earlier. However, these parameters are sensitive if the environment changes, resulting in estimating too high signal powers for the given location. A more robust choice is to over estimate the signal attenuation resulting in a higher $\alpha$. This choice might produce slightly larger positioning errors, but is less sensitive to changing environments.
+Looking at Figure \ref{err_vs_param} the PF exhibits an interesting behavior. The positioning error is relatively small for a large range of parameters, but a change to substantial errors happens suddenly for certain parameters. Parameter choices along the approximate line from  $C=-39$ and $\alpha=0$ to $C=-25$ and $\alpha=0.7$ need to be changed only by a small amount to produce either good or truly poor results. A deeper investigation shows that this line roughly translates to the models switching from estimating a too low signal power to estimating a too high one, for a certain location. The smallest positioning errors are obtained when the modeled and received powers are about the same, placing them slightly below the line described earlier. However, these parameters are sensitive if the environment changes, resulting in estimating too high signal powers for the given location. A more robust choice is to overestimate the signal attenuation resulting in a higher $\alpha$. This choice might produce slightly larger positioning errors, but is less sensitive to changing environments.
 
-The conclusion of the discussion above is that it is far better to under estimate the signal power at a given location than to over estimate it. Taking this into account, the values stated in Table \ref{table:model_par} will be used to model the received RSSI value at a distance, $d$ from the AP.  These values are more restrictive concerning the signal power than the parameters found previously. However, these choices provide a more robust estimation if the environmental properties change. The effect  of a small change in the true value of $C$, due to either variations in the power transmitted by the AP or different properties of the receiving device, will also be somewhat mitigated by a more restrictive choice of parameters.  
+The conclusion of the discussion above is that it is far better to underestimate the signal strength at a given location than to overestimate it. Taking this into account, the values stated in Table \ref{table:model_par} will be used to model the received RSSI value at a distance, $d$, from the AP.  These values are more restrictive concerning the signal strength than the parameters found previously. However, these choices provide a more robust estimation if the environmental properties change. The effect  of a small change in the true value of $C$, due to either variations in the power transmitted by the AP or different properties of the receiving device, will also be somewhat mitigated by a more restrictive choice of parameters.  
 %
 \begin{table}[!hbt]
 \begin{center}
@@ -988,7 +988,7 @@ For \emph{Case 1}, the distance between measurements can be changed in increment
 
 The tests were performed in a building called Glasgow, one of Sony's office buildings, on the 6:th floor. For different tests, different paths and different setups of APs are used. Further, all tests are performed in the same type of open office environment, but the differences between the exact environments for each test are fairly large. During the tests, the user held the smartphone in one hand, with the screen pointing upwards. The smartphones used were one Xperia Z Ultra and one Xperia Z1, both manufactured by Sony. These performed similarly except for a constant bias on the RSSI.
 
-For both test cases, the estimated path is generated by connection subsequent estimated positions. 
+For both test cases, the estimated path is generated by connection of subsequent estimated positions. 
 %
 \section{Results}
 \label{environment_results}
@@ -1002,7 +1002,7 @@ The results of the different tests performed are presented in the sections below
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/env_one}
-\caption{The path (\emph{blue} line) used in the \emph{Environment one}, along with measurement points (\emph{blue} \texttt{x}), start point (\emph{black} \texttt{x}) and end point (\emph{red} \texttt{o}).}\label{env_one}
+\caption{The path (\emph{blue} line) used in \emph{Environment one}, along with measurement points (\emph{blue} \texttt{x}), start point (\emph{black} \texttt{x}) and end point (\emph{red} \texttt{o}).}\label{env_one}
 \end{figure}
 %
 \begin{figure}[!hbt]
@@ -1037,7 +1037,7 @@ Median & $1.6$ & $2.5$ & $2.9$ \\
 \hline 
 \end{tabular}
 \end{center}
-\caption{Attributes of the absolute positioning error for \emph{Environment one}. It is clear that using 2.4 and 5 GHz WiFi in combination is producing better results, both in terms of mean as well as maximum, than using either one alone.}\label{table:error_env-1}
+\caption{Attributes of the absolute positioning error for \emph{Environment one}. It is clear that using 2.4 and 5 GHz WiFi in combination produces better results, both in terms of mean as well as maximum, than using either one alone.}\label{table:error_env-1}
 \end{table}
 
 In this environment, the placement of the AP in relation to the path walked is beneficial. During the walk, measurements from at least four APs are available and almost always on both $2.4$ and $5$ GHz.  Further, the geometry of the APs is such that we always stay inside or at the border of a polygon where the APs compose the corners. These properties contribute to the fairly small positioning errors in Table \ref{table:error_env-1}  
@@ -1046,12 +1046,17 @@ In this environment, the placement of the AP in relation to the path walked is b
 %
 The test in \emph{Environment two} uses the methodology of \emph{Case 1}, and the measurements are taken over a distance of $176.5$ meters. For a reference of the actual path see Figure \ref{true_vs_est_env_2_05}.    
 %
+
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/pure_rssi/true_vs_est_env_2_05}
-\caption{The true path (\emph{blue}), along with estimated path (\emph{black}), start point (\emph{red} \texttt{o}), initial heading (\emph{black} arrow) and AP (\emph{cyan} \texttt{o}). The estimation follows the true path well for the most parts of the walk, but a part near the end stands out where the errors are large (maximum of 11.5 meters). This is due to the unfavorable geometry, when only signals from the three rightmost AP are obtain. The mean error for this estimation is 4.0 m and the maximum error is 11.5 m.}\label{true_vs_est_env_2_05}
+\caption{The true path (\emph{blue}), along with estimated path (\emph{black}), start point (\emph{red} \texttt{o}), initial heading (\emph{black} arrow) and AP (\emph{cyan} \texttt{o}). The estimates follow the true path well for most parts of the walk, but a part near the end stands out where the errors are large (with a maximum of 11.5 meters). This is due to the unfavorable geometry, where only signals from the three rightmost APs are obtained. The mean error for this estimation is 4.0 m and the maximum error is 11.5 m.}\label{true_vs_est_env_2_05}
 \end{figure}
 %
+
+A plot of the estimated path along with the true one is shown in Figure \ref{true_vs_est_env_2_05}, and some attributes of the absolute positioning error can be found in Table \ref{table:error_env_2}.
+
+
 \begin{table}[!hbt]
 \begin{center}
 \begin{tabular}{|l|c|}
@@ -1070,9 +1075,9 @@ Median & $3.2$ \\
 \caption{Attributes for the absolute positioning errors for \emph{Environment two}.}\label{table:error_env_2}
 \end{table}
 
-A plot of the estimated path along with the true one is shown in Figure \ref{true_vs_est_env_2_05}, and some attributes of the absolute positioning error can be found in Table \ref{table:error_env_2}.
 
-The maximum positioning error here is considerably worse than the maximum from \emph{Environment one}. This is largely due to an unfavorable geometry of the APs during the last part of the path where only measurements from the three rightmost APs were available. Theses APs compose a quite obtuse triangle further impairing the positioning.  
+
+The maximum positioning error here is considerably worse than the maximum from \emph{Environment one}. This is largely due to an unfavorable geometry of the APs during the last part of the path where only measurements from the three rightmost APs were available. These APs compose a quite obtuse triangle further impairing the positioning.  
 %
 \subsection{Environment Three}
 %
