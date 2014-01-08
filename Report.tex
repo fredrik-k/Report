@@ -381,7 +381,7 @@ In Figure \ref{log_norm_n_2} and \ref{log_norm_n_3_2}, measured values of the si
 %
 \begin{figure}[!hbt]
 \include{graphics}
-\includegraphics[width=1\textwidth]{images/signal_model/log_norm_n_2.eps}
+\includegraphics[width=1\textwidth]{images/signal_model/log_norm_n_2}
 \caption{Measured signal strength (blue) versus signal strength modeled using the log-normal shadowing model with $n=2$ (red). The model provides good estimation of the signal power close to the AP i.e. when it is in LOS. For greater distances to the AP, the model predicts higher powers than the ones received. At larger distances the signal is often further attenuated by objects in the surroundings and the model does not take that into account.}\label{log_norm_n_2}
 \end{figure}
 %
@@ -2104,9 +2104,11 @@ Another advantage of having a large number of users is a large amount of data ge
 To obtain a total picture of the APs in the surroundings of the measuring device a scan of each possible WiFi channel must be performed. Such a scan claims a large amount of time (around 3.5 second). If, on the other hand, the channel/channels on which APs in the vicinity are transmitting are known, only these channels should be scanned. This would drastically decrease the amount of time spent scanning, as a single channel takes just over 100 ms to scan. If the scans could be performed at shorter time interval more information from the interesting APs could be obtained.   
 %
 \printbibliography  %% Comment if you don't want to use bibtex
-\newpage
+
 \appendix
 \addtocontents{toc}{\protect\contentsline{chapter}{Appendix:}{}}
+\newpage
+
 \begin{figure}
 \begin{minipage}{\textwidth}
 \chapter{}
