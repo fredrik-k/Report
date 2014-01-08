@@ -1680,7 +1680,7 @@ with the same notation as previous with the exception of $d_k$ being the particl
 \chapter{Indoor Positioning - Sensor Fused Approach} 
 \label{chap:sensor_fused}
 %
-In this chapter, a method of how to include the information from the sensors in the positioning algorithm will be presented. The DR presented in the previous chapter works well for short distances (see e.g. Figure \ref{deadreckon_1}), whereas information from WiFi signals do not have the disadvantage of drifts. The main strategy is now to combine these, in order to get the best properties from both  parts.
+In this chapter, a method of how to include the information from the sensors in the positioning algorithm will be presented. The dead reckoning presented in the previous chapter works well for short distances (see e.g. Figure \ref{deadreckon_1}), whereas information from WiFi signals do not have the disadvantage of drifts. The main strategy is now to combine these, in order to get the best properties from both  parts.
 
 
 
@@ -1688,13 +1688,13 @@ In this chapter, a method of how to include the information from the sensors in 
 
 In the previous chapters, the particles consisted of two states; the coordinates of the position. Now, we introduce the direction of movement, and the step length of the user, as two new states. 
 
-In Section \ref{subsec:PF_heading} two extensions to the state space, (\ref{eq:heading_step_kin_mod}) and (\ref{eq:heading_step_len_kin_mod}), to accommodate for heading and heading plus step length in congregation with a step counter are presented. Both of these models will be used to estimate positions in later parts of this chapter.
+In Section \ref{subsec:PF_heading} two extensions to the state space, (\ref{eq:heading_step_kin_mod}) and (\ref{eq:heading_step_len_kin_mod}), to accommodate for heading and for heading plus step length in congregation with a step counter are presented. Both of these models will be used to estimate positions in later parts of this chapter.
 
 Two sensors will be used to aid in the positioning, an accelerometer and a gyroscope. The accelerometer will have two different uses. It will serve as the basis for the step counting algorithm and to estimate the orientation of the phone in relation to the gravity. Using this orientation, the gyroscope will be used to measure the changes in heading.  
 
 Initially, the position of each particle is uniformly random distributed in $[0,2\pi]$, and the step length is normally random distributed around 0.75 m. When the user takes a step, each particle moves its own step length in its own direction. Then, particles with good estimations of the step length and direction will reach accurate estimations of the position, and be more likely to multiply in the next step.
 
-The new states offer two advantages. Firstly, this kinematics model is more accurate than a random walk, which means that the particles are moved to more probable positions at each step. Secondly, the average direction and step length can be used for DR between the RSSI-measurements, providing a more frequent position estimation output.
+The new states offer two advantages. Firstly, this kinematics model is more accurate than a random walk, which means that the particles are moved to more probable positions at each step. Secondly, the average direction and step length can be used for PDR between the RSSI-measurements, providing a more frequent position estimation output.
 
 In order to keep the particle density in the state space high enough, the number of particles used has to be larger for this algorithm. In order to model the noise, the directions and step lengths are spread randomly with normal distributions around their current values, during each state update (see Table \ref{table:parameter_distributions}). Standard deviations of 0.01 meters for the step length, and 0.01 radians for the direction, seemed to be reasonable for the models. The states are updated each time a step is taken by the user. 
 
@@ -1757,7 +1757,7 @@ The positioning estimation error is computed by dividing the path into equidista
 %
 \section{Results}
 %
-This section presents the results obtained when fusing sensor data together with WiFi measurements. First, the results obtained while a predetermined step length was used are presented. Afterwards, the position estimation when the step length is treated as a part of the state space is presented along with positioning from an LS algorithm, PF using only WiFi measurements and a PDR algorithm. This section is followed by a presentation of findings concerning the step length estimation when the algorithm is tested with an erroneous initial value. The last section deals with detection and compensation of ''false'' user induced turns.   
+This section presents the results obtained when fusing sensor data together with WiFi measurements. First, the results obtained while a predetermined step length was used are presented. Afterwards, the position estimates when the step length is treated as a part of the state space is presented along with positioning from an LS algorithm, a PF using only WiFi measurements and a PDR algorithm. This section is followed by a presentation of findings concerning the step length estimation when the algorithm is tested with an erroneous initial value. The last section deals with detection and compensation of ''false'' user induced turns.   
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -1774,7 +1774,7 @@ This section presents the results obtained when fusing sensor data together with
 
 %
 \subsection{Fixed Step Length}
-In Figure \ref{path_no_step_est}, the estimated path of a walk in \emph{Environment three} is presented. The positioning errors are shown in Figure \ref{error_no_step_est} and have a mean of 1.3 m and a max of 6 m. 
+In Figure \ref{path_no_step_est}, the estimated path of a walk in \emph{Environment three} is presented. The positioning errors are shown in Figure \ref{error_no_step_est} and have a mean of 1.3 meters and a maximum of 6 meters. 
 %
 
 The time until an approximate initial heading is found, is clearly visible in the plot of the error, corresponding to the peak at 7 samples. A known initial heading would of course improve on this error. 
