@@ -1444,7 +1444,7 @@ for two quaternions $q$ and $r$, where $\cdot$ denotes the scalar product and $\
 {q}\otimes {r} \neq {r} \otimes {q}
 \end{equation}
 %
-in general. It is, however associative
+in general. It is, however, associative
 %
 \begin{equation}
 ({q}\otimes{r})\otimes{s} = {q}\otimes({r}\otimes{s}).
@@ -1471,7 +1471,7 @@ where the quaternion norm $|q|$ is defined as
 %
 \subsection{Quaternions Interpreted as Rotations}
 %
-Why a certain subset of quaternions i.e. $|q|=1$, may be interpreted as rotations is beyond the scope of this thesis to explain. Instead, here follows a recapitulation of how they can be used. Readers interested in the mechanisms involved are referred to \cite{kuip98} for an in-depth discussion of the background and theory of quaternions. 
+Quaternions with the property $|q|=1$ may be interpreted as rotations, although the reason for this is beyond the scope of this thesis. Instead, here follows a recapitulation of how they can be used. Readers interested in the mechanisms involved are referred to \cite{kuip98} for an in-depth discussion of the background and theory of quaternions. 
 
 Rotations are defined by two elements, the amount (angle) of rotation and around what axis the rotation is performed. Suppose that a rotation of $\theta$ is performed around the three-dimensional unit vector $\vec n$. The quaternion representation of this would be
 \begin{equation}
@@ -1513,7 +1513,7 @@ Characterizing a step allows a kinematics algorithm to keep track of the approxi
 |\vec a| = \sqrt{a_x^2+a_y^2+a_z^2},
 \end{equation}
 %
-which is considerably more similar between use cases.
+which is considerably more consistent between use cases.
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -1521,7 +1521,7 @@ which is considerably more similar between use cases.
 \caption{Acceleration during 10 seconds of a typical walk, when the phone is carried in the hand. Here, it is hard to distinguish when a step has been taken. In order to make this easier, the signal is first differentiated, to center it around zero (see Figure \ref{avr_acc_dif}), and then filtered (see Figure \ref{avr_acc_dif_filt}).} \label{avr_acc}
 \end{figure}
 
-A 10 second sample of the average acceleration measured by a phone placed in the front pocket during a typical walk is displayed in Figure \ref{avr_acc}. A flaw of this approach is easily noticed. Due to gravity, the average acceleration is centered around this value, ($9.81$ m/s$^2$). A way around this is to differentiate the signal according to 
+A 10 second sample of the average acceleration measured by a phone placed in the front pocket during a typical walk is displayed in Figure \ref{avr_acc}. A flaw of this approach is easily noticed. Due to gravity, the average acceleration is centered around this value ($9.81$ m/s$^2$). A way around this is to differentiate the signal according to 
 %
 \begin{equation}
 \Delta f(x) = \frac{f(x+\Delta t) - f(x) }{\Delta t},
@@ -1530,43 +1530,43 @@ A 10 second sample of the average acceleration measured by a phone placed in the
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/avr_acc_dif}
-\caption{Differentiation of acceleration during 10 seconds of a typical walk,. This signal is low-pass filtered before the steps are detected (see Figure \ref{avr_acc_dif_filt}).}\label{avr_acc_dif}
+\caption{Differentiation of acceleration during 10 seconds of a typical walk. This signal is low-pass filtered before the steps are detected (see Figure \ref{avr_acc_dif_filt}).}\label{avr_acc_dif}
 \end{figure}
 %
-yielding the signal depicted in Figure \ref{avr_acc_dif}. This signal is centered around zero, but possesses unnecessary high frequency behavior. The sampling frequency of the accelerometer is $\sim 20$ Hz, giving a frequency content of the signal between 0 and 10 Hz \cite{pro07}. The normal step frequency for a person is no larger than 3 Hz, which promotes filtering the signal. Doing this with a fourth order \emph{Butterworth filter} with a cut-of frequency of 3 Hz results in the signal shown in Figure \ref{avr_acc_dif_filt}.
+yielding the signal depicted in Figure \ref{avr_acc_dif}. This signal is centered around zero, but possesses unnecessarily high frequency behavior. The sampling frequency of the accelerometer is $\sim 20$ Hz, giving a frequency content of the signal between 0 and 10 Hz \cite{pro07}. The normal step frequency for a person is no larger than 3 Hz, which promotes filtering the signal. Doing this with a fourth order \emph{Butterworth filter} with a cut-of frequency of 3 Hz results in the signal shown in Figure \ref{avr_acc_dif_filt}.
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/avr_acc_dif_filt}
-\caption{Filtered differentiation of average acceleration during 10 seconds of a typical walk with the phone carried in hand (red), and a threshold level (blue). Here, each step is considerably easier to distinguish than in Figure \ref{avr_acc} and \ref{avr_acc_dif}. When the signal goes from below to above the threshold, this is used to indicate that a step has been taken. In this case, 17 steps were taken and registered. This step counter works regardless of if the phone is carried in a bag, in a pocket or in the hand.}\label{avr_acc_dif_filt}
+\caption{Filtered differentiation of acceleration during 10 seconds of a typical walk with the phone carried in hand (red), and a threshold level (blue). Here, each step is considerably easier to distinguish than in Figure \ref{avr_acc} and \ref{avr_acc_dif}. When the signal goes from below to above the threshold, this is used to indicate that a step has been taken. In this case, 17 steps were taken and registered. This step counter works regardless of if the phone is carried in a bag, in a pocket or in the hand.}\label{avr_acc_dif_filt}
 \end{figure}
 
-Here, the steps are clearly distinguishable and each peak corresponds to a step taken. In Figure \ref{avr_acc_dif_filt} a threshold for determining weather a step has been taken or not is also present. A simple rule to count the number of steps taken could be to count the number of times the signal passes from below to above the threshold. Using this rule 17 steps were taken during the 10 seconds interval displayed in Figure \ref{avr_acc_dif_filt}.
+Here, the steps are clearly distinguishable and each peak corresponds to a step taken. In Figure \ref{avr_acc_dif_filt} a threshold for determining whether a step has been taken or not is also present. A simple rule to count the number of steps taken could be to count the number of times the signal passes from below to above the threshold. Using this rule 17 steps were taken during the 10 seconds interval displayed in Figure \ref{avr_acc_dif_filt}.
 
 An algorithm corresponding to the rule above has been implemented in Android using Java. To test the performance of the algorithm two walks of 100 steps respectively were taken, one with the phone in hand and one with the phone in the front right jeans pocket. When the phone was carried in the hand, 101 steps were registered and when carried in pocket, 
 100 steps were registered. This shows that the simple algorithm produces satisfactory results in these common use cases.
-The technique could be refined further, by e. g. by identifying the step frequency or by using more sensors. 
+The technique could be refined further, e.g. by identifying the step frequency or by using more sensors. 
 %
 \subsection{Step Length Considerations}
 \label{subsec:step_len}
 %
-The step length of an individual, moving in a straight line with a constant speed, is more or less constant. Different individuals or the same individual moving at different speeds or performing turns have a quite large span of step lengths. In this the parts of this thesis where a fixed step length is used, the step length has been determined by the authors walking a predetermined distance comprised of walking straight interspersed with turning both left and right, at a constant speed. The average step length is then simply computed as the distance divided by number of steps and a value of $0.77$ m was obtained.  
+The step length of an individual, moving in a straight line with a constant speed, is more or less constant. Different individuals or the same individual moving at different speeds or performing turns have a quite large span of step lengths. In the parts of this thesis where a fixed step length is used, the step length has been determined by the authors walking a predetermined distance comprised of walking straight interspersed with turning both left and right, at a constant speed. The average step length is then simply computed as the distance divided the by number of steps and a value of $0.77$ m was obtained.  
 
 For real world usage however, the length of a user's steps must be determined. This can be done in various ways. One is to have the user estimate his/her own step length with the same method as above. Another is to adaptively tune the step length by using approximately known distances traveled and the number of steps taken whilst traveling. A way of doing this is to use some sort of positioning technique (GPS, WiFi etc.) to estimate the distance while the step counter determines the number of steps.
 
-An alternative method is to add a state in the PF corresponding to step length, and spread the particles accordingly. Particles with either too long or too short step lengths would agree badly with measured RSSI-values and thus be given small weights. A downside of this is that increasing the number of states would require more particles as discussed in section \ref{sec:nlfp} consequently increasing the computational power required to implement the filter.      
+An alternative method is to add a state in the PF corresponding to step length, and spread the particles accordingly. Particles with either too long or too short step lengths would agree badly with measured RSSI-values and thus be given small weights. A downside of this is that increasing the number of states would require more particles as discussed in Section \ref{sec:nlfp}, and consequently increase the computational power required to implement the filter.      
 %
 \section{Dead Reckoning}
 %
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_1}
-\caption{True versus, by PDR, estimated path using gyroscope and pedometer. The initial heading is in the negative $x$-direction. The error gets larger with time, but is only about three meters of after a 110 meter walk. However, as Figure \ref{deadreckon_2} shows, the performance only deteriorates form here.}\label{deadreckon_1}
+\caption{True versus, by PDR, estimated path using gyroscope and pedometer. The initial heading is in the negative $x$-direction. The error gets larger with time, but is only about three meters off after a 110 meters walk. However, as Figure \ref{deadreckon_2} shows, the performance only deteriorates form here.}\label{deadreckon_1}
 \end{figure}
 %
-\emph{Dead reckoning} (DR) is the process of calculating the current position based on a previously determined position and advancing that position based on a known model \cite{ped_dead}. DR has been used by e. g. ships and airplanes for a long time, and in more recent time in networked computer games \cite{network_game}. However, the error is cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and especially the heading error is clearly visible. 
+\emph{Dead reckoning} (DR) is the process of calculating the current position based on a previously determined position and advancing that position based on a known model \cite{ped_dead}. DR has been used by e.g. ships and airplanes for a long time, and in more recent time in networked computer games \cite{network_game}. However, the error is cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and the error in heading and position is clearly visible. 
 
-DR estimations are subject to cumulative errors, i.e. errors are added over time and depending on the accuracy of the DR system, the estimated position deviates from the true. This implies that the position and heading estimates need to be calibrated at a certain time interval to provide an accurate position.
+DR estimations are subject to cumulative errors, i.e. errors are added over time and depending on the accuracy of the DR system, the estimated position deviates from the true one. This implies that the position and heading estimates need to be corrected at a certain time interval to provide an accurate position.
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -1574,7 +1574,7 @@ DR estimations are subject to cumulative errors, i.e. errors are added over time
 \caption{True versus, by PDR, estimated path using pedestrian dead reckoning using the same method as in Figure \ref{deadreckon_1} but for a longer time. The error gets larger with time and after approximately 630 meters walked, the error is around 12 meters and the heading is almost $30^\circ$ off.}\label{deadreckon_2}
 \end{figure}
 %
-For phones, a method which extends normal DR, called \emph{pedestrian dead reckoning} (PDR) could be used. Position and direction estimation would most likely include some form of step counting for distance measurement combined with either gyroscope or a sensor fusion including the magnetometer for heading estimation. As an example, the true and estimated paths using a pedometer and a gyroscope during a walk of approximately 110 meters, are presented in Figure \ref{deadreckon_1}. The behavior is fairly good but there is a heading error present soon after the start, and this grows as the walk continues. The distance estimated by the pedometer is also larger than the true distance traveled. Further, the estimation error grows with time, as seen in Figure \ref{deadreckon_2}, making PDR useful only for short term estimation, if no calibration of position and direction is performed.  
+For phones, a method which extends normal DR, called \emph{pedestrian dead reckoning} (PDR) could be used \cite{ped_dead}. Position and direction estimation would most likely include some form of step counting for distance measurement combined with either gyroscope or a sensor fusion including the magnetometer for heading estimation. As an example, the true and estimated paths using a pedometer and a gyroscope during a walk of approximately 110 meters, are presented in Figure \ref{deadreckon_1}. The behavior is fairly good but there is a heading error present soon after the start, and this grows as the walk continues. The distance estimated by the pedometer is also larger than the true distance traveled. Further, the estimation error grows with time, as seen in Figure \ref{deadreckon_2}, making PDR useful only for short term estimation, if no correction of position and direction is performed.  
 %
 \section{Dealing With a Non-Constant Sampling Rate}
 %
@@ -1584,12 +1584,12 @@ For phones, a method which extends normal DR, called \emph{pedestrian dead recko
 \caption{Histogram over time difference between consecutive samples given a specified sampling frequency of 20 Hz. Each interval is divided into 100 bins and the width of each bin is $7\cdot10^{-4}$, $2.5\cdot10^{-4}$ and $4\cdot10^{-5}$ seconds respectively. The time differences shown in the bottom figure shows occasions when a sample has been skipped by the subsystem, which occurs about once every 2000 samples. Due to the large number of data points these are almost indistinguishable in the first plot.}\label{sample_diff}
 \end{figure}
 %
-The Android platform employs a sampling strategy called \emph{event based sampling}. An application may request sensor data with a specified time separation, e.g. 50 ms for a sampling frequency of 20 Hz. However, the system will forward data to the application when a new value is available in conjunction with the specified rate. The result is sensor data sampled at slightly different time intervals. Further, if the system is busy when the requested data is to be obtained, it may choose to skip that sample, resulting in a de facto doubling in sample time for the next sample. Disregarding sensor samples is more common when the system is under heavy load resulting in more and more samples being skipped.
+The Android platform employs a sampling strategy called \emph{event based sampling}. An application may request sensor data with a specified time separation, e.g. 50 ms for a sampling frequency of 20 Hz. However, the system will forward data to the application when a new value is available in conjunction with the specified rate. The result is sensor data sampled at slightly different time intervals. Further, if the system is busy when the requested data is to be obtained, it may choose to skip that sample, resulting in a de facto doubling in sample time for the next sample. Disregarding sensor samples is more common when the system is under heavy load, which results in more and more samples being skipped.
 
-In Figure \ref{sample_diff} a histogram over the time between consecutive samples for a set of 12 375 accelerometer data points with a specified time between samples of 50 ms. The first figure shows that most time differences are around 50 ms, which is to be expected. If the data is studied more closely, a small number of points is visible around a separation of 100 ms. These are generated by the system disregarding a sample, resulting in an approximately double time difference. The two following figures consist of the data spilt into two intervals, one with time differences ranging from 
+Figure \ref{sample_diff} presents a histogram over the time between consecutive samples for a set of 12 375 accelerometer data points with a specified time between samples of 50 ms. The first figure shows that most time differences are around 50 ms, which is to be expected. If the data is studied more closely, a small number of points is visible around a separation of 100 ms. These are generated by the system disregarding a sample, resulting in an approximately double time difference. The two following figures consist of the data spilt into two intervals, one with time differences ranging from 
 40.3 ms to 61.7 ms, and one with a range from 97.9 ms to 101 ms. The first of these intervals consists of 12 311 data points, and the second of 64 points. 
 
-Only a small fraction of the samples are skipped by the system, however, these might introduce unwanted behavior when the data is filtered. The \emph{Butterworth} low pass filter used in the step detection algorithm is designed by a cutoff frequency being chosen as a fraction of the \emph{Nyquist frequency}, half the sampling frequency. A small difference from the desired sample time only affects the cut-off frequency and filter behavior slightly. A missed sample, on the other hand, causes the cut-off frequency and the behavior of the filter to change drastically. 
+Only a small fraction of the samples are skipped by the system. However, these might introduce unwanted behavior when the data is filtered. The \emph{Butterworth} low pass filter used in the step detection algorithm is designed by a cutoff frequency being chosen as a fraction of the \emph{Nyquist frequency}, half the sampling frequency. A small difference from the desired sample time only affects the cut-off frequency and filter behavior slightly. A missed sample, on the other hand, causes the cut-off frequency and the behavior of the filter to change drastically. 
 
 This must be addresses for the aforementioned step detection algorithm to function as intended. A straight forward way to do so is to use \emph{linear interpolation}.  Given two data points, $x_0$ and $x_1$, separated in time by $\Delta $t, a new sample in between could be constructed as,
 %
@@ -1597,7 +1597,7 @@ This must be addresses for the aforementioned step detection algorithm to functi
 x_{1^\prime}=x_0+\frac{x_1-x_0}{2}.
 \end{equation}
 %
-The resulting sequence, $x_0$, $x_{1'}$ and $x_1$, now has a time separation of $\Delta $t$/2$ and $x_{1'}$ is located in the middle of $x_0$ and $x_1$ on the straight line connecting the two. This would of course not capture any of the signal's behavior in between the two data points, but the frequency content missed would be of the order of $1/(2\cdot\Delta$t$)$ and higher. Thus sampling the signal at a sufficiently high rate would allow for some interpolation without missing the frequency behavior of interest. This simple interpolation scheme can easily be extended to accommodate for more samples being introduced in between $x_0$ and $x_1$.
+The resulting sequence, $x_0$, $x_{1'}$ and $x_1$, now has a time separation of $\Delta $t$/2$ and $x_{1'}$ is located in the middle of $x_0$ and $x_1$ on the straight line connecting the two. This would of course not capture any of the signal's behavior in between the two data points, but the frequency content missed would be of the order of $1/(2\cdot\Delta$t$)$ and higher. Thus sampling the signal at a sufficiently high rate would allow for some interpolation without missing the frequency behavior of interest. This simple interpolation scheme can easily be extended to accommodate for more samples being introduced between $x_0$ and $x_1$.
 
 There is a possibility for the system to skip several consecutive measurements. For the step detection algorithm previously described, the frequencies of interest were below 3 Hz, resulting, due to the \emph{Nyquist sampling theorem}, to a minimum sampling frequency of 6 Hz. In the algorithm, a sampling time of  50 ms is used and to fully resolve the sought after frequencies, a sampling time of 166 ms or faster is needed. This implies that at least three consecutive samples would need to be skipped to corrupt the desired frequencies. From the data set illustrated in Figure \ref{sample_diff}, the approximate probability of missing a single sample is $64/12375\approx0.005$. If the system uses the same priorities when deciding if a sample should be skipped regardless of if the previous sample was skipped, which in itself is unlikely, the probability of two consecutive samples being skipped is $2.5\cdot10^{-5}$. Further, to skip three samples we would need to, on average, collect 8 million samples. With a sampling frequency of 20 Hz, this would take 400 000 seconds or a little over 4.5 days. Even a tenfold increase in the probability of skipping a sample would potentially cause either a missed detection or extra step detected on average once every 7th minute, which still is acceptable.              
 %
@@ -1608,7 +1608,7 @@ To have a good estimation of the movement, not only the distance traveled needs 
 %
 \subsection{Integrated Gyroscope}
 %
-An enticing opportunity to determine the direction of movement using the gyroscope is, given a known initial heading, to integrate the gyroscope output using, e.g. \emph{the trapezoidal rule}. This would give three angles describing the gyroscopes current orientation in reference to the initial one. This approach, however, has two major flaws. The MEMS gyroscopes possess biases and drifts making the estimated orientation to drift over time. This makes the gyroscope suitable only for estimations over short intervals of time. Further, the gyroscope only measures its own angular velocity and in extent orientation, this makes it hard to discern between a true turn and a turn of the gyroscope, without strapping the gyroscope to the user with a fixed orientation. 
+An enticing opportunity to determine the direction of movement using the gyroscope is, given a known initial heading, to integrate the gyroscope output using e.g. the trapezoidal rule. This would give three angles describing the gyroscope's current orientation in reference to the initial one. This approach, however, has two major flaws. The MEMS gyroscopes possess biases and drifts making the estimated orientation drift over time. This makes the gyroscope suitable only for estimations over short intervals of time. Further, the gyroscope only measures its own angular velocity and in extent orientation, this makes it hard to discern between a true turn and a turn of the gyroscope, without strapping the gyroscope to the user with a fixed orientation. 
 
 A way to get around some parts of the last flaw is to use the accelerometer to approximately determine how the device is oriented in reference to gravity. The gyroscope may then be used to compute only the approximate angle with which the user has turned around the direction of gravity. This is beneficial simply because all ''normal'' turns performed by a human are around the direction of gravity. This makes the orientation of the device in reference to the user somewhat obsolete, but false turns may still be induced by turning the device around the direction of gravity.
 % 
@@ -1617,12 +1617,12 @@ A way to get around some parts of the last flaw is to use the accelerometer to a
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/rot_test}
-\caption{True heading versus heading output from Android rotation vector sensor. The true heading was due east, marked by the green dotted line. The mean of the estimated heading is 89.7$^\circ$ which is good, however it deviates from this mean as much as 15$^\circ$ and is not accurate enough for our purpose.}\label{rot_test}
+\caption{True heading versus heading output from Android rotation vector sensor. The true heading was due east, marked by the green dotted line. The mean of the estimated heading is 89.7$^\circ$, which is satisfactory. However, it deviates from this mean as much as 15$^\circ$ and is not accurate enough for our purpose.}\label{rot_test}
 \end{figure}
 %
 There are different approaches for combining magnetometer, gyroscope and possibly other sensors to produce a sensor fused estimation of the heading. Most Android phones implement such an algorithm, using gyroscope, magnetometer and accelerometer to produce an estimate of how the phone is oriented in the world coordinate system. The algorithm uses gyroscope and accelerometer to determine when the magnetometer output is corrupted, and uses their measurements to estimate the heading until the magnetometer can be trusted. 
 
-In Figure \ref{rot_test} the estimated heading for such an algorithm is shown along with the true heading. The measurement was taken while walking due east for 91.5 meters in a corridor indoors. The difference between the mean estimated heading, 89.7$^\circ$, and true heading (90$^\circ$) is minuscule, but the estimation varies around $\pm$15$^\circ$ from the true heading. This method of estimating the heading does not possess longterm drifts, but, as the estimation relies on the magnetometer for longterm calibration, it may be corrupted by different environmental factors, see Section \ref{subsec:mag}. 
+In Figure \ref{rot_test} the estimated heading for such an algorithm is shown along with the true heading. The measurement was taken while walking due east for 91.5 meters in a corridor indoors. The difference between the mean estimated heading, 89.7$^\circ$, and the true heading, 90$^\circ$, is minuscule, but the estimates vary around $\pm$15$^\circ$ from the true heading. This method of estimating the heading does not possess longterm drifts, but, as the estimation relies on the magnetometer for longterm calibration, it may be corrupted by different environmental factors, see Section \ref{subsec:mag}. 
 %
 \subsection{Heading as a Particle Filter State}
 \label{subsec:PF_heading}
@@ -1635,23 +1635,23 @@ y_{k+1} & = &y_k + r\cdot\sin{\theta_k}\label{eq:heading_kin_mod}\\
 \theta_{k+1} & = & \theta_k + v_{k+1} \nonumber
 \end{eqnarray}
 %
-where $x$ and $y$ represent the particle's two dimensional position, $r$ the approximate distance traversed between time step $k$ and $k+1$, $\theta$ the particle heading in the range of $\left[0,2\pi\right]$ radians and $v_{k+1}$ the process noise at time step $k+1$. During the state update particles will be spread according to their heading and the distance traveled since last update. Particles with the correct heading will reach the correct position and be assigned large weights. A problem arrises when after a long stretch of walking straight, the user makes a turn, as most particles at that point have headings corresponding to the user before the turn was made. Thus, to be able accommodate for turns, the process noise, $v_k$, must have a sufficiently large standard deviation. 
+where $x$ and $y$ represent the particle's two dimensional position, $r$ the approximate distance traversed between time step $k$ and $k+1$, $\theta$ the particle heading in the range of $\left[0,2\pi\right]$ radians and $v_{k+1}$ the process noise at time step $k+1$. During the state update particles will be spread according to their heading and the distance traveled since last update. Particles with correct heading and previous position will reach the correct position and be assigned large weights. A problem arises when after a long stretch of walking straight, the user makes a turn, as most particles at that point have headings corresponding to the user before the turn was made. Thus, to be able accommodate for turns, the process noise, $v_k$, must have a sufficiently large standard deviation. 
 
-Gyroscope measurements may be added to the kinematics model by adding them to the $\theta$ state update rule as,
+Gyroscope measurements may be added to the kinematics model by adding them to the $\theta$ state update rule as
 %
 \begin{equation}
-\theta_{k+1} = \theta_k + \Delta\theta_k + v_{k+1}.\label{eq:heading_gyro}
+\theta_{k+1} = \theta_k + \Delta\theta_k + v_{k+1}\label{eq:heading_gyro},
 \end{equation} 
 %
-Where,
+where
 %
 \begin{equation}
 \Delta\theta_k = \sum^N_{n=1}\frac{\vec{\omega_{t_n}}+\vec{\omega_{t_{n+1}}}}{2}\cdot\left(t_{n+1}-t_n\right)
 \end{equation}
 %
-with $N$ as the number of gyroscope measurements between $t_k$ and $t_{k+1}$, $\vec{\omega}$ as the sensor measurements and $t_n$ as the time of the $n$:th measurement. $\Delta\theta$ is a measurement of the change in direction between $k$ and $k+1$, allowing the kinematics model to more accurately capture turns. Used in this sense the gyroscope is only used to compute the angular change in between two times. Thus, if the time between state updates is short enough, biases and drifts of the gyroscope may be neglected. Further, this model allows for a process noise, $v_k$, with a much smaller standard deviation as most of the dynamics of a turn is captured by the gyroscope. 
+with $N$ as the number of gyroscope measurements between $t_k$ and $t_{k+1}$, $\vec{\omega}$ as the sensor measurements and $t_n$ as the time of the $n$:th measurement. $\Delta\theta$ is a measurement of the change in direction between $k$ and $k+1$, allowing the kinematics model to more accurately capture turns. Used in this sense the gyroscope is only used to compute the angular change between two time steps. Thus, if the time between state updates is short enough, biases and drifts of the gyroscope may be neglected. Further, this model allows for a process noise, $v_k$, with a much smaller standard deviation as most of the dynamics of a turn is captured by the gyroscope. 
 
-The problem of ''false'' turns, which arrise when the device turns when the user does not, is still present. However, the effect can be reduced quite substantially when the gyroscope is used collaboratively with the PF. Each particle is an independent entity and if a turn is detected, a portion, $p\in[0,1]$, of the particles may be selected to ignore the turn. Later, when the particles are given their weights, these particles will, depending on weather an actual turn was made, either be given large or small weights. Thus, if a turn was made, the portion, $p$, of particles that did not turn will not be re-sampled and vice versa. 
+The problem of ''false'' turns, which arises when the device turns when the user does not, is still present. However, the effect can be reduced quite substantially when the gyroscope is used collaboratively with the PF. Each particle is an independent entity and if a turn is detected, a portion, $p\in[0,1]$, of the particles may be selected to ignore the turn. Later, when the particles are given their weights, these particles will, depending on whether an actual turn was made, either be given large or small weights. Thus, if a turn was made, the portion, $p$, of particles that did not turn will not be re-sampled and vice versa. 
 
 \subsubsection{Adding the Step Counter}
 %
@@ -1665,7 +1665,7 @@ y_{k+1} & = &y_k + N\cdot (d + r_{k+1})\cdot\sin{\theta_k}\label{eq:heading_step
 %
 where $N$ is the number of steps taken between time step $k$ and $k+1$, $d$ is a predetermined step length and $ r_k$ is a small correction factor to account for fluctuations in step length. Further, $r_k$ and $v_k$ are Guassian random variables with zero mean and $\sigma_r$ and  $\sigma_v$ as standard deviations.
 
-Given a well determined step length of the user and an accurate gyroscope, the standard deviations of both $r_k$ and $v_k$ can be kept small. The resulting kinematics model will give a particle spread more related to the user's actual movement. However, inferior behavior is to be expected if the user's step length is far from the one used by the model. A solution to this is, as stated in Section \ref{subsec:step_len}, to include step length as an additional particle state. The extended model becomes,
+Given a well determined step length of the user and an accurate gyroscope, the standard deviations of both $r_k$ and $v_k$ can be kept small. The resulting kinematics model will give a particle spread more related to the user's actual movement. However, inferior behavior is to be expected if the user's step length is far from the one used by the model. A solution to this is, as stated in Section \ref{subsec:step_len}, to include step length as an additional particle state. The extended model becomes
 %
 \begin{eqnarray}
 x_{k+1} &  = & x_k + N\cdot d_k\cdot\cos{\theta_k} \nonumber\\
@@ -1674,7 +1674,7 @@ y_{k+1} & = &y_k + N\cdot d_k\cdot\sin{\theta_k}\label{eq:heading_step_len_kin_m
 d_{k+1} & = & d_k + r_{k+1}\nonumber
 \end{eqnarray}  
 %
-with the same notation as previous with the exception of $d_k$ being the particles step length at time step $k$. Particles with appropriate step lengths will agree more with measurements of the position and tend to ''survive'' the re-sampling. This has the advantage of being independent of the user's step length as the algorithm adapts for each user. On the other hand, we now have introduced two additional filter states compared to the simple case of only two states corresponding to $x$- and $y$-positions. Adding states forces an increase in the number of particles which in turn leads to a more computational and power demanding algorithm. Increasing the number of states by a factor two requires the number of particles to increase to the power of two to keep the same density of particles in the state space. This would result in the need to use between 100 000 and 1 000 000 particles, which would be too computationally demanding for todays smartphones, at least without extensive optimization. But, adding the additional states increases the knowledge of how the user has moved in between measurements, giving a much more narrow area where a true position is probable. Further, the possible variance, especially of the step length state, is fairly small. The step length for most persons is in the region of 0.5 to 1 meter, and when an initial estimate has been determined, there are only a few cases where this length changes by more than a few centimeters. Concerning the heading, particles would initially need to be spread in all directions. However, when an approximate heading is obtained, the spread only needs to be enough to correct for biases and drifts of the gyro and small heading changes caused by the user inadvertently turning the device a small amount. Larger ''false'' changes in heading will be caught by the partial spread discussed earlier. In conjunction, this decreases the number of particles needed from almost a million to between 3 000 and 10 000, depending on the time between the RSSI measurements.       
+with the same notation as previous with the exception of $d_k$ being the particles step length at time step $k$. Particles with appropriate step lengths will agree more with measurements of the position and tend to sustain and multiply. This has the advantage of being independent of the user's step length as the algorithm adapts for each user. On the other hand, we now have introduced two additional filter states compared to the simple case of only two states corresponding to $x$- and $y$-positions. Adding states forces an increase in the number of particles which in turn leads to a more computational and power demanding algorithm. Increasing the number of states by a factor two requires the number of particles to increase to the power of two to keep the same density of particles in the state space. This would result in the need to use between $10^{5}$ and $10^{6}$ particles, which would be too computationally demanding for today's smartphones, at least without extensive optimization. But, adding the additional states increases the knowledge of how the user has moved between measurements, giving a much more narrow area where a true position is probable. Further, the possible variance, especially of the step length state, is fairly small. The step length for most persons is in the region of 0.5 to 1 meter, and when an initial estimate has been determined, there are only a few cases where this length changes by more than a few centimeters. Concerning the heading, particles would initially need to be spread in all directions. However, when an approximate heading is obtained, the spread only needs to be enough to correct for biases and drifts of the gyro and small heading changes caused by the user inadvertently turning the device a small amount. Larger ''false'' changes in heading will be caught by the partial spread discussed earlier. In conjunction, this decreases the number of particles needed from almost a million to between 3 000 and 10 000, depending on the time between the RSSI measurements.       
 %
 \chapter{Indoor Positioning - Sensor Fused Approach} 
 \label{chap:sensor_fused}
