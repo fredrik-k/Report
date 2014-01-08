@@ -8,6 +8,8 @@
 \parindent 0pt
 \usepackage[pdftex]{graphicx}
 \usepackage{epstopdf}
+\usepackage[leftcaption]{sidecap}
+
 \addbibresource{mybib.bib}  %  Comment if you don't want to use bibtex
 
 \usepackage{tikz}
@@ -1871,7 +1873,7 @@ This scheme mitigates the problem of having one strongly transmitting AP on the 
 
 Simply determining the mean received power from each floor suffers from the same problems as earlier discussed. If, on the other hand, the aggregate received power from each floor is determined, a more robust method is obtained. As RSSI values are reported from the driver in the range of 0 to $-$100 dB where 0 indicates the highest received power, a simple addition will not suffice. Instead, the smallest received RSSI, $R_{\mbox{min}}$, is used to scale all RSSI values before adding them together. This is done by determining how much to add to the smallest RSSI value to obtain $0$ i.e. $-R_{\mbox{min}} $, and add this to all RSSI values. The set of accumulated power from each floor can then be used to determine a probable floor according to the rules defined in the flowchart depicted in Figure \ref{flowchart}.
 
-\begin{figure}
+\begin{figure}[width=10 cm, height = 15cm]
   % setting the typeface to sans serif and the font size to small
   % the scope local to the environment
   %\sffamily
@@ -2090,6 +2092,18 @@ Another advantage of having a large number of users is a large amount of data ge
 To obtain a total picture of the APs in the surroundings of the measuring device a scan of each possible WiFi channel must be performed. Such a scan claims a large amount of time (around 3.5 second). If, on the other hand, the channel/channels on which APs in the vicinity are transmitting are known, only these channels should be scanned. This would drastically decrease the amount of time spent scanning, as a single channel takes just over 100 ms to scan. If the scans could be performed at shorter time interval more information from the interesting APs could be obtained.   
 %
 \printbibliography  %% Comment if you don't want to use bibtex
+\newpage
+\appendix
+\addtocontents{toc}{\protect\contentsline{chapter}{Appendix:}{}}
+\begin{figure}
+\begin{minipage}{\textwidth}
+\chapter{}
+\vspace{-110pt}
+\centering
+\includegraphics[height = 17.5cm]{images/map_appendix/environment_map}
+\caption{Paths and environments used during the different tests in this thesis.}
+\end{minipage}
+\end{figure}
 
 \end{document}
 
