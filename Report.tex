@@ -276,16 +276,23 @@ where $P_r(d)$ is the received power in dBm at a T-R separation of $d$ meters, $
 %
 where $f$ is the signal frequency in Hertz, $\omega_c$ is the frequency in radians per second and $c$ is the speed of light in meters per second. 
 
-The Friis equation can only be used as a predictor for $P_r$ when $d$ is in the far-field, or \emph{Fraunhofer region}, of the transmitting antenna \cite{rappaport96}. The far-field region of a transmitter is defined as $d>d_f$ where $d_f$ is the far-field distance defined as
+The Friis equation can only be used as a predictor for $P_r$ when $d$ is in the far-field, or \emph{Fraunhofer region}, of the transmitting antenna \cite{rappaport96}. The far-field region of a transmitter is defined as $d>d_f$ where $d_f$ is the \emph{Fraunhofer} distance defined as
 %
 \begin{eqnarray}
-d_f=\frac{2D^2}{\lambda}, & d_f\gg D, & d_f\gg \lambda, \label{equation:frau_dist}
+d_f=\frac{2D^2}{\lambda}
+\label{equation:frau_dist}
 \end{eqnarray}
 %
 where $D$ is the largest physical dimension of the transmitting antenna.
 
+Further, to be in the far-field region 
+\begin{equation}
+ d\gg D \mbox{ and } d\gg \lambda.
+ \label{equation:add_req}
+\end{equation}
+
 For a radio signal with frequency ranging from 2.4 to 5 GHz (WiFi) and a largest antenna dimension $D$ of 0.1 m, $d_f$ is in the
-range of $\left[0.36,0.75\right]$  and a $d_f>1$ m fulfills both the additional requirements from (\ref{equation:frau_dist}).
+range of $\left[0.36,0.75\right]$  and a $d>1$ m fulfills both  (\ref{equation:frau_dist}) and the additional requirements from (\ref{equation:add_req}).
 %
 \section{Path Loss}
 %
@@ -401,7 +408,7 @@ A simple extension of the log-normal shadowing model is combining different valu
 \end{subequations} 
 where $X_{\sigma_1}$ and $X_{\sigma_2}$ are random Gaussian distributed variables with zero mean and standard deviation $\sigma_1$ and $\sigma_2$ respectively.
  
-In Figure \ref{double_slope}, the double slope model for $n_1=2$, $n_2=3.2$ and $d_1=10$ m is displayed together with measurements using the distance trajectory in Figure \ref{dist_trans}. The value $n=2$, was chosen because at a short distance (0-5 m) the path to an AP is assumed to be unobstructed. The other value, $n=3$, was obtained by performing measurements of the received power from APs at distances ranging from 15 to 30 meters and using these measurements to find the average path loss exponent. The distance at which the parameter is switched, $d_1$, is then chosen as the middle point of the distance ranges of $n_1$ and $n_2$. 
+In Figure \ref{double_slope}, the double slope model for $n_1=2$, $n_2=3.2$ and $d_1=10$ m is displayed together with measurements using the distance trajectory in Figure \ref{dist_trans}. The value $n_1=2$, was chosen because at a short distance (0 to 5 meters) the path to an AP is assumed to be unobstructed. The other value, $n_2=3$, was obtained by performing measurements of the received power from APs at distances ranging from 15 to 30 meters and using these measurements to find the average path loss exponent. The distance at which the parameter is switched, $d_1$, is then chosen as the middle point between the distance ranges of $n_1$ and $n_2$. 
 %
 \begin{figure}[!hbt]
 \include{graphics}
@@ -1121,7 +1128,7 @@ The comparison will be made for \emph{Environment one} and \emph{two} from the p
 
 The estimated paths from both the PF and LS estimators are displayed in Figure \ref{ls_short}, along with the true path for \emph{Environment one}. It is clearly visible that the PF performs considerably better compared to the LS estimator. The positioning errors from Figure \ref{ls_error_short} make this even more clear and the PF has a smaller positioning error for every sample compared to the LS estimator. The mean position error is $1.7$ m for the PF, and $5.7$ m for the LS estimation.
 
-For \emph{Environment two}, the LS estimation performs more equal to to the PF than for \emph{Environment 1}, as shown by the errors in Figure \ref{ls_error_medium}. The PF, however, does still provide the best position estimates, as the error is lower for the PF in most of the samples. The difference in maximum error is not large, but the mean error for the PF is $3.4$ m, and for the LS estimation it is $5.1$ m. The PF produces considerably better results compared to the LS method when the environment is favorable, i.e. when a large number of APs are available and/or their geometry is good. When the conditions are disadvantageous both methods perform equally, giving positions around 10 meters off.
+For \emph{Environment two}, the LS estimation performs more equal to to the PF than for \emph{Environment one}, as shown by the errors in Figure \ref{ls_error_medium}. The PF, however, does still provide the best position estimates, as the error is lower for the PF in most of the samples. The difference in maximum error is not large, but the mean error for the PF is $3.4$ m, and for the LS estimation it is $5.1$ m. The PF produces considerably better results compared to the LS method when the environment is favorable, i.e. when a large number of APs are available and/or their geometry is good. When the conditions are disadvantageous both methods perform equally, giving positions around 10 meters off.
 
 The conclusion to be drawn from these investigations is that a PF is the better choice for estimating positions from noisy RSSI measurements, especially if the only sought after attribute is the smallest mean and maximum errors. The LS estimation may be desirable to use if computational power is limited, or if only measurements with long time separation are available.
 
@@ -1159,7 +1166,7 @@ Another issue is that the signals reaching the phone might be attenuated conside
 \begin{figure}[!hbt]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/error_vs_maxP_all}
-\caption{Obtained position errors versus the maximum received RSSI. There is a clear correlation between small positioning errors and a large value of the maximum received RSSI. The reason for this is that the RSSI values decrease faster with distance if close to the AP thus giving a better position resolution at short distances, and in extension large RSSI values.}\label{error_vs_maxp_all}
+\caption{Obtained position errors versus the maximum received RSSI. There is a clear correlation between small positioning errors and a large value of the maximum received RSSI. The reason for this is that the RSSI values decrease faster with distance if close to the AP, which gives a better position resolution at short distances, and in extension larger RSSI values.}\label{error_vs_maxp_all}
 \end{figure}
 %
 \begin{figure}[!hbt]
@@ -1170,7 +1177,7 @@ Another issue is that the signals reaching the phone might be attenuated conside
 
 The method described in Chapter \ref{chap:pure_rssi} has proven to perform better at a closer distance to the nearest AP. At a certain time step, a large maximum RSSI-value indicates that the nearest AP is close. This, in turn, indicates that the position error is relatively small. Figure \ref{error_vs_maxp_all} shows this relation. The data is from the test setup \emph{Case 1} for \emph{Environment two}, defined in Section \ref{sec:test_setup} and \ref{environment_results}, respectively.
 
-Whenever one RSSI is above a certain value, the error can be considered small. This value depends on the model of the phone, and on $C$ for the closest AP. In this example, -36 dB is a suitable lower limit. If one RSSI is larger than that at a certain time, the average error is 1.05 meters, and it is unlikely to get an error that is larger than 4 meters. Figure \ref{prediction_interval} shows the error together with a one-sided, upper bounded, 99\% prediction interval \cite{matstat}. For other phone models and different AP:s , the limit has to be modified by adding a constant value, in order to get similar results. If $C$ is not known initially, it has to be estimated in order to determine the limit, before the adaptation can begin.  This can be solved when the user walks straight below an AP for the first time. By registering the peak RSSI, a very first approximation of $C$ can be computed, and a reasonable limit determined.
+Whenever one RSSI is above a certain value, the error can be considered small. This value depends on the model of the phone, and on $C$ for the closest AP. In this example, -36 dB is a suitable lower limit. If one RSSI is larger than that at a certain time, the average error is 1.05 meters, and it is unlikely to get an error that is larger than 4 meters. Figure \ref{prediction_interval} shows the error together with a one-sided, upper bounded, 99 \% prediction interval \cite{matstat}. For other phone models and different AP:s , the limit has to be modified by adding a constant value, in order to get similar results. If $C$ is not known initially, it has to be estimated in order to determine the limit, before the adaptation can begin.  This can be solved when the user walks straight below an AP for the first time. By registering the peak RSSI, a very first approximation of $C$ can be computed, and a reasonable limit determined.
 
 %
 \section{Updating the Parameters} %Working title
@@ -1205,7 +1212,7 @@ The value of $C$ is specific for each frequency on each AP. Therefore, the algor
 The parameter $\alpha$ can be treated in different ways. Here follows two alternatives for this.
 
 \subsection{Alternative 1}
-The parameter, $\alpha$, is the same for the whole building. After each determination of $\alpha_i$, $\alpha_{ave}$ is defined as the average of all determinations, including the initial estimation.
+The parameter, $\alpha$, is the same for the whole building. After each determination of $\alpha_i$, $\alpha_{ave}$ is defined as the average of all determinations, including the initial estimate.
 
 
 %
@@ -1243,7 +1250,7 @@ Please note that each particle gets its own set of parameters, and that the esti
 %
 Both alternatives have been tested offline using MATLAB. For the environments defined in Section \ref{environment_results}, the results are similar. The reason why there is no gain in dividing the building into areas is that it is homogeneous enough for alternative 1 to work. In an environment where the obstacle density changes more, alternative 2 would be more suitable.
 
-In order to evaluate the parameter updates, the algorithm was given erroneous initial parameter values. Then, the phone was carried one round in \emph{Environment three}, and after that the updated parameters were noted. During the round 61 RSSI measurements were taken by the phone, giving an approximate spatial separation of 4.5 m. The resulting parameters are shown in Table \ref{table:parameter_adaptation}
+In order to evaluate the parameter updates, the algorithm was given erroneous initial parameter values. Then, the phone was carried one round in \emph{Environment three}, and after that the updated parameters were noted. During the round, 61 RSSI measurements were taken by the phone, giving an approximate spatial separation of 4.5 m. The resulting parameters are shown in Table \ref{table:parameter_adaptation}
 
 \begin{table}[!hbt]
 \begin{center}
@@ -1270,7 +1277,7 @@ $C$ & $\alpha$ & $C$ & $\alpha$& $C$& $\alpha$\\
 \hline
 \end{tabular}
 \end{center}
-\caption{Parameter values before and after adaptation. If the initial parameters are chosen fare from the true ones, the adaptation manages to find parameters fairly close to the measured ones. }\label{table:parameter_adaptation}
+\caption{Parameter values before and after adaptation. If the initial parameters are chosen far from the true ones, the adaptation manages to find parameters fairly close to the measured ones. }\label{table:parameter_adaptation}
 \end{table}
 
 Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable after the adaptation. Moreover, the algorithm moves the parameter values towards the region with relatively low position error in Figure \ref{err_vs_param}. The bottom row in Table \ref{table:parameter_adaptation} was investigated in more detail, as an example of how the adaptation affects the positioning. Figure \ref{adaptation_vs_none} shows the positioning with and without the parameter adaptation, respectively, with $C = -25$ and $\alpha = 0.3$ as initial values.
@@ -1281,19 +1288,19 @@ Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable a
 \begin{figure}
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/positioning_pocket}
-\caption{Phone in pocket. Wearing the phone in the pocket did not affect the positioning significantly. The mean error was 5.3 m when carried in the hand, and 5.6 m when carried in the pocket. There seams to be little difference between carrying the phone in the pocket compared to the hand, which both the mean estimation error and the estimated path points to. A third estimation when the phone was carried in a bag was also performed, but the behavior was so close to the other two, it was decided to be omitted.}\label{positioning_pocket}
+\caption{Phone in pocket. Wearing the phone in the pocket did not affect the positioning significantly. The mean error was 5.3 m when carried in the hand, and 5.6 m when carried in the pocket. There seems to be little difference between carrying the phone in the pocket compared to the hand, which both the mean estimation error and the estimated path point to. A third estimation when the phone was carried in a bag was also performed, but the behavior was so close to the other two, it was decided to be omitted.}\label{positioning_pocket}
 \end{figure}
 
 \begin{figure}
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block}
-\caption{Blocking with hands, once. Attenuation by the hands had a severe impact on the positioning. The mean error was 6.3 m while carrying the phone normally, and 38.5 m while blocking. Here a substantial block of the incoming signals are performed and without compensation the algorithm performs poorly and a large positioning error is present soon after the block was initialized. }\label{hand_block}
+\caption{Blocking with hands, once. Attenuation by the hands had a severe impact on the positioning. The mean error was 6.3 m while carrying the phone normally, and 38.5 m while blocking. Here, a substantial block of the incoming signals was performed. A large positioning error is present soon after the blocking was initialized. }\label{hand_block}
 \end{figure}
 
 \begin{figure}
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly}
-\caption{Blocking with hands, repeatedly. Attenuation by the hands had a severe impact on the positioning. Average error: 9.3 m. It is possible to see when a attenuation of the signal is performed as the estimated position performs a large jump at those instances. The error here is not as large as for the case where the signals were attenuated for a long stretch of time, however, a fairly large mean error was obtained. }\label{hand_block_repeatedly}
+\caption{Blocking with hands, repeatedly. Attenuation by the hands had a severe impact on the positioning. The mean error was 9.3 meters. The error here is not as large as for the case where the signals were attenuated for a long stretch of time. However, a large mean error was obtained. }\label{hand_block_repeatedly}
 \end{figure}
 %
 
@@ -1322,7 +1329,7 @@ Carrying the phone in the pocket did not affect the RSSI significantly, and henc
 
 \subsection{Compensation}
 
-The main strategy for detecting the attenuation is to note when the RSSI decreases fast. However, moving away from the AP:s, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal attenuation by the user only, the algorithm focuses on the six largest RSSI-values. If fewer than six APs are available, every received signal is used. If the average of these decreases more than 6 dB in one time step, this indicates a hand attenuation. Moving away from the APs would not make the RSSI decrease that fast, and if LOS is lost to some APs there is a chance that LOS is established to another. If, on the other hand, LOS is lost to several APs without gaining LOS to other APs, e.g. by entering a room without an AP, the compensation may be triggered. However, this is more likely to improve than to degrade the positioning as the standard RSSI models do not incorporate quick drops in signal level caused by walls and similar objects. If a user enters a room without an AP, the RSSI measurements would drop significantly for all APs, but the compensation would ideally remove this effect, allowing the walls to be taken into account by the positioning algorithm. 
+The main strategy for detecting the attenuation is to note when the RSSI decreases fast. However, moving away from the AP:s, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal attenuation by the user only, the algorithm focuses on the six largest RSSI-values. If fewer than six signals are available, every received signal is used. If the average of these decreases more than 6 dB in one time step, this indicates a hand attenuation. Moving away from the APs would not make the RSSI decrease that fast, and if LOS is lost to some APs there is a chance that LOS is established to another. If, on the other hand, LOS is lost to several APs without gaining LOS to other APs, e.g. by entering a room without an AP, the compensation may be triggered. However, this is more likely to improve than to degrade the positioning as the standard RSSI models do not incorporate quick drops in signal level caused by walls and similar objects. If a user enters a room without an AP, the RSSI measurements would drop significantly for all APs, but the compensation would ideally remove this effect, allowing the walls to be taken into account by the positioning algorithm. 
 
 When an attenuation is detected, a constant term $H$ is added to the model, which corresponds to how much the signals have been reduced. Hence, the new model is given by Equation (\ref{equation:hand_comp}),  When the phone is unblocked, this is detected in an analogous way, and then $H$ is set to 0. 
 
@@ -1331,23 +1338,23 @@ When an attenuation is detected, a constant term $H$ is added to the model, whic
 \label{equation:hand_comp}
 \end{equation}
 
-Test 1) and 2) were performed again, but this time with the compensating algorithm. The results are shown in Figure \ref{hand_block_comp} and \ref{hand_block_repeatedly_comp}. Compared to the results shown in Figure \ref{hand_block} and \ref{hand_block_repeatedly}, the compensation algorithm results in a significant improvement to the positioning. The is especially true when the signals are attenuated for a relatively long time, clearly visible when comparing Figure \ref{hand_block} to \ref{hand_block_comp}. However, the positioning is aided by the compensation algorithm even when the attenuation is present for a short time.  
+Test 1) and 2) were performed again, but this time with the compensating algorithm. The results are shown in Figure \ref{hand_block_comp} and \ref{hand_block_repeatedly_comp}. Compared to the results shown in Figure \ref{hand_block} and \ref{hand_block_repeatedly}, the compensation algorithm results in a significant improvement to the positioning. This is especially true when the signals are attenuated for a relatively long time, clearly visible when comparing Figure \ref{hand_block} to \ref{hand_block_comp}. However, the positioning is aided by the compensation algorithm even when the attenuation is present for a short time.  
 
 \begin{figure}[!htb]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_comp}
-\caption{Blocking with hands, once. The algorithm compensates for the attenuation. The mean error was 7.3 m while blocking, and 7.2 m while carrying the device normally. Compared to Figure \ref{hand_block}, the algorithms has a much better performance when the signal is blocked, and it is hard to discern between the compensated and non-blocked part of the estimation.}\label{hand_block_comp}
+\caption{Blocking with hands, once. The algorithm compensates for the attenuation. The mean error was 7.3 m while blocking, and 7.2 m while carrying the device normally. Compared to Figure \ref{hand_block}, this algorithm has a much better performance, and it is hard to discern between the compensated and the non-blocked part of the estimation.}\label{hand_block_comp}
 \end{figure}
 
 \begin{figure}[!htb]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly_comp}
-\caption{Blocking with hands, repeatedly. The algorithm compensates for the attenuation, which supports the positioning. See Figure \ref{hand_block_repeatedly} for a comparison with the same use case, but without compensation.} \label{hand_block_repeatedly_comp}
+\caption{Blocking with hands, repeatedly. The algorithm compensates for the attenuation, which supports the positioning. See Figure \ref{hand_block_repeatedly} for a comparison with the same use case, but without compensation. } \label{hand_block_repeatedly_comp}
 \end{figure}
 
 
 \section{Conclusion}
-In this chapter, an algorithm that updates the model parallel to the positioning has been suggested. The purpose is to increase the generality of the application, and to make it improve while in a new environment. If the initial parameter values are inaccurate, this part of the algorithm improves the positioning significantly. However, if the initial parameter values are too far from the true, the positioning never gets accurate enough for the parameter update to work. Hence, the algorithm has to start with feasible parameter values in order to make them more accurate. In order to achieve this, $C$ could be estimated from the peak RSSI values.
+In this chapter, an algorithm that updates the model parallel to the positioning has been suggested. The purpose is to increase the generality of the application, and to make it improve while in a new environment. If the initial parameter values are inaccurate, this part of the algorithm improves the positioning significantly. However, if the initial parameter values are too far from the true ones, the positioning never gets accurate enough for the parameter update to work. Hence, the algorithm has to start with feasible parameter values in order to make them more accurate. In order to achieve this, $C$ could be estimated from the peak RSSI values.
 
 
 Compensating for the hand attenuation clearly improved the positioning. However, $H$ can not be determined exactly, due to noise and obstacles in the environment. In addition, the hand attenuation is only detected if the phone is covered fast enough. If it goes from uncovered to covered successively, during several time steps, this can not be distinguished from other causes of lowered RSSI. Naturally, going from covered to uncovered works analogously.
