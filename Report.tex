@@ -8,6 +8,7 @@
 \parindent 0pt
 \usepackage[pdftex]{graphicx}
 \usepackage{epstopdf}
+
 \addbibresource{mybib.bib}  %  Comment if you don't want to use bibtex
 
 \usepackage{tikz}
@@ -318,7 +319,7 @@ where $P_r(d_0)$ can be determined by a simple measurement at 1 meter from the t
 %
 \section{Basic Mechanisms of Signal Propagation}
 %
-In this section the three basic mechanisms for signal propagation, reflection, diffraction and scattering, are presented together with their respective impact on the propagation model. The presentation is a rather brief recap of sections 3.5 through 3.8 in  \cite{rappaport96}, and interested readers are referred there for a more in-depth description.  
+In this section the three basic mechanisms for signal propagation, reflection, diffraction and scattering, are presented together with their respective impact on the propagation model. The presentation is a rather brief recap of Sections 3.5 through 3.8 in  \cite{rappaport96}, and interested readers are referred there for a more in-depth description.  
 %
 \subsection{Reflection}
 %
@@ -343,7 +344,7 @@ Scattering occurs when a wave travels through an environment which has a large d
 %
 The Friis free space equation together with the reflection, diffraction and scattering have spawned many different models for indoor signal propagation of a wide range of complexity.
 %
-\subsection{Log-normal Shadowing} 
+\subsection{Log-Normal Shadowing} 
 One of the more simple models is the log-distance path loss model
 %
 \begin{equation}
@@ -379,7 +380,7 @@ In Figure \ref{log_norm_n_2} and \ref{log_norm_n_3_2}, measured values of the si
 %
 \begin{figure}[!hbt]
 \include{graphics}
-\includegraphics[width=1\textwidth]{images/signal_model/log_norm_n_2.eps}
+\includegraphics[width=1\textwidth]{images/signal_model/log_norm_n_2}
 \caption{Measured signal strength (blue) versus signal strength modeled using the log-normal shadowing model with $n=2$ (red). The model provides good estimation of the signal power close to the AP i.e. when it is in LOS. For greater distances to the AP, the model predicts higher powers than the ones received. At larger distances the signal is often further attenuated by objects in the surroundings and the model does not take that into account.}\label{log_norm_n_2}
 \end{figure}
 %
@@ -543,7 +544,7 @@ as to have the probabilities normalized.
 
 In Figure \ref{particle_weights} the normalized weights assigned to each particle in our example are displayed. It comes as no surprise that the weights resemble the normally distributed measurement noise. 
 %
-\subsection{Re-sampling}
+\subsection{Re-Sampling}
 %
 The re-sampling step is introduced to eliminate the possibility of one or a few particles to be the only probable after a few iterations of the PF. If the re-sampling is omitted, the computing of weight and subsequent state update could dilute the particles in the state-space until only one particle is the probable one. This could be the case even if the most probable particle does not agree with the measurement. Thus, the purpose of the re-sampling is to use the weights to create $N$ new particles from the $N$ old ones. This can be done in many ways. One is to allow a number of the most probable particles to spawn new particles until $N$ particles are obtained. A statistically more stringent way is to compute a uniformly distributed random number $r$ between zero and one. Then, assuming the sum of all particle probabilities is one, start adding these until the sum is greater than $r$. Then, let the particle that caused the change from below to above $r$, spawn a new one. Using this method particles with large weights have a larger chance of spawning a new one.
 
@@ -587,9 +588,9 @@ Finally, in Figure \ref{hist_dist_10_itr}, the particle distribution after ten i
 %
 The PF, like most \emph{Monte Carlo} based filters, suffers from high computational complexity. Especially as the number of particles necessary to keep a fixed particle density in the state space grows as the power of the number of states. A solution to this is proposed in \cite{gson12}, where only states bearing non-linear distributions are passed throughout the PF and states bearing Gaussian distributions may be filtered by a different method. This is called the \emph{marginalized particle filter} and aims to keep the number of states passed to the PF low. 
 
-The three steps discussed in section \ref{sec:PF_process} pose somewhat different computational difficulties. The weights need to be calculated for each particle and thus need to be computed $N$ times, giving an $O(N)$ complexity. However, the calculation for each weight depends of the number of measurements $M$ giving a total complexity of $O(M\cdot N)$. In most cases however, the number of measurements is small in comparison to the number of particles and may be neglected. Another pleasant feature of the weight computation is their independence of each other, thus making parallelization of computations simple.
+The three steps discussed in Section \ref{sec:PF_process} pose somewhat different computational difficulties. The weights need to be calculated for each particle and thus need to be computed $N$ times, giving an $O(N)$ complexity. However, the calculation for each weight depends of the number of measurements $M$ giving a total complexity of $O(M\cdot N)$. In most cases however, the number of measurements is small in comparison to the number of particles and may be neglected. Another pleasant feature of the weight computation is their independence of each other, thus making parallelization of computations simple.
 
-For the re-sampling step, assuming the number of samples before and after is constant, the algorithm described in section \ref{sec:PF_process} comprises two distinct steps. First the \emph{cumulative sum} of the weights is computed. This is of complexity $O(N)$ but can, depending on the implementation, be computed alongside the weights. Next, for the $N$ new particles, it is needed, for each, to determine which of the $N$ old ones to inherit states from. This is done by, for each new particle, computing a uniformly distributed random number in the range [0,1]. This random number is then compared to the cumulative sum of weights to find the index where the cumulative sum for the first time is equal to or larger than the random number. This can be done using a \emph{binary search} as the cumulative sum is sorted by its nature, giving the step complexity $O(N\cdot\log_2{N})$. Furthermore, the weights need to be computed before the re-sampling is initialized, making it impossible to parallelize the particle filter process from start to finish. However, when the weights have been computed, the particles, once again, are independent. 
+For the re-sampling step, assuming the number of samples before and after is constant, the algorithm described in Section \ref{sec:PF_process} comprises two distinct steps. First the \emph{cumulative sum} of the weights is computed. This is of complexity $O(N)$ but can, depending on the implementation, be computed alongside the weights. Next, for the $N$ new particles, it is needed, for each, to determine which of the $N$ old ones to inherit states from. This is done by, for each new particle, computing a uniformly distributed random number in the range [0,1]. This random number is then compared to the cumulative sum of weights to find the index where the cumulative sum for the first time is equal to or larger than the random number. This can be done using a \emph{binary search} as the cumulative sum is sorted by its nature, giving the step complexity $O(N\cdot\log_2{N})$. Furthermore, the weights need to be computed before the re-sampling is initialized, making it impossible to parallelize the particle filter process from start to finish. However, when the weights have been computed, the particles, once again, are independent. 
 
 Updating the states is done for each particle and it depends on the number of states $K$ along with the complexity of the state model, resulting in roughly $O(N \cdot K)$ complexity. During this step, the particles, once again, are entirely independent, which makes parallelization possible.
 
@@ -1674,7 +1675,7 @@ y_{k+1} & = &y_k + N\cdot d_k\cdot\sin{\theta_k}\label{eq:heading_step_len_kin_m
 d_{k+1} & = & d_k + r_{k+1}\nonumber
 \end{eqnarray}  
 %
-with the same notation as previous with the exception of $d_k$ being the particles step length at time step $k$. Particles with appropriate step lengths will agree more with measurements of the position and tend to sustain and multiply. This has the advantage of being independent of the user's step length as the algorithm adapts for each user. On the other hand, we now have introduced two additional filter states compared to the simple case of only two states corresponding to $x$- and $y$-positions. Adding states forces an increase in the number of particles which in turn leads to a more computational and power demanding algorithm. Increasing the number of states by a factor two requires the number of particles to increase to the power of two to keep the same density of particles in the state space. This would result in the need to use between $10^{5}$ and $10^{6}$ particles, which would be too computationally demanding for today's smartphones, at least without extensive optimization. But, adding the additional states increases the knowledge of how the user has moved between measurements, giving a much more narrow area where a true position is probable. Further, the possible variance, especially of the step length state, is fairly small. The step length for most persons is in the region of 0.5 to 1 meter, and when an initial estimate has been determined, there are only a few cases where this length changes by more than a few centimeters. Concerning the heading, particles would initially need to be spread in all directions. However, when an approximate heading is obtained, the spread only needs to be enough to correct for biases and drifts of the gyro and small heading changes caused by the user inadvertently turning the device a small amount. Larger ''false'' changes in heading will be caught by the partial spread discussed earlier. In conjunction, this decreases the number of particles needed from almost a million to between 3 000 and 10 000, depending on the time between the RSSI measurements.       
+with the same notation as previous with the exception of $d_k$ being the particle's step length at time step $k$. Particles with appropriate step lengths will agree more with the measurements and tend to sustain and multiply. This has the advantage of being independent of the user's step length as the algorithm adapts for each user. On the other hand, we now have introduced two additional filter states compared to the simple case of only two states corresponding to $x$- and $y$-positions. Adding states forces an increase in the number of particles which in turn leads to a more computational and power demanding algorithm. Increasing the number of states by a factor two requires the number of particles to increase to the power of two to keep the same density of particles in the state space. This would result in the need to use between $10^{5}$ and $10^{6}$ particles, which would be too computationally demanding for today's smartphones, at least without extensive optimization. But, adding the additional states increases the knowledge of how the user has moved between measurements, giving a much more narrow area where a true position is probable. Further, the possible variance, especially of the step length state, is fairly small. The step length for most persons is in the region of 0.5 to 1 meter, and when an initial estimate has been determined, there are only a few cases where this length changes by more than a few centimeters. Concerning the heading, particles would initially need to be spread in all directions. However, when an approximate heading is obtained, the spread only needs to be enough to correct for biases and drifts of the gyro and small heading changes caused by the user inadvertently turning the device a small amount. Larger ''false'' changes in heading will be caught by the partial spread discussed earlier. In conjunction, this decreases the number of particles needed from almost a million to between 3 000 and 10 000, depending on the time between the RSSI measurements.       
 %
 \chapter{Indoor Positioning - Sensor Fused Approach} 
 \label{chap:sensor_fused}
@@ -1883,7 +1884,7 @@ This scheme mitigates the problem of having one strongly transmitting AP on the 
 
 Simply determining the mean received power from each floor suffers from the same problems as earlier discussed. If, on the other hand, the aggregate received power from each floor is determined, a more robust method is obtained. As RSSI values are reported from the driver in the range of 0 to $-$100 dB where 0 indicates the highest received power, a simple addition will not suffice. Instead, the smallest received RSSI, $R_{\mbox{min}}$, is used to scale all RSSI values before adding them together. This is done by determining how much to add to the smallest RSSI value to obtain $0$ i.e. $-R_{\mbox{min}} $, and add this to all RSSI values. The set of accumulated power from each floor can then be used to determine a probable floor according to the rules defined in the flowchart depicted in Figure \ref{flowchart}.
 
-\begin{figure}
+\begin{figure}[width=10 cm, height = 15cm]
   % setting the typeface to sans serif and the font size to small
   % the scope local to the environment
   %\sffamily
@@ -2041,7 +2042,7 @@ A PF that uses both 2.4 and 5 GHz WiFi signals for positioning was developed. It
 \subsection{Sensor Fused Positioning}
 In addition to the WiFi signals, information from the sensors was used to model the motion of the user carrying the device. From this, an accurate positioning algorithm was implemented, with the constraint that the device must be reasonably fix in relation to the user. For the case where this is not fulfilled, a less accurate but more robust algorithm was developed. For these algorithms, the initial position and heading do not have to be known. This information is obtained from the WiFi signals. The algorithms were developed and tested for commonly used smartphones, and hence the sensors in these are accurate enough for the algorithms to work.
 
-\subsubsection{Step counter} ~\\
+\subsubsection{Step Counter} ~\\
 A step counter using the accelerometer was developed, as an important part of the algorithm. The magnitude of the acceleration was differentiated and filtered, and when it passed a certain threshold level, this was used to indicate a step. This step counter works regardless of whether the phone is carried in the hand, in a pocket or in a bag. 
 
 \subsubsection{Heading} ~\\
@@ -2050,7 +2051,7 @@ The accelerometer was also used to give the direction of gravity as a reference 
 \subsection{Implementation in Android}
 The robust version of the sensor fused positioning algorithm was implemented in SonyMap, an online positioning application developed by Sony Mobile.
 
-\subsubsection{Determine floor} ~\\
+\subsubsection{Determine Floor} ~\\
 In the online implementation, a new algorithm to determine the current floor by using WiFi signals was included. This proved to be an improvement compared to the previous algorithm used in SonyMap.
 
 \section{Future Work}
@@ -2102,6 +2103,20 @@ Another advantage of having a large number of users is a large amount of data ge
 To obtain a total picture of the APs in the surroundings of the measuring device a scan of each possible WiFi channel must be performed. Such a scan claims a large amount of time (around 3.5 second). If, on the other hand, the channel/channels on which APs in the vicinity are transmitting are known, only these channels should be scanned. This would drastically decrease the amount of time spent scanning, as a single channel takes just over 100 ms to scan. If the scans could be performed at shorter time interval more information from the interesting APs could be obtained.   
 %
 \printbibliography  %% Comment if you don't want to use bibtex
+
+\appendix
+\addtocontents{toc}{\protect\contentsline{chapter}{Appendix:}{}}
+\newpage
+
+\begin{figure}
+\begin{minipage}{\textwidth}
+\chapter{}
+\vspace{-110pt}
+\centering
+\includegraphics[height = 17.5cm]{images/map_appendix/environment_map}
+\caption{Paths and environments used during the different tests in this thesis.}
+\end{minipage}
+\end{figure}
 
 \end{document}
 
