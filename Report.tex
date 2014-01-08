@@ -320,7 +320,7 @@ where $P_r(d_0)$ can be determined by a simple measurement at 1 meter from the t
 %
 \section{Basic Mechanisms of Signal Propagation}
 %
-In this section the three basic mechanisms for signal propagation, reflection, diffraction and scattering, are presented together with their respective impact on the propagation model. The presentation is a rather brief recap of sections 3.5 through 3.8 in  \cite{rappaport96}, and interested readers are referred there for a more in-depth description.  
+In this section the three basic mechanisms for signal propagation, reflection, diffraction and scattering, are presented together with their respective impact on the propagation model. The presentation is a rather brief recap of Sections 3.5 through 3.8 in  \cite{rappaport96}, and interested readers are referred there for a more in-depth description.  
 %
 \subsection{Reflection}
 %
@@ -345,7 +345,7 @@ Scattering occurs when a wave travels through an environment which has a large d
 %
 The Friis free space equation together with the reflection, diffraction and scattering have spawned many different models for indoor signal propagation of a wide range of complexity.
 %
-\subsection{Log-normal Shadowing} 
+\subsection{Log-Normal Shadowing} 
 One of the more simple models is the log-distance path loss model
 %
 \begin{equation}
@@ -545,7 +545,7 @@ as to have the probabilities normalized.
 
 In Figure \ref{particle_weights} the normalized weights assigned to each particle in our example are displayed. It comes as no surprise that the weights resemble the normally distributed measurement noise. 
 %
-\subsection{Re-sampling}
+\subsection{Re-Sampling}
 %
 The re-sampling step is introduced to eliminate the possibility of one or a few particles to be the only probable after a few iterations of the PF. If the re-sampling is omitted, the computing of weight and subsequent state update could dilute the particles in the state-space until only one particle is the probable one. This could be the case even if the most probable particle does not agree with the measurement. Thus, the purpose of the re-sampling is to use the weights to create $N$ new particles from the $N$ old ones. This can be done in many ways. One is to allow a number of the most probable particles to spawn new particles until $N$ particles are obtained. A statistically more stringent way is to compute a uniformly distributed random number $r$ between zero and one. Then, assuming the sum of all particle probabilities is one, start adding these until the sum is greater than $r$. Then, let the particle that caused the change from below to above $r$, spawn a new one. Using this method particles with large weights have a larger chance of spawning a new one.
 
@@ -589,9 +589,9 @@ Finally, in Figure \ref{hist_dist_10_itr}, the particle distribution after ten i
 %
 The PF, like most \emph{Monte Carlo} based filters, suffers from high computational complexity. Especially as the number of particles necessary to keep a fixed particle density in the state space grows as the power of the number of states. A solution to this is proposed in \cite{gson12}, where only states bearing non-linear distributions are passed throughout the PF and states bearing Gaussian distributions may be filtered by a different method. This is called the \emph{marginalized particle filter} and aims to keep the number of states passed to the PF low. 
 
-The three steps discussed in section \ref{sec:PF_process} pose somewhat different computational difficulties. The weights need to be calculated for each particle and thus need to be computed $N$ times, giving an $O(N)$ complexity. However, the calculation for each weight depends of the number of measurements $M$ giving a total complexity of $O(M\cdot N)$. In most cases however, the number of measurements is small in comparison to the number of particles and may be neglected. Another pleasant feature of the weight computation is their independence of each other, thus making parallelization of computations simple.
+The three steps discussed in Section \ref{sec:PF_process} pose somewhat different computational difficulties. The weights need to be calculated for each particle and thus need to be computed $N$ times, giving an $O(N)$ complexity. However, the calculation for each weight depends of the number of measurements $M$ giving a total complexity of $O(M\cdot N)$. In most cases however, the number of measurements is small in comparison to the number of particles and may be neglected. Another pleasant feature of the weight computation is their independence of each other, thus making parallelization of computations simple.
 
-For the re-sampling step, assuming the number of samples before and after is constant, the algorithm described in section \ref{sec:PF_process} comprises two distinct steps. First the \emph{cumulative sum} of the weights is computed. This is of complexity $O(N)$ but can, depending on the implementation, be computed alongside the weights. Next, for the $N$ new particles, it is needed, for each, to determine which of the $N$ old ones to inherit states from. This is done by, for each new particle, computing a uniformly distributed random number in the range [0,1]. This random number is then compared to the cumulative sum of weights to find the index where the cumulative sum for the first time is equal to or larger than the random number. This can be done using a \emph{binary search} as the cumulative sum is sorted by its nature, giving the step complexity $O(N\cdot\log_2{N})$. Furthermore, the weights need to be computed before the re-sampling is initialized, making it impossible to parallelize the particle filter process from start to finish. However, when the weights have been computed, the particles, once again, are independent. 
+For the re-sampling step, assuming the number of samples before and after is constant, the algorithm described in Section \ref{sec:PF_process} comprises two distinct steps. First the \emph{cumulative sum} of the weights is computed. This is of complexity $O(N)$ but can, depending on the implementation, be computed alongside the weights. Next, for the $N$ new particles, it is needed, for each, to determine which of the $N$ old ones to inherit states from. This is done by, for each new particle, computing a uniformly distributed random number in the range [0,1]. This random number is then compared to the cumulative sum of weights to find the index where the cumulative sum for the first time is equal to or larger than the random number. This can be done using a \emph{binary search} as the cumulative sum is sorted by its nature, giving the step complexity $O(N\cdot\log_2{N})$. Furthermore, the weights need to be computed before the re-sampling is initialized, making it impossible to parallelize the particle filter process from start to finish. However, when the weights have been computed, the particles, once again, are independent. 
 
 Updating the states is done for each particle and it depends on the number of states $K$ along with the complexity of the state model, resulting in roughly $O(N \cdot K)$ complexity. During this step, the particles, once again, are entirely independent, which makes parallelization possible.
 
@@ -1556,7 +1556,7 @@ The step length of an individual, moving in a straight line with a constant spee
 
 For real world usage however, the length of a user's steps must be determined. This can be done in various ways. One is to have the user estimate his/her own step length with the same method as above. Another is to adaptively tune the step length by using approximately known distances traveled and the number of steps taken whilst traveling. A way of doing this is to use some sort of positioning technique (GPS, WiFi etc.) to estimate the distance while the step counter determines the number of steps.
 
-An alternative method is to add a state in the PF corresponding to step length, and spread the particles accordingly. Particles with either too long or too short step lengths would agree badly with measured RSSI-values and thus be given small weights. A downside of this is that increasing the number of states would require more particles as discussed in section \ref{sec:nlfp} consequently increasing the computational power required to implement the filter.      
+An alternative method is to add a state in the PF corresponding to step length, and spread the particles accordingly. Particles with either too long or too short step lengths would agree badly with measured RSSI-values and thus be given small weights. A downside of this is that increasing the number of states would require more particles as discussed in Section \ref{sec:nlfp} consequently increasing the computational power required to implement the filter.      
 %
 \section{Dead Reckoning}
 %
@@ -2043,7 +2043,7 @@ A PF that uses both 2.4 and 5 GHz WiFi signals for positioning was developed. It
 \subsection{Sensor Fused Positioning}
 In addition to the WiFi signals, information from the sensors was used to model the motion of the user carrying the device. From this, an accurate positioning algorithm was implemented, with the constraint that the device must be reasonably fix in relation to the user. For the case where this is not fulfilled, a less accurate but more robust algorithm was developed. For these algorithms, the initial position and heading do not have to be known. This information is obtained from the WiFi signals. The algorithms were developed and tested for commonly used smartphones, and hence the sensors in these are accurate enough for the algorithms to work.
 
-\subsubsection{Step counter} ~\\
+\subsubsection{Step Counter} ~\\
 A step counter using the accelerometer was developed, as an important part of the algorithm. The magnitude of the acceleration was differentiated and filtered, and when it passed a certain threshold level, this was used to indicate a step. This step counter works regardless of whether the phone is carried in the hand, in a pocket or in a bag. 
 
 \subsubsection{Heading} ~\\
@@ -2052,7 +2052,7 @@ The accelerometer was also used to give the direction of gravity as a reference 
 \subsection{Implementation in Android}
 The robust version of the sensor fused positioning algorithm was implemented in SonyMap, an online positioning application developed by Sony Mobile.
 
-\subsubsection{Determine floor} ~\\
+\subsubsection{Determine Floor} ~\\
 In the online implementation, a new algorithm to determine the current floor by using WiFi signals was included. This proved to be an improvement compared to the previous algorithm used in SonyMap.
 
 \section{Future Work}
