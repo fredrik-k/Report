@@ -1373,11 +1373,12 @@ The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and 
 %
 Carrying the phone in the pocket did not affect the RSSI significantly, and hence the positioning was unaffected. However, blocking the signals with the hands lowered the RSSI considerably, causing the positioning to be inaccurate. Hence, this use case has to be detected and compensated for.
 
+\newpage
+%
 \subsection{Compensation}
 
 The main strategy for detecting the attenuation is to note when the RSSI decreases fast. However, moving away from the AP:s, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal attenuation by the user only, the algorithm focuses on the six largest RSSI-values. If fewer than six signals are available, every received signal is used. If the average of these decreases more than 6 dB in one time step, this indicates a hand attenuation. Moving away from the APs would not make the RSSI decrease that fast, and if LOS is lost to some APs there is a chance that LOS is established to another. If, on the other hand, LOS is lost to several APs without gaining LOS to other APs, e.g. by entering a room without an AP, the compensation may be triggered. However, this is more likely to improve than to degrade the positioning as the standard RSSI models do not incorporate quick drops in signal level caused by walls and similar objects. If a user enters a room without an AP, the RSSI measurements would drop significantly for all APs, but the compensation would ideally remove this effect, allowing the walls to be taken into account by the positioning algorithm. 
 
-\pagebreak
 %
 When an attenuation is detected, a constant term $H$ is added to the model, which corresponds to how much the signals have been reduced. Hence, the new model is given by Equation (\ref{equation:hand_comp}),  When the phone is unblocked, this is detected in an analogous way, and then $H$ is set to 0. 
 
