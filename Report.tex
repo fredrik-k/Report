@@ -1916,18 +1916,18 @@ The implementation will be done in a positioning application developed by Sony M
 %
 Going from offline simulations to a real time implementation naturally requires certain considerations to achieve desired performance. Further, to scale a positioning algorithm from use in a single building and a single floor to a system that is used in multiple sites around the globe provides additional challenges. In this section, some of the considerations made when the algorithm was implemented are presented. 
 
-The focus of the implemented algorithm was usability and accuracy, while keeping the strain on hardware and battery at a minimum. Because of this a few of the techniques described in this thesis was kept outside the implemented algorithm.
+The focus of the implemented algorithm was usability and accuracy, while keeping the strain on hardware and battery at a minimum. Because of this a few of the techniques described in this thesis were kept outside the implemented algorithm.
 \subsubsection{Adaptation of Model Parameters} \ \\
 %
-To adapt the model parameters would be a good approach either if the environment is unknown or if it is changing within the specific building. However, as stated in Chapter \ref{chap:adapt}, the parameters obtained through the proposed adaptation algorithm are accurate, but not as accurate as the ones obtained by multiple measurements at several known locations. To obtain the best accuracy the choice was made to, instead of adapting the parameters, allow for individual values of $C$ and $\alpha$ to be set for both 2.4 and 5 GHz for each AP.  
+To adapt the model parameters is a good approach either if the environment is unknown or if it is changing within the specific building. However, as stated in Chapter \ref{chap:adapt}, the parameters obtained through the proposed adaptation algorithm are accurate, but not as accurate as the ones obtained by multiple measurements at several known locations. To obtain the best accuracy the choice was made to, instead of adapting the parameters, allow for individual values of $C$ and $\alpha$ to be set for both 2.4 and 5 GHz for each AP.  
 %
 \subsubsection{Compensation for User Induced Signal Attenuation} \ \\
 %
-In Chapter \ref{chap:adapt} it was shown that most normal use cases, carrying phone in hand, pocket or bag) did not produce sufficient signal attenuation to noticeably impact the positioning. Enough signal attenuation for this was only produced when the user deliberately tried to cover the antenna. Further, the algorithm to detect such an attenuation required a fairly large number of computations and was thus decided to keep out of the implementation.  
+In Chapter \ref{chap:adapt} it was shown that most normal use cases (carrying phone in hand, pocket or bag) did not produce sufficient signal attenuation to noticeably impact the positioning. Enough signal attenuation for this was only produced when the user deliberately tried to cover the antenna. Further, the algorithm to detect such an attenuation required a fairly large number of computations and was thus decided to be kept out of the implementation.  
 %
 \subsubsection{Step Length as a Particle Filter State} \ \\
 %
-Estimating the step length proved to be a good addition the state space, especially when the users step length was different from the initial filter state or when the step length changed during the positioning. However, to include step length as a filter state required a increase in the number of particles from the current 2 500 to around 10 000, making it  cumbersome to run. Further, to accommodate for the possibility of the user changing orientation of the phone, the spread of the particles was increased, removing some of the benefits of having step length as a filter state.  
+Estimating the step length proved to be a good addition to the state space, especially when the user's step length was different from the initial filter state or when the step length changed during the positioning. However, to include step length as a filter state required an increase in the number of particles from the current 2 500 to around 10 000, making it  cumbersome to run. Further, to accommodate for the possibility of the user changing orientation of the phone, the spread of the particles was increased, removing some of the benefits of having step length as a filter state.  
 %
 \subsection{Finding Correct Building \& Floor}
 %
