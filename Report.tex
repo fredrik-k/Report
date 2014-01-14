@@ -36,13 +36,13 @@ The second contribution is adding an accelerometer and a gyroscope to the algori
 \chapter*{Acknowledgements}
 Several people have contributed with technical expertise, new and alternative ideas, practical solutions and great opinions. Without these, this thesis would never have been created. 
 
-First of all, we would like to show appreciation to our advisor at SOMC, Magnus Persson. If not for your help, excellent ideas and feedback along the way, this thesis would not exist. Secondly, our advisors at Lund University, Assoc. Prof. Fredrik Tufvesson and Prof. Bo Bernhardsson, have contributed with great ideas on how to improve our project and advise on topics of a more technical nature. Your help has been most appreciated. Further, Oskar Gr\"{o}nqvist has helped to solve practical problems that have arisen along the way, and supplied improvements to the developed solutions. Finally, Dr. Peter Karlsson deserves gratitude for providing great technical insight, especially concerning radio signal propagation.     
+First of all, we would like to show appreciation to our advisor at Sony Mobile, Magnus Persson. If not for your help, excellent ideas and feedback along the way, this thesis would not exist. Secondly, our advisors at Lund University, Assoc. Prof. Fredrik Tufvesson and Prof. Bo Bernhardsson, have contributed with great ideas on how to improve our project and advise on topics of a more technical nature. Your help has been most appreciated. Further, Oskar Gr\"{o}nqvist has helped to solve practical problems that have arisen along the way, and supplied improvements to the developed solutions. Finally, Dr. Peter Karlsson deserves gratitude for providing great technical insight, especially concerning radio signal propagation.     
 
 To all, thank you!
 \tableofcontents
 \chapter{Introduction}
 
-This Master's thesis investigates possible algorithms for indoor positioning with smartphones. The project is a cooperation between Sony Mobile Communications (SOMC), the Department of Automatic Control, Lund University, and the Department of Electrical and Information Technology, Lund University. The major part of the work was performed at SOMC, Lund.
+This Master's thesis investigates possible algorithms for indoor positioning with smartphones. The project is a cooperation between Sony Mobile Communications, the Department of Automatic Control, Lund University, and the Department of Electrical and Information Technology, Lund University. The major part of the work was performed at Sony Mobile, Lund.
 
 \section{Background}
 %
@@ -74,7 +74,7 @@ In the first part, positioning is done using information from WiFi signals only.
 
 In the second part, the goal is to improve the performance by adding information from the sensors, in order to receive a more accurate model of the user's movement.
 
-When the algorithm is developed, the aim is to implement it as an Android \emph{application programming interface} (API), for use in e.g. SonyMap \cite{sonymap}, an indoor positioning application developed by SOMC.
+When the algorithm is developed, the aim is to implement it as an Android \emph{application programming interface} (API), for use in e.g. SonyMap \cite{sonymap}, an indoor positioning application developed by Sony Mobile.
 
 \section{Limitations}
 %
@@ -144,7 +144,7 @@ Altogether, this makes GPS a good positioning technique in open outdoor areas, b
 \section{Coordinate Systems}
 It should be apparent to the reader that a well defined coordinate system is of great importance for positioning applications. Further, to be able to receive a meaningful position, the coordinate system needs to be fixed in reference to the Earth. In the sections below, two such coordinate systems are presented along with the coordinate system of the phone. 
 %
-\pagebreak
+\newpage
 %
 \subsection{World Frame}
 %
@@ -243,7 +243,7 @@ In principle the accelerometer could be used to estimate a position by integrati
 %
 \subsection{The Gyroscope}
 %
-A gyroscope measures the \emph{angular velocities} with which it is turning around each of its axis. Most gyroscopes use three orthogonal axis giving measurements of the angular velocities on the form $\vec\omega = (\omega_x \hspace{5pt} \omega_y \hspace{5pt} \omega_z)$.  Mechanically, a gyroscope consists of a spinning wheel or disc mounted in a gimbal, a pivoted support that allows the disc to rotate freely about all three axis. This construction allows the disc to keep an almost fixed position in reference to the mounting platform's motion. However, this is a fairly large device not well suited for modern electronic devices. These instead rely on \emph{MEMS gyroscopes} which can be fashioned into a more suitable size. MEMS, or \emph{vibrating structure} gyroscopes rely on the physical principle of vibrating objects tending to continue vibrating in the same plane as its supports rotate in.  
+A gyroscope measures the \emph{angular velocities} with which it is turning around each of its axis. Most gyroscopes use three orthogonal axis giving measurements of the angular velocities on the form $\vec\omega = (\omega_x \hspace{5pt} \omega_y \hspace{5pt} \omega_z)$.  Mechanically, a gyroscope consists of a spinning wheel or disc mounted in a gimbal, a pivoted support that allows the disc to rotate freely about all three axis. This construction allows the disc to keep an almost fixed position in reference to the mounting platform's motion. However, this is a fairly large device not well suited for modern electronic devices. These instead rely on \emph{MEMS gyroscopes} which can be fashioned into a more suitable size. %MEMS, or \emph{vibrating structure} gyroscopes rely on the physical principle of vibrating objects tending to continue vibrating in the same plane as its supports rotate in.  
 
 As the MEMS gyroscope measures angular velocities and, in this thesis, the absolute change in angle is of interest. A method to compute the absolute change from the velocities are needed. Given two sets of angular velocities measured with a time difference of $\Delta t$, the angular change, $\theta$, may be computed using  numerical integration according to the \emph{trapezoidal rule} \cite{analysis},  
 \begin{equation}
@@ -1294,6 +1294,7 @@ Please note that each particle gets its own set of parameters, and that the esti
 %
 Both alternatives have been tested offline using MATLAB. For the environments defined in Section \ref{environment_results}, the results are similar. The reason why there is no gain in dividing the building into areas is that it is homogeneous enough for alternative 1 to work. In an environment where the obstacle density changes more, alternative 2 would be more suitable.
 
+%
 \pagebreak
 %
 In order to evaluate the parameter updates, the algorithm was given erroneous initial parameter values. Then, the phone was carried one round in \emph{Environment three}, and after that the updated parameters were noted. During the round, 61 RSSI measurements were taken by the phone, giving an approximate spatial separation of 4.5 m. The resulting parameters are shown in Table \ref{table:parameter_adaptation}
@@ -1329,6 +1330,8 @@ $C$ & $\alpha$ & $C$ & $\alpha$& $C$& $\alpha$\\
 
 Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable after the adaptation. Moreover, the algorithm moves the parameter values towards the region with relatively low position error in Figure \ref{err_vs_param}. The bottom row in Table \ref{table:parameter_adaptation} was investigated in more detail, as an example of how the adaptation affects the positioning. Figure \ref{adaptation_vs_none} shows the positioning with and without the parameter adaptation, respectively, with $C = -25$ and $\alpha = 0.3$ as initial values.
 
+If more data points were collected, it is probable that the estimated parameters would converge closer to the measured parameters from \ref{table:model_par}.However, the WiFi signals are severely noisy and the estimated positions where the measurements were obtained are not exact. Therefore, a complete convergence is not expected.
+
 \section{Compensating for Signal Blocking} %Working title
 %
 \begin{figure}
@@ -1353,6 +1356,8 @@ Implausible parameter values (e.g. $C = -50$ or $C = -25$) are more reasonable a
 %
 The RSSI is affected by how the phone is carried by the user. If, for example, the user blocks the signals with the hand, the RSSI will get lower, which indicates that the phone is further away from each AP than it actually is. In this section, this effect, and the possibility of compensating for it, will be evaluated.
 %
+\pagebreak
+%
 \begin{enumerate}
 \item \textbf{Evaluation of different use cases}
 In the tests this far, the phone has been held so that the signal is blocked as little as possible. In this section, three different use cases are tested, all in \emph{Environment three}. 
@@ -1369,11 +1374,10 @@ Like the previous test, but during the second round, the signals were blocked an
 %
 The results are shown in Figure \ref{positioning_pocket} , \ref{hand_block} and \ref{hand_block_repeatedly}.
 
-
 %
 Carrying the phone in the pocket did not affect the RSSI significantly, and hence the positioning was unaffected. However, blocking the signals with the hands lowered the RSSI considerably, causing the positioning to be inaccurate. Hence, this use case has to be detected and compensated for.
 
-\newpage
+
 %
 \subsection{Compensation}
 
@@ -1405,7 +1409,6 @@ Test 1) and 2) were performed again, but this time with the compensating algorit
 \section{Conclusion}
 In this chapter, an algorithm that updates the model parallel to the positioning has been suggested. The purpose is to increase the generality of the application, and to make it improve while in a new environment. If the initial parameter values are inaccurate, this part of the algorithm improves the positioning significantly. However, if the initial parameter values are too far from the true ones, the positioning never gets accurate enough for the parameter update to work. Hence, the algorithm has to start with feasible parameter values in order to make them more accurate. In order to achieve this, $C$ could be estimated from the peak RSSI values.
 
-\pagebreak
 %
 Compensating for the hand attenuation clearly improved the positioning. However, $H$ can not be determined exactly, due to noise and obstacles in the environment. In addition, the hand attenuation is only detected if the phone is covered fast enough. If it goes from uncovered to covered successively, during several time steps, this can not be distinguished from other causes of lowered RSSI. Naturally, going from covered to uncovered works analogously.
 
@@ -2019,7 +2022,7 @@ Simply determining the mean received power from each floor suffers from the same
      \path (midComp) -- node{No}(top);
      \end{scope}
   \end{tikzpicture}
-  \caption{Flowchart of floor estimation algorithm. It is based on the floors from which the largest total signal intensities are received. A large signal intensity from a certain floor is used to indicate that the user is close to that floor.} \label{flowchart}
+  \caption{Flowchart of floor estimation algorithm. It is based on the floors from which the largest total signal intensities are received. A large signal intensity from a certain floor is used to indicate that the user is on/close to that floor.} \label{flowchart}
 \end{figure}
 
 This algorithm uses some heuristic assumptions concerning the power from different floors when estimating the current one. The assumptions are based on consecutive floors being relatively similar, both in layout and AP distribution. Further, it is expected that the antennas of the APs are designed to direct the signal downwards. One of the assumptions is that if the signals from three consecutive floors are comparable, the most probable location is on the middle floor. In the implementation we have deemed two floors as comparable if their total powers are within a factor 1.5 from each other.  
@@ -2170,7 +2173,7 @@ To obtain a total picture of the APs in the surroundings of the measuring device
 \vspace{-110pt}
 \centering
 \includegraphics[height = 17.5cm]{images/map_appendix/environment_map}
-\caption{Paths and environments used during the different tests in this thesis. The floor depicted is the top floor in the Glasgow building at SOMC, Lund.}
+\caption{Paths and environments used during the different tests in this thesis. The floor depicted is the top floor in the Glasgow building at Sony Mobile, Lund.}
 \label{env_map}
 \end{minipage}
 \end{figure}
