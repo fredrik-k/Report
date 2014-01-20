@@ -48,13 +48,13 @@ This Master's thesis investigates possible algorithms for indoor positioning wit
 %
 The research area concerning techniques for positioning of handheld devices is of great importance, both from a user and commercial standpoint. Many different services and applications depend on, or could be improved by, a ubiquitous localization system. In addition, the user experience of applications could be aided by including information based on the user's current position. %Another area of interest is positioning of emergency response teams, where the lack of an accurate position potentially could have lethal consequences.
   
-In most outdoor environments the \emph{Global Navigation Satellite System} (GNSS), of which the \emph{Global Positioning System} (GPS) is a part, provides locations with an accuracy around 10 meters. These types of systems require signal connections to satellites to function, and in obstructed outdoor and indoor areas these signals are often too weak to enable accurate positioning. 
+In most outdoor environments the \emph{Global Navigation Satellite System} (GNSS), of which the \emph{Global Positioning System} (GPS) is a part, provides locations with an accuracy around 15 meters. These types of systems require signal connections to satellites to function, and in obstructed outdoor and indoor areas these signals are often too weak to enable accurate positioning. 
 
 Fueled by the lack of accurate positioning in the indoor environment, a multitude of techniques that solve the problem under different constraints has been developed \cite{positioning_overview}. Attempts have been made using WiFi received signal strength, inertial sensors, ultrasound etc. requiring different infrastructure and properties of the environment. 
 
 The advantages of using WiFi access points (APs) are several. The technique is well established and APs exist in almost every indoor environment, making no further infrastructure investments necessary. Another interesting development is the move to include transmitters at both 2.4 and 5 GHz in modern APs, in best case resulting in two independent measurements from each AP. Further, there is potential for techniques to locate APs with reasonable accuracy, such as the one presented in e.g. \cite{exjobb}. 
 
-However, WiFi signals are fickle and for an accurate positioning aid from complementary methods is needed. Here, different approaches could be used, and an especially enticing one is inertial sensors, like accelerometers and gyroscopes. Most modern smartphones contain both sensor types along with the possibility to measure WiFi signals at both 2.4 and 5 GHz. Additionally, the market penetration of smartphones is large, making it a suitable platform for a large scale roll out of an indoor positioning application.
+However, WiFi signals are fickle and for an accurate positioning aid from complementary methods are needed. Here, different approaches could be used, and an especially enticing one is inertial sensors, like accelerometers and gyroscopes. Most modern smartphones contain both sensor types along with the possibility to measure WiFi signals at both 2.4 and 5 GHz. Additionally, the market penetration of smartphones is large, making it a suitable platform for a large scale roll out of an indoor positioning application.
 %
 
 \section{Previous Work}
@@ -114,9 +114,9 @@ This outline presents the large scale structure of this thesis.
 %
 \item[Chapter \ref{chap:kin}] models the kinematics of walking using different sensors. These sensors are described and a step detection algorithm is presented. 
 %
-\item[Chapter \ref{chap:sensor_fused}] merges the algorithm introduced in Chapter \ref{chap:pure_rssi} with sensor data to a sensor fused indoor positioning algorithm using dual band WiFi measurements.
+\item[Chapter \ref{chAPsensor_fused}] merges the algorithm introduced in Chapter \ref{chap:pure_rssi} with sensor data to a sensor fused indoor positioning algorithm using dual band WiFi measurements.
 %
-\item[Chapter \ref{chap:implement}] is dedicated to the Java implementation of the algorithms presented in Chapter \ref{chap:pure_rssi} and \ref{chap:sensor_fused} and the specific considerations made. 
+\item[Chapter \ref{chap:implement}] is dedicated to the Java implementation of the algorithms presented in Chapter \ref{chap:pure_rssi} and \ref{chAPsensor_fused} and the specific considerations that was made. 
 %
 \item[Chapter \ref{chap:conclusion}] evaluates the results of the thesis and presents possible future work on the subject. 
 %
@@ -229,7 +229,7 @@ In Figure \ref{env_map} in Appendix \ref{chap:appendix}, the chosen coordinate s
 
 
 \section{Sensors}
-Here follows a brief description of three sensors commonly available in modern smartphones, \emph{the accelerometer, the gyroscope} and \emph{the magnetometer}. A short description of their inner workings, advantages and disadvantages is given along with a description of their use in position estimation. For a deeper description of the sensors and a more extensive discussion about biases and drifts references are given to \cite{bently88} and \cite{morris96}. 
+Here follows a brief description of three sensors commonly available in modern smartphones, \emph{the accelerometer, the gyroscope} and \emph{the magnetometer}. A short description of their inner workings, advantages and disadvantages is given along with a description of their use in position estimation. For a deeper description of the sensors and a more extensive discussion about biases and drifts references are given in \cite{bently88} and \cite{morris96}. 
 %
 \subsection{The Accelerometer}
 %
@@ -243,7 +243,7 @@ In principle the accelerometer could be used to estimate a position by integrati
 %
 \subsection{The Gyroscope}
 %
-A gyroscope measures the \emph{angular velocities} with which it is turning around each of its axis. Most gyroscopes use three orthogonal axis giving measurements of the angular velocities on the form $\vec\omega = (\omega_x \hspace{5pt} \omega_y \hspace{5pt} \omega_z)$.  Mechanically, a gyroscope consists of a spinning wheel or disc mounted in a gimbal, a pivoted support that allows the disc to rotate freely about all three axis. This construction allows the disc to keep an almost fixed position in reference to the mounting platform's motion. However, this is a fairly large device not well suited for modern electronic devices. These instead rely on \emph{MEMS gyroscopes} which can be fashioned into a more suitable size. %MEMS, or \emph{vibrating structure} gyroscopes rely on the physical principle of vibrating objects tending to continue vibrating in the same plane as its supports rotate in.  
+A gyroscope measures the \emph{angular velocities} with which it is turning around each of its axes. Most gyroscopes use three orthogonal axes giving measurements of the angular velocities on the form $\vec\omega = (\omega_x \hspace{5pt} \omega_y \hspace{5pt} \omega_z)$.  Mechanically, a gyroscope consists of a spinning wheel or disc mounted in a gimbal, a pivoted support that allows the disc to rotate freely about all three axes. This construction allows the disc to keep an almost fixed position in reference to the mounting platform's motion. However, this is a fairly large device not well suited for modern electronic devices. These instead rely on \emph{MEMS gyroscopes} which can be fashioned into a more suitable size. %MEMS, or \emph{vibrating structure} gyroscopes rely on the physical principle of vibrating objects tending to continue vibrating in the same plane as its supports rotate in.  
 
 As the MEMS gyroscope measures angular velocities and, in this thesis, the absolute change in angle is of interest. A method to compute the absolute change from the velocities are needed. Given two sets of angular velocities measured with a time difference of $\Delta t$, the angular change, $\theta$, may be computed using  numerical integration according to the \emph{trapezoidal rule} \cite{analysis},  
 \begin{equation}
@@ -259,7 +259,7 @@ There are a few problems of using the gyroscope to determine the direction of mo
 %
 A way around the problems of a known initial orientation is the use of a magnetometer, which measures the \emph{magnetic field strength} in each of the phone's three coordinate directions. Using the known electromagnetic field produced by the Earth's core, it is possible to find the phone's heading.
 
-There is a multitude of ways to measure the magnetic field strength. In most modern smartphones a measurement of the resistivity of a thin strip of magnetic film is used. The sensor contains a thin strip on permalloy (NiFe magnetic film) whose resistance is proportional to the magnetic field strength.  
+There are a multitude of ways to measure the magnetic field strength. In most modern smartphones a measurement of the resistivity of a thin strip of magnetic film is used. The sensor contains a thin strip on permalloy (NiFe magnetic film) whose resistance is proportional to the magnetic field strength.  
 
 In theory the magnetometer along with a known phone orientation in reference to the Earth's coordinate system  could be used to give an accurate estimation of the heading of the user. This is possible in environments where the electromagnetic fields, apart from the Earth's own, are weak, e. g. outdoors. In most indoor environments however, fields from electronic devices and structural elements (metal beams, pipes etc.) produce their own magnetic fields. These fields are in many cases strong enough to interfere or even overpower the Earth's, causing the estimated heading to be wrong. 
 
@@ -271,7 +271,7 @@ The \emph{fingerprinting} strategy for signal strengths described in Section \re
 %
 The performance of any wireless communication system is fundamentally limited by the properties of the radio signals. In the simplest case, these properties and hence the signal intensities would depend only on the distance between transmitter and receiver. However, they vary greatly depending on the environment, from a simple line-of-sight (LOS) case to a severely obstructed one, where walls, windows, furniture etc. distort the signal between transmitter and receiver. Furthermore, the signal is affected by a large number of small-scale effects. Among them are reflections from various surfaces, diffraction and Doppler shift due to a difference in speed between the receiver in reference to the transmitter \cite{rappaport96}. In this thesis the focus is put on obtaining good models for the indoor propagation of radio signals in the range $[2.4;5]$ GHz for application in indoor positioning.
 
-The chapter consists of a recapitulation of free space signal propagation and path loss, together with different ways of modeling these. Different sources of disturbances and their influences are discussed.
+This chapter consists of a recapitulation of free space signal propagation and path loss, together with different ways of modeling these. Different sources of disturbances and their influences are discussed.
 %
 \section{Free Space Propagation Model}
 %
@@ -299,9 +299,10 @@ where $D$ is the largest physical dimension of the transmitting antenna.
 
 Further, to be in the far-field region 
 \begin{equation}
- d\gg D \mbox{ and } d\gg \lambda.
+ d\gg D \mbox{ and } d\gg \lambda
  \label{equation:add_req}
 \end{equation}
+musty hold.
 
 For a radio signal with frequency ranging from 2.4 to 5 GHz (WiFi) and a largest antenna dimension $D$ of 0.1 m, $d_f$ is in the
 range of $\left[0.36,0.75\right]$  and a $d>1$ m fulfills both  (\ref{equation:frau_dist}) and the additional requirements from (\ref{equation:add_req}).
@@ -314,6 +315,8 @@ The \emph{path loss} is defined as the difference in dB between the transmitted 
 PL\left(\text{dB}\right)=10\log_{10}{\frac{P_t}{P_r}}=-10\log_{10}{\left[\frac{\lambda^2}{\left(4\pi\right)^2d^2}\right]}\label{equation:pl}.
 \end{equation} 
 %
+\pagebreak
+
 It is obvious that (\ref{equation:friis_equation}), and thus (\ref{equation:pl}), does not hold for $d=0$. To get around this, large-scale fading models use a fixed distance $d_0$ with known power \cite{rappaport96}. At $d_0$ the power can either be measured or estimated from (\ref{equation:friis_equation}). The distance $d_0$ needs to be in the far-field region of the transmitter, as defined in (\ref{equation:frau_dist}). Furthermore, if $d_0$ is chosen to be smaller than any distance $d$ used in the application, the power at an arbitrary distance may be related to the received power at $d_0$ by,
 %
 \begin{equation}
@@ -415,7 +418,7 @@ It is obvious that this model has its flaws. A low value of $n$ fails to predict
 %
 \subsection{Double Slope Model}
 %
-A simple extension of the log-normal shadowing model is combining different values of $n$ for use in various intervals of the distance to the transmitter. The most simple of these models is the double slope model where two different path loss exponents, $n_1$ and $n_2$, are used together with a single break distance, $d_1$, where the model changes from one to the other. This model then becomes,
+A simple extension of the log-normal shadowing model is combining different values of $n$ for use in various intervals of the distance to the transmitter. The most simple of these models is the double slope model where two different path loss exponents, $n_1$ and $n_2$, are used together with a single break distance, $d_1$, where the model changes from one to the other. The model then becomes,
 \begin{subequations}
 \begin{align}
 \log_{10}({P_r(d)})&=\log_{10}({P_r(d_0)})-10n_1\log_{10}\left[{\frac{d}{d_0}}\right] + X_{\sigma_1}, & 0<d<d_1\\
@@ -519,7 +522,7 @@ There is a large collection of filtering methods solving this estimation problem
 
 Here we will instead focus on another filtering approach, the \emph{particle filter} (PF), also called the \emph{Sequential Monte Carlo method}. This is a simulation based approach for solving the estimation problem (\ref{equation:nonlinear_model}), only requiring the PDF of $e_k$ and $v_k$ to be known \cite{gson12,fig_fra10}.  
 
-The PF consists of a set of $N$ particles $\left\{x^i\right\}_{i=1}^N$, which represent different samples of states. These particles are used to create an approximation of the distribution $p(x_k|y_{1:k})$  of the states $x_k$ given the set of measurements $y_{1:k}$. The strength of the PF is that the distribution $p(x_k|y_{1:k})$ can be arbitrary. On the other hand, to provide the same particle density the number of particles grows by the power of the number of states. Hence, if you have 10 particles and one state, you need 100 particles to provide the same density for two dimensions. For three dimensions, you then need 1000 particles. This makes the PF suitable only when the number of states is relatively small.
+The PF consists of a set of $N$ particles, $\left\{x^i\right\}_{i=1}^N$, which represent different samples of states. These particles are used to create an approximation of the distribution $p(x_k|y_{1:k})$  of the states $x_k$ given the set of measurements $y_{1:k}$. The strength of the PF is that the distribution $p(x_k|y_{1:k})$ can be arbitrary. On the other hand, to provide the same particle density the number of particles grows by the power of the number of states. Hence, if you have 10 particles and one state, you need 100 particles to provide the same density for two dimensions. For three dimensions, you then need 1000 particles. This makes the PF suitable only when the number of states is relatively small.
 %
 \section{The Particle Filter Process}
 \label{sec:PF_process}
@@ -578,7 +581,7 @@ After the re-sampling is done, it is crucial to give all particles the same weig
 \caption{Histogram over the particle distribution, after one iteration of the PF, in the range $[-10,10]$ using 100 bins. The particles tends more towards the true distribution.}\label{hist_dist_1_itr}
 \end{figure}
 
-After the re-sampling technique described above is applied to the particles of our example, their distribution is displayed in Figure \ref{hist_dist_1_itr}. The states of the particles still existing tend more towards the true one, $X=0$. The mean of the states may now be used as an estimate of the true state.    
+After the re-sampling technique described above has been applied to the particles of our example, their distribution is displayed in Figure \ref{hist_dist_1_itr}. The states of the particles still existing tend more towards the true one, $X=0$. The mean of the states may now be used as an estimate of the true state.    
 % 
 \subsection{State Update}
 %
@@ -662,7 +665,7 @@ This chapter is intended to give an introduction to the WiFi technologies and wh
 %
 \section{The $802.11$ Standard}
 %
-The IEEE $802.11$ standard consists of a series of techniques for over-the-air radio modulation using the same basic protocol \cite{IEEE:802.11}. The standard allows different products, computers, smart-phones etc. to implement the protocol to communicate wirelessly. Historically the communication has taken place over the frequency 2.4 GHz, however in later years devices implementing 5 GHz communication protocol have become increasingly common \cite{walrand10}.
+The IEEE $802.11$ standard consists of a series of techniques for over-the-air radio modulation using the same basic protocol \cite{IEEE:802.11}. The standard allows different products, computers, smart-phones etc. to implement the protocol to communicate wirelessly. Historically the communication has taken place over the frequency 2.4 GHz, however, in later years devices implementing 5 GHz communication protocol have become increasingly common \cite{walrand10}.
 
 The standard splits each frequency range into several channels over which the communication takes place. The frequency 2.4 GHz is split into 14 channels with 5 MHz spacing. For 5 GHz the situation is more complicated and will not be explained in detail. Local regulations affect which channels are allowed in a certain region.   
 
@@ -670,7 +673,7 @@ Wireless technologies are evolving towards higher frequencies. The radio channel
 %
 \subsection{The MAC-Address}
 %
-Most devices using the IEEE $802.11$ standard have a \emph{Media Access Control} (MAC) address assigned as its network address \cite{IEEE:802.11}. The MAC address is usually assigned by the manufacturer and can be considered unique in a local area network. The address consists of twelve hexadecimal numbers. In its human readable form it is presented as six groups of two hexadecimal numbers, separated with either \verb|:| or \verb|-|, e.g. \verb|0a:1b:2c:3d:4e:5f|. The address can be used to identify from which devices a signal originates.
+Most devices using the IEEE $802.11$ standard have a \emph{Media Access Control} (MAC) address assigned as its network address \cite{IEEE:802.11}. The MAC address is usually assigned by the manufacturer and can be considered unique in a local area network. The address consists of twelve hexadecimal numbers. In its human readable form it is presented as six groups of two hexadecimal numbers, separated with either \verb|:| or \verb|-|, e.g. \verb|0a:1b:2c:3d:4e:5f|. The address can be used to identify from which device a signal originates.
 %
 \section{WiFi and Positioning}
 \label{sec:wifi_positioning}
@@ -704,12 +707,12 @@ A way to eliminate the requirement of synchronized APs, is to measure the time i
 %
 \end{itemize}
 %
-The techniques presented here assume that the measuring device is also performing the positioning. Similar approaches are available using the APs, to position devices in the environment. Furthermore, the technologies above could be combined or used together with different technologies such as Bluetooth, NFC, rfid etc \cite{nfc, rfid}. to increase the positioning accuracy. 
-In this thesis however, the focus will be placed on the received signal strength from WiFi.
+The techniques presented here assume that the measuring device is also performing the positioning. Similar approaches are available using the APs, to position devices in the environment. Furthermore, the technologies above could be combined or used together with different technologies such as Bluetooth, NFC, RFID etc \cite{nfc, rfid}. to increase the positioning accuracy. 
+In this thesis, however, the focus will be placed on the received signal strength from WiFi.
 %
 \subsection{Received Signal Strength Indication}
 %
-The \emph{Received Signal Strength Indication} (RSSI) is a value indicating the short-time average of the received signal power \cite{fig_fra10}. The RSSI is given in an arbitrary unit, but usually dBm, and there is no standard of how RSSI should be related to the physical properties of the received signal. This means different manufacturers are able to choose the range in which the RSSI is presented. 
+The \emph{Received Signal Strength Indication} (RSSI) is a value indicating the short-time average of the received signal power \cite{fig_fra10}. The RSSI is given in an arbitrary unit, usually dBm, and there is no standard of how RSSI should be related to the physical properties of the received signal. This means different manufacturers are able to choose the range in which the RSSI is presented. 
 
 For the RSSI to be a meaningful measurement of the received signal strength it must somehow be related to the physical properties of the signal. Usually, a measurement of the RSSI at a known distance is used together with an investigation of how the RSSI changes with the distance. The models discussed in Chapter \ref{chap:RSP} can then be applied. Different devices may posses different parameters, thus requiring modeling for a specific device or the use of an adaptive estimation scheme. 
 %
@@ -889,7 +892,7 @@ This estimation could be further improved by the use of a technique for counting
 %
 The measurement noise can be estimated in the following way. Take a set of RSSI measurements from a certain AP, and vary the distance. Then model a received RSSI at each distance and compute the noise as the difference between model and measurement. The standard deviation of measurement noise can then be estimated as the average of the absolute value of the noise. To estimate the noise accurately a large set of data in different environments is required.
 
-This has been done for a quite large number of AP:s, and in environments ranging from LOS to a highly obstructed signal path. Some of these results are displayed in Figure \ref{noise_behaviour}. 
+This has been done for a quite large number of APs, and in environments ranging from LOS to a highly obstructed signal path. Some of these results are displayed in Figure \ref{noise_behaviour}. 
 %
 \begin{figure}
 \include{graphics}
@@ -897,7 +900,7 @@ This has been done for a quite large number of AP:s, and in environments ranging
 \caption{The difference between measurements and model for a few different APs for different environments and distances. Here it is clearly visible that the indoor signal environment is hard to model. Depending on the number of objects between transmitter and receiver the received signal strength at a given separation varies substantially. Because of this large measurement noise, the particle filter needs to take into account that the received signal strength at a given distance has a large variance. }\label{noise_behaviour}
 \end{figure}
 
-The resulting variance in the measurements ranged from $9$ to $60$, with a mean of $25$. The reason for the large span is that some of the APs were in LOS for most of the measurements even though the distance to them was fairly large. Other AP:s were, on the other hand, highly obstructed while at a quite short distance, and yet others followed the models well. 
+The resulting variance in the measurements ranged from $9$ to $60$, with a mean of $25$. The reason for the large span is that some of the APs were in LOS for most of the measurements even though the distance to them was fairly large. Other APs were, on the other hand, highly obstructed while at a quite short distance, and yet others followed the models well. 
 
 During the position estimations in the rest of this chapter the mean of the variance, $25$, will be used. Further, the measurement noise will be assumed to be Gaussian with zero mean. This assumption is valid for data sets covering large distances. However, over a short traveled distance the noise is expected to be biased in some cases as it is highly dependent on the environment. This is somewhat mitigated by having measurements from numerous APs, allowing positive and negative biases to cancel.
 
@@ -1010,7 +1013,7 @@ Frequency, GHz & $C$ & $\alpha$ \\
 \section{Test Setup}
 \label{sec:test_setup}
 %
-During the sections of this chapter two different test cases will be used.
+During the remaining sections of this chapter two different test cases will be used.
 \begin{quote}
 %
 \begin{description}
@@ -1091,7 +1094,7 @@ In this environment, the placement of the AP in relation to the path walked is b
 %
 \subsection{Environment Two}
 %
-The test in \emph{Environment two} uses the methodology of \emph{Case 1}, and the measurements are taken over a distance of $176.5$ meters. For a reference of the actual path see Figure \ref{true_vs_est_env_2_05}.    
+The test in \emph{Environment two} uses the methodology of \emph{Case 1}, and the measurements are taken over a distance of $176.5$ meters.% For a reference of the actual path see Figure \ref{true_vs_est_env_2_05}.    
 %
 
 \begin{figure}
@@ -1147,7 +1150,7 @@ For this environment similar results were produced both when the phone was held 
 %
 A common way of estimating a position from an RSSI measurement is to use an LS estimation, for additional information see Section \ref{sec:oet}. Here the difference between the estimations from a PF and from an LS algorithm will be investigated. 
 
-The comparison will be made for \emph{Environment one} and \emph{two} from the previous sections, but with new datasets. Further, the methodology from \emph{Case 1} will be used, but with 3 m instead of $0.5$ m sample spacing. Further, both estimators will use the same path loss models.   
+The comparison will be made for \emph{Environment one} and \emph{two} from the previous sections, but with new datasets. Further, the methodology from \emph{Case 1} will be used, but with 3 m instead of $0.5$ m sample spacing. In addition, both estimators will use the same path loss models.   
 %
 \begin{figure}
 \include{graphics}
@@ -1169,7 +1172,7 @@ The comparison will be made for \emph{Environment one} and \emph{two} from the p
 
 The estimated paths from both the PF and LS estimators are displayed in Figure \ref{ls_short}, along with the true path for \emph{Environment one}. It is clearly visible that the PF performs considerably better compared to the LS estimator. The positioning errors from Figure \ref{ls_error_short} make this even more clear and the PF has a smaller positioning error for every sample compared to the LS estimator. The mean position error is $1.7$ m for the PF, and $5.7$ m for the LS estimation.
 
-For \emph{Environment two}, the LS estimation performs more equal to to the PF than for \emph{Environment one}, as shown by the errors in Figure \ref{ls_error_medium}. The PF, however, does still provide the best position estimates, as the error is lower for the PF in most of the samples. The difference in maximum error is not large, but the mean error for the PF is $3.4$ m, and for the LS estimation it is $5.1$ m. The PF produces considerably better results compared to the LS method when the environment is favorable, i.e. when a large number of APs are available and/or their geometry is good. When the conditions are disadvantageous both methods perform equally, giving positions around 10 meters off.
+For \emph{Environment two}, the difference between the LS estimation and the PF are smaller compared to \emph{Environment one}, as shown by the errors in Figure \ref{ls_error_medium}. The PF, however, does still provide the best position estimates, as the error is lower for the PF in most of the samples. The difference in maximum error is not large, but the mean error for the PF is $3.4$ m, and for the LS estimation it is $5.1$ m. The PF produces considerably better results compared to the LS method when the environment is favorable, i.e. when a large number of APs are available and/or their geometry is good. When the conditions are disadvantageous both methods perform equally, giving positions around 10 meters off.
 
 The conclusion to be drawn from these investigations is that a PF is the better choice for estimating positions from noisy RSSI measurements, especially if the only sought after attribute is the smallest mean and maximum errors. The LS estimation may be desirable to use if computational power is limited, or if only measurements with long time separation are available.
 
@@ -1178,7 +1181,7 @@ An interesting aspect is the performance when no previous measurements are avail
 %
 \section{Concluding Remarks}
 %
-Using measurements of RSSI to position devices in an indoor environment can be a satisfactory technique if the need for precision is not too large. In a fairly homogenous building, with a reasonable number of APs placed in an acceptable geometry, the positioning may be quite good. 
+Using measurements of RSSI to position devices in an indoor environment can be a satisfactory technique if the need for precision is not too large. In a fairly homogenous building, with a reasonable number of APs placed in an acceptable geometry, the positioning may be quite good. A reasonable number of APs is in this context at least three.
 
 \pagebreak
 %
@@ -1215,12 +1218,12 @@ Another issue is that the signals reaching the phone might be attenuated conside
 \begin{figure}
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/prediction_interval}
-\caption{Obtained position errors versus the maximum received RSSI and a 99 \% confidence interval for the error as a function of RSSI. Here, it is clear that the error can be deemed small (< 3.5 meters) if the maximum received signal power is larger than $-36$.}\label{prediction_interval}
+\caption{Obtained position errors versus the maximum received RSSI and a 99 \% confidence interval for the error as a function of RSSI. Here, it is clear that the error can be deemed small (< 3.5 meters) if the maximum received RSSI is larger than $-36$.}\label{prediction_interval}
 \end{figure}
 
 The method described in Chapter \ref{chap:pure_rssi} has proven to perform better at a closer distance to the nearest AP. At a certain time step, a large maximum RSSI-value indicates that the nearest AP is close. This, in turn, indicates that the position error is relatively small. Figure \ref{error_vs_maxp_all} shows this relation. The data is from the test setup \emph{Case 1} for \emph{Environment two}, defined in Section \ref{sec:test_setup} and \ref{environment_results}, respectively.
 
-Whenever one RSSI is above a certain value, the error can be considered small. This value depends on the model of the phone, and on $C$ for the closest AP. In this example, -36 dB is a suitable lower limit. If one RSSI is larger than that at a certain time, the average error is 1.05 meters, and it is unlikely to get an error that is larger than 4 meters. Figure \ref{prediction_interval} shows the error together with a one-sided, upper bounded, 99 \% prediction interval \cite{matstat}. For other phone models and different AP:s , the limit has to be modified by adding a constant value, in order to get similar results. If $C$ is not known initially, it has to be estimated in order to determine the limit, before the adaptation can begin.  This can be solved when the user walks straight below an AP for the first time. By registering the peak RSSI, a very first approximation of $C$ can be computed, and a reasonable limit determined.
+Whenever one RSSI is above a certain value, the error can be considered small. This value depends on the model of the phone, and on $C$ for the closest AP. In this example, -36 dB is a suitable lower limit. If one RSSI is larger than that at a certain time, the average error is 1.05 meters, and it is unlikely to get an error that is larger than 4 meters. Figure \ref{prediction_interval} shows the error together with a one-sided, upper bounded, 99 \% prediction interval \cite{matstat}. For other phone models and different APs , the limit has to be modified by adding a constant value, in order to get similar results. If $C$ is not known initially, it has to be estimated in order to determine the limit, before the adaptation can begin.  This can be solved when the user walks straight below an AP for the first time. By registering the peak RSSI, a very first approximation of $C$ can be computed, and a reasonable limit determined.
 
 \pagebreak
 %
@@ -1280,10 +1283,10 @@ the parameter set from row $k$ in alpha will be used for this particle.
 If it is in several sections at the same time, an average of the parameter sets for these sections will be used.
 
 \item  \textbf{No section}
-Finally, if it is outside all sections, a default value of $\alpha$ will be used.
+If it is outside all sections, a default value of $\alpha$ will be used.
 \end{enumerate}
 %
-Please note that each particle gets its own set of parameters, and that the estimated position of the phone is not involved in choosing this set.
+Note that each particle gets its own set of parameters, and that the estimated position of the phone is not involved in choosing this set.
 %
 \begin{figure}
 \include{graphics}
@@ -1381,10 +1384,10 @@ Carrying the phone in the pocket did not affect the RSSI significantly, and henc
 %
 \subsection{Compensation}
 
-The main strategy for detecting the attenuation is to note when the RSSI decreases fast. However, moving away from the AP:s, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal attenuation by the user only, the algorithm focuses on the six largest RSSI-values. If fewer than six signals are available, every received signal is used. If the average of these decreases more than 6 dB in one time step, this indicates a hand attenuation. Moving away from the APs would not make the RSSI decrease that fast, and if LOS is lost to some APs there is a chance that LOS is established to another. If, on the other hand, LOS is lost to several APs without gaining LOS to other APs, e.g. by entering a room without an AP, the compensation may be triggered. However, this is more likely to improve than to degrade the positioning as the standard RSSI models do not incorporate quick drops in signal level caused by walls and similar objects. If a user enters a room without an AP, the RSSI measurements would drop significantly for all APs, but the compensation would ideally remove this effect, allowing the walls to be taken into account by the positioning algorithm. 
+The main strategy for detecting the attenuation is to note when the RSSI decreases fast. However, moving away from the APs, or walking behind a wall, may lower the RSSI in a similar way. In order to distinguish the signal attenuation by the user only, the algorithm focuses on the six largest RSSI-values. If fewer than six signals are available, every received signal is used. If the average of these decreases more than 6 dB in one time step, this indicates a hand attenuation. Moving away from the APs would not make the RSSI decrease that fast, and if LOS is lost to some APs there is a chance that LOS is established to another. If, on the other hand, LOS is lost to several APs without gaining LOS to other APs, e.g. by entering a room without an AP, the compensation may be triggered. However, this is more likely to improve than to degrade the positioning as the standard RSSI models do not incorporate quick drops in signal level caused by walls and similar objects. If a user enters a room without an AP, the RSSI measurements would drop significantly for all APs, but the compensation would ideally remove this effect, allowing the walls to be taken into account by the positioning algorithm. 
 
 %
-When an attenuation is detected, a constant term $H$ is added to the model, which corresponds to how much the signals have been reduced. Hence, the new model is given by Equation (\ref{equation:hand_comp}),  When the phone is unblocked, this is detected in an analogous way, and then $H$ is set to 0. 
+When an attenuation is detected, a constant term $H$ is added to the model, which corresponds to how much the signals have been reduced. Hence, the new model is given by Equation (\ref{equation:hand_comp}).  When the phone is unblocked, this is detected in an analogous way, and then $H$ is set to 0. 
 
 \begin{equation}
 \log_{10}({P_r(d)})=C-10n\log_{10}(d) - \alpha\cdot\min({d, d_{\text{max}})}+H+ X_\sigma.
@@ -1402,7 +1405,7 @@ Test 1) and 2) were performed again, but this time with the compensating algorit
 \begin{figure}[!htb]
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/adapt_parameters/hand_block_repeatedly_comp}
-\caption{Blocking with hands, repeatedly. The algorithm compensates for the attenuation, which supports the positioning. See Figure \ref{hand_block_repeatedly} for a comparison with the same use case, but without compensation. } \label{hand_block_repeatedly_comp}
+\caption{Blocking with hands, repeatedly. The algorithm compensates for the attenuation, which supports the positioning. See Figure \ref{hand_block_repeatedly} for a comparison with the same use case without compensation. } \label{hand_block_repeatedly_comp}
 \end{figure}
 
 
@@ -1574,7 +1577,7 @@ which is considerably more consistent between use cases.
 \caption{Acceleration during 10 seconds of a typical walk, when the phone is carried in the hand. Here, it is hard to distinguish when a step has been taken. In order to make this easier, the signal is first differentiated, to center it around zero (see Figure \ref{avr_acc_dif}), and then filtered (see Figure \ref{avr_acc_dif_filt}).} \label{avr_acc}
 \end{figure}
 
-A 10 second sample of the average acceleration measured by a phone placed in the front pocket during a typical walk is displayed in Figure \ref{avr_acc}. A flaw of this approach is easily noticed. Due to gravity, the average acceleration is centered around this value ($9.81$ m/s$^2$). A way around this is to differentiate the signal according to 
+A 10 second sample of the average acceleration measured by a phone placed in the front pocket during a typical walk is displayed in Figure \ref{avr_acc}. A flaw of this approach is easily noticed. Due to gravity, the average acceleration is centered around $9.81$ m/s$^2$. A way around this is to differentiate the signal according to 
 %
 \begin{equation}
 \Delta f(x) = \frac{f(x+\Delta t) - f(x) }{\Delta t},
@@ -1618,10 +1621,10 @@ An alternative method is to add a state in the PF corresponding to step length, 
 \begin{figure}
 \include{graphics}
 \includegraphics[width=1\textwidth ]{images/kinematic/deadreckon_1}
-\caption{True versus, by PDR, estimated path using gyroscope and pedometer. The initial heading is in the negative $x$-direction. The error gets larger with time, but is only about three meters off after a 110 meters walk. However, as Figure \ref{deadreckon_2} shows, the performance only deteriorates form here.}\label{deadreckon_1}
+\caption{True versus, by PDR, estimated path using gyroscope and pedometer. The initial heading is in the negative $x$-direction. The error gets larger with time, but is only about three meters off after a of 110 meters walk. However, as Figure \ref{deadreckon_2} shows, the performance only deteriorates form here.}\label{deadreckon_1}
 \end{figure}
 %
-\emph{Dead reckoning} (DR) is the process of calculating the current position based on a previously determined position and advancing that position based on a known model \cite{ped_dead}. DR has been used by e.g. ships and airplanes for a long time, and in more recent time in networked computer games \cite{network_game}. However, the error is cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and the error in heading and position is clearly visible. 
+\emph{Dead reckoning} (DR) is the process of calculating the current position based on a previously determined position and advancing that position based on a known model \cite{ped_dead}. DR has been used by ships and airplanes for a long time, and in more recent time in networked computer games \cite{network_game}. However, the error is cumulative and the performance deteriorates with time. This is shown in Figure \ref{deadreckon_2}. The distance around the rectangle is approximately 105 meters, and the error in heading and position is clearly visible. 
 
 DR estimations are subject to cumulative errors, i.e. errors are added over time and depending on the accuracy of the DR system, the estimated position deviates from the true one. This implies that the position and heading estimates need to be corrected at a certain time interval to provide an accurate position.
 %
@@ -1643,14 +1646,14 @@ For phones, a method which extends normal DR, called \emph{pedestrian dead recko
 \caption{Histogram over time difference between consecutive samples given a specified sampling frequency of 20 Hz. Each interval is divided into 100 bins and the width of each bin is $7\cdot10^{-4}$, $2.5\cdot10^{-4}$ and $4\cdot10^{-5}$ seconds respectively. The time differences shown in the bottom figure shows occasions when a sample has been skipped by the subsystem, which occurs about once every 2000 samples. Due to the large number of data points these are almost indistinguishable in the first plot.}\label{sample_diff}
 \end{figure}
 %
-The Android platform employs a sampling strategy called \emph{event based sampling}. An application may request sensor data with a specified time separation, e.g. 50 ms for a sampling frequency of 20 Hz. However, the system will forward data to the application when a new value is available in conjunction with the specified rate. The result is sensor data sampled at slightly different time intervals. Further, if the system is busy when the requested data is to be obtained, it may choose to skip that sample, resulting in a de facto doubling in sample time for the next sample. Disregarding sensor samples is more common when the system is under heavy load, which results in more and more samples being skipped.
+The Android platform employs a sampling strategy called \emph{event based sampling}. An application may request sensor data with a specified time separation, e.g. 50 ms for a sampling frequency of 20 Hz. However, the system will forward data to the application when a new value is available in conjunction with the specified rate. The result is sensor data sampled at slightly different time intervals. Further, if the system is busy when the requested data is to be obtained, it may choose to skip that sample, resulting in a de facto doubling in sample time for the next sample. Disregarding sensor samples is more common when the system is under heavy load, which results in more samples being skipped.
 
-Figure \ref{sample_diff} presents a histogram over the time between consecutive samples for a set of 12 375 accelerometer data points with a specified time between samples of 50 ms. The first figure shows that most time differences are around 50 ms, which is to be expected. If the data is studied more closely, a small number of points is visible around a separation of 100 ms. These are generated by the system disregarding a sample, resulting in an approximately double time difference. The two following figures consist of the data spilt into two intervals, one with time differences ranging from 
+Figure \ref{sample_diff} presents a histogram over the time between consecutive samples for a set of 12 375 accelerometer data points with a specified time between samples of 50 ms. The first figure shows that most time differences are around 50 ms, which is to be expected. If the data is studied more closely, a small number of points is visible around a separation of 100 ms. These are generated by the system disregarding a sample, resulting in an approximately double time difference. The two following figures consist of the data divided into two intervals, one with time differences ranging from 
 40.3 ms to 61.7 ms, and one with a range from 97.9 ms to 101 ms. The first of these intervals consists of 12 311 data points, and the second of 64 points. 
 
-Only a small fraction of the samples are skipped by the system. However, these might introduce unwanted behavior when the data is filtered. The \emph{Butterworth} low pass filter used in the step detection algorithm is designed by a cutoff frequency being chosen as a fraction of the \emph{Nyquist frequency}, half the sampling frequency. A small difference from the desired sample time only affects the cut-off frequency and filter behavior slightly. A missed sample, on the other hand, causes the cut-off frequency and the behavior of the filter to change drastically. 
+Only a small fraction of the samples are skipped by the system. However, these might introduce unwanted behavior when the data is filtered. The \emph{Butterworth} low pass filter used in the step detection algorithm is designed by a cutoff frequency being chosen as a fraction of the \emph{Nyquist frequency} (half the sampling frequency). A small difference from the desired sample time only affects the cut-off frequency and filter behavior slightly. A missed sample, on the other hand, causes the cut-off frequency and the behavior of the filter to change drastically. 
 
-This must be addresses for the aforementioned step detection algorithm to function as intended. A straight forward way to do so is to use \emph{linear interpolation}.  Given two data points, $x_0$ and $x_1$, separated in time by $\Delta $t, a new sample in between could be constructed as,
+This must be addressed for the aforementioned step detection algorithm to function as intended. A straight forward way to do so is to use \emph{linear interpolation}.  Given two data points, $x_0$ and $x_1$, separated in time by $\Delta $t, a new sample in between could be constructed as,
 %
 \begin{equation}
 x_{1^\prime}=x_0+\frac{x_1-x_0}{2}.
@@ -1658,7 +1661,7 @@ x_{1^\prime}=x_0+\frac{x_1-x_0}{2}.
 %
 The resulting sequence, $x_0$, $x_{1'}$ and $x_1$, now has a time separation of $\Delta $t$/2$ and $x_{1'}$ is located in the middle of $x_0$ and $x_1$ on the straight line connecting the two. This would of course not capture any of the signal's behavior in between the two data points, but the frequency content missed would be of the order of $1/(2\cdot\Delta$t$)$ and higher. Thus sampling the signal at a sufficiently high rate would allow for some interpolation without missing the frequency behavior of interest. This simple interpolation scheme can easily be extended to accommodate for more samples being introduced between $x_0$ and $x_1$.
 
-There is a possibility for the system to skip several consecutive measurements. For the step detection algorithm previously described, the frequencies of interest were below 3 Hz, resulting, due to the \emph{Nyquist sampling theorem}, to a minimum sampling frequency of 6 Hz. In the algorithm, a sampling time of  50 ms is used and to fully resolve the sought after frequencies, a sampling time of 166 ms or faster is needed. This implies that at least three consecutive samples would need to be skipped to corrupt the desired frequencies. From the data set illustrated in Figure \ref{sample_diff}, the approximate probability of missing a single sample is $64/12375\approx0.005$. If the system uses the same priorities when deciding if a sample should be skipped regardless of if the previous sample was skipped, which in itself is unlikely, the probability of two consecutive samples being skipped is $2.5\cdot10^{-5}$. Further, to skip three samples we would need to, on average, collect 8 million samples. With a sampling frequency of 20 Hz, this would take 400 000 seconds or a little over 4.5 days. Even a tenfold increase in the probability of skipping a sample would potentially cause either a missed detection or extra step detected on average once every 7th minute, which still is acceptable.              
+There is a possibility for the system to skip several consecutive measurements. For the step detection algorithm previously described, the frequencies of interest were below 3 Hz, resulting, due to the \emph{Nyquist sampling theorem}, in a minimum sampling frequency of 6 Hz. In the algorithm, a sampling time of  50 ms is used and to fully resolve the sought after frequencies, a sampling time of 166 ms or faster is needed. This implies that at least three consecutive samples would need to be skipped to corrupt the desired frequencies. From the data set illustrated in Figure \ref{sample_diff}, the approximate probability of missing a single sample is $64/12375\approx0.005$. If the system uses the same priorities when deciding if a sample should be skipped regardless of if the previous sample was skipped, which in itself is unlikely, the probability of two consecutive samples being skipped is $2.5\cdot10^{-5}$. Further, to skip three samples a collection of, on average, 8 million samples would be needed. With a sampling frequency of 20 Hz, this would take 400 000 seconds, or a little over 4.5 days. Even a tenfold increase in the probability of skipping a sample would potentially cause either a missed detection or extra step detected on average once every 7th minute, which still is acceptable.              
 %
 
 \section{Direction of Movement}
@@ -1667,9 +1670,9 @@ To have a good estimation of the movement, not only the distance traveled needs 
 %
 \subsection{Integrated Gyroscope}
 %
-An enticing opportunity to determine the direction of movement using the gyroscope is, given a known initial heading, to integrate the gyroscope output using e.g. the trapezoidal rule. This would give three angles describing the gyroscope's current orientation in reference to the initial one. This approach, however, has two major flaws. The MEMS gyroscopes possess biases and drifts making the estimated orientation drift over time. This makes the gyroscope suitable only for estimations over short intervals of time. Further, the gyroscope only measures its own angular velocity and in extent orientation, this makes it hard to discern between a true turn and a turn of the gyroscope, without strapping the gyroscope to the user with a fixed orientation. 
+An enticing opportunity to determine the direction of movement using the gyroscope is, given a known initial heading, to integrate the gyroscope output using e.g. the trapezoidal rule. This would give three angles describing the gyroscope's current orientation in reference to the initial one. This approach, however, has two major flaws. The MEMS gyroscopes possess biases and drifts making the estimated orientation drift over time. This makes the gyroscope suitable only for estimations over short intervals of time. Further, the gyroscope only measures its own angular velocity and in extent orientation, this makes it hard to discern between a true turn and a turn of the gyroscope without strapping the gyroscope to the user with a fixed orientation. 
 
-A way to get around some parts of the last flaw is to use the accelerometer to approximately determine how the device is oriented in reference to gravity. The gyroscope may then be used to compute only the approximate angle with which the user has turned around the direction of gravity. This is beneficial simply because all ''normal'' turns performed by a human are around the direction of gravity. This makes the orientation of the device in reference to the user somewhat obsolete, but false turns may still be induced by turning the device around the direction of gravity.
+A way to get around some parts of the last problem is to use the accelerometer to approximately determine how the device is oriented in reference to gravity. The gyroscope may then be used to compute only the approximate angle with which the user has turned around the direction of gravity. This is beneficial simply because all ''normal'' turns performed by a human are around the direction of gravity. This makes the orientation of the device in reference to the user somewhat obsolete, but false turns may still be induced by turning the device around the direction of gravity.
 % 
 \subsection{Sensor Fused Heading Estimation}
 %
@@ -1736,7 +1739,7 @@ d_{k+1} & = & d_k + r_{k+1}\nonumber
 with the same notation as previous with the exception of $d_k$ being the particle's step length at time step $k$. Particles with appropriate step lengths will agree more with the measurements and tend to sustain and multiply. This has the advantage of being independent of the user's step length as the algorithm adapts for each user. On the other hand, we now have introduced two additional filter states compared to the simple case of only two states corresponding to $x$- and $y$-positions. Adding states forces an increase in the number of particles which in turn leads to a more computational and power demanding algorithm. Increasing the number of states by a factor two requires the number of particles to increase to the power of two to keep the same density of particles in the state space. This would result in the need to use between $10^{5}$ and $10^{6}$ particles, which would be too computationally demanding for today's smartphones, at least without extensive optimization. But, adding the additional states increases the knowledge of how the user has moved between measurements, giving a much more narrow area where a true position is probable. Further, the possible variance, especially of the step length state, is fairly small. The step length for most persons is in the region of 0.5 to 1 meter, and when an initial estimate has been determined, there are only a few cases where this length changes by more than a few centimeters. Concerning the heading, particles would initially need to be spread in all directions. However, when an approximate heading is obtained, the spread only needs to be enough to correct for biases and drifts of the gyro and small heading changes caused by the user inadvertently turning the device a small amount. Larger ''false'' changes in heading will be caught by the partial spread discussed earlier. In conjunction, this decreases the number of particles needed from almost a million to between 3 000 and 10 000, depending on the time between the RSSI measurements.       
 %
 \chapter{Indoor Positioning - Sensor Fused Approach} 
-\label{chap:sensor_fused}
+\label{chAPsensor_fused}
 %
 In this chapter, a method of how to include the information from the sensors in the positioning algorithm will be presented. The dead reckoning presented in the previous chapter works well for short distances (see e.g. Figure \ref{deadreckon_1}), whereas information from WiFi signals do not have the disadvantage of drifts. The main strategy is now to combine these, in order to get the best properties from both  parts.
 
@@ -1752,7 +1755,7 @@ Two sensors will be used to aid in the positioning, an accelerometer and a gyros
 
 Initially, the position of each particle is uniformly random distributed in $[0,2\pi]$, and the step length is normally random distributed around 0.75 m. When the user takes a step, each particle moves its own step length in its own direction. Then, particles with good estimations of the step length and direction will reach accurate estimations of the position, and be more likely to multiply in the next step.
 
-The new states offer two advantages. Firstly, this kinematics model is more accurate than a random walk, which means that the particles are moved to more probable positions at each step. Secondly, the average direction and step length can be used for PDR between the RSSI-measurements, providing a more frequent position estimation output.
+The new states offer two advantages. First, this kinematics model is more accurate than a random walk, which means that the particles are moved to more probable positions at each step. Secondly, the average direction and step length can be used for PDR between the RSSI-measurements, providing a more frequent position estimation output.
 
 In order to keep the particle density in the state space high enough, the number of particles used has to be larger for this algorithm. In order to model the noise, the directions and step lengths are spread randomly with normal distributions around their current values, during each state update (see Table \ref{table:parameter_distributions}). Standard deviations of 0.01 meters for the step length, and 0.01 radians for the direction, seemed to be reasonable for the models. The states are updated each time a step is taken by the user. 
 
@@ -1851,7 +1854,7 @@ The time until an approximate initial heading is found is clearly visible in the
 \caption{Position error of different algorithms. Note that the scales on both the axis are different. Using PDR only gives an error that grows with time. Combining WiFi and PDR gives the lowest error. See also Figure \ref{path_multi} and Table \ref{table:error_different_algorithms}.}\label{error_multi}
 \end{figure}
 %
-Figure \ref{path_multi} shows the estimated path of four different positioning algorithms, LS, PDR and PF with and without sensor data. The positioning error is, for each algorithm, displayed in Figure \ref{error_multi} and to high light some of the features of the error, the mean, max and median values for each are available in Table \ref{table:error_different_algorithms}. In this test, WiFi measurements combined with information from the sensors performed best. Furthermore, Figure \ref{error_multi} shows that the error from the PDR seems to grow with time, which is a typical property of this estimation method. The error of the PF with sensor data is larger when the step length is also estimated. This behavior is expected since the estimation relies on relatively noisy RSSI measurements to estimate the step length. However, this walk was conducted at an approximatively constant speed by a single user, and a different user may have a quite different stride length. In such a case, the positioning will improve if the  step length is estimated. Additionally, a user may change stride length over the course of a walk, which will be caught by the estimation.
+Figure \ref{path_multi} shows the estimated path of four different positioning algorithms, LS, PDR and PF with and without sensor data. The positioning error is, for each algorithm, displayed in Figure \ref{error_multi} and to high-light some of the features of the error, the mean, max and median values for each are available in Table \ref{table:error_different_algorithms}. In this test, WiFi measurements combined with information from the sensors performed best. Furthermore, Figure \ref{error_multi} shows that the error from the PDR seems to grow with time, which is a typical property of this estimation method. The error of the PF with sensor data is larger when the step length is also estimated. This behavior is expected since the estimation relies on relatively noisy RSSI measurements to estimate the step length. However, this walk was conducted at an approximatively constant speed by a single user, and a different user may have a quite different stride length. In such a case, the positioning will improve if the  step length is estimated. Additionally, a user may change stride length over the course of a walk, which will be caught by the estimation.
 %
 \begin{table}
 \begin{center}
@@ -1898,7 +1901,7 @@ This was tested in \emph{Environment three}, where the phone was rotated $\frac{
 
 \section{Concluding Remarks}
 %
-Using information from the accelerometer and the gyroscope improved the positioning significantly. At the same time, this requires that the orientation of the phone in relation to the user does not chance too frequently. While these events may be detected and taken into account, there are situations where it takes some time for the algorithm to exclude a "false" turn, and if these occur too often, the position estimation would always be inaccurate.
+Using information from the accelerometer and the gyroscope improved the positioning significantly. At the same time, this requires that the orientation of the phone in relation to the user does not change too frequently. While these events may be detected and taken into account, there are situations where it takes some time for the algorithm to exclude a "false" turn, and if these occur too often, the position estimation would always be inaccurate.
 Even though the sensors contribute with important information about the movement of the user, it would not be an option to use these for PDR only, i.e. without combining them with the WiFi measurements. The main reasons are that the initial states would have to be known, that the expected error grows with time, and that the orientation of the phone would always have to be fix in relation to the user. The conclusion is that WiFi measurements could be used without PDR, but not the other way around.
 
 \chapter{Algorithm Implementation in Android}
@@ -1931,7 +1934,7 @@ Estimating the step length proved to be a good addition to the state space, espe
 %
 \subsection{Finding Correct Building \& Floor}
 %
-One of the first obstacles encountered when trying to upscale the algorithm was, on a cite with several multistory buildings, to find the correct building and floor. 
+One of the first obstacles encountered when trying to implement the algorithm was, on a site with several multistory buildings, to find the correct building and floor. 
 
 To find the correct building a couple of different techniques could be used. The most simple of these is to use the GPS output when the user enters the building. This, however, is not a very robust way. Either the user may want to start the navigation when inside the building or the GPS output might be inaccurate. A better estimate can be obtained by evaluating the RSSI values of the available known WiFi APs, and position the user in the building from where the strongest RSSI value is obtained. If needed, this could be refined further by taking more than the AP with largest RSSI value into account. However, as the buildings at Sony are separated by fairly large distances, regarding only one AP is sufficient.
 
@@ -1948,9 +1951,9 @@ Below, a floor detection scheme based on the three APs with largest RSSI values 
 %
 This scheme mitigates the problem of having one strongly transmitting AP on the ''wrong'' floor. However, if there are at least two APs from the ''wrong'' floor among the three, this floor will always be chosen. Therefore an alternative method has been suggested by the authors. 
 
-Simply determining the mean received power from each floor suffers from the same problems as earlier discussed. If, on the other hand, the aggregate received power from each floor is determined, a more robust method is obtained. As RSSI values are reported from the driver in the range of 0 to $-$100 dB where 0 indicates the highest received power, a simple addition will not suffice. Instead, the smallest received RSSI, $R_{\mbox{min}}$, is used to scale all RSSI values before adding them together. This is done by determining how much to add to the smallest RSSI value to obtain $0$ i.e. $-R_{\mbox{min}} $, and add this to all RSSI values. The set of accumulated power from each floor can then be used to determine a probable floor according to the rules defined in the flowchart depicted in Figure \ref{flowchart} in Appendix \ref{chap:flowchart}.
+Simply determining the mean received power from each floor suffers from the same problems as earlier discussed. If, on the other hand, the aggregate received power from each floor is determined, a more robust method is obtained. As RSSI values are reported from the driver in the range of 0 to $-$100 dB, where 0 indicates the highest received power, a simple addition will not suffice. Instead, the smallest received RSSI, $R_{\mbox{min}}$, is used to scale all RSSI values before adding them together. This is done by determining how much to add to the smallest RSSI value to obtain $0$ i.e. $-R_{\mbox{min}} $, and add this to all RSSI values. The set of accumulated power from each floor can then be used to determine a probable floor according to the rules defined in the flowchart depicted in Figure \ref{flowchart} in Appendix \ref{chap:flowchart}.
 
-This algorithm uses some heuristic assumptions concerning the power from different floors when estimating the current one. The assumptions are based on consecutive floors being relatively similar, both in layout and AP distribution. Further, it is expected that the antennas of the APs are designed to direct the signal downwards. One of the assumptions is that if the signals from three consecutive floors are comparable, the most probable location is on the middle floor. In the implementation we have deemed two floors as comparable if their total powers are within a factor 1.5 from each other.  
+This algorithm uses some heuristic assumptions concerning the power from different floors when estimating the current one. The assumptions are based on consecutive floors being relatively similar, both in layout and AP distribution. Further, it is expected that the antennas of the APs are designed to direct the signal downwards. One of the assumptions is that if the signals from three consecutive floors are comparable, the most probable location is on the middle floor. In the implementation two floors have been comparable if their total powers are within a factor 1.5 from each other.  
 
 To test the performance of the algorithms, each was implemented in a version of SonyMap whereafter the applications were installed on identical phones. A $\sim$30 minute walk was then taken throughout the Sony building and the number of faulty floor estimates was noted. The scheme proposed in \cite{floor_det} reported the wrong floor 10 times during the walk while the one proposed by the authors was wrong 3 times. 
 
@@ -1959,7 +1962,7 @@ If a consistent floor estimation is of more importance than a speedy change when
 %
 \subsection{Coordinate Conversions}
 %s
-In Chapter \ref{chap:background} the longitude/latitude coordinate system is presented. This system is used in most large scale positioning applications as it gives each point on Earth a unique coordinate representation. However, it is impractical to use the longitude/latitude system for positioning on a local scale. This is due to, because of the Earth's spherical surface, the same difference in longitude/latitude will equal a different distance in meters on different locations. As all calculations, in this thesis and in many other applications, are done in meters a conversion between the two is needed. 
+In Chapter \ref{chap:background} the longitude/latitude coordinate system is presented. This system is used in most large scale positioning applications as it gives each point on Earth a unique coordinate representation. However, it is impractical to use the longitude/latitude system for positioning on a local scale. This is due tothe same difference in longitude/latitude will equal a different distance in meters on different locations, because of the Earth's spherical surface. As all calculations, in this thesis and in many other applications, are done in meters a conversion between the two is needed. 
 
 In this thesis an open source solution called \emph{Jcoord} is used \cite{jcoord}, which is published under the \emph{GNU General Public License (GPL)}\footnote{GNU General Public License (GPL): \url{www.gnu.org/copyleft/gpl.html}}. This solution splits the Earth into regions within which a distance in longitude/latitude is approximately constant converted into meters. Further, some extrapolation is done within each region to make the conversion even more exact. To convert in the other direction, the region needs to be known, but otherwise the same general computations are made.   
 %
@@ -1971,7 +1974,7 @@ In the implementation, a user has been deemed as still if no steps have been det
 %
 \subsection{The Particle Filter}
 %
-In Chapter \ref{chap:PF}, the PF process is described in three steps, weighting, re-sampling and state update. Performing the operations in this order is not very computationally efficient, both concerning memory and computational power. A better way is to combine the state update and weighting, thus when a new set of RSSI values is available for each particle, the state is updated and then the weight computed. During this step a sorted cumulative sum of the particle weights is also computed. Then the re-sampling is performed along with the computation of the estimated position.
+In Chapter \ref{chap:PF}, the PF process is described in three steps, weighting, re-sampling and state update. Performing the operations in this order is not computationally efficient, both concerning memory and computational power. A better way is to combine the state update and weighting, thus when a new set of RSSI values is available for each particle, the state is updated and then the weight computed. During this step a sorted cumulative sum of the particle weights is also computed. Then the re-sampling is performed along with the computation of the estimated position.
 
 If a step counter is added to aid the state update, the states can be updated at each detection of a step, as the time between consecutive RSSI measurements is no longer needed to perform an accurate state update. This further decreases the amount of computing time spent between receiving new RSSI measurements and a position estimate is obtained. In addition, along with every registered step, a new estimation of the position could be computed, allowing for faster updates than the RSSI measurements alone. 
 
